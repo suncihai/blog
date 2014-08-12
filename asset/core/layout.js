@@ -1,6 +1,7 @@
 define(function( require, exports ){
 	// 变量&模块
 	var $ = require('jquery');
+	var util = require('@core/util');
 	var C = require('@core/config');
 
 	// 整体框架布局
@@ -8,19 +9,15 @@ define(function( require, exports ){
 		'<div id="MAIN">',
 			'<div class="G-frame">',
 				'<div class="G-frameBody">',
-					'<div class="G-frameBodyHead">',
-					'</div>',
-					'<div class="G-frameBodyContent">',
-					'</div>',
-					'<div class="G-frameBodyAside">',
-					'</div>',
-					'<div class="G-frameBodyFooter">',
-					'</div>',
+					'<div class="G-frameBodyHead"/>',
+					'<div class="G-frameBodyContent"/>',
+					'<div class="G-frameBodyAside"/>',
+					'<div class="G-frameBodyFooter"/>',
 				'</div>',
 			'</div>',
 		'</div>',
-		'<div id="LOADING"/>',
-		'<div id="POPWIN"/>'
+		'<div id="LOADING"></div>',
+		'<div id="POPWIN"></div>'
 	].join('');
 
 	var body = $('body').append( layout );
@@ -38,5 +35,19 @@ define(function( require, exports ){
 		'footer': 		$('.G-frameBodyFooter', body)
 	}
 	exports.doms = doms;
+
+	// 移除一些提示
+	$('#noScript').remove();
+
+	// 构建导航
+	var navs = [];
+	$.each( C.nav, function( idx, item ) {
+		navs.push([
+			'<li>',
+				'<a href="#' + item.link + '" data-id="' + idx + '">' + item.name + '</a>',
+			'</li>'
+		].join(''));
+	});
+	doms.head.append( '<ul>' + navs.join('') + '</ul>' );
 
 });
