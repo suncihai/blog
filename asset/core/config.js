@@ -1,5 +1,11 @@
 define(function( require, exports ){
 	var CONFIG = {
+		// 默认hash值
+		'defaultHash': 'index',
+
+		// 归档页
+		'Archives': ['javascript', 'html5css3', 'xhtmlcss', 'ued', 'talk'],
+
 		// 导航
 		'nav': [
 			{

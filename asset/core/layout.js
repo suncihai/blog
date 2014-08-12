@@ -16,8 +16,8 @@ define(function( require, exports ){
 				'</div>',
 			'</div>',
 		'</div>',
-		'<div id="LOADING"></div>',
-		'<div id="POPWIN"></div>'
+		'<div id="LOADING"><span><em></em></span></div>',
+		'<div id="POPWIN"><span><em></em></span></div>'
 	].join('');
 
 	var body = $('body').append( layout );
@@ -28,6 +28,7 @@ define(function( require, exports ){
 		'POPWIN': 		$('#POPWIN'),
 
 		// 框架主体：
+		'frame': 		$('.G-frame', body),
 		'body': 		$('.G-frameBody', body),
 		'head': 		$('.G-frameBodyHead', body),
 		'content': 		$('.G-frameBodyContent', body),
@@ -49,5 +50,8 @@ define(function( require, exports ){
 		].join(''));
 	});
 	doms.head.append( '<ul>' + navs.join('') + '</ul>' );
+
+	doms.aside.html('侧边栏');
+	doms.footer.html('bidingX');
 
 });

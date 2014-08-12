@@ -1,4 +1,6 @@
 ;(function( SEA, WIN ){
+
+	function getContainer(){}
 	// SeaJS配置信息
 	var SeaJSConfig = {
 		base: '/me/',
@@ -10,7 +12,7 @@
 		paths: {
 			'@asset':   	'asset',
 			'@core': 		'asset/core',
-			'@modules':		'modules'
+			'@pages':		'pages'
 		},
 		map: [
 			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=20140000'] 
