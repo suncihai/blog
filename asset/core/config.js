@@ -1,13 +1,14 @@
 define(function( require, exports ){
 	var CONFIG = {
-		// 默认hash值
-		'defaultHash': 'index',
 
-		// 归档页
-		'Archives': ['javascript', 'html5css3', 'xhtmlcss', 'ued', 'talk'],
+		// 默认页面为主页
+		defaultPage: 'index',
+
+		// 控制器的调用方法
+		action: 'onRun',
 
 		// 导航
-		'nav': [
+		nav: [
 			{
 				'name': '首页',
 				'link': 'index'
@@ -22,7 +23,7 @@ define(function( require, exports ){
 			},
 			{
 				'name': 'XHTML/CSS',
-				'link': 'xhtmlcss'
+				'link': 'htmlcss'
 			},
 			{
 				'name': '用户体验设计',
@@ -32,7 +33,12 @@ define(function( require, exports ){
 				'name': '前端那些事',
 				'link': 'talk'
 			}
-		]
+		],
+
+		// 数据中心
+		dataCenter: {
+			uArchives: 'sweety/listarchives',
+		}
 	}
 	return CONFIG;
 });

@@ -1,6 +1,8 @@
 define(function( require, util ){
 	var WIN = window;
+	var DOC = document;
 	var OP = Object.prototype;
+	var SP = String.prototype;
 
 	// 是否是对象自变量, {}或new Object()的形式
 	function isObject( obj ) {
@@ -35,24 +37,38 @@ define(function( require, util ){
 		return -1;
 	}
 
+	/**
+	 * 工具方法导出
+	 * @type {Boolean}
+	 */
 	util.isObject = isObject;
 	util.isArray = isArray;
 	util.isFunc = isFunc;
 	util.isString = isString;
 	util.inArray = inArray;
-	
-	// 系统日志函数
+
+	/**
+	 * 系统日志函数
+	 * @type {[type]}
+	 */
+	var cons = WIN.console || {};
 	util.log = function() {
-		var cons = WIN.console || {};
 		cons.log.apply( cons, arguments );
 	}
-
-	// 异步创建模块
-	util.create = function( uri, callback ) {
-		if( isString( uri ) && isFunc( callback ) ) {
-			require.async( uri, function( mod ) {
-				callback.call( mod );
-			});
+	util.error = function() {
+		if( cons.error.apply ) {
+			cons.error.apply( cons, arguments );
+		}
+		else {
+			cons.error( arguments[0] );
 		}
 	}
+	// 去掉字符串首位空格
+	util.trim = function( str ) {
+		if( isString( str ) ) {
+			return SP.trim.call( str );
+		}
+		return str;
+	}
+
 });
