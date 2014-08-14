@@ -6,8 +6,9 @@ define(function( require, exports ){
 	var C = require('@core/config');
 	var action = C.action;
 	var data = {
-		module: null,
-		param: null
+		dom: null, 	  // 容器对象
+		name: null,   // 模块名称
+		param: null   // 传递参数
 	}
 
 	function hashChanged() {
@@ -17,10 +18,10 @@ define(function( require, exports ){
 		run( hash, param );
 	}
 
-	function run( module, param ) {
-		data.module = module;
+	function run( name, param ) {
+		data.name = name;
 		data.param = param;
-		require.async( '@controller/' + module, afterRun );
+		require.async( '@controller/' + name, afterRun );
 	}
 
 	function afterRun( module ) {
@@ -32,7 +33,7 @@ define(function( require, exports ){
 		}
 	}
 
-	// 开始执行路由
+	// 开始执行路由控制
 	exports.start = function() {
 		if( 'onhashchange' in WIN ) {
 			WIN.addEventListener( 'hashchange', hashChanged, false );

@@ -1,5 +1,4 @@
 define(function( require, exports ){
-	// 变量&模块
 	var $ = require('jquery');
 	var util = require('@core/util');
 	var C = require('@core/config');
@@ -41,17 +40,22 @@ define(function( require, exports ){
 	$('#noScript').remove();
 
 	// 构建导航
-	var navs = [];
-	$.each( C.nav, function( idx, item ) {
-		navs.push([
-			'<li>',
-				'<a href="#' + item.link + '" data-id="' + idx + '">' + item.name + '</a>',
-			'</li>'
-		].join(''));
-	});
-	doms.head.append( '<ul>' + navs.join('') + '</ul>' );
+	exports.buildNav = function() {
+		var navs = [];
+		$.each( C.nav, function( idx, item ) {
+			navs.push([
+				'<li>',
+					'<a href="#' + item.link + '" data-id="' + idx + '">' + item.name + '</a>',
+				'</li>'
+			].join(''));
+		});
+		doms.head.append( '<ul>' + navs.join('') + '</ul>' );
+		return this;
+	}
 
-	doms.aside.html('侧边栏');
-	doms.footer.html('bidingX');
+	exports.buildAside = function() {
+		doms.aside.html('侧边栏');
+		doms.footer.html('bidingX');
+	}
 
 });

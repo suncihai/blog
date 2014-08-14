@@ -37,7 +37,7 @@ define(function( require, exports ){
 
 		// 数据中心
 		dataCenter: {
-			uArchives: 'sweety/listarchives',
+			uArchives: 'data/listarchives',
 		}
 	}
 	return CONFIG;
