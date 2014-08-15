@@ -8,11 +8,11 @@
 			'util':         '@core/util.js',
 			'view':         '@core/view.js',
 			'router':       '@core/router.js',
-			'jquery':       '@asset/jquery/jquery-1.8.3.min.js'
+			'jquery':       '@dist/jquery/jquery-1.8.3.min.js'
 		},
 		paths: {
-			'@asset':   	'asset',
-			'@core': 		'asset/core',
+			'@dist':   		'dist',
+			'@core': 		'dist/core',
 			'@controller':	'controller',
 			'@pages':		'pages'
 		},
@@ -54,7 +54,7 @@
 			router.start();
 		}
 	];
-	// 
+
 	INIT();
 
 })( seajs, window );

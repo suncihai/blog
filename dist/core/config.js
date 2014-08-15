@@ -1,7 +1,7 @@
 define(function( require, exports ){
 	var CONFIG = {
 
-		// 默认页面为主页
+		// 默认页面
 		defaultPage: 'index',
 
 		// 控制器的调用方法
@@ -35,9 +35,21 @@ define(function( require, exports ){
 			}
 		],
 
+		// 后端处理目录
+		backPath: '/fade',
+
+		// 请求选项
+		request: {
+			pageSize: 10,	// archive页面显示文章数
+			briefSize: 80	// archive页面文章摘要长度
+		},
+
 		// 数据中心
 		dataCenter: {
-			uArchives: 'data/listarchives',
+			listarchives: '/listarchives',
+			showarticle: '/showarticle',
+			showcomment: '/showcomment',
+			listtitle: '/listtitle'
 		}
 	}
 	return CONFIG;

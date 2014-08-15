@@ -1,7 +1,7 @@
 define(function( require, exports ){
 	exports.onRun = function( data, view ) {
-		// 创建页面容器
-		data.dom = view.createContainer({
+		// 创建栏目页面
+		data.dom = view.createArchive({
 			'container': data.name
 		});
 
