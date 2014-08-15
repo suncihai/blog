@@ -2,5 +2,37 @@
 	width: @globalWidth;
 	height: 200px;
 	margin: 0 auto;
-	border: 1px solid #FFF;
+	&Body{
+		// 头部
+		&Head{
+			li{
+				display: inline-block;
+				margin-right: 15px;
+				a.act{
+					color: red;
+				}
+			}
+		}
+		// 内容区
+		&Content{
+			display: inline-block;
+			float: left;
+			width: 70%;
+			height: 400px;
+			background: #EEEEFF;
+		}
+		// 侧边栏
+		&Aside{
+			display: inline-block;
+			width: 30%;
+			height: 400px;
+			background: #E8FFF3;
+		}
+		// 底部
+		&Footer{
+			width: 100%;
+			height: 50px;
+			background: #F3F3F1;
+		}
+	}
 }
