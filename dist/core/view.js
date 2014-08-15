@@ -24,6 +24,7 @@ define(function( require, exports ){
 				// 防止重复创建
 				for( ; i < len; i++ ) {
 					if( Sons.eq(i).attr('archive-name') === contName ) {
+						Sons.eq(i).show().siblings().hide();
 						return;
 					}
 				}
@@ -34,7 +35,8 @@ define(function( require, exports ){
 					'archive-name': contName
 				}).html(contName);
 
-				// 添加到外层容器中
+				// 隐藏其他栏目
+				Sons.hide();
 				DomC.append( cont );
 			});
 			return cont;

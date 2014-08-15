@@ -6,7 +6,7 @@ define(function( require, exports ){
 		});
 
 		require.async('@pages/archives', function( module ) {
-			module['build']( data );
+			module['onMain']( data );
 		});
 	} 
 });

@@ -121,6 +121,9 @@ noscript {
   display: inline-block;
   margin-right: 15px;
 }
+.G-frameBodyHead li a.act {
+  color: red;
+}
 .G-frameBodyContent {
   display: inline-block;
   float: left;

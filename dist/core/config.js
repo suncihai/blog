@@ -35,6 +35,16 @@ define(function( require, exports ){
 			}
 		],
 
+		// 栏目title
+		archiveTitle: {
+			index: '欢迎来到小前端！',
+			javascript: 'JavaScript | 博文汇总',
+			html5css3: 'HTML5&CSS3 | 博文汇总',
+			htmlcss: 'XHTML/CSS | 博文汇总',
+			ued: '用户体验设计',
+			talk: '前端那些事'
+		},
+
 		// 后端处理目录
 		backPath: '/fade',
 

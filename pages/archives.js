@@ -1,6 +1,9 @@
 define(function( require, exports ){
-	
-	exports.build = function( data ) {
-		// console.log( data )
+	var $ = require('jquery');
+	var layout = require('layout');
+	var C = require('@core/config');
+
+	exports.onMain = function( data ) {
+		$(document).attr( 'title', C.archiveTitle[data.name] );
 	}
 });
