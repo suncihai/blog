@@ -51,13 +51,28 @@ define(function( require, exports ){
 			talk: '前端那些事'
 		},
 
+		// 栏目hash对应的category数据库id
+		catId: {
+			javascript: 1,
+			html5css3: 2,
+			htmlcss: 3,
+			ued: 4,
+			talk: 5
+		},
+
 		// 后端处理目录
-		backPath: '/fade',
+		backPath: '/me/fade',
 
 		// 请求选项
-		request: {
+		requestOption: {
 			pageSize: 10,	// archive页面显示文章数
-			briefSize: 80	// archive页面文章摘要长度
+			briefSize: 80,	// archive页面文章摘要长度
+			orderBy: [
+				'date',		// 按最新发布
+				'rencentlyComment',		// 按最新评论
+				'mostComment', 		// 按评论数
+				'random'		// 随机
+			]
 		},
 
 		// 数据中心
