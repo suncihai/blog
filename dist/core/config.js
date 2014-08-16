@@ -4,6 +4,12 @@ define(function( require, exports ){
 		// 默认页面
 		defaultPage: 'index',
 
+		//Logo
+		logo: {
+			alt: '小前端-前端那些事~',
+			src: 'resources/images/logo.png'
+		},
+
 		// 控制器的调用方法
 		action: 'onRun',
 

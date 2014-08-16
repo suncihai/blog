@@ -43,9 +43,7 @@
 
 		// 初始化布局
 		function( jquery, util, layout ) {
-			layout
-				.buildNav()
-				.buildAside();
+			layout.init().buildNav();
 			SEA.use( 'router', INIT );
 		},
 

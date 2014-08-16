@@ -4,6 +4,7 @@ define(function( require, exports ){
 	var C = require('@core/config');
 
 	exports.onMain = function( data ) {
+		// 设置网站标题
 		$(document).attr( 'title', C.archiveTitle[data.name] );
 	}
 });

@@ -1,3 +1,6 @@
+/**
+ * [路由控制模块]
+ */
 define(function( require, exports ){
 	var WIN = window;
 	var LOC = WIN.location;
