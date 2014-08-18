@@ -144,13 +144,11 @@ noscript {
 .G-frameBodyIndex {
   width: 100%;
   height: 400px;
-  background: #EEEEFF;
 }
 .G-frameBodyWrapper {
   display: none;
   width: 100%;
   height: 400px;
-  background: #EEEEFF;
 }
 .G-frameBodyWrapperArchive {
   float: left;
@@ -158,7 +156,7 @@ noscript {
   height: 400px;
   box-sizing: border-box;
   padding: 15px;
-  background: #D7D7FF;
+  border: 1px solid #EEE;
 }
 .G-frameBodyWrapperAside {
   float: right;
@@ -166,7 +164,7 @@ noscript {
   height: 400px;
   padding: 15px;
   box-sizing: border-box;
-  background: yellow;
+  border: 1px solid #EEE;
 }
 .G-frameBodyFooter {
   width: 100%;

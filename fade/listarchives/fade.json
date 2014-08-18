@@ -3,18 +3,21 @@
 	"result": {
 		"items": [
 			{
+				"artid": 102,
 				"title": "文章标题A",
 				"archive": "栏目A",
 				"publishDate": "2014年8月8日",
 				"abstract": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 			},
 			{
+				"artid": 103,
 				"title": "文章标题B",
 				"archive": "栏目B",
 				"publishDate": "2014年8月9日",
 				"abstract": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
 			},
 			{
+				"artid": 104,
 				"title": "文章标题C",
 				"archive": "栏目C",
 				"publishDate": "2014年8月10日",
