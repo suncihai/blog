@@ -60,20 +60,17 @@ define(function( require, exports ){
 			talk: 5
 		},
 
+		// archive列表默认请求选项
+		archiveOption: {
+			catid: 1,
+			limit: 10,		// archivem每页显示文章数
+			brief: 80,		// archive页面文章摘要长度
+			order: 'date', 	// 按时间顺序排列
+			options: ['artid', 'title', 'publishDate', 'tags', 'abstract']
+		},
+
 		// 后端处理目录
 		backPath: '/me/fade',
-
-		// 请求选项
-		requestOption: {
-			pageSize: 10,	// archive页面显示文章数
-			briefSize: 80,	// archive页面文章摘要长度
-			orderBy: [
-				'date',		// 按最新发布
-				'rencentlyComment',		// 按最新评论
-				'mostComment', 		// 按评论数
-				'random'		// 随机
-			]
-		},
 
 		// 数据中心
 		dataCenter: {
