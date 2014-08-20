@@ -158,6 +158,14 @@ noscript {
   padding: 15px;
   border: 1px solid #EEE;
 }
+.G-frameBodyWrapperArticle {
+  float: left;
+  width: 75%;
+  height: 400px;
+  box-sizing: border-box;
+  padding: 15px;
+  border: 1px solid #ABCDEF;
+}
 .G-frameBodyWrapperAside {
   float: right;
   width: 25%;

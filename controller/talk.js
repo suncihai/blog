@@ -1,11 +1,21 @@
 define(function( require, exports ){
 	exports.onRun = function( data, view ) {
-		// 创建栏目页面
-		data.dom = view.createArchive({
-			'container': data.name
-		});
+		var type = data.param == null ? 'archives' : 'article';
 
-		require.async('@pages/archives', function( module ) {
+		if( type == 'archives' ) {
+			data.dom = view.createArchive({
+				'container': data.name
+			});
+		}
+		else {
+			data.dom = view.createArticle({
+				'container': data.name,
+				'pageid': data.param
+			});
+		}
+		
+
+		require.async('@pages/' + type, function( module ) {
 			module['onMain']( data );
 		});
 	} 

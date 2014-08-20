@@ -1,30 +1,54 @@
+/**
+ * [工具方法模块]
+ */
 define(function( require, util ){
 	var WIN = window;
 	var DOC = document;
 	var OP = Object.prototype;
 	var SP = String.prototype;
 
-	// 是否是对象自变量, {}或new Object()的形式
+	/**
+	 * [isObject 是否是对象自变量, {}或new Object()的形式]
+	 * @param  {[type]}  obj [检测对象]
+	 * @return {Boolean}     [返回]
+	 */
 	function isObject( obj ) {
 		return OP.toString.call( obj ) === '[object Object]';
 	}
 
-	// 是否是真数组, []或new Array()的形式
+	/**
+	 * [isArray 是否是真数组, []或new Array()的形式]
+	 * @param  {[type]}  obj [监测对象]
+	 * @return {Boolean}     [返回]
+	 */
 	function isArray( obj ) {
 		return OP.toString.call( obj ) === '[object Array]';
 	}
 
-	// 是否是函数
+	/**
+	 * [isFunc 是否是函数]
+	 * @param  {Function} fn [监测对象]
+	 * @return {Boolean}     [返回]
+	 */
 	function isFunc( fn ) {
 		return ( fn instanceof Function );
 	}
 
-	// 是否是字符串
+	/**
+	 * [isString 是否是字符串]
+	 * @param  {[type]}  str [监测对象]
+	 * @return {Boolean}     [返回]
+	 */
 	function isString( str ) {
 		return ( typeof( str ) === 'string' );
 	}
 
-	// 数组中是否存在某元素
+	/**
+	 * [inArray 数组中是否存在某元素]
+	 * @param  {[Mix]}   ele [目标元素]
+	 * @param  {[Array]} arr [查询数组]
+	 * @return {[Number]}    [数组下标]
+	 */
 	function inArray( ele, arr ) {
 		if( isArray( arr ) ) {
 			var leng = arr.length, i = 0;
@@ -39,7 +63,6 @@ define(function( require, util ){
 
 	/**
 	 * 工具方法导出
-	 * @type {Boolean}
 	 */
 	util.isObject = isObject;
 	util.isArray = isArray;
@@ -49,7 +72,6 @@ define(function( require, util ){
 
 	/**
 	 * 系统日志函数
-	 * @type {[type]}
 	 */
 	var cons = WIN.console || {};
 	util.log = function() {
@@ -63,12 +85,24 @@ define(function( require, util ){
 			cons.error( arguments[0] );
 		}
 	}
-	// 去掉字符串首位空格
-	util.trim = function( str ) {
-		if( isString( str ) ) {
-			return SP.trim.call( str );
+	
+	/**
+	 * [extConfig 参数合并/更新]
+	 * @param  {[JSON]} Jold [默认参数]
+	 * @param  {[JSOn]} Jnew [指定参数]
+	 * @return {[JSON]}      [最新参数]
+	 */
+	util.mergeParam = function( Jold, Jnew ) {
+		if( !isObject( Jold ) || !isObject( Jnew ) ) {
+			return false;
 		}
-		return str;
+		for( var pro in Jold ) {
+			Jold[pro] = 
+				Jnew.hasOwnProperty( pro ) ? 
+				isArray( Jnew[pro] ) ? Jnew[pro].join(',') : Jnew[pro] :
+				isArray( Jold[pro] ) ? Jold[pro].join(',') : Jold[pro];
+		}
+		return Jold;
 	}
 
 });

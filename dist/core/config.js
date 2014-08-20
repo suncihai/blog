@@ -1,3 +1,6 @@
+/**
+ * [系统配置信息]
+ */
 define(function( require, exports ){
 	var CONFIG = {
 
@@ -70,7 +73,7 @@ define(function( require, exports ){
 		},
 
 		// 后端处理目录
-		backPath: '/me/fade',
+		backPath: '/blog/fade',
 
 		// 数据中心
 		dataCenter: {
