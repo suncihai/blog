@@ -9,18 +9,19 @@ define(function( require, exports ){
 		// 数据拉取地址
 		var requestUrl = C.backPath + '/listarchives/fade.json';
 		// 请求参数
-		var requestParam = $.extend(C.archiveOption, {
-			catid: 2
+		var requestParam = util.mergeParam( C.archiveOption, {
+			catid: 2,
+			limit: 5
 		});
 
 		// 拉取数据
-		$.ajax({
-			url: requestUrl,
-			dataType: 'json',
-			data: requestParam,
-			success: fnSuccess,
-			error: fnError
-		});
+		// $.ajax({
+		// 	url: requestUrl,
+		// 	dataType: 'json',
+		// 	data: requestParam,
+		// 	success: fnSuccess,
+		// 	error: fnError
+		// });
 
 		/**
 		 * [fnSuccess 请求成功]

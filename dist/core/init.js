@@ -1,8 +1,8 @@
-;(function( SEA, WIN ){
+(function( SEA, WIN ){
 
 	// SeaJS配置信息
 	var SeaJSConfig = {
-		base: '/me/',
+		base: '/blog/',
 		alias: {
 			'layout':       '@core/layout.js',
 			'util':         '@core/util.js',

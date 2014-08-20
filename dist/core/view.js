@@ -44,9 +44,10 @@ define(function( require, exports ){
 					i = 0,
 					len = Sons.size();
 
-				// 隐藏主页
 				layout.doms.index.hide();
 				layout.doms.wrapper.show();
+				layout.doms.article.hide();
+				layout.doms.archive.show();
 
 				// 更新导航激活状态
 				layout.updateNav( contName ).buildAside('侧边栏');
@@ -79,6 +80,45 @@ define(function( require, exports ){
 	 * @return {[Object]}        [容器对象]
 	 */
 	exports.createArticle = function( config ) {
-		//
+		if( $.type( config ) === 'object' ) {
+			var tag = 'div',
+				cont = $('<'+ tag +'/>'),
+				contName = config.container,
+				marker = contName + '/' + config.pageid;
+
+			require.async('layout', function( layout ) {
+				var DomA = layout.doms.article,
+					Sons = DomA.children(),
+					i = 0,
+					len = Sons.size();
+
+				layout.doms.index.hide();
+				layout.doms.wrapper.show();
+				layout.doms.archive.hide();
+				layout.doms.article.show();
+
+				// 更新导航激活状态
+				layout.updateNav( contName ).buildAside('侧边栏');
+
+				// 防止重复创建
+				for( ; i < len; i++ ) {
+					if( Sons.eq(i).attr('article-name') === marker ) {
+						Sons.eq(i).show().siblings().hide();
+						return;
+					}
+				}
+
+				// 添加标识属性
+				cont.attr({
+					'class': 'P-article',
+					'article-name': marker
+				});
+
+				// 隐藏其他栏目
+				Sons.hide();
+				DomA.append( cont );
+			});
+			return cont;
+		}
 	}
 });
