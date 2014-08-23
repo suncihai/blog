@@ -57,8 +57,13 @@ define(function( require, exports ){
 	 * @return {[type]} [layout]
 	 */
 	exports.init = function() {
+		// 构建导航和侧边栏
+		this.buildNav()
+			.buildAside()
+			.buildFooter();
 		// 移除一些提示
 		$('#noScript').remove();
+		$('#welcome').remove();
 
 		return this;
 	}
@@ -101,11 +106,11 @@ define(function( require, exports ){
 
 	/**
 	 * [buildAside 侧边栏创建]
-	 * @param  {[type]} param [参数]
-	 * @return {[type]}       [description]
 	 */
-	exports.buildAside = function( param ) {
-		doms.aside.html(param);
+	exports.buildAside = function() {
+		require.async('@pages/aside', function( aside ) {
+			aside.init();
+		});
 		return this;
 	}
 
@@ -114,8 +119,29 @@ define(function( require, exports ){
 	 * @param  {[type]} param [参数]
 	 * @return {[type]}       [description]
 	 */
-	exports.buildFooter = function( param ) {
-		doms.footer.html(param);
+	exports.buildFooter = function() {
+		require.async('@pages/footer', function( footer ) {
+			footer.init();
+		});
+		return this;
+	}
+
+	/**
+	 * [setTitle 设置网站title, 栏目与标题的组合，一个参数则直接设置]
+	 * @param {[type]} name  [栏目名称]
+	 * @param {[type]} title [文章名称]
+	 */
+	exports.setTitle = function( name, title ) {
+		var str = '', art, arc;
+		if( util.isString( name ) && arguments.length == 1 ) {
+			str = name;
+		}
+		else {
+			art = title == null ? '' : title + ' | ';
+			arc = C.archiveTitle[name] || C.archiveTitle.index;
+			str = art + arc;
+		}
+		$(document).attr('title', str);
 		return this;
 	}
 

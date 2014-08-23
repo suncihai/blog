@@ -1,0 +1,27 @@
+{
+	"success": true,
+	"result": {
+		"items": [
+			{
+				"artid": 102,
+				"title": "文章标题A",
+				"archive": "JavaScript",
+				"publishDate": "2014年8月8日"
+			},
+			{
+				"artid": 103,
+				"title": "文章标题B",
+				"archive": "HTML5CSS3",
+				"publishDate": "2014年8月9日"
+			},
+			{
+				"artid": 104,
+				"title": "文章标题C",
+				"archive": "talk",
+				"publishDate": "2014年8月10日"
+			}
+
+		],
+		"total": 3
+	}
+}

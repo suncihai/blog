@@ -50,7 +50,7 @@ define(function( require, exports ){
 				layout.doms.archive.show();
 
 				// 更新导航激活状态
-				layout.updateNav( contName ).buildAside('侧边栏');
+				layout.updateNav( contName );
 
 				// 防止重复创建
 				for( ; i < len; i++ ) {
@@ -98,7 +98,7 @@ define(function( require, exports ){
 				layout.doms.article.show();
 
 				// 更新导航激活状态
-				layout.updateNav( contName ).buildAside('侧边栏');
+				layout.updateNav( contName );
 
 				// 防止重复创建
 				for( ; i < len; i++ ) {
