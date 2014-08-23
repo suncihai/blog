@@ -17,11 +17,10 @@ define(function( require, exports ){
 
 	function hashChanged() {
 		var hash, arr, len, name, param;
-		hash = LOC.hash.replace(/^[#\/\!]+/, '') || C.defaultPage; // javascript/102
+		hash = LOC.hash.replace(/^[#\/\!]+/, '') || C.defaultPage;
 		arr = hash.split('/');
 		len = arr.length;
 		name = arr[0];
-		// 确定参数
 		switch( len ) {
 			case 1: param = null; break;
 			case 2: param = arr[1]; break;

@@ -3,25 +3,28 @@ define(function( require, exports ){
 	var util = require('util');
 	var layout = require('layout');
 	var C = require('@core/config');
+	
+	var DC = C.dataCenter;
 
-	exports.onMain = function( data ) {
+	exports.onMain = function( data ) {		
 		var DOM = data.dom;
-		// 数据拉取地址
-		var requestUrl = C.backPath + '/listarchives/fade.json';
-		// 请求参数
+		var requestUrl = DC.path + DC.listarchives + DC.file;
 		var requestParam = util.mergeParam( C.archiveOption, {
 			catid: 2,
 			limit: 5
 		});
 
+		// 设置标题
+		layout.setTitle( data.name );
+
 		// 拉取数据
-		// $.ajax({
-		// 	url: requestUrl,
-		// 	dataType: 'json',
-		// 	data: requestParam,
-		// 	success: fnSuccess,
-		// 	error: fnError
-		// });
+		$.ajax({
+			url: requestUrl,
+			dataType: 'json',
+			data: requestParam,
+			success: fnSuccess,
+			error: fnError
+		});
 
 		/**
 		 * [fnSuccess 请求成功]
@@ -57,11 +60,6 @@ define(function( require, exports ){
 		 */
 		function fnError( msg ) {
 			util.error('数据拉取失败！错误码:' + msg.status + ', 错误信息:' + msg.statusText);
-		}		
-
-		/**
-		 * 设置网站标题
-		 */
-		$(document).attr( 'title', C.archiveTitle[data.name] );
+		}
 	}
 });

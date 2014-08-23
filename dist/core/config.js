@@ -7,14 +7,20 @@ define(function( require, exports ){
 		// 默认页面
 		defaultPage: 'index',
 
+		// 控制器的调用方法
+		action: 'onRun',
+
 		//Logo
 		logo: {
 			alt: '小前端-前端那些事~',
 			src: 'resources/images/logo.png'
 		},
 
-		// 控制器的调用方法
-		action: 'onRun',
+		// 页脚文字
+		copyright: '©2012-2014 TANGBC.COM 桂ICP备12002316号',
+
+		// 统计代码
+		stat: '',
 
 		// 导航
 		nav: [
@@ -72,16 +78,30 @@ define(function( require, exports ){
 			options: ['artid', 'title', 'publishDate', 'tags', 'abstract']
 		},
 
-		// 后端处理目录
-		backPath: '/blog/fade',
+		// article默认请求选项
+		articleOption: {
+			artid: 2,
+			options: ['title', 'publishDate', 'tags', 'content', 'comments']
+		},
+
+		// 侧边标题列表默认请求选项
+		listOption: {
+			amount: 8,
+			options: ['title', 'artid', 'archive', 'publishDate'],
+			orderby: 'date'
+		},
 
 		// 数据中心
 		dataCenter: {
-			listarchives: '/listarchives',
-			showarticle: '/showarticle',
-			showcomment: '/showcomment',
-			listtitle: '/listtitle'
-		}
+			// 处理文件
+			path: '/blog/fade',
+			file: 'fade.json',
+			// 文件目录
+			listarchives: '/listarchives/',
+			showarticle: '/showarticle/',
+			showcomment: '/showcomment/',
+			listtitle: '/listtitle/'
+		}		
 	}
 	return CONFIG;
 });
