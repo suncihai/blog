@@ -43,24 +43,9 @@ module.exports = function( grunt ) {
             }
 		},
 		watch: {
-			scripts: {
-				files: ['module/*.js', 'dist/core/*.js'],
-				tasks: ['jshint'],
-				options: {
-					interrupt: true
-				}
-			},
 			less: {
 				files: ['resources/less/*.less'],
 				tasks: ['less:compile']
-			},
-			config: {
-				files: ['Gruntfile.js'],
-				tasks: ['jshint:config']
-			},
-			client: {
-				files: ['module/*.js', 'dist/core/*.js'],
-				tasks: ['jshint:client']
 			}
 		}
 	});
