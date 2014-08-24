@@ -15,7 +15,7 @@ define(function( require, exports ){
 		});
 
 		// 设置标题
-		layout.setTitle( data.name );
+		layout.setTitle( C.archiveTitle[data.name] );
 
 		// 拉取数据
 		$.ajax({
@@ -43,9 +43,9 @@ define(function( require, exports ){
 						'<h2><a href="#'+ data.name +'/'+ item.artid +'" title="'+ item.title +'">'+ item.title +'</a></h2>',
 						'<div class="info">',
 							'<span class="time">'+ item.publishDate +'</span>',
-							'<article>'+ item.abstract +'</article>',
-							'<a href="#'+ data.name +'/'+ item.artid +'" class="readAll">阅读全文</a>',
 						'</div>',
+						'<article>'+ item.abstract +'</article>',
+						'<a href="#'+ data.name +'/'+ item.artid +'" class="readAll">阅读全文</a>',
 					'</section>'
 				].join(''));
 			});
