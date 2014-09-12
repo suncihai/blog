@@ -3,6 +3,7 @@ define(function( require, exports ){
 	var util = require('util');
 	var layout = require('layout');
 	var C = require('@core/config');
+	
 	var DC = C.dataCenter;
 
 	exports.onMain = function( data ) {

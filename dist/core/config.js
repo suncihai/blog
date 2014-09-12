@@ -33,15 +33,11 @@ define(function( require, exports ){
 				'link': 'javascript'
 			},
 			{
-				'name': 'HTML5&CSS3',
-				'link': 'html5css3'
+				'name': 'CSS',
+				'link': 'css'
 			},
 			{
-				'name': 'XHTML/CSS',
-				'link': 'htmlcss'
-			},
-			{
-				'name': '用户体验设计',
+				'name': 'UED',
 				'link': 'ued'
 			},
 			{
@@ -52,10 +48,9 @@ define(function( require, exports ){
 
 		// 栏目title
 		archiveTitle: {
-			index: '欢迎来到小前端！',
+			index: '小前端',
 			javascript: 'JavaScript | 博文汇总',
-			html5css3: 'HTML5&CSS3 | 博文汇总',
-			htmlcss: 'XHTML/CSS | 博文汇总',
+			css: 'CSS | 博文汇总',
 			ued: '用户体验设计',
 			talk: '前端那些事'
 		},
@@ -63,10 +58,9 @@ define(function( require, exports ){
 		// 栏目hash对应的category数据库id
 		catId: {
 			javascript: 1,
-			html5css3: 2,
-			htmlcss: 3,
-			ued: 4,
-			talk: 5
+			css: 2,
+			ued: 3,
+			talk: 4
 		},
 
 		// archive列表默认请求选项
@@ -101,7 +95,19 @@ define(function( require, exports ){
 			showarticle: '/showarticle/',
 			showcomment: '/showcomment/',
 			listtitle: '/listtitle/'
-		}		
+		}
+
+		// 数据中心
+		// dataCenter: {
+		// 	// 处理文件
+		// 	path: '/blog/Sprite/operation',
+		// 	file: 'query.php',
+		// 	// 文件目录
+		// 	listarchives: '/listarchives/',
+		// 	showarticle: '/showarticle/',
+		// 	showcomment: '/showcomment/',
+		// 	listtitle: '/listtitle/'
+		// }		
 	}
 	return CONFIG;
 });

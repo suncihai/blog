@@ -59,7 +59,7 @@ define(function( require, exports ){
 	 */
 	exports.buildList = function ( num ) {
 		var requestUrl = DC.path + DC.listtitle + DC.file;
-		var requestParam = C.listOption
+		var requestParam = util.mergeParam( C.listOption );
 
 		// 拉取数据
 		$.ajax({

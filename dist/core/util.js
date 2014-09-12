@@ -9,8 +9,6 @@ define(function( require, util ){
 
 	/**
 	 * [isObject 是否是对象自变量, {}或new Object()的形式]
-	 * @param  {[type]}  obj [检测对象]
-	 * @return {Boolean}     [返回]
 	 */
 	function isObject( obj ) {
 		return OP.toString.call( obj ) === '[object Object]';
@@ -18,8 +16,6 @@ define(function( require, util ){
 
 	/**
 	 * [isArray 是否是真数组, []或new Array()的形式]
-	 * @param  {[type]}  obj [监测对象]
-	 * @return {Boolean}     [返回]
 	 */
 	function isArray( obj ) {
 		return OP.toString.call( obj ) === '[object Array]';
@@ -27,8 +23,6 @@ define(function( require, util ){
 
 	/**
 	 * [isFunc 是否是函数]
-	 * @param  {Function} fn [监测对象]
-	 * @return {Boolean}     [返回]
 	 */
 	function isFunc( fn ) {
 		return ( fn instanceof Function );
@@ -36,8 +30,6 @@ define(function( require, util ){
 
 	/**
 	 * [isString 是否是字符串]
-	 * @param  {[type]}  str [监测对象]
-	 * @return {Boolean}     [返回]
 	 */
 	function isString( str ) {
 		return ( typeof( str ) === 'string' );
@@ -87,20 +79,20 @@ define(function( require, util ){
 	}
 	
 	/**
-	 * [extConfig 参数合并/更新]
+	 * [mergeParam AJAX请求参数的合并/更新/格式化]
 	 * @param  {[JSON]} Jold [默认参数]
 	 * @param  {[JSOn]} Jnew [指定参数]
 	 * @return {[JSON]}      [最新参数]
 	 */
 	util.mergeParam = function( Jold, Jnew ) {
+		if( arguments.length == 1 ) {
+			Jnew = {};
+		}
 		if( !isObject( Jold ) || !isObject( Jnew ) ) {
 			return false;
 		}
 		for( var pro in Jold ) {
-			Jold[pro] = 
-				Jnew.hasOwnProperty( pro ) ? 
-				isArray( Jnew[pro] ) ? Jnew[pro].join(',') : Jnew[pro] :
-				isArray( Jold[pro] ) ? Jold[pro].join(',') : Jold[pro];
+			Jold[pro] = Jnew.hasOwnProperty( pro ) ? isArray( Jnew[pro] ) ? Jnew[pro].join(',') : Jnew[pro] : isArray( Jold[pro] ) ? Jold[pro].join(',') : Jold[pro];
 		}
 		return Jold;
 	}
