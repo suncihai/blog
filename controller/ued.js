@@ -12,8 +12,7 @@ define(function( require, exports ){
 				'container': data.name,
 				'pageid': data.param
 			});
-		}
-		
+		}	
 
 		require.async('@pages/' + type, function( module ) {
 			module['onMain']( data );

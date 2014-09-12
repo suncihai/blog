@@ -14,7 +14,6 @@ define(function( require, exports ){
 			});
 		}
 		
-
 		require.async('@pages/' + type, function( module ) {
 			module['onMain']( data );
 		});

@@ -12,9 +12,12 @@ define(function( require, exports ){
 	var data = {
 		dom: null, 	  // 容器对象
 		name: null,   // 模块名称
-		param: null   // 传递参数
+		param: null   // 请求参数
 	}
 
+	/**
+	 * [hashChanged 监听hash变化]
+	 */
 	function hashChanged() {
 		var hash, arr, len, name, param;
 		hash = LOC.hash.replace(/^[#\/\!]+/, '') || C.defaultPage;
@@ -29,12 +32,21 @@ define(function( require, exports ){
 		run( name, param );
 	}
 
+	/**
+	 * [run 启用模块]
+	 * @param  {[type]} name  [模块名]
+	 * @param  {[type]} param [请求参数]
+	 */
 	function run( name, param ) {
 		data.name = name;
 		data.param = param;
 		require.async( '@controller/' + name, afterRun );
 	}
 
+	/**
+	 * [afterRun 启用后执行相应的操作]
+	 * @param  {[type]} module [启用的模块]
+	 */
 	function afterRun( module ) {
 		// 404
 		if( !module ) {
@@ -51,7 +63,9 @@ define(function( require, exports ){
 		
 	}
 
-	// 开始执行路由控制
+	/**
+	 * [start 开始执行路由控制]
+	 */
 	exports.start = function() {
 		if( 'onhashchange' in WIN ) {
 			if( WIN.addEventListener ) {
