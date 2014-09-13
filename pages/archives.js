@@ -32,25 +32,26 @@ define(function( require, exports ){
 		 * @return {[NULL]}     [无返回值]
 		 */
 		function fnSuccess( res ) {
-			if( !res.success ) {
-				DOM.html('拉取数据似乎出了点问题~');
-				return;
-			}
-			var sections = [];
-			$.each( res.result.items, function( idx, item ) {
-				sections.push([
-					'<section list-id="'+ idx +'">',
-						'<h2><a href="#'+ data.name +'/'+ item.artid +'" title="'+ item.title +'">'+ item.title +'</a></h2>',
-						'<div class="info">',
-							'<span class="time">'+ item.publishDate +'</span>',
-						'</div>',
-						'<article>'+ item.abstract +'</article>',
-						'<a href="#'+ data.name +'/'+ item.artid +'" class="readAll">阅读全文</a>',
-					'</section>'
-				].join(''));
-			});
+			util.log( res );
+			// if( !res.success ) {
+			// 	DOM.html('拉取数据似乎出了点问题~');
+			// 	return;
+			// }
+			// var sections = [];
+			// $.each( res.result.items, function( idx, item ) {
+			// 	sections.push([
+			// 		'<section list-id="'+ idx +'">',
+			// 			'<h2><a href="#'+ data.name +'/'+ item.artid +'" title="'+ item.title +'">'+ item.title +'</a></h2>',
+			// 			'<div class="info">',
+			// 				'<span class="time">'+ item.publishDate +'</span>',
+			// 			'</div>',
+			// 			'<article>'+ item.abstract +'</article>',
+			// 			'<a href="#'+ data.name +'/'+ item.artid +'" class="readAll">阅读全文</a>',
+			// 		'</section>'
+			// 	].join(''));
+			// });
 
-			DOM.append( sections.join('') );
+			// DOM.append( sections.join('') );
 		}
 
 		/**
