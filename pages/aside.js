@@ -62,13 +62,13 @@ define(function( require, exports ){
 		var requestParam = util.mergeParam( C.listOption );
 
 		// 拉取数据
-		$.ajax({
-			url: requestUrl,
-			dataType: 'json',
-			data: requestParam,
-			success: fnSuccess,
-			error: fnError
-		});
+		// $.ajax({
+		// 	url: requestUrl,
+		// 	dataType: 'json',
+		// 	data: requestParam,
+		// 	success: fnSuccess,
+		// 	error: fnError
+		// });
 
 		/**
 		 * [fnSuccess 请求成功]

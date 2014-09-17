@@ -86,28 +86,28 @@ define(function( require, exports ){
 		},
 
 		// 数据中心
-		dataCenter: {
-			// 处理文件
-			path: '/blog/fade',
-			file: 'fade.json',
-			// 文件目录
-			listarchives: '/listarchives/',
-			showarticle: '/showarticle/',
-			showcomment: '/showcomment/',
-			listtitle: '/listtitle/'
-		}
-
-		// 数据中心
 		// dataCenter: {
 		// 	// 处理文件
-		// 	path: '/blog/Sprite/operation',
-		// 	file: 'query.php',
+		// 	path: '/blog/fade',
+		// 	file: 'fade.json',
 		// 	// 文件目录
 		// 	listarchives: '/listarchives/',
 		// 	showarticle: '/showarticle/',
 		// 	showcomment: '/showcomment/',
 		// 	listtitle: '/listtitle/'
-		// }		
+		// }
+
+		// 数据中心
+		dataCenter: {
+			// 处理文件
+			path: '/blog/Sprint/operation',
+			file: 'query.php',
+			// 文件目录
+			listarchives: '/listarchives/',
+			showarticle: '/showarticle/',
+			showcomment: '/showcomment/',
+			listtitle: '/listtitle/'
+		}		
 	}
 	return CONFIG;
 });

@@ -2,16 +2,14 @@
 
 	require_once('../../library/sql.class.php');
 
-	$DB = new Sql();
+	$DB = new SQL();
 
-	// require_once('../../library/common.php');
+	$DB->open();
 
-	// $model = M();
+	$array = $DB->query("SELECT user_nicename FROM wp_users WHERE ID = 1");
 
-	// $sql = "SELECT user_nicename FROM wp_users WHERE ID = 1";
+	echo( $array );
 
-	// $res = $model -> query( $sql );
-
-	// echo $res['user_nicename'];
+	$DB->close();
 
 ?>

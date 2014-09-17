@@ -1,6 +1,4 @@
 <?php
-
-    /**  配置信息 **/
     
     /* 服务器 */ 
     define('DB_HOST', 'localhost');
