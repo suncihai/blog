@@ -1,15 +1,25 @@
 <?php
 
-	require_once('../../library/sql.class.php');
+	/**
+	 * 栏目文章列表
+	 */
 
-	$DB = new SQL();
+	require_once('../../library/db.class.php');
 
-	$DB->open();
+	// 请求选项
+	$catid = $_GET['catid'];
+	$limit = $_GET['limit'];
+	$order = $_GET['order'];
+	$brief = $_GET['brief'];
 
-	$array = $DB->query("SELECT user_nicename FROM wp_users WHERE ID = 1");
+	$Sql = new SQL();
 
-	echo( $array );
+	$Sql->open();
 
-	$DB->close();
+	$result = $Sql->getArchiveList( $catid, $limit, $order, $brief );
+
+	echo( $result );
+
+	$Sql->close();
 
 ?>

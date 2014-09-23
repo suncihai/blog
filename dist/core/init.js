@@ -14,12 +14,17 @@
 			'@dist':   		'dist',
 			'@core': 		'dist/core',
 			'@controller':	'controller',
-			'@pages':		'pages'
+			'@pages':		'pages',
+			'@plugins':		'dist/plugins'
 		},
 		map: [
-			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=20140000'] 
+			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=20140000']
 		],
-		preload: [],
+		preload: [
+			'@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css',
+			'@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCoreDefault.css',
+			'@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css'
+		],
 		debug: true
 	};
 

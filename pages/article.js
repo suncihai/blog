@@ -2,24 +2,26 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
 	var layout = require('layout');
+	var footer = require('@pages/footer');
 	var C = require('@core/config');
-	
+
 	var DC = C.dataCenter;
 
 	exports.onMain = function( data ) {
 		var DOM = data.dom;
 		var requestUrl = DC.path + DC.showarticle + DC.file;
 		var requestParam = util.mergeParam( C.articleOption, {
-			artid: data.param
+			'artid': data.param
 		});
 
 		// 拉取数据
 		$.ajax({
-			url: requestUrl,
-			dataType: 'json',
-			data: requestParam,
-			success: fnSuccess,
-			error: fnError
+			'url': requestUrl,
+			'method': 'get',
+			'dataType': 'json',
+			'data': requestParam,
+			'success': fnSuccess,
+			'error': fnError
 		});
 
 		/**
@@ -45,6 +47,8 @@ define(function( require, exports ){
 			$(html).appendTo( DOM );
 
 			layout.setTitle( data.name, res.result.title );
+			// 加载syntaxhighlighter插件
+			footer.addExternalScript( C.codeHighLighter );
 		}
 
 		/**
