@@ -3,6 +3,7 @@ define(function( require, exports ){
 	var util = require('util');
 	var layout = require('layout');
 	var C = require('@core/config');
+	var footer = require('@pages/footer');
 
 	var DC = C.dataCenter;
 
@@ -11,7 +12,7 @@ define(function( require, exports ){
 		var requestUrl = DC.path + DC.listarchives + DC.file;
 		var requestParam = util.mergeParam( C.archiveOption, {
 			'catid': 2,
-			'limit': 3
+			'limit': 30
 		});
 
 		// 设置标题
@@ -33,7 +34,6 @@ define(function( require, exports ){
 		 * @return {[NULL]}     [无返回值]
 		 */
 		function fnSuccess( res ) {
-			util.log( res );
 			if( !res.success ) {
 				DOM.html('拉取数据似乎出了点问题~');
 				return;
@@ -46,13 +46,14 @@ define(function( require, exports ){
 						'<div class="info">',
 							'<span class="time">'+ item.publishDate +'</span>',
 						'</div>',
-						'<article>'+ item.content +'</article>',
+						'<article>'+ item.content +' ......</article>',
 						'<a href="#'+ data.name +'/'+ item.id +'" class="readAll">阅读全文</a>',
 					'</section>'
 				].join(''));
 			});
-
 			DOM.append( sections.join('') );
+			// 加载syntaxhighlighter插件
+			// footer.loadHighLighter();
 		}
 
 		/**

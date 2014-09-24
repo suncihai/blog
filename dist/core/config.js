@@ -3,14 +3,13 @@
  */
 define(function( require, exports ) {
 	// 代码高亮插件路径
-	var pluginsBase = "/blog/dist/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/";
+	var shPath = "/blog/dist/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/";
 	var syntaxScripts = [
-		'<script src="'+ pluginsBase +'shCore.js"></script>',
-		'<script src="'+ pluginsBase +'shAutoloader.js"></script>',
-		'<script src="'+ pluginsBase +'shBrushXml.js"></script>',
-		'<script src="'+ pluginsBase +'shInit.js"></script>'
-	].join('');
-
+		shPath + 'shCore.js',
+		shPath + 'shAutoloader.js',
+		shPath + 'shBrushXml.js',
+		shPath + 'shInit.js'
+	];
 	var CONFIG = {
 
 		// 默认页面
@@ -32,7 +31,7 @@ define(function( require, exports ) {
 		stat: '',
 
 		// 代码高亮插件地址
-		codeHighLighter: syntaxScripts,
+		highLighterFiles: syntaxScripts,
 
 		// 导航
 		nav: [
@@ -79,7 +78,7 @@ define(function( require, exports ) {
 		archiveOption: {
 			catid: 1,
 			limit: 10,		// archivem每页显示文章数
-			brief: 80,		// archive页面文章摘要长度
+			brief: 180,		// archive页面文章摘要长度
 			order: 'date' 	// 按时间顺序排列
 		},
 

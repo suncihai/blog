@@ -5,6 +5,7 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var layout = require('layout');
 	var C = require('@core/config');
+	var util = require('util');
 
 	var footer = layout.doms.footer;
 
@@ -21,11 +22,10 @@ define(function( require, exports ){
 	exports.doms = doms;
 
 	/**
-	 * [init 页脚初始化，文字信息和统计代码]
+	 * [init 页脚初始化, 标注, 版权等文字信息]
 	 */
 	exports.init = function() {
-		this.buildFooterInfo( C.copyright )
-			.addExternalScript( C.stat );
+		this.buildFooterInfo( C.copyright );
 		return true;
 	}
 
@@ -40,12 +40,16 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [addExternalScript 插入JS文件]
-	 * @param {[type]} script [script标签]
+	 * TODO: 想个更好的加载方式吧~
+	 * [loadHighLighter 加载syntaxhighlighter]
 	 * @return {[type]}     [footer]
 	 */
-	exports.addExternalScript = function( script ) {
-		doms.hide.html( script || C.stat );
+	exports.loadHighLighter = function() {
+		var jsArr = C.highLighterFiles;
+		$.ajaxSetup({cache: true});
+		for( var i = 0, len = jsArr.length; i < len; i++ ) {
+			$.getScript( jsArr[i] );
+		}
 		return this;
 	}
 });
