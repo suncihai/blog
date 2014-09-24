@@ -6,6 +6,7 @@ define(function( require, util ){
 	var DOC = document;
 	var OP = Object.prototype;
 	var SP = String.prototype;
+	var AP = Array.prototype;
 
 	/**
 	 * [isObject 是否是对象自变量, {}或new Object()的形式]
@@ -77,7 +78,7 @@ define(function( require, util ){
 			cons.error( arguments[0] );
 		}
 	}
-	
+
 	/**
 	 * [mergeParam AJAX请求参数的合并/更新/格式化]
 	 * @param  {[JSON]} Jold [默认参数]
@@ -95,6 +96,15 @@ define(function( require, util ){
 			Jold[pro] = Jnew.hasOwnProperty( pro ) ? isArray( Jnew[pro] ) ? Jnew[pro].join(',') : Jnew[pro] : isArray( Jold[pro] ) ? Jold[pro].join(',') : Jold[pro];
 		}
 		return Jold;
+	}
+
+	util.argsToArray = function( args ) {
+		if ( args instanceof arguments.constructor ) {
+			return AP.slice.call( args );
+		}
+		else {
+			return args;
+		}
 	}
 
 });

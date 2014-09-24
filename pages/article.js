@@ -14,15 +14,17 @@ define(function( require, exports ){
 			'artid': data.param
 		});
 
-		// 拉取数据
-		$.ajax({
-			'url': requestUrl,
-			'method': 'get',
-			'dataType': 'json',
-			'data': requestParam,
-			'success': fnSuccess,
-			'error': fnError
-		});
+		setTimeout(function(){
+			// 拉取数据
+			$.ajax({
+				'url': requestUrl,
+				'method': 'get',
+				'dataType': 'json',
+				'data': requestParam,
+				'success': fnSuccess,
+				'error': fnError
+			});
+		}, 0);
 
 		/**
 		 * [fnSuccess 请求成功]
@@ -48,7 +50,7 @@ define(function( require, exports ){
 
 			layout.setTitle( data.name, res.result.title );
 			// 加载syntaxhighlighter插件
-			footer.addExternalScript( C.codeHighLighter );
+			// footer.loadHighLighter();
 		}
 
 		/**

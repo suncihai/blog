@@ -10,7 +10,7 @@
 
 	$Sql->open();
 
-	$artid = 36;
+	$artid = $_GET['artid'];
 
 	$result = $Sql->getArticle( $artid );
 

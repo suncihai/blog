@@ -21,11 +21,11 @@
 			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=20140000']
 		],
 		preload: [
-			'@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css',
-			'@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCoreDefault.css',
-			'@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css'
+			// '@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css',
+			// '@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCoreDefault.css',
+			// '@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css'
 		],
-		debug: true
+		debug: 0
 	};
 
 	/**

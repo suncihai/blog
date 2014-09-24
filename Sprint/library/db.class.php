@@ -86,7 +86,7 @@
             // 查询字段
             $fields = "ID, post_title, post_date, post_modified, post_content";
             // 查询条件
-            $filter = "LIMIT $limit ORDER BY $order";
+            $filter = "LIMIT $limit";
             $sql = "SELECT $fields FROM wp_posts $filter";
             // 执行查询操作
             $result = mysql_query( $sql, $this->conn );
@@ -97,13 +97,15 @@
                 $itemArray = array();
                 while( $assoc = mysql_fetch_assoc( $result ) )
                 {
+                    // 摘要截取
+                    $abstract = mb_substr( $assoc['post_content'], 0, $brief, 'utf8' );
                     $itemFormat = array
                     (
                         'id'           => $assoc['ID'],
                         'title'        => $assoc['post_title'],
                         'publishDate'  => $assoc['post_date'],
                         'modifiedDate' => $assoc['post_modified'],
-                        'content'      => $assoc['post_content']
+                        'content'      => $abstract
                     );
                     array_push( $itemArray, $itemFormat );
                 }
