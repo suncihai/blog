@@ -2,14 +2,6 @@
  * [系统配置信息]
  */
 define(function( require, exports ) {
-	// 代码高亮插件路径
-	var shPath = "/blog/dist/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/";
-	var syntaxScripts = [
-		shPath + 'shCore.js',
-		shPath + 'shAutoloader.js',
-		shPath + 'shBrushXml.js',
-		shPath + 'shInit.js'
-	];
 	var CONFIG = {
 
 		// 默认页面
@@ -30,31 +22,13 @@ define(function( require, exports ) {
 		// 统计代码
 		stat: '',
 
-		// 代码高亮插件地址
-		highLighterFiles: syntaxScripts,
-
 		// 导航
 		nav: [
-			{
-				'name': '首页',
-				'link': 'index'
-			},
-			{
-				'name': 'JavaScript',
-				'link': 'javascript'
-			},
-			{
-				'name': 'CSS',
-				'link': 'css'
-			},
-			{
-				'name': 'UED',
-				'link': 'ued'
-			},
-			{
-				'name': '前端那些事',
-				'link': 'talk'
-			}
+			{'name': '首页', 'link': 'index'},
+			{'name': 'JavaScript', 'link': 'javascript'},
+			{'name': 'CSS', 'link': 'css'},
+			{'name': 'UED', 'link': 'ued'},
+			{'name': '前端那些事', 'link': 'talk'}
 		],
 
 		// 栏目title
@@ -92,19 +66,16 @@ define(function( require, exports ) {
 		// 侧边标题列表默认请求选项
 		listOption: {
 			amount: 8,
-			orderby: 'date'
+			type: 'date'
 		},
 
 		// 数据中心
 		dataCenter: {
-			// 处理文件
-			path: '/blog/Sprint/operation',
-			file: 'query.php',
-			// 文件目录
-			listarchives: '/listarchives/',
-			showarticle: '/showarticle/',
-			showcomment: '/showcomment/',
-			listtitle: '/listtitle/'
+			// 处理文件目录
+			listarchives: '/blog/Sprint/operation/listarchives/query.php',
+			showarticle: '/blog/Sprint/operation/showarticle/query.php',
+			showcomment: '/blog/Sprint/operation/showcomment/query.php',
+			listtitle: '/blog/Sprint/operation/listtitle/query.php'
 		}
 	}
 	return CONFIG;

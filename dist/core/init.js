@@ -20,16 +20,12 @@
 		map: [
 			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=20140000']
 		],
-		preload: [
-			// '@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css',
-			// '@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCoreDefault.css',
-			// '@plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css'
-		],
+		preload: [],
 		debug: 0
 	};
 
 	/**
-	 * [INIT 分步初始化]
+	 * INIT 分步初始化
 	 */
 	function INIT() {
 		var cb = stepFunc[i++];

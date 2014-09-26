@@ -16,7 +16,7 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [hashChanged 监听hash变化]
+	 * hashChanged 监听hash变化
 	 */
 	function hashChanged() {
 		var hash, arr, len, name, param;
@@ -33,9 +33,9 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [run 启用模块]
-	 * @param  {[type]} name  [模块名]
-	 * @param  {[type]} param [请求参数]
+	 * run 启用模块
+	 * @param  {type} name  [模块名]
+	 * @param  {type} param [请求参数]
 	 */
 	function run( name, param ) {
 		data.name = name;
@@ -44,8 +44,8 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [afterRun 启用后执行相应的操作]
-	 * @param  {[type]} module [启用的模块]
+	 * afterRun 启用后执行相应的操作
+	 * @param  {type} module [启用的模块]
 	 */
 	function afterRun( module ) {
 		// 404
@@ -60,11 +60,11 @@ define(function( require, exports ){
 				util.error('Method "' + action + '" is not correct in controller/' + data.name + '.js');
 			}
 		}
-		
+
 	}
 
 	/**
-	 * [start 开始执行路由控制]
+	 * start 开始执行路由控制
 	 */
 	exports.start = function() {
 		if( 'onhashchange' in WIN ) {
@@ -82,14 +82,13 @@ define(function( require, exports ){
 				}
 			}, 150);
 		}
-		// 强制执行一次
 		hashChanged();
 	}
 
 	/**
-	 * [goto 路由切换方法]
-	 * @param  {[String]} uri [路由地址 / 数字表示跳转的历史]
-	 * @return {[null]}       [无返回]
+	 * goto 路由切换方法
+	 * @param  {String} uri [路由地址 / 数字表示跳转的历史]
+	 * @return {null}       [无返回]
 	 */
 	exports.goto = function( uri ) {
 		if ( util.isString( uri ) ){
