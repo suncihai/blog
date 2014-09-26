@@ -22,7 +22,7 @@ define(function( require, exports ){
 	exports.doms = doms;
 
 	/**
-	 * [init 页脚初始化, 标注, 版权等文字信息]
+	 * init 页脚初始化, 标注, 版权等文字信息
 	 */
 	exports.init = function() {
 		this.buildFooterInfo( C.copyright );
@@ -30,26 +30,12 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [buildFooterInfo 构建页脚文字信息]
-	 * @param  {[type]} str [显示的文字]
-	 * @return {[type]}     [footer]
+	 * buildFooterInfo 构建页脚文字信息
+	 * @param  {type} str [显示的文字]
+	 * @return {type}     [footer]
 	 */
 	exports.buildFooterInfo = function( str ) {
 		doms.info.html( str || C.copyright );
-		return this;
-	}
-
-	/**
-	 * TODO: 想个更好的加载方式吧~
-	 * [loadHighLighter 加载syntaxhighlighter]
-	 * @return {[type]}     [footer]
-	 */
-	exports.loadHighLighter = function() {
-		var jsArr = C.highLighterFiles;
-		$.ajaxSetup({cache: true});
-		for( var i = 0, len = jsArr.length; i < len; i++ ) {
-			$.getScript( jsArr[i] );
-		}
 		return this;
 	}
 });

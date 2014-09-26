@@ -9,38 +9,38 @@ define(function( require, util ){
 	var AP = Array.prototype;
 
 	/**
-	 * [isObject 是否是对象自变量, {}或new Object()的形式]
+	 * isObject 是否是对象自变量, {}或new Object()的形式
 	 */
 	function isObject( obj ) {
 		return OP.toString.call( obj ) === '[object Object]';
 	}
 
 	/**
-	 * [isArray 是否是真数组, []或new Array()的形式]
+	 * isArray 是否是真数组, []或new Array()的形式
 	 */
 	function isArray( obj ) {
 		return OP.toString.call( obj ) === '[object Array]';
 	}
 
 	/**
-	 * [isFunc 是否是函数]
+	 * isFunc 是否是函数
 	 */
 	function isFunc( fn ) {
 		return ( fn instanceof Function );
 	}
 
 	/**
-	 * [isString 是否是字符串]
+	 * isString 是否是字符串
 	 */
 	function isString( str ) {
 		return ( typeof( str ) === 'string' );
 	}
 
 	/**
-	 * [inArray 数组中是否存在某元素]
-	 * @param  {[Mix]}   ele [目标元素]
-	 * @param  {[Array]} arr [查询数组]
-	 * @return {[Number]}    [数组下标]
+	 * inArray 数组中是否存在某元素
+	 * @param  {Mix}   ele [目标元素]
+	 * @param  {Array} arr [查询数组]
+	 * @return {Number}    [数组下标]
 	 */
 	function inArray( ele, arr ) {
 		if( isArray( arr ) ) {
@@ -80,10 +80,10 @@ define(function( require, util ){
 	}
 
 	/**
-	 * [mergeParam AJAX请求参数的合并/更新/格式化]
-	 * @param  {[JSON]} Jold [默认参数]
-	 * @param  {[JSOn]} Jnew [指定参数]
-	 * @return {[JSON]}      [最新参数]
+	 * mergeParam AJAX请求参数的合并/更新/格式化
+	 * @param  {JSON} Jold [默认参数]
+	 * @param  {JSON} Jnew [指定参数]
+	 * @return {JSON}      [最新参数]
 	 */
 	util.mergeParam = function( Jold, Jnew ) {
 		if( arguments.length == 1 ) {

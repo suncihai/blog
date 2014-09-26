@@ -5,9 +5,9 @@ define(function( require, exports ){
 	var $ = require('jquery');
 
 	/**
-	 * [createIndex 创建主页容器]
-	 * @param  {[JSON]} config   [配置参数]
-	 * @return {[Object]}        [容器对象]
+	 * createIndex 创建主页容器
+	 * @param  {JSON} config   [配置参数]
+	 * @return {Object}        [容器对象]
 	 */
 	exports.createIndex = function( config ) {
 		if( $.type( config ) === 'object' ) {
@@ -28,9 +28,9 @@ define(function( require, exports ){
 
 
 	/**
-	 * [createArchive 创建栏目容器]
-	 * @param  {[JSON]} config   [配置参数]
-	 * @return {[Object]}        [容器对象]
+	 * createArchive 创建栏目容器
+	 * @param  {JSON} config   [配置参数]
+	 * @return {Object}        [容器对象]
 	 */
 	exports.createArchive = function( config ) {
 		if( $.type( config ) === 'object' ) {
@@ -75,9 +75,9 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [createArticle 创建文章容器]
-	 * @param  {[JSON]} config   [配置参数]
-	 * @return {[Object]}        [容器对象]
+	 * createArticle 创建文章容器
+	 * @param  {JSON} config   [配置参数]
+	 * @return {Object}        [容器对象]
 	 */
 	exports.createArticle = function( config ) {
 		if( $.type( config ) === 'object' ) {

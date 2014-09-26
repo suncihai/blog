@@ -53,8 +53,8 @@ define(function( require, exports ){
 	exports.doms = doms;
 
 	/**
-	 * [init 初始化]
-	 * @return {[type]} [layout]
+	 * init 初始化
+	 * @return {type} [layout]
 	 */
 	exports.init = function() {
 		// 构建导航和侧边栏
@@ -69,8 +69,8 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [buildNav 构建导航]
-	 * @return {[type]} [layout]
+	 * buildNav 构建导航
+	 * @return {type} [layout]
 	 */
 	exports.buildNav = function() {
 		var navs = [];
@@ -86,9 +86,9 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [updateNav 更新导航选中状态]
-	 * @param  {[String]} link [导航hash值]
-	 * @return {[type]}        [layout]
+	 * updateNav 更新导航选中状态
+	 * @param  {String} link [导航hash值]
+	 * @return {type}        [layout]
 	 */
 	exports.updateNav = function( link ) {
 		$.each( C.nav, function( idx, item ) {
@@ -105,7 +105,7 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [buildAside 侧边栏创建]
+	 * buildAside 侧边栏创建
 	 */
 	exports.buildAside = function() {
 		require.async('@pages/aside', function( aside ) {
@@ -115,9 +115,9 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [buildFooter 页脚创建]
-	 * @param  {[type]} param [参数]
-	 * @return {[type]}       [description]
+	 * buildFooter 页脚创建
+	 * @param  {type} param [参数]
+	 * @return {type}       [description]
 	 */
 	exports.buildFooter = function() {
 		require.async('@pages/footer', function( footer ) {
@@ -127,9 +127,9 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * [setTitle 设置网站title, 栏目与标题的组合，一个参数则直接设置]
-	 * @param {[type]} name  [栏目名称]
-	 * @param {[type]} title [文章名称]
+	 * setTitle 设置网站title, 栏目与标题的组合，一个参数则直接设置
+	 * @param {type} name  [栏目名称]
+	 * @param {type} title [文章名称]
 	 */
 	exports.setTitle = function( name, title ) {
 		var str = '', art, arc;

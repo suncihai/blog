@@ -5,11 +5,10 @@ define(function( require, exports ){
 	var C = require('@core/config');
 	var footer = require('@pages/footer');
 
-	var DC = C.dataCenter;
+	var dc = C.dataCenter;
 
 	exports.onMain = function( data ) {
 		var DOM = data.dom;
-		var requestUrl = DC.path + DC.listarchives + DC.file;
 		var requestParam = util.mergeParam( C.archiveOption, {
 			'catid': 2,
 			'limit': 30
@@ -20,7 +19,7 @@ define(function( require, exports ){
 
 		// 拉取数据
 		$.ajax({
-			'url': requestUrl,
+			'url': dc.listarchives,
 			'method': 'get',
 			'dataType': 'json',
 			'data': requestParam,
@@ -29,9 +28,9 @@ define(function( require, exports ){
 		});
 
 		/**
-		 * [fnSuccess 请求成功]
-		 * @param  {[JSON]} res [返回数据]
-		 * @return {[NULL]}     [无返回值]
+		 * fnSuccess 请求成功
+		 * @param  {JSON} res [返回数据]
+		 * @return {NULL}     [无返回值]
 		 */
 		function fnSuccess( res ) {
 			if( !res.success ) {
@@ -57,9 +56,9 @@ define(function( require, exports ){
 		}
 
 		/**
-		 * [fnError 请求失败]
-		 * @param  {[JSON]} msg [错误信息]
-		 * @return {[NULL]}     [无返回值]
+		 * fnError 请求失败
+		 * @param  {JSON} msg [错误信息]
+		 * @return {NULL}     [无返回值]
 		 */
 		function fnError( msg ) {
 			util.error('数据拉取失败！错误码:' + msg.status + ', 错误信息:' + msg.statusText);
