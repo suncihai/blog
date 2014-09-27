@@ -1,3 +1,9 @@
+.leftW{
+	width: 73%;
+}
+.rightW{
+	width: 27%;
+}
 .G-frame{
 	width: @globalWidth;
 	margin: 0 auto;
@@ -37,21 +43,26 @@
 			display: none;
 			width: 100%;
 			&Archive{
+				.leftW;
 				display: inline-block;
-				width: 75%;
 				box-sizing: border-box;
 			}
 			&Article{
+				.leftW;
 				display: inline-block;
-				width: 75%;
 				box-sizing: border-box;
 			}
 			&Aside{
+				.rightW;
 				float: right;
-				width: 25%;
+				padding: 15px;
 				box-sizing: border-box;
-				border: 1px solid #EEE;
-				border-radius: 2px;
+				background: #F4F4F4;
+				dt{
+					font-weight: bold;
+					color: #666;
+					background: #FAFAFA;
+				}
 			}
 		}
 		// 底部

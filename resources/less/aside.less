@@ -1,15 +1,81 @@
 // 侧边栏样式
+.P-aside{
+	font-size: 15px;
+}
+.P-me, .P-list, .P-others{
+	box-sizing: border-box;
+	border-radius: 2px;
+	background: #FFF;
+	border: 3px solid #E2E1E1;
+}
+// 关于我
 .P-me{
-	box-sizing: border-box;
-	padding: 10px;
+	.P-me-dt{
+		height: @listOptionHeight;
+		line-height: @listOptionHeight;
+		padding: 0 10px;
+		border-bottom: 1px solid #EEE;
+	}
+	.P-me-dd{
+		padding: 10px;
+	}
 }
+// 文章列表
 .P-list{
-	box-sizing: border-box;
-	padding: 10px;
-	border-bottom: 1px solid #EEE;
-	border-top: 1px solid #EEE;
+	margin: 15px 0;
+	.P-list-dt{
+		height: @listOptionHeight;
+		line-height: @listOptionHeight;
+		padding: 0 10px;
+		border-bottom: 2px solid #EEE;
+	}
+	.art-item{
+		padding: 6px 10px;
+		background: #FFF;
+		-webkit-transition: background .4s ease;
+		-moz-transition: background .4s ease;
+		transition: background .4s ease;
+	}
+	.art-item:hover{
+		background: #F8F8F5;
+	}
+	.art-line{
+		height: 0;
+		border-top: 1px dashed #DDD;
+		overflow: hidden;
+	}
+	.art-line:last-child{
+		display: none;
+	}
+	.art-anchor{
+		display: block;
+	}
+	.art-anchor:hover{
+		color: @defaultAnchor;
+	}
+	.art-title{
+		display: block;
+		width: 100%;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	.art-archive, .art-date, .art-comments{
+		font-size: 12px;
+		color: #BBB;
+	}
+	.art-archive{
+		// background: url(../images/archive.png) no-repeat;
+	}
+	.art-date{
+		// background: url(../images/date.png) no-repeat;
+		margin: 0 10px;
+	}
+	.art-comments{
+		// background: url(../images/comment.png) no-repeat;
+	}
 }
+// 其他信息
 .P-others{
-	box-sizing: border-box;
 	padding: 10px;
 }

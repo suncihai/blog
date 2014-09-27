@@ -110,8 +110,14 @@ noscript {
   color: #666;
   text-shadow: 2px 2px 3px #CCC;
 }
+.leftW {
+  width: 73%;
+}
+.rightW {
+  width: 27%;
+}
 .G-frame {
-  width: 1190px;
+  width: 1080px;
   margin: 0 auto;
 }
 .G-frameBodyHead {
@@ -147,21 +153,26 @@ noscript {
   width: 100%;
 }
 .G-frameBodyWrapperArchive {
+  width: 73%;
   display: inline-block;
-  width: 75%;
   box-sizing: border-box;
 }
 .G-frameBodyWrapperArticle {
+  width: 73%;
   display: inline-block;
-  width: 75%;
   box-sizing: border-box;
 }
 .G-frameBodyWrapperAside {
+  width: 27%;
   float: right;
-  width: 25%;
+  padding: 15px;
   box-sizing: border-box;
-  border: 1px solid #EEE;
-  border-radius: 2px;
+  background: #F4F4F4;
+}
+.G-frameBodyWrapperAside dt {
+  font-weight: bold;
+  color: #666;
+  background: #FAFAFA;
 }
 .G-frameBodyFooter {
   width: 100%;
@@ -196,20 +207,77 @@ noscript {
   margin-top: 10px;
   width: 100%;
   padding: 10px;
-  background: #eeeeff;
 }
-.P-me {
+.P-aside {
+  font-size: 15px;
+}
+.P-me,
+.P-list,
+.P-others {
   box-sizing: border-box;
+  border-radius: 2px;
+  background: #FFF;
+  border: 3px solid #E2E1E1;
+}
+.P-me .P-me-dt {
+  height: 35px;
+  line-height: 35px;
+  padding: 0 10px;
+  border-bottom: 1px solid #EEE;
+}
+.P-me .P-me-dd {
   padding: 10px;
 }
 .P-list {
-  box-sizing: border-box;
-  padding: 10px;
-  border-bottom: 1px solid #EEE;
-  border-top: 1px solid #EEE;
+  margin: 15px 0;
+}
+.P-list .P-list-dt {
+  height: 35px;
+  line-height: 35px;
+  padding: 0 10px;
+  border-bottom: 2px solid #EEE;
+}
+.P-list .art-item {
+  padding: 6px 10px;
+  background: #FFF;
+  -webkit-transition: background .4s ease;
+  -moz-transition: background .4s ease;
+  transition: background .4s ease;
+}
+.P-list .art-item:hover {
+  background: #F8F8F5;
+}
+.P-list .art-line {
+  height: 0;
+  border-top: 1px dashed #DDD;
+  overflow: hidden;
+}
+.P-list .art-line:last-child {
+  display: none;
+}
+.P-list .art-anchor {
+  display: block;
+}
+.P-list .art-anchor:hover {
+  color: #008000;
+}
+.P-list .art-title {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.P-list .art-archive,
+.P-list .art-date,
+.P-list .art-comments {
+  font-size: 12px;
+  color: #BBB;
+}
+.P-list .art-date {
+  margin: 0 10px;
 }
 .P-others {
-  box-sizing: border-box;
   padding: 10px;
 }
 .P-article .content {
@@ -231,6 +299,6 @@ noscript {
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
-  font-family: Consolas;
+  font-family: Consolas, Tahoma;
   background: #FCFCFC;
 }
