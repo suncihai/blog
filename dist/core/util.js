@@ -98,6 +98,11 @@ define(function( require, util ){
 		return Jold;
 	}
 
+	/**
+	 * argsToArray 参数转数组
+	 * @param  {Object} args [参数]
+	 * @return {Array}       [数组]
+	 */
 	util.argsToArray = function( args ) {
 		if ( args instanceof arguments.constructor ) {
 			return AP.slice.call( args );
