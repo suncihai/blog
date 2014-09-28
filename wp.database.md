@@ -4,16 +4,27 @@ wordpress数据库表结构
 数据库结构:
 ----------
 wp_commentmeta：存储评论的元数据
+
 wp_comments：存储评论
+
 wp_links：存储友情链接（Blogroll）
+
 wp_options：存储WordPress系统选项和插件、主题配置
+
 wp_postmeta：存储文章（包括页面、上传文件、修订）的元数据
+
 wp_posts：存储文章（包括页面、上传文件、修订）
+
 wp_terms：存储每个目录、标签
+
 wp_term_relationships：存储每个文章、链接和对应分类的关系
+
 wp_term_taxonomy：存储每个目录、标签所对应的分类
+
 wp_usermeta：存储用户的元数据
+
 wp_users：存储用户
+
 
 表结构:
 ----------
