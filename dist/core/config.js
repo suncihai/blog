@@ -26,26 +26,26 @@ define(function( require, exports ) {
 		nav: [
 			{'name': '首页', 'link': 'index'},
 			{'name': 'JavaScript', 'link': 'javascript'},
-			{'name': 'CSS', 'link': 'css'},
-			{'name': 'UED', 'link': 'ued'},
-			{'name': '前端那些事', 'link': 'talk'}
+			{'name': 'HTML/CSS', 'link': 'htmlcss'},
+			{'name': 'UE Design', 'link': 'uedesign'},
+			{'name': '前端那些事', 'link': 'matters'}
 		],
 
 		// 栏目title
 		archiveTitle: {
 			index: '小前端',
 			javascript: 'JavaScript',
-			css: 'CSS',
-			ued: '用户体验设计',
-			talk: '前端那些事'
+			htmlcss: 'CSS',
+			uedesign: '用户体验设计',
+			matters: '前端那些事'
 		},
 
-		// 栏目hash对应的category数据库id
+		// 栏目hash对应的category数据库id(表wp_terms)
 		cat: {
-			javascript: 1,
-			css: 2,
-			ued: 3,
-			talk: 4
+			javascript: 3,
+			htmlcss: 22,
+			uedesign: 6,
+			matters: 1
 		},
 
 		// archive列表默认请求选项
