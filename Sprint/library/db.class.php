@@ -84,11 +84,16 @@ class SQL
      */
     public function getArchiveList( $catid, $limit, $order, $brief )
     {
+        if( $order === 'date' ) {
+            $orderBy = 'post_date';
+        }
         // 查询字段
         $fields = "ID, post_title, post_date, post_modified, post_content";
         // 查询条件
-        $filter = "LIMIT $limit";
-        $sql = "SELECT $fields FROM wp_posts $filter";
+        $where = "post_status='publish' AND post_type='post'";
+        // 限制条件
+        $filter = "ORDER BY $orderBy DESC LIMIT $limit";
+        $sql = "SELECT $fields FROM wp_posts WHERE $where $filter";
         // 执行查询操作
         $result = mysql_query( $sql, $this->conn );
         // 查询是否成功
@@ -98,8 +103,14 @@ class SQL
             $itemArray = array();
             while( $assoc = mysql_fetch_assoc( $result ) )
             {
-                // 摘要截取
-                $abstract = mb_substr( $assoc['post_content'], 0, $brief, 'utf8' );
+                // 摘要截取, 先检测再截取(确保字数)
+                $text = fixtags( $assoc['post_content'] );
+                $abstract = mb_substr( strip_tags( $text ), 0, $brief, 'utf8');
+
+                // 摘要截取, 先截取再检测(确保性能)
+                // $text = mb_substr( $assoc['post_content'], 0, $brief, 'utf8' );
+                // $abstract = strip_tags( fixtags( $text ) );
+
                 $itemFormat = array
                 (
                     'id'           => $assoc['ID'],
@@ -189,8 +200,10 @@ class SQL
         // 查询字段
         $fields = "ID, post_title, post_date";
         // 查询条件
-        $filter = "LIMIT $amount";
-        $sql = "SELECT $fields FROM wp_posts $filter";
+        $where = "post_status='publish' AND post_type='post'";
+        // 限制条件
+        $filter = "ORDER BY post_date DESC LIMIT $amount";
+        $sql = "SELECT $fields FROM wp_posts WHERE $where $filter";
         // 执行查询操作
         $result = mysql_query( $sql, $this->conn );
         // 查询是否成功
@@ -233,6 +246,18 @@ class SQL
         }
         return json_encode( $retArray );
     }
+}
+
+// HTML标签闭合检测. 如果$text的数据过大时, 可能存在一定的性能问题
+function fixtags( $text ) {
+    $text = htmlspecialchars( $text );
+    $text = preg_replace( "/&quot;/", "&quot;\"", $text );
+    $tags = "/&lt;(!|)(\/|)(\w*)(\ |)(\w*)([\\\=]*)(?|(\")\"&quot;\"|)(?|(.*)?&quot;(\")|)([\ ]?)(\/|)&gt;/i";
+    $replacement = "<$1$2$3$4$5$6$7$8$9$10$11>";
+    $text = preg_replace( $tags, $replacement, $text );
+    $text = preg_replace( "/=\"\"/", "=", $text );
+    $text = preg_replace( "/&quot;\"/", "\"", $text );
+    return $text;
 }
 
 ?>

@@ -11,7 +11,7 @@ define(function( require, exports ){
 		var DOM = data.dom;
 		var requestParam = util.mergeParam( C.archiveOption, {
 			'catid': 2,
-			'limit': 30
+			'limit': 40
 		});
 
 		// 设置标题
@@ -38,6 +38,7 @@ define(function( require, exports ){
 				return;
 			}
 			var sections = [];
+			util.log( res );
 			$.each( res.result.items, function( idx, item ) {
 				sections.push([
 					'<section list-id="'+ idx +'">',
@@ -45,14 +46,11 @@ define(function( require, exports ){
 						'<div class="info">',
 							'<span class="time">'+ item.publishDate +'</span>',
 						'</div>',
-						'<article>'+ item.content +' ......</article>',
-						'<a href="#'+ data.name +'/'+ item.id +'" class="readAll">阅读全文</a>',
+						'<article>'+ item.content +' ……</article>',
 					'</section>'
 				].join(''));
 			});
 			DOM.append( sections.join('') );
-			// 加载syntaxhighlighter插件
-			// footer.loadHighLighter();
 		}
 
 		/**
