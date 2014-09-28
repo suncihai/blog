@@ -4,13 +4,9 @@ wordpress数据库表结构
 数据库结构:
 ----------
 wp_commentmeta：存储评论的元数据
-
 wp_comments：存储评论
-
 wp_links：存储友情链接（Blogroll）
-
 wp_options：存储WordPress系统选项和插件、主题配置
-
 wp_postmeta：存储文章（包括页面、上传文件、修订）的元数据
 
 wp_posts：存储文章（包括页面、上传文件、修订）
@@ -29,16 +25,24 @@ wp_users：存储用户
 表结构:
 ----------
 wp_commentmeta
+
 	meta_id：自增唯一ID
+	
 	comment_id：对应评论ID
+	
 	meta_key：键名
+	
 	meta_value：键值
+	
 
 
 
 wp_comments
+
 	comment_ID：自增唯一ID
+	
 	comment_post_ID：对应文章ID
+	
 	comment_author：评论者
 	comment_author_email：评论者邮箱
 	comment_author_url：评论者网址
