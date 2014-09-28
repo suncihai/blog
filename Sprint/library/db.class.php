@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 header("Content-type: text/html; charset=utf-8");
 require_once('config.php');
@@ -12,7 +12,7 @@ class SQL
 	public $db;
 	public $conn;
 
-	/**
+    /**
      * 打开数据库连接
      */
     public function open( $host = DB_HOST, $user = DB_USER, $pswd = DB_PASSWORD, $db = DB_NAME )

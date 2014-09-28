@@ -12,18 +12,21 @@ define(function( require, exports ){
 
 	// HTML结构
 	var html = [
-		'<div class="P-me"></div>',
-		'<div class="P-list">',
-			'<dl class="P-list-dl">',
-				'<dt class="P-list-dt"></dt>',
-				'<dd class="P-list-dd"></dd>',
-			'</dl>',
-		'</div>',
-		'<div class="P-others"></div>'
+		'<div class="P-aside">',
+			'<div class="P-me"></div>',
+			'<div class="P-list">',
+				'<dl class="P-list-dl">',
+					'<dt class="P-list-dt"></dt>',
+					'<dd class="P-list-dd"></dd>',
+				'</dl>',
+			'</div>',
+			'<div class="P-others"></div>',
+		'</div>'
 	].join('');
 
 	$(html).appendTo( Aside );
 	var doms = {
+		'aside': 	$('.P-aside', Aside),
 		'me': 		$('.P-me', Aside),
 		'list': 	$('.P-list', Aside),
 		'listDL': 	$('.P-list-dl', Aside),
@@ -37,8 +40,9 @@ define(function( require, exports ){
 	 * build 侧边栏初始化
 	 */
 	exports.init = function() {
-		this.buildMe().buildList().buildOthers();
-		return true;
+		this.buildMe()
+			.buildList()
+			.buildOthers();
 	}
 
 	/**
@@ -55,7 +59,12 @@ define(function( require, exports ){
 	 * @return {type} [Aside]
 	 */
 	exports.buildMe = function() {
-		doms.me.html('自我介绍');
+		$([
+			'<dl class="P-me-dl">',
+				'<dt class="P-me-dt">关于我</dt>',
+				'<dd class="P-me-dd">关于我的信息</dd>',
+			'</dl>'
+		].join('')).appendTo( doms.me );
 		return this;
 	}
 
@@ -89,9 +98,15 @@ define(function( require, exports ){
 			var lis = [];
 			$.each( res.result.items, function( idx, item ) {
 				lis.push([
-					'<li>',
-						'<a href="#'+ item.archive +'/'+ item.id +'" title="'+ item.title +'">'+ item.title +'</a>',
-					'</li>'
+					'<li class="art-item" data-id="'+ idx +'">',
+						'<a href="#'+ item.archive +'/'+ item.id +'" class="art-anchor">',
+							'<span class="art-title" title="'+ item.title +'">'+ item.title +'</span>',
+							'<em class="art-archive" title="文章分类">JavaScript</em>',
+							'<em class="art-date" title="发布日期">2014-09-27</em>',
+							'<em class="art-comments" title="评论数">3</em>',
+						'</a>',
+					'</li>',
+					'<li class="art-line"/>'
 				].join(''));
 			});
 			var ul = '<ul>' + lis.join('') + '</ul>';
