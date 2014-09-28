@@ -27,7 +27,7 @@ wp_usermeta：存储用户的元数据
 wp_users：存储用户
 
 
-表结构:
+#表结构:#
 ----------
 wp_commentmeta
 
