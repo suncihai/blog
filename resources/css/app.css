@@ -64,6 +64,7 @@ body {
   background: #FFF;
   font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑', Tahoma;
   font-size: 16px;
+  background: url(../images/bg.gif) repeat;
 }
 input,
 textarea {
@@ -227,6 +228,7 @@ noscript {
 }
 .M-pager .M-pagerItem,
 .M-pager .M-pagerPN {
+  box-sizing: border-box;
   position: relative;
   margin-right: 10px;
   display: inline-block;
@@ -241,7 +243,12 @@ noscript {
   font-size: 18px;
 }
 .M-pager .M-pagerAct {
-  border-color: #FFF;
+  border: none;
+  background: none;
+  cursor: default;
+}
+.M-pager .M-pagerDisabled {
+  background: #F1F1EF;
   cursor: default;
 }
 .P-aside {

@@ -49,11 +49,24 @@ define(function( require, exports ){
 		// 激活当前页码
 		$('.M-pagerItem').eq(page-1).addClass('M-pagerAct');
 
+		if( page === 1 ) {
+			$('.M-pagerPrev').addClass('M-pagerDisabled');
+		}
+		else if( page === pages ) {
+			$('.M-pagerNext').addClass('M-pagerDisabled');
+		}
+
 		// 翻页点击事件
 		$('.M-pagerPN').on( 'click', function() {
-			var id = 'next';
+			var id = 0;
 			if( $(this).hasClass('M-pagerPrev') ) {
-				id = 'prev';
+				id = page - 1;
+			}
+			else if( $(this).hasClass('M-pagerNext') ) {
+				id = page + 1;
+			}
+			if( id === 0 || id > pages ) {
+				return false;
 			}
 			callback.call( this, id );
 			return false;

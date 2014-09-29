@@ -60,9 +60,9 @@ define(function( require, exports ){
 	 */
 	exports.buildMe = function() {
 		$([
-			'<dl class="P-me-dl">',
-				'<dt class="P-me-dt">关于我</dt>',
-				'<dd class="P-me-dd">关于我的信息</dd>',
+			'<dl class="P-aside-me-dl">',
+				'<dt class="P-aside-me-dt">关于我</dt>',
+				'<dd class="P-aside-me-dd">关于我的信息</dd>',
 			'</dl>'
 		].join('')).appendTo( doms.me );
 		return this;

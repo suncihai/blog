@@ -10,7 +10,7 @@
 
 	$Sql->open();
 
-	$artid = isset( $_GET['artid'] ) : $_GET['type'] : 1;
+	$artid = isset( $_GET['artid'] ) ? $_GET['artid'] : 1;
 
 	$result = $Sql->getArticle( $artid );
 

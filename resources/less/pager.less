@@ -9,8 +9,8 @@
 	input:active, input:focus{
 		outline: none;
 	}
-
 	.M-pagerItem, .M-pagerPN{
+		box-sizing: border-box;
 		position: relative;
 		margin-right: 10px;
 		display: inline-block;
@@ -25,7 +25,12 @@
 		font-size: 18px;
 	}
 	.M-pagerAct{
-		border-color: #FFF;
+		border: none;
+		background: none;
+		cursor: default;
+	}
+	.M-pagerDisabled{
+		background: #F1F1EF;
 		cursor: default;
 	}
 	.M-pagerPrev, .M-pagerNext{
