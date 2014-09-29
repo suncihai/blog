@@ -13,26 +13,26 @@ define(function( require, exports ){
 	// HTML结构
 	var html = [
 		'<div class="P-aside">',
-			'<div class="P-me"></div>',
-			'<div class="P-list">',
-				'<dl class="P-list-dl">',
-					'<dt class="P-list-dt"></dt>',
-					'<dd class="P-list-dd"></dd>',
+			'<div class="P-aside-me"></div>',
+			'<div class="P-aside-list">',
+				'<dl class="P-aside-list-dl">',
+					'<dt class="P-aside-list-dt"></dt>',
+					'<dd class="P-aside-list-dd"></dd>',
 				'</dl>',
 			'</div>',
-			'<div class="P-others"></div>',
+			'<div class="P-aside-others"></div>',
 		'</div>'
 	].join('');
 
 	$(html).appendTo( Aside );
 	var doms = {
 		'aside': 	$('.P-aside', Aside),
-		'me': 		$('.P-me', Aside),
-		'list': 	$('.P-list', Aside),
-		'listDL': 	$('.P-list-dl', Aside),
-		'listDT': 	$('.P-list-dt', Aside),
-		'listDD': 	$('.P-list-dd', Aside),
-		'others': 	$('.P-others', Aside)
+		'me': 		$('.P-aside-me', Aside),
+		'list': 	$('.P-aside-list', Aside),
+		'listDL': 	$('.P-aside-list-dl', Aside),
+		'listDT': 	$('.P-aside-list-dt', Aside),
+		'listDD': 	$('.P-aside-list-dd', Aside),
+		'others': 	$('.P-aside-others', Aside)
 	}
 	exports.doms = doms;
 

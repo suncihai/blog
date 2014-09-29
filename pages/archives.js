@@ -3,15 +3,23 @@ define(function( require, exports ){
 	var util = require('util');
 	var layout = require('layout');
 	var C = require('@core/config');
-	var footer = require('@pages/footer');
+	var pager = require('@pages/pager');
 
 	var dc = C.dataCenter;
 
 	exports.onMain = function( data ) {
-		var DOM = data.dom;
+		var dom = data.dom;
+		$([
+			'<div class="P-archive-list"/>',
+			'<div class="P-archive-pager"/>'
+		].join('')).appendTo( dom );
+		var listBox = $('.P-archive-list', dom);
+		var pagerBox = $('.P-archive-pager', dom);
+		var url = dc.listarchives;
 		var requestParam = util.mergeParam( C.archiveOption, {
 			'catid': 2,
-			'limit': 40
+			'page': 1,
+			'limit': 3
 		});
 
 		// 设置标题
@@ -19,7 +27,7 @@ define(function( require, exports ){
 
 		// 拉取数据
 		$.ajax({
-			'url': dc.listarchives,
+			'url': url,
 			'method': 'get',
 			'dataType': 'json',
 			'data': requestParam,
@@ -37,20 +45,45 @@ define(function( require, exports ){
 				DOM.html('拉取数据似乎出了点问题~');
 				return;
 			}
+			// 循环生成列表
+			$.each( res.result.items, createSections );
+
+			// 分页器
+			pager.buildPager({
+				'target': pagerBox,
+				'page': res.result.page,
+				'pages': res.result.pages,
+				'total': res.result.total
+			}, onPagerSelect);
+		}
+
+		/**
+		 * createSections 循环生成列表
+		 * @param  {Number} idx  [序号]
+		 * @param  {Object} item [选项对象]
+		 * @return {NULL}        [无返回值]
+		 */
+		function createSections( idx, item ) {
 			var sections = [];
-			util.log( res );
-			$.each( res.result.items, function( idx, item ) {
-				sections.push([
-					'<section list-id="'+ idx +'">',
-						'<h2><a href="#'+ data.name +'/'+ item.id +'" title="'+ item.title +'">'+ item.title +'</a></h2>',
-						'<div class="info">',
-							'<span class="time">'+ item.publishDate +'</span>',
-						'</div>',
-						'<article>'+ item.content +' ……</article>',
-					'</section>'
-				].join(''));
-			});
-			DOM.append( sections.join('') );
+			sections.push([
+				'<section list-id="'+ idx +'">',
+					'<h2><a href="#'+ data.name +'/'+ item.id +'" title="'+ item.title +'">'+ item.title +'</a></h2>',
+					'<div class="info">',
+						'<span class="time">'+ item.publishDate +'</span>',
+					'</div>',
+					'<article>'+ item.content +' ……</article>',
+				'</section>'
+			].join(''));
+			listBox.append( sections.join('') );
+		}
+
+		/**
+		 * onPagerSelect 页码激活事件
+		 * @param  {Number} page [激活的页码]
+		 * @return {NULL}        [无返回值]
+		 */
+		function onPagerSelect( page ) {
+			util.log(page);
 		}
 
 		/**
