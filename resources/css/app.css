@@ -65,6 +65,10 @@ body {
   font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑', Tahoma;
   font-size: 16px;
 }
+input,
+textarea {
+  font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑', Tahoma;
+}
 ul,
 ol {
   list-style-type: none;
@@ -111,10 +115,10 @@ noscript {
   text-shadow: 2px 2px 3px #CCC;
 }
 .leftW {
-  width: 73%;
+  width: 70%;
 }
 .rightW {
-  width: 27%;
+  width: 30%;
 }
 .G-frame {
   width: 1080px;
@@ -153,17 +157,17 @@ noscript {
   width: 100%;
 }
 .G-frameBodyWrapperArchive {
-  width: 73%;
+  width: 70%;
   display: inline-block;
   box-sizing: border-box;
 }
 .G-frameBodyWrapperArticle {
-  width: 73%;
+  width: 70%;
   display: inline-block;
   box-sizing: border-box;
 }
 .G-frameBodyWrapperAside {
-  width: 27%;
+  width: 30%;
   float: right;
   padding: 15px;
   box-sizing: border-box;
@@ -208,76 +212,108 @@ noscript {
   width: 100%;
   padding: 10px;
 }
-.P-aside {
-  font-size: 15px;
+.M-pager {
+  padding: 20px 0;
 }
-.P-me,
-.P-list,
-.P-others {
+.M-pagerList {
+  display: inline-block;
+}
+.M-pagerInfo {
+  display: inline-block;
+}
+.M-pager input:active,
+.M-pager input:focus {
+  outline: none;
+}
+.M-pager .M-pagerItem,
+.M-pager .M-pagerPN {
+  position: relative;
+  margin-right: 10px;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border: 1px solid #DDD;
+  border-radius: 2px;
+  background: #FFF;
+  cursor: pointer;
+  font-size: 18px;
+}
+.M-pager .M-pagerAct {
+  border-color: #FFF;
+  cursor: default;
+}
+.P-aside {
+  font-size: 16px;
+}
+.P-aside-me,
+.P-aside-list,
+.P-aside-others {
   box-sizing: border-box;
   border-radius: 2px;
   background: #FFF;
   border: 3px solid #E2E1E1;
 }
-.P-me .P-me-dt {
+.P-aside-me .P-aside-me-dt {
   height: 35px;
   line-height: 35px;
   padding: 0 10px;
   border-bottom: 1px solid #EEE;
 }
-.P-me .P-me-dd {
+.P-aside-me .P-aside-me-dd {
   padding: 10px;
 }
-.P-list {
+.P-aside-list {
   margin: 15px 0;
 }
-.P-list .P-list-dt {
+.P-aside-list .P-aside-list-dt {
   height: 35px;
   line-height: 35px;
   padding: 0 10px;
   border-bottom: 2px solid #EEE;
 }
-.P-list .art-item {
+.P-aside-list .art-item {
   padding: 6px 10px;
   background: #FFF;
   -webkit-transition: background .4s ease;
   -moz-transition: background .4s ease;
   transition: background .4s ease;
 }
-.P-list .art-item:hover {
+.P-aside-list .art-item:hover {
   background: #F8F8F5;
 }
-.P-list .art-line {
+.P-aside-list .art-line {
   height: 0;
   border-top: 1px dashed #DDD;
   overflow: hidden;
 }
-.P-list .art-line:last-child {
+.P-aside-list .art-line:last-child {
   display: none;
 }
-.P-list .art-anchor {
+.P-aside-list .art-anchor {
   display: block;
 }
-.P-list .art-anchor:hover {
+.P-aside-list .art-anchor:hover {
   color: #008000;
 }
-.P-list .art-title {
+.P-aside-list .art-title {
   display: block;
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.P-list .art-archive,
-.P-list .art-date,
-.P-list .art-comments {
+.P-aside-list .art-archive,
+.P-aside-list .art-date,
+.P-aside-list .art-comments {
   font-size: 12px;
   color: #BBB;
 }
-.P-list .art-date {
+.P-aside-list .art-date {
   margin: 0 10px;
 }
-.P-others {
+.P-aside-others {
   padding: 10px;
 }
 .P-article .content {

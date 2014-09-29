@@ -86,14 +86,12 @@ define(function( require, util ){
 	 * @return {JSON}      [最新参数]
 	 */
 	util.mergeParam = function( Jold, Jnew ) {
-		if( arguments.length == 1 ) {
-			Jnew = {};
-		}
+		Jnew = arguments.length === 1 ? {} : Jnew;
 		if( !isObject( Jold ) || !isObject( Jnew ) ) {
 			return false;
 		}
 		for( var pro in Jold ) {
-			Jold[pro] = Jnew.hasOwnProperty( pro ) ? isArray( Jnew[pro] ) ? Jnew[pro].join(',') : Jnew[pro] : isArray( Jold[pro] ) ? Jold[pro].join(',') : Jold[pro];
+			Jold[pro] = Jnew.hasOwnProperty( pro ) ? Jnew[pro] : Jold[pro];
 		}
 		return Jold;
 	}

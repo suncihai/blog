@@ -51,8 +51,9 @@ define(function( require, exports ) {
 		// archive列表默认请求选项
 		archiveOption: {
 			catid: 1,
-			limit: 10,		// archivem每页显示文章数
-			brief: 180,		// archive页面文章摘要长度
+			page: 1,		// 请求第1页
+			limit: 10,		// 每页显示文章数
+			brief: 180,		// 文章摘要长度
 			order: 'date' 	// 按时间顺序排列
 		},
 
