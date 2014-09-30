@@ -42,12 +42,14 @@ define(function( require, exports ){
 		 */
 		function fnSuccess( res ) {
 			if( !res.success ) {
-				DOM.html('拉取数据似乎出了点问题~');
+				dom.html('拉取数据似乎出了点问题~');
 				return;
 			}
 			// 循环生成列表
+			listBox.empty();
+			pagerBox.empty();
 			$.each( res.result.items, createSections );
-
+			this.page = res.result.page;
 			// 分页器
 			pager.buildPager({
 				'target': pagerBox,
@@ -83,7 +85,18 @@ define(function( require, exports ){
 		 * @return {NULL}        [无返回值]
 		 */
 		function onPagerSelect( page ) {
-			util.log(page);
+			var newParam = util.mergeParam( requestParam, {
+				'page': page
+			});
+			// 拉取数据
+			$.ajax({
+				'url': url,
+				'method': 'get',
+				'dataType': 'json',
+				'data': newParam,
+				'success': fnSuccess,
+				'error': fnError
+			});
 		}
 
 		/**
