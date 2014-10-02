@@ -35,47 +35,6 @@ class SQL
     }
 
     /**
-     * getTotal 获取某个表的总行数(用于栏目,评论分页)
-     * param  [String] $type   [获取类型]
-     * param  [String] $num    [每页显示行数]
-     * param  [String] $postID [评论分页时对应的文章ID]
-     * return [Array]  $ret    [$total->总行数, $page->总页数]
-     */
-    public function getTotal( $type, $num, $postID )
-    {
-        switch( $type )
-        {
-            // 栏目分页
-            case 'archive':
-                $sql = "SELECT * FROM wp_posts WHERE post_status='publish' AND post_type='post'";
-            break;
-            // 评论分页
-            case 'comment':
-                $sql = "SELECT * FROM wp_comments WHERE comment_post_ID=$postID";
-            break;
-        }
-        $result = mysql_query( $sql );
-        if( $result )
-        {
-            $total = mysql_num_rows( $result );
-            $page = ceil( $total / $num );
-            mysql_free_result( $result );
-        }
-        else
-        {
-            $total = 0;
-            $page = 0;
-        }
-        // 返回结果
-        $ret = array
-        (
-            'total'    => $total,
-            'pageSize' => $page
-        );
-        return $ret;
-    }
-
-    /**
      * query 基本查询,返回没有格式化字段的结果
      * param  [String] $sql [SQL语句]
      */
@@ -132,10 +91,21 @@ class SQL
                $orderBy = 'post_date';
             break;
         }
+        // 查询$catid栏目下的所有文章ID
+        $resultIDs = mysql_query("SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id=$catid");
+        $IDArr = array();
+        while( $assocIDs = mysql_fetch_assoc( $resultIDs ) )
+        {
+            array_push( $IDArr, $assocIDs["object_id"] );
+        }
+        // 结果总条数
+        $total = mysql_num_rows( $resultIDs );
+        mysql_free_result( $resultIDs );
+        $IDs = implode(",", $IDArr);
         // 查询字段
         $_fields = "ID, post_title, post_date, post_modified, post_content";
         // 查询条件(返回正常的文章必须指定post_status和post_type)
-        $_where = "post_status='publish' AND post_type='post'";
+        $_where = "ID in($IDs) AND post_status='publish' AND post_type='post'";
         // 排序方式
         $_order = "ORDER BY $orderBy DESC";
         // 分页起点
@@ -158,8 +128,6 @@ class SQL
                 // 摘要截取, 先检测再截取(确保字数)
                 $text = fixtags( $assoc['post_content'] );
                 $abstract = mb_substr( strip_tags( $text ), 0, $brief, 'utf8');
-
-
                 $itemFormat = array
                 (
                     'id'           => $assoc['ID'],
@@ -171,14 +139,12 @@ class SQL
                 array_push( $itemArray, $itemFormat );
             }
             mysql_free_result( $result );
-            // 获取分页信息
-            $pageInfo = $this->getTotal( 'archive', $limit, 0 );
             $resArray = array
             (
-                'items' => $itemArray,
-                'total' => $pageInfo['total'],
-                'pages' => $pageInfo['pageSize'],
-                'page'  => $page
+                'items' => $itemArray,               // 选项数组
+                'total' => $total,                   // 总条数
+                'pages' => ceil( $total / $limit ),  // 总页数
+                'page'  => $page                     // 当前第几页
             );
             // 最终返回的结果
             $retArray = array
@@ -299,10 +265,9 @@ class SQL
     }
 }
 
-// HTML标签闭合检测. 如果$text的数据过大时, 可能存在一定的性能问题
+// HTML标签闭合检测, $text的数据过大时, 可能存在一定的性能问题
 function fixtags( $text ) {
-    $text = htmlspecialchars( $text );
-    $text = preg_replace( "/&quot;/", "&quot;\"", $text );
+    $text = preg_replace( "/&quot;/", "&quot;\"", htmlspecialchars( $text ) );
     $tags = "/&lt;(!|)(\/|)(\w*)(\ |)(\w*)([\\\=]*)(?|(\")\"&quot;\"|)(?|(.*)?&quot;(\")|)([\ ]?)(\/|)&gt;/i";
     $replacement = "<$1$2$3$4$5$6$7$8$9$10$11>";
     $text = preg_replace( $tags, $replacement, $text );
