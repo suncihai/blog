@@ -17,9 +17,7 @@ define(function( require, exports ){
 		var pagerBox = $('.P-archive-pager', dom);
 		var url = dc.listarchives;
 		var requestParam = util.mergeParam( C.archiveOption, {
-			'catid': 2,
-			'page': 1,
-			'limit': 3
+			'catid': C.cat[data.name]
 		});
 
 		// 设置标题
@@ -56,7 +54,7 @@ define(function( require, exports ){
 				'page': res.result.page,
 				'pages': res.result.pages,
 				'total': res.result.total
-			}, onPagerSelect);
+			}, afterPagerSelect);
 		}
 
 		/**
@@ -80,15 +78,15 @@ define(function( require, exports ){
 		}
 
 		/**
-		 * onPagerSelect 页码激活事件
+		 * afterPagerSelect 页码激活事件
 		 * @param  {Number} page [激活的页码]
 		 * @return {NULL}        [无返回值]
 		 */
-		function onPagerSelect( page ) {
+		function afterPagerSelect( page ) {
 			var newParam = util.mergeParam( requestParam, {
 				'page': page
 			});
-			// 拉取数据
+			// 重新拉取数据
 			$.ajax({
 				'url': url,
 				'method': 'get',

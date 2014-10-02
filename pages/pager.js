@@ -18,9 +18,9 @@ define(function( require, exports ){
 		}
 		// 分页信息
 		var dom = opt.target;  // 分页器的添加位置
-		var page = opt.page;   // 当前页码
-		var pages = opt.pages; // 总页数
-		var total = opt.total; // 总条数
+		var page = +opt.page;   // 当前页码
+		var pages = +opt.pages; // 总页数
+		var total = +opt.total; // 总条数
 		// 分页器HTML结构
 		var html = [
 			'<div class="M-pager">',
@@ -74,7 +74,7 @@ define(function( require, exports ){
 
 		// 页码点击事件
 		$('.M-pager').on( 'click', 'input', function() {
-			var id = $(this).attr('data-type');
+			var id = +$(this).attr('data-type');
 			if( id === page ) {
 				return false;
 			}

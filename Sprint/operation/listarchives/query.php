@@ -7,7 +7,7 @@
 	require_once('../../library/db.class.php');
 
 	// 栏目iD
-	$catid = isset( $_GET['catid'] ) ? intval( $_GET['catid'] ) : 1;
+	$catid = isset( $_GET['catid'] ) ? intval( $_GET['catid'] ) : 3;
 	// 请求第几页
 	$page = isset( $_GET['page'] ) ? intval( $_GET['page'] ) : 1;
 	// 每页行数
