@@ -30,6 +30,7 @@ define(function( require, exports ){
 			default: param = arr[2] == '' ? arr[1] : null;
 		}
 		run( name, param );
+		util.scrollTo(0);
 	}
 
 	/**
@@ -94,10 +95,12 @@ define(function( require, exports ){
 		if ( util.isString( uri ) ){
 			if ( uri.charAt(0) == '/' ){
 				LOC.href = uri;
-			}else {
+			}
+			else {
 				LOC.hash = "#" + uri;
 			}
-		}else {
+		}
+		else {
 			Win.history.go( uri );
 		}
 	}

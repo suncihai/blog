@@ -13,18 +13,16 @@ define(function( require, exports ){
 			'artid': data.param
 		});
 
-		setTimeout(function(){
-			// 拉取数据
-			$.ajax({
-				'url': dc.showarticle,
-				'method': 'get',
-				'dataType': 'json',
-				'data': requestParam,
-				'success': fnSuccess,
-				'error': fnError
-			});
-		}, 0);
-
+		// 拉取数据
+		$.ajax({
+			'url': dc.showarticle,
+			'method': 'get',
+			'dataType': 'json',
+			'data': requestParam,
+			'success': fnSuccess,
+			'error': fnError
+		});
+		
 		/**
 		 * fnSuccess 请求成功
 		 * @param  {JSON} res [返回数据]
@@ -35,21 +33,22 @@ define(function( require, exports ){
 				DOM.html('拉取数据似乎出了点问题~');
 				return;
 			}
+			var article = res.result;
 			var html = [
 				'<div class="content">',
-					'<h1>'+ res.result.title +'</h1>',
+					'<h1>'+ article.title +'</h1>',
 					'<div class="info">',
-						'<span class="time">'+ res.result.publishDate +'</span>',
+						'<span class="time">时间：'+ article.publishDate.toString().slice( 0, 10 ) +'</span> | ',
+						'<span class="tag">标签：性能</sapn> | ',
+						'<span class="comments">评论数：'+ article.comments +'</sapn>',
 					'</div>',
-					'<article>'+ res.result.content +'</article>',
+					'<article>'+ article.content +'</article>',
 				'</div>'
 			].join('');
 
 			$(html).appendTo( DOM );
 
 			layout.setTitle( data.name, res.result.title );
-			// 加载syntaxhighlighter插件
-			// footer.loadHighLighter();
 		}
 
 		/**

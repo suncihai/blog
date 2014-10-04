@@ -97,6 +97,17 @@ define(function( require, util ){
 	}
 
 	/**
+	 * scrollTo 自定义滚动条位置(用于hash改变时纠正滚动条位置) 
+	 * @param  {Number} x [横位置]
+	 * @param  {Number} y [纵位置]
+	 */
+	 util.scrollTo = function( x, y ) {
+	 	var a = x || 0;
+	 	var b = y || 0;
+	 	window.scrollTo( a, b );
+	 }
+
+	/**
 	 * argsToArray 参数转数组
 	 * @param  {Object} args [参数]
 	 * @return {Array}       [数组]
@@ -107,6 +118,24 @@ define(function( require, util ){
 		}
 		else {
 			return args;
+		}
+	}
+
+	/**
+	 * getKeyName 获取JSON对象键值名
+	 * @param  {String} val  [值]
+	 * @param  {Object} obj  [值所在的对象]
+	 * @return {String}      [键值名称]
+	 */
+	util.getKeyName = function( val, obj ) {
+		var key = '';
+		if( ( !val || !obj ) && !isObject( obj ) ) {
+			return false;
+		}
+		for( key in obj ) {
+			if( obj[key] == val ) {
+				return key;
+			}
 		}
 	}
 

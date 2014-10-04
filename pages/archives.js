@@ -65,13 +65,29 @@ define(function( require, exports ){
 		 */
 		function createSections( idx, item ) {
 			var sections = [];
+			var str = item.publishDate.slice( 0, 10 );
+			var arr = str.split('-');
+			var year = arr[0];
+			var mouth = +arr[1];
+			var day = +arr[2];
 			sections.push([
 				'<section list-id="'+ idx +'">',
-					'<h2><a href="#'+ data.name +'/'+ item.id +'" title="'+ item.title +'">'+ item.title +'</a></h2>',
-					'<div class="info">',
-						'<span class="time">'+ item.publishDate +'</span>',
+					'<div class="P-archive-list-head">',
+						'<div class="P-archive-list-date">',
+							'<div class="day">'+ day +'号</div>',
+							'<div class="year">'+ year +'年-'+ mouth +'月</div>',
+						'</div>',
+						'<div class="P-archive-list-title">',
+							'<h2><a href="#'+ data.name +'/'+ item.id +'" title="'+ item.title +'">'+ item.title +'</a></h2>',
+							'<div class="P-archive-list-info">',
+								'<span class="tag">分类：</span>',
+								'<span class="tag">标签：</span>',
+								'<span class="tag">评论：</span>',
+							'</div>',
+						'</div>',
 					'</div>',
 					'<article>'+ item.content +' ……</article>',
+					'<a href="#'+ data.name +'/'+ item.id +'" class="all">阅读全文>></a>',
 				'</section>'
 			].join(''));
 			listBox.append( sections.join('') );

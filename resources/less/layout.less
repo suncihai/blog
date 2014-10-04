@@ -8,6 +8,7 @@
 	width: @globalWidth;
 	margin: 0 auto;
 	&Body{
+		position: relative;
 		// 头部
 		&Head{
 			height: @headHeight;
@@ -39,9 +40,10 @@
 			width: 100%;
 			height: 400px;
 		}
-		&Wrapper{
+		&Blog{
 			display: none;
 			width: 100%;
+			min-height: 500px;
 			&Archive{
 				.leftW;
 				display: inline-block;

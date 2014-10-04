@@ -112,9 +112,7 @@ class SQL
         $start = ( $page - 1 ) * $limit;
         // SQL语句
         $sql = "SELECT $_fields FROM wp_posts WHERE $_where $_order LIMIT $start, $limit";
-        // 执行查询操作
         $result = mysql_query( $sql, $this->conn );
-        // 查询是否成功
         if( $result )
         {
             // 选项数组集合
@@ -171,7 +169,7 @@ class SQL
     public function getArticle( $artid )
     {
         // 查询字段
-        $fields = "post_title, post_date, post_modified, post_content";
+        $fields = "post_title, post_date, post_modified, post_content, comment_count";
         // 查询条件
         $filter = "LIMIT 1";
         $sql = "SELECT $fields FROM wp_posts WHERE ID = $artid $filter";
@@ -187,6 +185,7 @@ class SQL
                 'title'        => $assoc['post_title'],
                 'publishDate'  => $assoc['post_date'],
                 'modifiedDate' => $assoc['post_modified'],
+                'comments'     => $assoc['comment_count'],
                 'content'      => $assoc['post_content']
             );
             // 最终返回的结果
@@ -215,26 +214,32 @@ class SQL
     public function getTitleList( $type, $amount )
     {
         // 查询字段
-        $fields = "ID, post_title, post_date";
+        $fields = "ID, post_title, post_date, comment_count";
         // 查询条件
         $where = "post_status='publish' AND post_type='post'";
         // 限制条件
         $filter = "ORDER BY post_date DESC LIMIT $amount";
         $sql = "SELECT $fields FROM wp_posts WHERE $where $filter";
-        // 执行查询操作
         $result = mysql_query( $sql, $this->conn );
-        // 查询是否成功
         if( $result )
         {
             // 选项数组集合
             $itemArray = array();
             while( $assoc = mysql_fetch_assoc( $result ) )
             {
+                $ID = $assoc["ID"];
+                $sql_getArchive = "SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$ID LIMIT 1";
+                $resultArchie = mysql_query( $sql_getArchive );
+                $archiveAssoc = mysql_fetch_assoc( $resultArchie );
+                mysql_free_result( $resultArchie );
+                $archiveID = $archiveAssoc['term_taxonomy_id'];
                 $itemFormat = array
                 (
-                    'id'           => $assoc['ID'],
+                    'id'           => $ID,
+                    'archive'      => $archiveID,
                     'title'        => $assoc['post_title'],
-                    'publishDate'  => $assoc['post_date']
+                    'publishDate'  => $assoc['post_date'],
+                    'comments'     => $assoc['comment_count']
                 );
                 array_push( $itemArray, $itemFormat );
             }
