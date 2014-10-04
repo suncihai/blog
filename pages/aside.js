@@ -17,7 +17,9 @@ define(function( require, exports ){
 			'<div class="P-aside-list">',
 				'<dl class="P-aside-list-dl">',
 					'<dt class="P-aside-list-dt"></dt>',
-					'<dd class="P-aside-list-dd"></dd>',
+					'<dd class="P-aside-list-dd">',
+						'<ul class="P-aside-list-dd-ul"/>',
+					'</dd>',
 				'</dl>',
 			'</div>',
 			'<div class="P-aside-others"></div>',
@@ -32,6 +34,7 @@ define(function( require, exports ){
 		'listDL': 	$('.P-aside-list-dl', Aside),
 		'listDT': 	$('.P-aside-list-dt', Aside),
 		'listDD': 	$('.P-aside-list-dd', Aside),
+		'listDDul':	$('.P-aside-list-dd-ul', Aside),
 		'others': 	$('.P-aside-others', Aside)
 	}
 	exports.doms = doms;
@@ -95,23 +98,32 @@ define(function( require, exports ){
 				doms.list.html('拉取数据出了点问题~');
 				return;
 			}
-			var lis = [];
-			$.each( res.result.items, function( idx, item ) {
-				lis.push([
-					'<li class="art-item" data-id="'+ idx +'">',
-						'<a href="#'+ item.archive +'/'+ item.id +'" class="art-anchor">',
-							'<span class="art-title" title="'+ item.title +'">'+ item.title +'</span>',
-							'<em class="art-archive" title="文章分类">JavaScript</em>',
-							'<em class="art-date" title="发布日期">2014-09-27</em>',
-							'<em class="art-comments" title="评论数">3</em>',
-						'</a>',
-					'</li>',
-					'<li class="art-line"/>'
-				].join(''));
-			});
-			var ul = '<ul>' + lis.join('') + '</ul>';
 			doms.listDT.html('最新文章');
-			$(ul).appendTo( doms.listDD );
+			$.each( res.result.items, createList );
+		}
+
+		/**
+		 * createList 循环生成列表
+		 * @param  {Number} idx  [序号]
+		 * @param  {Object} item [选项对象]
+		 * @return {NULL}        [无返回值]
+		 */
+		function createList( idx, item ) {
+			var lis = [];
+			var archive = util.getKeyName( item.archive, C.cat );
+			var date = item.publishDate.toString().slice( 0, 10 );
+			lis.push([
+				'<li class="art-item" data-id="'+ idx +'">',
+					'<a href="#'+ archive +'/'+ item.id +'" class="art-anchor">',
+						'<span class="art-title" title="'+ item.title +'">'+ item.title +'</span>',
+						'<em class="art-archive" title="文章分类：'+ archive +'">'+ archive +'</em>',
+						'<em class="art-date" title="发布日期：'+ date +'">'+ date +'</em>',
+						'<em class="art-comments" title="'+ item.comments +'条评论">'+ item.comments +'评论</em>',
+					'</a>',
+				'</li>',
+				'<li class="art-line"/>'
+			].join(''));
+			$(lis).appendTo( doms.listDDul );
 		}
 
 		/**

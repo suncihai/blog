@@ -64,7 +64,6 @@ body {
   background: #FFF;
   font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑', Tahoma;
   font-size: 16px;
-  background: url(../images/bg.gif) repeat;
 }
 input,
 textarea {
@@ -105,11 +104,13 @@ a:hover {
 }
 noscript {
   display: block;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  left: -50%;
-  top: -50%;
+  width: 550px;
+  height: 80px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -275px;
+  margin-top: -40px;
   text-align: center;
   font-size: 35px;
   color: #666;
@@ -124,6 +125,9 @@ noscript {
 .G-frame {
   width: 1080px;
   margin: 0 auto;
+}
+.G-frameBody {
+  position: relative;
 }
 .G-frameBodyHead {
   height: 70px;
@@ -153,28 +157,29 @@ noscript {
   width: 100%;
   height: 400px;
 }
-.G-frameBodyWrapper {
+.G-frameBodyBlog {
   display: none;
   width: 100%;
+  min-height: 500px;
 }
-.G-frameBodyWrapperArchive {
+.G-frameBodyBlogArchive {
   width: 70%;
   display: inline-block;
   box-sizing: border-box;
 }
-.G-frameBodyWrapperArticle {
+.G-frameBodyBlogArticle {
   width: 70%;
   display: inline-block;
   box-sizing: border-box;
 }
-.G-frameBodyWrapperAside {
+.G-frameBodyBlogAside {
   width: 30%;
   float: right;
   padding: 15px;
   box-sizing: border-box;
   background: #F4F4F4;
 }
-.G-frameBodyWrapperAside dt {
+.G-frameBodyBlogAside dt {
   font-weight: bold;
   color: #666;
   background: #FAFAFA;
@@ -189,29 +194,66 @@ noscript {
 }
 .P-archives section {
   padding: 15px 0;
+  box-sizing: border-box;
+  border: 1px solid #FFF;
+  border-radius: 2px;
 }
 .P-archives section h2 {
-  padding: 8px 0;
+  padding: 6px 0;
   font-weight: normal;
-  font-size: 24px;
-}
-.P-archives section h2 a {
+  font-size: 22px;
   padding-left: 10px;
-  border-left: 3px solid #080;
-  border-radius: 5px;
-}
-.P-archives section .info {
-  padding: 8px 0;
 }
 .P-archives section article {
+  padding: 20px;
+  color: #333;
   line-height: 150%;
 }
-.P-archives section a.readAll {
+.P-archives section .all {
   display: block;
-  box-sizing: border-box;
-  margin-top: 10px;
+  width: 90px;
+  padding: 6px;
+  text-align: center;
+  background: #FBFBFB;
+  border: 1px dashed #EEE;
+  border-radius: 2px;
+}
+.P-archive-list-head {
   width: 100%;
-  padding: 10px;
+  height: 60px;
+}
+.P-archive-list-date {
+  float: left;
+  width: 80px;
+  height: 60px;
+  text-align: center;
+  font-size: 14px;
+  background: #7AB80E;
+  border-radius: 2px;
+  color: #FFF;
+}
+.P-archive-list-date .day {
+  width: 100%;
+  height: 25px;
+  padding-top: 5px;
+  line-height: 30px;
+  font-size: 20px;
+}
+.P-archive-list-date .year {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  font-size: 13px;
+}
+.P-archive-list-title {
+  float: left;
+  height: 60px;
+}
+.P-archive-list-info {
+  padding-left: 10px;
+  color: #666;
+  font-style: italic;
+  font-size: 14px;
 }
 .M-pager {
   padding: 20px 0;
@@ -330,18 +372,31 @@ noscript {
   padding: 8px 0;
   font-weight: normal;
   font-size: 24px;
+  color: #008000;
 }
 .P-article .content .info {
-  padding: 8px 0;
+  padding-bottom: 15px;
+  border-bottom: 2px dashed #DDD;
+  color: #999;
+  font-size: 14px;
+  font-style: italic;
 }
 .P-article .content article {
-  line-height: 150%;
+  padding: 15px 0;
+  line-height: 180%;
+}
+.P-article .content article img {
+  display: block;
+  margin: 10px 0;
+  border: 5px solid #DDD;
+  border-radius: 5px;
 }
 .P-article pre {
   border: 5px solid #DDD;
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
-  font-family: Consolas, Tahoma;
+  line-height: 125%;
+  font-family: Consolas, Tahoma 'Microsoft Yahei';
   background: #FCFCFC;
 }

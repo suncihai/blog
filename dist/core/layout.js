@@ -16,12 +16,11 @@ define(function( require, exports ){
 							'<a href="/"><h1>TANGBC</h1></a>',
 						'</div>',
 					'</div>',
-					'<div class="G-frameBodyBan"/>',
 					'<div class="G-frameBodyIndex"/>',
-					'<div class="G-frameBodyWrapper">',
-						'<div class="G-frameBodyWrapperArchive"/>',
-						'<div class="G-frameBodyWrapperArticle"/>',
-						'<div class="G-frameBodyWrapperAside"/>',
+					'<div class="G-frameBodyBlog">',
+						'<div class="G-frameBodyBlogArchive"/>',
+						'<div class="G-frameBodyBlogArticle"/>',
+						'<div class="G-frameBodyBlogAside"/>',
 					'</div>',
 					'<div class="G-frameBodyFooter"/>',
 				'</div>',
@@ -43,11 +42,11 @@ define(function( require, exports ){
 		'body': 		$('.G-frameBody', body),
 		'head': 		$('.G-frameBodyHead', body),
 		'logo': 		$('.G-frameBodyHeadLogo', body),
-		'index': 		$('.G-frameBodyIndex', body),			// 主页
-		'wrapper': 		$('.G-frameBodyWrapper', body),
-		'archive': 		$('.G-frameBodyWrapperArchive', body),	// 栏目页
-		'article': 		$('.G-frameBodyWrapperArticle', body),	// 文章页
-		'aside': 		$('.G-frameBodyWrapperAside', body),	// 侧边栏
+		'index': 		$('.G-frameBodyIndex', body),		// 主页
+		'blog': 		$('.G-frameBodyBlog', body),        // 博客容器
+		'archive': 		$('.G-frameBodyBlogArchive', body),	// 博客 栏目
+		'article': 		$('.G-frameBodyBlogArticle', body),	// 博客 文章
+		'aside': 		$('.G-frameBodyBlogAside', body),	// 博客 侧边
 		'footer': 		$('.G-frameBodyFooter', body)
 	}
 	exports.doms = doms;
@@ -59,10 +58,10 @@ define(function( require, exports ){
 	exports.init = function() {
 		// 构建导航和侧边栏
 		this.buildNav()
-			.buildAside()
-			.buildFooter();
+			.buildAside();
+			// .buildFooter();
 		// 移除一些提示
-		$('#noScript').remove();
+		$('noScript').remove();
 		$('#welcome').remove();
 
 		return this;

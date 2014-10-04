@@ -15,8 +15,8 @@ define(function( require, exports ){
 			require.async('layout', function( layout ) {
 				cont = layout.doms.index;
 
-				// 隐藏wrapper容器
-				layout.doms.wrapper.hide();
+				// 隐藏blog容器
+				layout.doms.blog.hide();
 				cont.show();
 
 				// 更新导航激活状态
@@ -45,7 +45,7 @@ define(function( require, exports ){
 					len = Sons.size();
 
 				layout.doms.index.hide();
-				layout.doms.wrapper.show();
+				layout.doms.blog.show();
 				layout.doms.article.hide();
 				layout.doms.archive.show();
 
@@ -93,7 +93,7 @@ define(function( require, exports ){
 					len = Sons.size();
 
 				layout.doms.index.hide();
-				layout.doms.wrapper.show();
+				layout.doms.blog.show();
 				layout.doms.archive.hide();
 				layout.doms.article.show();
 
