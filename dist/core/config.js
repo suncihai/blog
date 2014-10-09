@@ -59,9 +59,7 @@ define(function( require, exports ) {
 
 		// article默认请求选项
 		articleOption: {
-			artid: 2,
-			brief: 800,
-			page: false
+			artid: 2
 		},
 
 		// 侧边标题列表默认请求选项
