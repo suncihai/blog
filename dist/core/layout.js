@@ -11,13 +11,13 @@ define(function( require, exports ){
 		'<div id="MAIN">',
 			'<div class="G-frame">',
 				'<div class="G-frameBody">',
-					'<div class="G-frameBodyHead">',
-						'<div class="G-frameBodyHeadLogo">',
-							'<a href="/"><h1>TANGBC</h1></a>',
-						'</div>',
-					'</div>',
 					'<div class="G-frameBodyIndex"/>',
 					'<div class="G-frameBodyBlog">',
+						'<div class="G-frameBodyBlogHead">',
+							'<div class="G-frameBodyBlogHeadLogo">',
+								'<a href="/blog"><h1>TANGBC</h1></a>',
+							'</div>',
+						'</div>',
 						'<div class="G-frameBodyBlogArchive"/>',
 						'<div class="G-frameBodyBlogArticle"/>',
 						'<div class="G-frameBodyBlogAside"/>',
@@ -40,8 +40,8 @@ define(function( require, exports ){
 		// 框架主体：
 		'frame': 		$('.G-frame', body),
 		'body': 		$('.G-frameBody', body),
-		'head': 		$('.G-frameBodyHead', body),
-		'logo': 		$('.G-frameBodyHeadLogo', body),
+		'head': 		$('.G-frameBodyBlogHead', body),
+		'logo': 		$('.G-frameBodyBlogHeadLogo', body),
 		'index': 		$('.G-frameBodyIndex', body),		// 主页
 		'blog': 		$('.G-frameBodyBlog', body),        // 博客容器
 		'archive': 		$('.G-frameBodyBlogArchive', body),	// 博客 栏目

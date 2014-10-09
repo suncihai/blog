@@ -25,8 +25,12 @@ define(function( require, exports ){
 		len = arr.length;
 		name = arr[0];
 		switch( len ) {
-			case 1: param = null; break;
-			case 2: param = arr[1]; break;
+			case 1:
+				param = null;
+			break;
+			case 2:
+				param = arr[1];
+			break;
 			default: param = arr[2] == '' ? arr[1] : null;
 		}
 		run( name, param );
