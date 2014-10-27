@@ -103,7 +103,7 @@ class SQL
         mysql_free_result( $resultIDs );
         $IDs = implode(",", $IDArr);
         // 查询字段
-        $_fields = "ID, post_title, post_date, post_modified, post_content";
+        $_fields = "ID, post_title, post_date, post_modified, post_content, comment_count";
         // 查询条件(返回正常的文章必须指定post_status和post_type)
         $_where = "ID in($IDs) AND post_status='publish' AND post_type='post'";
         // 排序方式
@@ -132,7 +132,8 @@ class SQL
                     'title'        => $assoc['post_title'],
                     'publishDate'  => $assoc['post_date'],
                     'modifiedDate' => $assoc['post_modified'],
-                    'content'      => $abstract
+                    'content'      => $abstract,
+                    'comments'     => $assoc['comment_count']
                 );
                 array_push( $itemArray, $itemFormat );
             }
