@@ -13,9 +13,9 @@ define(function( require, exports ){
 				'pageid': data.param
 			});
 		}
-		
-		require.async('@pages/' + type, function( module ) {
+
+		require.async('@modules/' + type, function( module ) {
 			module['onMain']( data );
 		});
-	} 
+	}
 });

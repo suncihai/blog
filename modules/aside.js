@@ -64,7 +64,7 @@ define(function( require, exports ){
 	exports.buildMe = function() {
 		$([
 			'<dl class="P-aside-me-dl">',
-				'<dt class="P-aside-me-dt">关于我</dt>',
+				'<dt class="P-aside-me-dt">About Me</dt>',
 				'<dd class="P-aside-me-dd">关于我的信息</dd>',
 			'</dl>'
 		].join('')).appendTo( doms.me );
@@ -98,7 +98,15 @@ define(function( require, exports ){
 				doms.list.html('拉取数据出了点问题~');
 				return;
 			}
-			doms.listDT.html('最新文章');
+			$([
+				'<span class="opt" data-id="1">NEW</span>',
+				'<span class="cube">■</span>',
+				'<span class="opt" data-id="2">JS</span>',
+				'<span class="cube">■</span>',
+				'<span class="opt" data-id="3">CSS</span>',
+				'<span class="cube">■</span>',
+				'<span class="opt" data-id="4">UED</span>'
+			].join('')).appendTo( doms.listDT );
 			$.each( res.result.items, createList );
 		}
 

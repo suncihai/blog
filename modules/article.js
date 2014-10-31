@@ -2,7 +2,7 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
 	var layout = require('layout');
-	var footer = require('@pages/footer');
+	var footer = require('@modules/footer');
 	var C = require('@core/config');
 
 	var dc = C.dataCenter;
@@ -22,7 +22,7 @@ define(function( require, exports ){
 			'success': fnSuccess,
 			'error': fnError
 		});
-		
+
 		/**
 		 * fnSuccess 请求成功
 		 * @param  {JSON} res [返回数据]
