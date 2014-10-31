@@ -3,7 +3,7 @@ define(function( require, exports ){
 	var util = require('util');
 	var layout = require('layout');
 	var C = require('@core/config');
-	var pager = require('@pages/pager');
+	var pager = require('@modules/pager');
 
 	var dc = C.dataCenter;
 

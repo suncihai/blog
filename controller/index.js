@@ -5,8 +5,8 @@ define(function( require, exports ){
 			'container': data.name
 		});
 
-		require.async('@pages/index', function( module ) {
+		require.async('@modules/index', function( module ) {
 			module['onMain']( data );
 		});
-	} 
+	}
 });

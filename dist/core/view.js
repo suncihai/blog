@@ -26,7 +26,6 @@ define(function( require, exports ){
 		}
 	}
 
-
 	/**
 	 * createArchive 创建栏目容器
 	 * @param  {JSON} config   [配置参数]

@@ -61,9 +61,7 @@ define(function( require, exports ){
 			.buildAside();
 			// .buildFooter();
 		// 移除一些提示
-		$('noScript').remove();
-		$('#welcome').remove();
-
+		$('noScript,#welcome').remove();
 		return this;
 	}
 
@@ -107,7 +105,7 @@ define(function( require, exports ){
 	 * buildAside 侧边栏创建
 	 */
 	exports.buildAside = function() {
-		require.async('@pages/aside', function( aside ) {
+		require.async('@modules/aside', function( aside ) {
 			aside.init();
 		});
 		return this;
@@ -119,7 +117,7 @@ define(function( require, exports ){
 	 * @return {type}       [description]
 	 */
 	exports.buildFooter = function() {
-		require.async('@pages/footer', function( footer ) {
+		require.async('@modules/footer', function( footer ) {
 			footer.init();
 		});
 		return this;

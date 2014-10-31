@@ -318,6 +318,13 @@ noscript {
   padding: 0 10px;
   border-bottom: 2px solid #EEE;
 }
+.P-aside-list .P-aside-list-dt .opt {
+  cursor: pointer;
+}
+.P-aside-list .P-aside-list-dt .cube {
+  margin: 0 10px;
+  color: #DDD;
+}
 .P-aside-list .art-item {
   padding: 6px 10px;
   background: #FFF;
