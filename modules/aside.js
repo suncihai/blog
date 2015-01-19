@@ -107,7 +107,15 @@ define(function( require, exports ){
 				'<span class="cube">■</span>',
 				'<span class="opt" data-id="4">UED</span>'
 			].join('')).appendTo( doms.listDT );
+			// 选项卡切换事件
+			doms.listDT.find('.opt').on( 'click', 'span', function() {
+				alert(456);
+			});
 			$.each( res.result.items, createList );
+		}
+
+		function toggleTab() {
+			alert(123)
 		}
 
 		/**

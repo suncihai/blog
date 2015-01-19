@@ -3,6 +3,7 @@ define(function( require, exports ){
 	var util = require('util');
 	var layout = require('layout');
 	var footer = require('@modules/footer');
+	var lighter = require('@modules/syntaxLighter');
 	var C = require('@core/config');
 
 	var dc = C.dataCenter;
@@ -34,7 +35,7 @@ define(function( require, exports ){
 				return;
 			}
 			var article = res.result;
-			var html = [
+			var html = $([
 				'<div class="content">',
 					'<h1>'+ article.title +'</h1>',
 					'<div class="info">',
@@ -42,12 +43,14 @@ define(function( require, exports ){
 						'<span class="tag">标签：性能</sapn> | ',
 						'<span class="comments">评论数：'+ article.comments +'</sapn>',
 					'</div>',
-					'<article>'+ article.content +'</article>',
+					'<article class="article">'+ article.content +'</article>',
 				'</div>'
-			].join('');
-
-			$(html).appendTo( DOM );
-
+			].join(''));
+			// 内容添加到文章容器中
+			html.appendTo( DOM );
+			var article = $('.article', html);
+			// 代码高亮
+			lighter.render( article.find('pre') );
 			layout.setTitle( data.name, res.result.title );
 		}
 
