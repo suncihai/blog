@@ -105,7 +105,7 @@ define(function( require, exports ){
 	 * buildAside 侧边栏创建
 	 */
 	exports.buildAside = function() {
-		require.async('@modules/aside', function( aside ) {
+		require.async('@pages/aside', function( aside ) {
 			aside.init();
 		});
 		return this;
@@ -117,7 +117,7 @@ define(function( require, exports ){
 	 * @return {type}       [description]
 	 */
 	exports.buildFooter = function() {
-		require.async('@modules/footer', function( footer ) {
+		require.async('@pages/footer', function( footer ) {
 			footer.init();
 		});
 		return this;
