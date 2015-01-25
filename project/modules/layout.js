@@ -11,18 +11,19 @@ define(function( require, exports ){
 		'<div id="MAIN">',
 			'<div class="G-frame">',
 				'<div class="G-frameBody">',
-					'<div class="G-frameBodyIndex"/>',
+					// 首页 
+					'<div class="G-frameBodyIndex">',
+						'<div class="G-frameBodyIndexHead"/>',
+						'<div class="G-frameBodyIndexContent"/>',
+						'<div class="G-frameBodyIndexFooter"/>',
+					'</div>',
+					// 博客
 					'<div class="G-frameBodyBlog">',
-						'<div class="G-frameBodyBlogHead">',
-							'<div class="G-frameBodyBlogHeadLogo">',
-								'<a href="/blog"><h1>TANGBC</h1></a>',
-							'</div>',
-						'</div>',
+						'<div class="G-frameBodyBlogHead"/>',
 						'<div class="G-frameBodyBlogArchive"/>',
 						'<div class="G-frameBodyBlogArticle"/>',
-						'<div class="G-frameBodyBlogAside"/>',
+						'<div class="G-frameBodyBlogFooter"/>',
 					'</div>',
-					'<div class="G-frameBodyFooter"/>',
 				'</div>',
 			'</div>',
 		'</div>',
@@ -36,18 +37,24 @@ define(function( require, exports ){
 		'MAIN': 		$('#MAIN'),
 		'LOADING':  	$('#LOADING'),
 		'POPWIN': 		$('#POPWIN'),
-
-		// 框架主体：
+		// 框架容器：
 		'frame': 		$('.G-frame', body),
 		'body': 		$('.G-frameBody', body),
-		'head': 		$('.G-frameBodyBlogHead', body),
-		'logo': 		$('.G-frameBodyBlogHeadLogo', body),
-		'index': 		$('.G-frameBodyIndex', body),		// 主页
-		'blog': 		$('.G-frameBodyBlog', body),        // 博客容器
-		'archive': 		$('.G-frameBodyBlogArchive', body),	// 博客 栏目
-		'article': 		$('.G-frameBodyBlogArticle', body),	// 博客 文章
-		'aside': 		$('.G-frameBodyBlogAside', body),	// 博客 侧边
-		'footer': 		$('.G-frameBodyFooter', body)
+		// 主页容器：
+		'index': {
+			'main': 	$('.G-frameBodyIndex', body),
+			'head': 	$('.G-frameBodyIndexHead', body),
+			'content': 	$('.G-frameBodyIndexContent', body),
+			'footer': 	$('.G-frameBodyIndexFooter', body)
+		},
+		// 博客容器
+		'blog': {
+			'main': 	$('.G-frameBodyBlog', body),
+			'head': 	$('.G-frameBodyBlogHead', body),	// 头部容器
+			'archive': 	$('.G-frameBodyBlogArchive', body),	// 栏目容器
+			'article': 	$('.G-frameBodyBlogArticle', body)	// 文章容器
+			'footer': 	$('.G-frameBodyBlogFooter', body)
+		}  
 	}
 	exports.doms = doms;
 
@@ -57,11 +64,23 @@ define(function( require, exports ){
 	 */
 	exports.init = function() {
 		// 构建导航和侧边栏
-		this.buildNav()
-			.buildAside();
+		// this.buildNav()
+		// 	.buildAside();
 			// .buildFooter();
 		// 移除一些提示
 		$('noScript,#welcome').remove();
+		return this;
+	}
+
+	/**
+	 * buildHeader 创建头部
+	 * @param  {Object} config [配置,应包含创建头部的目标DOM]
+	 * @return {type} [layout]
+	 */
+	exports.buildHeader = function( config ) {
+		require.async('@modules/header', function( header ) {
+			header.init( config );
+		});
 		return this;
 	}
 

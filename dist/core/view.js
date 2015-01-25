@@ -13,14 +13,14 @@ define(function( require, exports ){
 		if( $.type( config ) === 'object' ) {
 			var cont = null;
 			require.async('layout', function( layout ) {
-				cont = layout.doms.index;
+				cont = layout.doms.index['main'];
 
 				// 隐藏blog容器
-				layout.doms.blog.hide();
+				layout.doms.blog['main'].hide();
 				cont.show();
 
 				// 更新导航激活状态
-				layout.updateNav( config.container );
+				// layout.updateNav( config.container );
 			});
 			return cont;
 		}
@@ -49,7 +49,7 @@ define(function( require, exports ){
 				layout.doms.archive.show();
 
 				// 更新导航激活状态
-				layout.updateNav( contName );
+				// layout.updateNav( contName );
 
 				// 防止重复创建
 				for( ; i < len; i++ ) {
@@ -97,7 +97,7 @@ define(function( require, exports ){
 				layout.doms.article.show();
 
 				// 更新导航激活状态
-				layout.updateNav( contName );
+				// layout.updateNav( contName );
 
 				// 防止重复创建
 				for( ; i < len; i++ ) {
