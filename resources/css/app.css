@@ -133,6 +133,25 @@ noscript {
   width: 100%;
   height: 400px;
 }
+.G-frameBodyIndexHead {
+  width: 100%;
+  height: 70px;
+  line-height: 70px;
+  overflow: hidden;
+}
+.G-frameBodyIndexHeadLogo {
+  float: left;
+}
+.G-frameBodyIndexHead ul {
+  float: right;
+}
+.G-frameBodyIndexHead li {
+  display: inline-block;
+  margin-right: 15px;
+}
+.G-frameBodyIndexHead li a.act {
+  color: red;
+}
 .G-frameBodyBlog {
   display: none;
   width: 100%;
@@ -143,6 +162,7 @@ noscript {
   height: 70px;
   line-height: 70px;
   overflow: hidden;
+  background: #F7F7F7;
 }
 .G-frameBodyBlogHeadLogo {
   float: left;
@@ -166,19 +186,6 @@ noscript {
   width: 70%;
   display: inline-block;
   box-sizing: border-box;
-}
-.G-frameBodyBlogAside {
-  width: 30%;
-  position: relative;
-  float: right;
-  padding: 15px;
-  box-sizing: border-box;
-  background: #F4F4F4;
-}
-.G-frameBodyBlogAside dt {
-  font-weight: bold;
-  color: #666;
-  background: #FAFAFA;
 }
 .G-frameBodyFooter {
   width: 100%;
@@ -288,85 +295,6 @@ noscript {
 .M-pager .M-pagerDisabled {
   background: #F1F1EF;
   cursor: default;
-}
-.P-aside {
-  font-size: 16px;
-}
-.P-aside-me,
-.P-aside-list,
-.P-aside-others {
-  box-sizing: border-box;
-  border-radius: 2px;
-  background: #FFF;
-  border: 3px solid #E2E1E1;
-}
-.P-aside-me .P-aside-me-dt {
-  height: 35px;
-  line-height: 35px;
-  padding: 0 10px;
-  border-bottom: 1px solid #EEE;
-}
-.P-aside-me .P-aside-me-dd {
-  padding: 10px;
-}
-.P-aside-list {
-  margin: 15px 0;
-}
-.P-aside-list .P-aside-list-dt {
-  height: 35px;
-  line-height: 35px;
-  padding: 0 10px;
-  border-bottom: 2px solid #EEE;
-}
-.P-aside-list .P-aside-list-dt .opt {
-  cursor: pointer;
-}
-.P-aside-list .P-aside-list-dt .cube {
-  margin: 0 10px;
-  color: #DDD;
-}
-.P-aside-list .art-item {
-  padding: 6px 10px;
-  background: #FFF;
-  -webkit-transition: background .4s ease;
-  -moz-transition: background .4s ease;
-  transition: background .4s ease;
-}
-.P-aside-list .art-item:hover {
-  background: #F8F8F5;
-}
-.P-aside-list .art-line {
-  height: 0;
-  border-top: 1px dashed #DDD;
-  overflow: hidden;
-}
-.P-aside-list .art-line:last-child {
-  display: none;
-}
-.P-aside-list .art-anchor {
-  display: block;
-}
-.P-aside-list .art-anchor:hover {
-  color: #008000;
-}
-.P-aside-list .art-title {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.P-aside-list .art-archive,
-.P-aside-list .art-date,
-.P-aside-list .art-comments {
-  font-size: 12px;
-  color: #BBB;
-}
-.P-aside-list .art-date {
-  margin: 0 10px;
-}
-.P-aside-others {
-  padding: 10px;
 }
 .P-article .content {
   padding: 15px 15px 15px 0;

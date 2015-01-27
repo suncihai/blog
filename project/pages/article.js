@@ -48,9 +48,9 @@ define(function( require, exports ){
 			].join(''));
 			// 内容添加到文章容器中
 			html.appendTo( DOM );
-			var article = $('.article', html);
+			// var article = $('.article', html);
 			// 代码高亮
-			lighter.render( article.find('pre') );
+			// lighter.render( article.find('pre') );
 			layout.setTitle( data.name, res.result.title );
 		}
 

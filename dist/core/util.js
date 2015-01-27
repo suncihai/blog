@@ -102,9 +102,9 @@ define(function( require, util ){
 	 * @param  {Number} y [纵位置]
 	 */
 	 util.scrollTo = function( x, y ) {
-	 	var a = x || 0;
-	 	var b = y || 0;
-	 	window.scrollTo( a, b );
+	 	var _x = x || 0;
+	 	var _y = y || 0;
+	 	window.scrollTo( _x, _y );
 	 }
 
 	/**
