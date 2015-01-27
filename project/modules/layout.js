@@ -5,13 +5,14 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('@core/util');
 	var C = require('@core/config');
+	var header = require('@modules/header');
 
 	// 整体框架布局
 	var layout = [
 		'<div id="MAIN">',
 			'<div class="G-frame">',
 				'<div class="G-frameBody">',
-					// 首页 
+					// 首页
 					'<div class="G-frameBodyIndex">',
 						'<div class="G-frameBodyIndexHead"/>',
 						'<div class="G-frameBodyIndexContent"/>',
@@ -42,19 +43,19 @@ define(function( require, exports ){
 		'body': 		$('.G-frameBody', body),
 		// 主页容器：
 		'index': {
-			'main': 	$('.G-frameBodyIndex', body),
+			'body': 	$('.G-frameBodyIndex', body),
 			'head': 	$('.G-frameBodyIndexHead', body),
 			'content': 	$('.G-frameBodyIndexContent', body),
 			'footer': 	$('.G-frameBodyIndexFooter', body)
 		},
 		// 博客容器
 		'blog': {
-			'main': 	$('.G-frameBodyBlog', body),
+			'body': 	$('.G-frameBodyBlog', body),
 			'head': 	$('.G-frameBodyBlogHead', body),	// 头部容器
 			'archive': 	$('.G-frameBodyBlogArchive', body),	// 栏目容器
-			'article': 	$('.G-frameBodyBlogArticle', body)	// 文章容器
+			'article': 	$('.G-frameBodyBlogArticle', body),	// 文章容器
 			'footer': 	$('.G-frameBodyBlogFooter', body)
-		}  
+		}
 	}
 	exports.doms = doms;
 
@@ -63,10 +64,6 @@ define(function( require, exports ){
 	 * @return {type} [layout]
 	 */
 	exports.init = function() {
-		// 构建导航和侧边栏
-		// this.buildNav()
-		// 	.buildAside();
-			// .buildFooter();
 		// 移除一些提示
 		$('noScript,#welcome').remove();
 		return this;
@@ -78,26 +75,9 @@ define(function( require, exports ){
 	 * @return {type} [layout]
 	 */
 	exports.buildHeader = function( config ) {
-		require.async('@modules/header', function( header ) {
+		// require.async('@modules/header', function( header ) {
 			header.init( config );
-		});
-		return this;
-	}
-
-	/**
-	 * buildNav 构建导航
-	 * @return {type} [layout]
-	 */
-	exports.buildNav = function() {
-		var navs = [];
-		$.each( C.nav, function( idx, item ) {
-			navs.push([
-				'<li>',
-					'<a href="#' + item.link + '" data-id="' + idx + '">' + item.name + '</a>',
-				'</li>'
-			].join(''));
-		});
-		doms.head.append( '<ul>' + navs.join('') + '</ul>' );
+		// });
 		return this;
 	}
 
@@ -107,38 +87,7 @@ define(function( require, exports ){
 	 * @return {type}        [layout]
 	 */
 	exports.updateNav = function( link ) {
-		$.each( C.nav, function( idx, item ) {
-			if( item.link === link ) {
-				doms.head.find('a[data-id=' + idx + ']')
-					.addClass('act')
-					.parent()
-					.siblings()
-					.find('a')
-					.removeClass('act');
-			}
-		});
-		return this;
-	}
-
-	/**
-	 * buildAside 侧边栏创建
-	 */
-	exports.buildAside = function() {
-		require.async('@pages/aside', function( aside ) {
-			aside.init();
-		});
-		return this;
-	}
-
-	/**
-	 * buildFooter 页脚创建
-	 * @param  {type} param [参数]
-	 * @return {type}       [description]
-	 */
-	exports.buildFooter = function() {
-		require.async('@pages/footer', function( footer ) {
-			footer.init();
-		});
+		header.updateNav( link );
 		return this;
 	}
 
