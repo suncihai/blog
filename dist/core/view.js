@@ -13,14 +13,21 @@ define(function( require, exports ){
 		if( $.type( config ) === 'object' ) {
 			var cont = null;
 			require.async('layout', function( layout ) {
-				cont = layout.doms.index['main'];
+				var doms = layout.doms;
+				cont = doms.index.body;
 
-				// 隐藏blog容器
-				layout.doms.blog['main'].hide();
-				cont.show();
+				// 创建头部
+				// layout.buildHeader({
+				// 	'target': doms.index['head']
+				// });
 
 				// 更新导航激活状态
 				// layout.updateNav( config.container );
+
+				// 隐藏blog容器
+				doms.blog.body.hide();
+				cont.show();
+
 			});
 			return cont;
 		}
@@ -38,23 +45,32 @@ define(function( require, exports ){
 				contName = config.container;
 
 			require.async('layout', function( layout ) {
-				var DomC = layout.doms.archive,
-					Sons = DomC.children(),
+				var doms = layout.doms,
+					head = doms.blog.head,
+					archiveDom = doms.blog.archive,
+					sons = archiveDom.children(),
 					i = 0,
-					len = Sons.size();
+					len = sons.size();
 
-				layout.doms.index.hide();
-				layout.doms.blog.show();
-				layout.doms.article.hide();
-				layout.doms.archive.show();
+				doms.index['body'].hide();
+				doms.blog['body'].show();
+				doms.blog['article'].hide();
+				doms.blog['archive'].show();
+
+				// 创建头部
+				if( head.html() === "" ) {
+					layout.buildHeader({
+						'target': head
+					});
+				}
 
 				// 更新导航激活状态
-				// layout.updateNav( contName );
+				layout.updateNav( contName );
 
 				// 防止重复创建
 				for( ; i < len; i++ ) {
-					if( Sons.eq(i).attr('archive-name') === contName ) {
-						Sons.eq(i).show().siblings().hide();
+					if( sons.eq(i).attr('archive-name') === contName ) {
+						sons.eq(i).show().siblings().hide();
 						return;
 					}
 				}
@@ -66,8 +82,8 @@ define(function( require, exports ){
 				});
 
 				// 隐藏其他栏目
-				Sons.hide();
-				DomC.append( cont );
+				sons.hide();
+				archiveDom.append( cont );
 			});
 			return cont;
 		}
@@ -86,23 +102,32 @@ define(function( require, exports ){
 				marker = contName + '/' + config.pageid;
 
 			require.async('layout', function( layout ) {
-				var DomA = layout.doms.article,
-					Sons = DomA.children(),
+				var doms = layout.doms,
+					head = doms.blog.head,
+					articleDom = doms.blog.article,
+					sons = articleDom.children(),
 					i = 0,
-					len = Sons.size();
+					len = sons.size();
 
-				layout.doms.index.hide();
-				layout.doms.blog.show();
-				layout.doms.archive.hide();
-				layout.doms.article.show();
+				doms.index['body'].hide();
+				doms.blog['body'].show();
+				doms.blog['archive'].hide();
+				doms.blog['article'].show();
+
+				// 创建头部
+				if( head.html() === "" ) {
+					layout.buildHeader({
+						'target': head
+					});
+				}
 
 				// 更新导航激活状态
-				// layout.updateNav( contName );
+				layout.updateNav( contName );
 
 				// 防止重复创建
 				for( ; i < len; i++ ) {
-					if( Sons.eq(i).attr('article-name') === marker ) {
-						Sons.eq(i).show().siblings().hide();
+					if( sons.eq(i).attr('article-name') === marker ) {
+						sons.eq(i).show().siblings().hide();
 						return;
 					}
 				}
@@ -114,8 +139,8 @@ define(function( require, exports ){
 				});
 
 				// 隐藏其他栏目
-				Sons.hide();
-				DomA.append( cont );
+				sons.hide();
+				articleDom.append( cont );
 			});
 			return cont;
 		}

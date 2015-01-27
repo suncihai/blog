@@ -13,17 +13,38 @@
 		&Index{
 			width: 100%;
 			height: 400px;
-		}
-		&Blog{
-			display: none;
-			width: 100%;
-			min-height: 500px;
-			// 头部
+			// 主页头部
 			&Head{
 				width: 100%;
 				height: @headHeight;
 				line-height: @headHeight;
 				overflow: hidden;
+				&Logo{
+					float: left;
+				}
+				ul{
+					float: right;
+				}
+				li{
+					display: inline-block;
+					margin-right: 15px;
+					a.act{
+						color: red;
+					}
+				}
+			}
+		}
+		&Blog{
+			display: none;
+			width: 100%;
+			min-height: 500px;
+			// 博客头部
+			&Head{
+				width: 100%;
+				height: @headHeight;
+				line-height: @headHeight;
+				overflow: hidden;
+				background:#F7F7F7;
 				&Logo{
 					float: left;
 				}
@@ -47,19 +68,6 @@
 				.leftW;
 				display: inline-block;
 				box-sizing: border-box;
-			}
-			&Aside{
-				.rightW;
-				position: relative;
-				float: right;
-				padding: 15px;
-				box-sizing: border-box;
-				background: #F4F4F4;
-				dt{
-					font-weight: bold;
-					color: #666;
-					background: #FAFAFA;
-				}
 			}
 		}
 		// 底部

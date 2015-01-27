@@ -45,7 +45,7 @@ module.exports = function( grunt ) {
 		},
 		watch: {
 			less: {
-				files: ['resources/less/*.less'],
+				files: ['resources/less/**/*.less', 'resources/less/*/*.less'],
 				tasks: ['less:compile']
 			}
 		}
