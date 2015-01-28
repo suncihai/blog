@@ -22,6 +22,12 @@ define(function( require, exports ) {
 		// 统计代码
 		stat: '',
 
+		// 主页容器固定长度
+		indexWidth: 1080,
+
+		// 博客容器固定长度
+		blogWidth: 1080,
+
 		// 导航
 		nav: [
 			{'name': '首页', 'link': 'index'},

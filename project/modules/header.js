@@ -6,30 +6,33 @@ define(function( require, exports ){
 	var layout = require('layout');
 	var C = require('@core/config');
 
+	/**
+	 * init 头部初始化
+	 * @param  {JSON} config   [配置参数,应有target、css]
+	 * @return {Object}        [header]
+	 */
 	exports.init = function( config ) {
 		this.config = config || {};
 		var target = this.config['target'];
+		var cssConfig = this.config['css'];
 		var head = $([
 			'<div class="M-head">',
-				'<div class="M-headLogo"/>',
-				'<div class="M-headNav"/>',
-				'<div class="M-headTool"/>',
+				'<div class="M-headLogo fl">',
+					'<h1><a href="/blog/" class="logoText">TANGBC</a></h1>',
+				'</div>',
+				'<div class="M-headNav fl"/>',
+				'<div class="M-headTool fr"/>',
 			'</div>'
 		].join(''));
-		var doms = {
-			'logo': $('.M-headLogo', head),
-			'nav': $('.M-headNav', head),
-			'tool': $('.M-headTool', head)
+		// 配置有CSS要加上
+		if( cssConfig ) {
+			head.css( cssConfig )
 		}
-		// 创建LOGO对象
-		var logo = new Logo('resources/images/logo.png', {'width': 160, 'height': 40});
-		// logo.putTo( doms.logo );
 		// 创建导航对象
 		var nav = new Nav( C.nav );
-		nav.putTo( doms.nav );
+		nav.putTo( $('.M-headNav', head) );
 		// 缓存对象
 		this.$ = {
-			'logo': logo,
 			'nav': nav
 		}
 		head.appendTo( target );
@@ -40,32 +43,6 @@ define(function( require, exports ){
 	exports.updateNav = function( link ) {
 		this.$['nav'].updateNav( link );
 		return this;
-	}
-
-	// LOGO构造函数
-	var Logo = function( src, size ) {
-		this.src = src || '';
-		this.size = size || {};
-	}
-	Logo.prototype = {
-		constructor : Logo,
-		// 创建LOGO布局
-		buildLogo: function() {
-			var width = this.size['width'], height = this.size['height'];
-			var logo = this.$dom = $('<img src="'+ this.src +'"/>');
-			if( width && height ) {
-				logo.css({
-					'width': width,
-					'height': height
-				});
-			}
-			return logo;
-		},
-		putTo: function( target ) {
-			var dom = this.buildLogo();
-			dom.appendTo( target );
-			return this;
-		}
 	}
 
 	// Nav构造函数
