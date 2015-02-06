@@ -31,9 +31,6 @@ define(function( require, exports ) {
 		// 导航
 		nav: [
 			{'name': '首页', 'link': 'index'},
-			{'name': 'JavaScript', 'link': 'javascript'},
-			{'name': 'HTML/CSS', 'link': 'htmlcss'},
-			{'name': 'UE Design', 'link': 'uedesign'},
 			{'name': '前端那些事', 'link': 'matters'}
 		],
 
@@ -48,9 +45,6 @@ define(function( require, exports ) {
 
 		// 栏目hash对应的category数据库id(表wp_terms)
 		cat: {
-			javascript: 3,
-			htmlcss: 22,
-			uedesign: 6,
 			matters: 1
 		},
 
@@ -66,12 +60,6 @@ define(function( require, exports ) {
 		// article默认请求选项
 		articleOption: {
 			artid: 2
-		},
-
-		// 侧边标题列表默认请求选项
-		listOption: {
-			amount: 8,
-			type: 'date'
 		},
 
 		// 数据中心
