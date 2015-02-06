@@ -3,6 +3,7 @@
  */
 define(function( require, exports ){
 	var $ = require('jquery');
+	var C = require('@core/config');
 
 	/**
 	 * createIndex 创建主页容器
@@ -42,7 +43,8 @@ define(function( require, exports ){
 		if( $.type( config ) === 'object' ) {
 			var tag = 'div',
 				cont = $('<'+ tag +'/>'),
-				contName = config.container;
+				contName = config.container,
+				width = C['blogWidth'];
 
 			require.async('layout', function( layout ) {
 				var doms = layout.doms,
@@ -60,7 +62,10 @@ define(function( require, exports ){
 				// 创建头部
 				if( head.html() === "" ) {
 					layout.buildHeader({
-						'target': head
+						'target': head,
+						'css': {
+							'width': width
+						}
 					});
 				}
 
@@ -79,7 +84,7 @@ define(function( require, exports ){
 				cont.attr({
 					'class': 'P-archives',
 					'archive-name': contName
-				});
+				}).width( width );
 
 				// 隐藏其他栏目
 				sons.hide();

@@ -643,19 +643,6 @@ noscript {
   line-height: 70px;
   overflow: hidden;
 }
-.G-frameBodyIndexHeadLogo {
-  float: left;
-}
-.G-frameBodyIndexHead ul {
-  float: right;
-}
-.G-frameBodyIndexHead li {
-  display: inline-block;
-  margin-right: 15px;
-}
-.G-frameBodyIndexHead li a.act {
-  color: red;
-}
 .G-frameBodyBlog {
   display: none;
   min-height: 500px;
@@ -667,27 +654,10 @@ noscript {
   overflow: hidden;
   background: #F7F7F7;
 }
-.G-frameBodyBlogHeadLogo {
-  float: left;
-}
-.G-frameBodyBlogHead ul {
-  float: right;
-}
-.G-frameBodyBlogHead li {
-  display: inline-block;
-  margin-right: 15px;
-}
-.G-frameBodyBlogHead li a.act {
-  color: red;
-}
 .G-frameBodyBlogArchive {
-  width: 70%;
-  display: inline-block;
   box-sizing: border-box;
 }
 .G-frameBodyBlogArticle {
-  width: 70%;
-  display: inline-block;
   box-sizing: border-box;
 }
 .G-frameBodyFooter {
@@ -696,6 +666,7 @@ noscript {
   line-height: 50px;
 }
 .P-archives {
+  margin: 0 auto;
   padding: 15px 15px 15px 0;
 }
 .P-archives section {
@@ -798,6 +769,31 @@ noscript {
 .M-pager .M-pagerDisabled {
   background: #F1F1EF;
   cursor: default;
+}
+.M-head {
+  margin: 0 auto;
+}
+.M-headLogo {
+  line-height: 70px;
+  width: 18%;
+}
+.M-headLogo h1 {
+  font-size: 34px;
+  letter-spacing: 3px;
+}
+.M-headLogo .logoText {
+  color: #686599;
+}
+.M-headNav ul {
+  float: right;
+}
+.M-headNav li {
+  display: inline-block;
+  margin-right: 2.5em;
+  font-size: 18px;
+}
+.M-headNav li a.act {
+  color: red;
 }
 .P-article .content {
   padding: 15px 15px 15px 0;
