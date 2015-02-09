@@ -11,19 +11,23 @@ define(function( require, exports ){
 		var target = this.config['target'];
 		var head = $([
 			'<div class="M-head">',
-				'<div class="M-headLogo"/>',
-				'<div class="M-headNav"/>',
-				'<div class="M-headTool"/>',
+				'<div class="M-headLogo fl"/>',
+				'<div class="M-headNav fl"/>',
+				'<div class="M-headTool fr"/>',
 			'</div>'
 		].join(''));
+		var cssStyle = this.config.css;
+		if( cssStyle ) {
+			head.css( cssStyle );
+		}
 		var doms = {
 			'logo': $('.M-headLogo', head),
 			'nav': $('.M-headNav', head),
 			'tool': $('.M-headTool', head)
 		}
 		// 创建LOGO对象
-		var logo = new Logo('resources/images/logo.png', {'width': 160, 'height': 40});
-		// logo.putTo( doms.logo );
+		var logo = new Logo();
+		logo.putTo( doms.logo );
 		// 创建导航对象
 		var nav = new Navigator( C.nav );
 		nav.putTo( doms.nav );
@@ -44,21 +48,26 @@ define(function( require, exports ){
 
 	// LOGO 站标
 	function Logo( src, size ) {
-		this.src = src || '';
-		this.size = size || {};
+		// this.src = src || '';
+		// this.size = size || {};
 	}
 	Logo.prototype = {
 		constructor : Logo,
 		// 创建LOGO布局
 		buildLogo: function() {
-			var width = this.size['width'], height = this.size['height'];
-			var logo = this.$dom = $('<img src="'+ this.src +'"/>');
-			if( width && height ) {
-				logo.css({
-					'width': width,
-					'height': height
-				});
-			}
+			// var width = this.size['width'], height = this.size['height'];
+			// var logo = this.$dom = $('<img src="'+ this.src +'"/>');
+			// if( width && height ) {
+			// 	logo.css({
+			// 		'width': width,
+			// 		'height': height
+			// 	});
+			// }
+			var logo = this.$dom = $([
+				'<a href="/blog/" class="logoAnchor">',
+					'<h1>TANGBC</h1>',
+				'</a>'
+			].join(''));
 			return logo;
 		},
 		putTo: function( target ) {

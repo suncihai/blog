@@ -642,19 +642,7 @@ noscript {
   height: 70px;
   line-height: 70px;
   overflow: hidden;
-}
-.G-frameBodyIndexHeadLogo {
-  float: left;
-}
-.G-frameBodyIndexHead ul {
-  float: right;
-}
-.G-frameBodyIndexHead li {
-  display: inline-block;
-  margin-right: 15px;
-}
-.G-frameBodyIndexHead li a.act {
-  color: red;
+  background: #F7F7F7;
 }
 .G-frameBodyBlog {
   display: none;
@@ -668,27 +656,12 @@ noscript {
   overflow: hidden;
   background: #F7F7F7;
 }
-.G-frameBodyBlogHeadLogo {
-  float: left;
-}
-.G-frameBodyBlogHead ul {
-  float: right;
-}
-.G-frameBodyBlogHead li {
-  display: inline-block;
-  margin-right: 15px;
-}
-.G-frameBodyBlogHead li a.act {
-  color: red;
-}
 .G-frameBodyBlogArchive {
-  width: 70%;
-  display: inline-block;
+  width: 100%;
   box-sizing: border-box;
 }
 .G-frameBodyBlogArticle {
-  width: 70%;
-  display: inline-block;
+  width: 100%;
   box-sizing: border-box;
 }
 .G-frameBodyFooter {
@@ -825,6 +798,9 @@ noscript {
 }
 .M-headNav li a.act {
   color: red;
+}
+.P-article {
+  margin: 0 auto;
 }
 .P-article .content {
   padding: 15px 15px 15px 0;

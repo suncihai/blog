@@ -3,6 +3,8 @@
  */
 define(function( require, exports ){
 	var $ = require('jquery');
+	var C = require('@core/config');
+	var blogWidth = C['blogWidth']
 
 	/**
 	 * createIndex 创建主页容器
@@ -60,7 +62,10 @@ define(function( require, exports ){
 				// 创建头部
 				if( head.html() === "" ) {
 					layout.buildHeader({
-						'target': head
+						'target': head,
+						'css': {
+							'width': blogWidth
+						}
 					});
 				}
 
@@ -79,7 +84,7 @@ define(function( require, exports ){
 				cont.attr({
 					'class': 'P-archives',
 					'archive-name': contName
-				});
+				}).width( blogWidth );
 
 				// 隐藏其他栏目
 				sons.hide();
@@ -117,7 +122,10 @@ define(function( require, exports ){
 				// 创建头部
 				if( head.html() === "" ) {
 					layout.buildHeader({
-						'target': head
+						'target': head,
+						'css': {
+							'width': blogWidth
+						}
 					});
 				}
 
@@ -136,7 +144,7 @@ define(function( require, exports ){
 				cont.attr({
 					'class': 'P-article',
 					'article-name': marker
-				});
+				}).width( blogWidth );
 
 				// 隐藏其他栏目
 				sons.hide();
