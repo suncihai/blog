@@ -25,7 +25,7 @@ define(function( require, exports ){
 		var logo = new Logo('resources/images/logo.png', {'width': 160, 'height': 40});
 		// logo.putTo( doms.logo );
 		// 创建导航对象
-		var nav = new Nav( C.nav );
+		var nav = new Navigator( C.nav );
 		nav.putTo( doms.nav );
 		// 缓存对象
 		this.$ = {
@@ -42,8 +42,8 @@ define(function( require, exports ){
 		return this;
 	}
 
-	// LOGO构造函数
-	var Logo = function( src, size ) {
+	// LOGO 站标
+	function Logo( src, size ) {
 		this.src = src || '';
 		this.size = size || {};
 	}
@@ -68,12 +68,12 @@ define(function( require, exports ){
 		}
 	}
 
-	// Nav构造函数
-	var Nav = function( options ) {
+	// Navigator 导航
+	function Navigator( options ) {
 		this.options = options || {};
 	}
-	Nav.prototype = {
-		constructor: Nav,
+	Navigator.prototype = {
+		constructor: Navigator,
 		// 创建导航布局
 		buildNavDOM: function() {
 			var options = this.options;
