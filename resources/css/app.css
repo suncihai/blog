@@ -119,6 +119,13 @@ noscript {
 .center {
   margin: 0 auto;
 }
+.head-fixed {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  left: 0;
+  top: 0;
+}
 .tc {
   text-align: center !important;
 }
@@ -648,6 +655,7 @@ noscript {
   display: none;
   width: 100%;
   min-height: 500px;
+  padding-top: 70px;
 }
 .G-frameBodyBlogHead {
   width: 100%;

@@ -8,8 +8,7 @@ module.exports = function( grunt ) {
 		less: {
 			compile: {
 				files: {
-					'resources/css/app.css': 'resources/less/app.less',
-					'resources/css/animation.css': 'resources/less/animation.less'
+					'resources/css/app.css': 'resources/less/app.less'
 				}
 			}
 		},

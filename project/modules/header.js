@@ -5,6 +5,7 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var layout = require('layout');
 	var C = require('@core/config');
+	var HeadRoom = require('@plugins/headroom/headroom.min').base;
 
 	exports.init = function( config ) {
 		this.config = config || {};
@@ -37,6 +38,21 @@ define(function( require, exports ){
 			'nav': nav
 		}
 		head.appendTo( target );
+		// 启用headroom插件
+		(new HeadRoom( target.addClass('head-fixed').get(0), {
+			'tolerance': {
+				'up': 5,
+				'down': 5
+			},
+			'offset': 200,
+			'classes': {
+			    'initial': 'animated',
+			    'pinned': 'slideInDown',
+			    'unpinned': 'fadeOutUp',
+			    'top': '',
+			    'notTop': ''
+			}
+		})).init();
 		return this;
 	}
 
