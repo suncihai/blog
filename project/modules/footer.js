@@ -7,7 +7,7 @@ define(function( require, exports ){
 	var C = require('@core/config');
 	var util = require('util');
 
-	var footer = layout.doms.footer;
+	var footer = layout.getDOM('footer');
 
 	var html = [
 		'<div class="P-footer-info"/>',

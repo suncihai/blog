@@ -55,6 +55,8 @@ define(function( require, exports ){
 	function afterRun( module ) {
 		// 404
 		if( !module ) {
+			util.error('404 - 找不到该页面: ' + data.name);
+			require.async( '@controller/404', afterRun );
 			return false;
 		}
 		else {

@@ -21,10 +21,13 @@ define(function( require, exports ){
 					// 博客
 					'<div class="G-frameBodyBlog">',
 						'<div class="G-frameBodyBlogHead"/>',
+						'<div class="G-frameBodyBlogBanner"/>',
 						'<div class="G-frameBodyBlogArchive"/>',
 						'<div class="G-frameBodyBlogArticle"/>',
 						'<div class="G-frameBodyBlogFooter"/>',
 					'</div>',
+					// 空白页
+					'<div class="G-frameBodyBlank"/>',
 				'</div>',
 			'</div>',
 		'</div>',
@@ -35,29 +38,31 @@ define(function( require, exports ){
 	var body = $('body').append( layout );
 	var doms = {
 		// 框架结构：
-		'MAIN': 		$('#MAIN'),
-		'LOADING':  	$('#LOADING'),
-		'POPWIN': 		$('#POPWIN'),
+		'MAIN'    : 		$('#MAIN'),
+		'LOADING' :  		$('#LOADING'),
+		'POPWIN'  : 		$('#POPWIN'),
 		// 框架容器：
-		'frame': 		$('.G-frame', body),
-		'body': 		$('.G-frameBody', body),
+		'frame'   : 		$('.G-frame', body),
+		'body'    : 		$('.G-frameBody', body),
 		// 主页容器：
 		'index': {
-			'body': 	$('.G-frameBodyIndex', body),
-			'head': 	$('.G-frameBodyIndexHead', body),
-			'content': 	$('.G-frameBodyIndexContent', body),
-			'footer': 	$('.G-frameBodyIndexFooter', body)
+			'body'    : 	$('.G-frameBodyIndex', body),
+			'head'    : 	$('.G-frameBodyIndexHead', body),
+			'content' : 	$('.G-frameBodyIndexContent', body),
+			'footer'  : 	$('.G-frameBodyIndexFooter', body)
 		},
 		// 博客容器
 		'blog': {
-			'body': 	$('.G-frameBodyBlog', body),
-			'head': 	$('.G-frameBodyBlogHead', body),	// 头部容器
-			'archive': 	$('.G-frameBodyBlogArchive', body),	// 栏目容器
-			'article': 	$('.G-frameBodyBlogArticle', body),	// 文章容器
-			'footer': 	$('.G-frameBodyBlogFooter', body)
-		}
+			'body'    : 	$('.G-frameBodyBlog', body),
+			'head'    : 	$('.G-frameBodyBlogHead', body),	// 头部LOGO、导航、TOOL容器
+			'banner'  : 	$('.G-frameBodyBlogBanner', body),	// Banner容器
+			'archive' : 	$('.G-frameBodyBlogArchive', body),	// 栏目列表容器
+			'article' : 	$('.G-frameBodyBlogArticle', body),	// 文章内容容器
+			'footer'  : 	$('.G-frameBodyBlogFooter', body)
+		},
+		// 空白容器
+		'blank' : 			$('.G-frameBodyBlank', body)
 	}
-	exports.doms = doms;
 
 	/**
 	 * init 初始化
@@ -66,7 +71,41 @@ define(function( require, exports ){
 	exports.init = function() {
 		// 移除一些提示
 		$('noScript,#welcome').remove();
-		return this;
+		// 全局缓存变量$tick
+		this.$tick = {
+			'headerType': [], // 头部类型 [blog,index]
+		}
+		/**
+		 * _setTick 缓存tick方法(内部调用)
+		 * @param {String} name [缓存的字段]
+		 * @param {Mixed}  val [缓存值]
+		 */
+		this._setTick = function( name, val ) {
+			var tick = this.$tick[name];
+			// 字符串
+			if( util.isString( tick ) ) {
+				this.$tick[name] = val.toString();
+			}
+			// 数组
+			else if( util.isArray( tick ) ) {
+				this.$tick[name].push( val );
+			}
+			// 对象及其他
+			else {
+				this.$tick[name] = val;
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * getDOM 获取指定DOM对象
+	 * @param  {String} domName [需要获取的DOM对象,格式为blog/head, 暂时支持两层]
+	 * @return {Object} [DOM]
+	 */
+	exports.getDOM = function( domName ) {
+		var retDom, domArr = domName.toString().split('/');
+		return domArr.length === 2 ? doms[domArr[0]][domArr[1]] : doms[domArr[0]];
 	}
 
 	/**
@@ -75,10 +114,17 @@ define(function( require, exports ){
 	 * @return {type} [layout]
 	 */
 	exports.buildHeader = function( config ) {
-		// require.async('@modules/header', function( header ) {
-			header.init( config );
-		// });
-		return this;
+		var self = this;
+		var type = config['type']; // 头部类型, index,blog
+		var exist = util.inArray( type, this.$tick.headerType );
+		if( exist === -1 ) {
+			header.init( config , function( completed ) {
+				if( completed ) {
+					self._setTick( 'headerType', type );
+				}
+			});
+		}
+		return self;
 	}
 
 	/**
@@ -109,5 +155,10 @@ define(function( require, exports ){
 		$(document).attr('title', str);
 		return this;
 	}
+
+	/**
+	 * buildBanner 构建博客的Banner内容
+	 */
+	exports.buildBanner = function() {}
 
 });

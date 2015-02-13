@@ -26,7 +26,6 @@
 			display: none;
 			width: 100%;
 			min-height: 500px;
-			padding-top: @headHeight;
 			// 博客头部
 			&Head{
 				width: 100%;
@@ -35,10 +34,19 @@
 				overflow: hidden;
 				background:#F7F7F7;
 			}
+			// Banner
+			&Banner{
+				width: 100%;
+				padding-top: @headHeight;
+				min-height: 200px;
+				background: #383838;
+			}
+			// 博客列表页
 			&Archive{
 				width: 100%;
 				box-sizing: border-box;
 			}
+			// 博客内容页
 			&Article{
 				width: 100%;
 				box-sizing: border-box;

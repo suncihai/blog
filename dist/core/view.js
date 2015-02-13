@@ -12,27 +12,31 @@ define(function( require, exports ){
 	 * @return {Object}        [容器对象]
 	 */
 	exports.createIndex = function( config ) {
-		if( $.type( config ) === 'object' ) {
-			var cont = null;
-			require.async('layout', function( layout ) {
-				var doms = layout.doms;
-				cont = doms.index.body;
-
-				// 创建头部
-				// layout.buildHeader({
-				// 	'target': doms.index['head']
-				// });
-
-				// 更新导航激活状态
-				// layout.updateNav( config.container );
-
-				// 隐藏blog容器
-				doms.blog.body.hide();
-				cont.show();
-
-			});
-			return cont;
+		if( $.type( config ) !== 'object' ) {
+			return false;
 		}
+		var body = null;
+		require.async('layout', function( layout ) {
+			var indexDOM = layout.getDOM('index');
+			var indexBody = body = indexDOM['body'];
+
+			// 创建头部
+			layout.buildHeader({
+				'target': indexDOM['head'],
+				'type': 'index',
+				'css': {
+					'width': C.indexWidth
+				}
+			});
+
+			// 更新导航激活状态
+			layout.updateNav( config.container );
+
+			// 隐藏blog容器
+			indexBody.show().siblings().hide();
+
+		});
+		return body;
 	}
 
 	/**
@@ -41,57 +45,57 @@ define(function( require, exports ){
 	 * @return {Object}        [容器对象]
 	 */
 	exports.createArchive = function( config ) {
-		if( $.type( config ) === 'object' ) {
-			var tag = 'div',
-				cont = $('<'+ tag +'/>'),
-				contName = config.container;
-
-			require.async('layout', function( layout ) {
-				var doms = layout.doms,
-					head = doms.blog.head,
-					archiveDom = doms.blog.archive,
-					sons = archiveDom.children(),
-					i = 0,
-					len = sons.size();
-
-				doms.index['body'].hide();
-				doms.blog['body'].show();
-				doms.blog['article'].hide();
-				doms.blog['archive'].show();
-
-				// 创建头部
-				if( head.html() === "" ) {
-					layout.buildHeader({
-						'target': head,
-						'css': {
-							'width': blogWidth
-						}
-					});
-				}
-
-				// 更新导航激活状态
-				layout.updateNav( contName );
-
-				// 防止重复创建
-				for( ; i < len; i++ ) {
-					if( sons.eq(i).attr('archive-name') === contName ) {
-						sons.eq(i).show().siblings().hide();
-						return;
-					}
-				}
-
-				// 添加标识属性
-				cont.attr({
-					'class': 'P-archives',
-					'archive-name': contName
-				}).width( blogWidth );
-
-				// 隐藏其他栏目
-				sons.hide();
-				archiveDom.append( cont );
-			});
-			return cont;
+		if( $.type( config ) !== 'object' ) {
+			return false;
 		}
+		var tag = 'div',
+			cont = $('<'+ tag +'/>'),
+			contName = config.container;
+
+		require.async('layout', function( layout ) {
+			var blogDOM = layout.getDOM('blog'),
+				blogBody = blogDOM['body'],
+				head = blogDOM['head'],
+				archiveDom = blogDOM['archive'],
+				sons = archiveDom.children(),
+				i = 0,
+				len = sons.size();
+
+			blogBody.show().siblings().hide();
+			blogDOM['article'].hide();
+			blogDOM['archive'].show();
+
+			// 创建头部
+			layout.buildHeader({
+				'target': head,
+				'type': 'blog',
+				'css': {
+					'width': blogWidth
+				}
+			});
+
+			// 更新导航激活状态
+			layout.updateNav( contName );
+
+			// 防止重复创建
+			for( ; i < len; i++ ) {
+				if( sons.eq(i).attr('archive-name') === contName ) {
+					sons.eq(i).show().siblings().hide();
+					return;
+				}
+			}
+
+			// 添加标识属性
+			cont.attr({
+				'class': 'P-archives',
+				'archive-name': contName
+			}).width( blogWidth );
+
+			// 隐藏其他栏目
+			sons.hide();
+			archiveDom.append( cont );
+		});
+		return cont;
 	}
 
 	/**
@@ -100,57 +104,71 @@ define(function( require, exports ){
 	 * @return {Object}        [容器对象]
 	 */
 	exports.createArticle = function( config ) {
-		if( $.type( config ) === 'object' ) {
-			var tag = 'div',
-				cont = $('<'+ tag +'/>'),
-				contName = config.container,
-				marker = contName + '/' + config.pageid;
-
-			require.async('layout', function( layout ) {
-				var doms = layout.doms,
-					head = doms.blog.head,
-					articleDom = doms.blog.article,
-					sons = articleDom.children(),
-					i = 0,
-					len = sons.size();
-
-				doms.index['body'].hide();
-				doms.blog['body'].show();
-				doms.blog['archive'].hide();
-				doms.blog['article'].show();
-
-				// 创建头部
-				if( head.html() === "" ) {
-					layout.buildHeader({
-						'target': head,
-						'css': {
-							'width': blogWidth
-						}
-					});
-				}
-
-				// 更新导航激活状态
-				layout.updateNav( contName );
-
-				// 防止重复创建
-				for( ; i < len; i++ ) {
-					if( sons.eq(i).attr('article-name') === marker ) {
-						sons.eq(i).show().siblings().hide();
-						return;
-					}
-				}
-
-				// 添加标识属性
-				cont.attr({
-					'class': 'P-article',
-					'article-name': marker
-				}).width( blogWidth );
-
-				// 隐藏其他栏目
-				sons.hide();
-				articleDom.append( cont );
-			});
-			return cont;
+		if( $.type( config ) !== 'object' ) {
+			return false;
 		}
+		var tag = 'div',
+			cont = $('<'+ tag +'/>'),
+			contName = config.container,
+			marker = contName + '/' + config.pageid;
+
+		require.async('layout', function( layout ) {
+			var blogDOM = layout.getDOM('blog'),
+				blogBody = blogDOM['body'],
+				head = blogDOM['head'],
+				articleDom = blogDOM['article'],
+				sons = articleDom.children(),
+				i = 0,
+				len = sons.size();
+
+			blogBody.show().siblings().hide();
+			blogDOM['archive'].hide();
+			blogDOM['article'].show();
+
+			// 创建头部
+			layout.buildHeader({
+				'target': head,
+				'type': 'blog',
+				'css': {
+					'width': blogWidth
+				}
+			});
+
+			// 更新导航激活状态
+			layout.updateNav( contName );
+
+			// 防止重复创建
+			for( ; i < len; i++ ) {
+				if( sons.eq(i).attr('article-name') === marker ) {
+					sons.eq(i).show().siblings().hide();
+					return;
+				}
+			}
+
+			// 添加标识属性
+			cont.attr({
+				'class': 'P-article',
+				'article-name': marker
+			}).width( blogWidth );
+
+			// 隐藏其他栏目
+			sons.hide();
+			articleDom.append( cont );
+		});
+		return cont;
+	}
+
+	/**
+	 * createNotFound 返回404容器
+	 * @param  {JSON} config   [配置参数]
+	 * @return {Object}        [容器对象]
+	 */
+	exports.createNotFound = function() {
+		var blank = null;
+		require.async('layout', function( layout ) {
+			blank = layout.getDOM('blank');
+			blank.show().siblings().hide();
+		});
+		return blank;
 	}
 });

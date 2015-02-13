@@ -5,9 +5,10 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var layout = require('layout');
 	var C = require('@core/config');
+	var util = require('util');
 	var HeadRoom = require('@plugins/headroom/headroom.min').base;
 
-	exports.init = function( config ) {
+	exports.init = function( config, callback ) {
 		this.config = config || {};
 		var target = this.config['target'];
 		var head = $([
@@ -53,6 +54,10 @@ define(function( require, exports ){
 			    'notTop': ''
 			}
 		})).init();
+		// 创建完成后回调
+		if( util.isFunc( callback ) ) {
+			callback.call( this, true );
+		}
 		return this;
 	}
 

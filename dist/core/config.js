@@ -23,10 +23,10 @@ define(function( require, exports ) {
 		stat: '',
 
 		// 主页容器固定长度
-		indexWidth: 1080,
+		indexWidth: 1024,
 
 		// 博客容器固定长度
-		blogWidth: 1080,
+		blogWidth: 1024,
 
 		// 导航
 		nav: [

@@ -97,7 +97,7 @@ define(function( require, util ){
 	}
 
 	/**
-	 * scrollTo 自定义滚动条位置(用于hash改变时纠正滚动条位置) 
+	 * scrollTo 自定义滚动条位置(用于hash改变时纠正滚动条位置)
 	 * @param  {Number} x [横位置]
 	 * @param  {Number} y [纵位置]
 	 */
@@ -137,6 +137,7 @@ define(function( require, util ){
 				return key;
 			}
 		}
+		return false;
 	}
 
 });
