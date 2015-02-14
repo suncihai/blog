@@ -16,21 +16,20 @@ define(function( require, exports ){
 			return false;
 		}
 		var body = null;
-		require.async('layout', function( layout ) {
+		require.async('layout', function( mod ) {
+			var layout = mod.base;
 			var indexDOM = layout.getDOM('index');
 			var indexBody = body = indexDOM['body'];
 
-			// 创建头部
+			// 创建头部/激活导航状态
 			layout.buildHeader({
 				'target': indexDOM['head'],
 				'type': 'index',
+				'headroom': true,
 				'css': {
 					'width': C.indexWidth
 				}
-			});
-
-			// 更新导航激活状态
-			layout.updateNav( config.container );
+			}).updateNav( config.container );
 
 			// 隐藏blog容器
 			indexBody.show().siblings().hide();
@@ -48,34 +47,32 @@ define(function( require, exports ){
 		if( $.type( config ) !== 'object' ) {
 			return false;
 		}
-		var tag = 'div',
-			cont = $('<'+ tag +'/>'),
-			contName = config.container;
+		var tag = 'div';
+		var	cont = $('<'+ tag +'/>');
+		var	contName = config.container;
 
-		require.async('layout', function( layout ) {
-			var blogDOM = layout.getDOM('blog'),
-				blogBody = blogDOM['body'],
-				head = blogDOM['head'],
-				archiveDom = blogDOM['archive'],
-				sons = archiveDom.children(),
-				i = 0,
-				len = sons.size();
+		require.async('layout', function( mod ) {
+			var layout = mod.base;
+			var blogDOM = layout.getDOM('blog');
+			var	blogBody = blogDOM['body'];
+			var	head = blogDOM['head'];
+			var	archiveDom = blogDOM['archive'];
+			var	sons = archiveDom.children();
+			var	i = 0, len = sons.size();
 
 			blogBody.show().siblings().hide();
 			blogDOM['article'].hide();
 			blogDOM['archive'].show();
 
-			// 创建头部
+			// 创建头部/激活导航状态
 			layout.buildHeader({
 				'target': head,
 				'type': 'blog',
+				'headroom': true,
 				'css': {
 					'width': blogWidth
 				}
-			});
-
-			// 更新导航激活状态
-			layout.updateNav( contName );
+			}).updateNav( contName );
 
 			// 防止重复创建
 			for( ; i < len; i++ ) {
@@ -107,35 +104,33 @@ define(function( require, exports ){
 		if( $.type( config ) !== 'object' ) {
 			return false;
 		}
-		var tag = 'div',
-			cont = $('<'+ tag +'/>'),
-			contName = config.container,
-			marker = contName + '/' + config.pageid;
+		var tag = 'div';
+		var	cont = $('<'+ tag +'/>');
+		var	contName = config.container;
+		var	marker = contName + '/' + config.pageid;
 
-		require.async('layout', function( layout ) {
-			var blogDOM = layout.getDOM('blog'),
-				blogBody = blogDOM['body'],
-				head = blogDOM['head'],
-				articleDom = blogDOM['article'],
-				sons = articleDom.children(),
-				i = 0,
-				len = sons.size();
+		require.async('layout', function( mod ) {
+			var layout = mod.base;
+			var blogDOM = layout.getDOM('blog');
+			var	blogBody = blogDOM['body'];
+			var	head = blogDOM['head'];
+			var	articleDom = blogDOM['article'];
+			var	sons = articleDom.children();
+			var	i = 0, len = sons.size();
 
 			blogBody.show().siblings().hide();
 			blogDOM['archive'].hide();
 			blogDOM['article'].show();
 
-			// 创建头部
+			// 创建头部/激活导航状态
 			layout.buildHeader({
 				'target': head,
 				'type': 'blog',
+				'headroom': true,
 				'css': {
 					'width': blogWidth
 				}
-			});
-
-			// 更新导航激活状态
-			layout.updateNav( contName );
+			}).updateNav( contName );
 
 			// 防止重复创建
 			for( ; i < len; i++ ) {
@@ -165,7 +160,8 @@ define(function( require, exports ){
 	 */
 	exports.createNotFound = function() {
 		var blank = null;
-		require.async('layout', function( layout ) {
+		require.async('layout', function( mod ) {
+			var layout = mod.base;
 			blank = layout.getDOM('blank');
 			blank.show().siblings().hide();
 		});

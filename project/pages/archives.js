@@ -1,7 +1,7 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
-	var layout = require('layout');
+	var layout = require('layout').base;
 	var C = require('@core/config');
 	var pager = require('@modules/pager');
 

@@ -3,69 +3,86 @@
  */
 define(function( require, exports ){
 	var $ = require('jquery');
-	var layout = require('layout');
 	var C = require('@core/config');
 	var util = require('util');
-	var HeadRoom = require('@plugins/headroom/headroom.min').base;
+	var HeadRoom = require('@plugins/headroom/headroom').base;
 
-	exports.init = function( config, callback ) {
-		this.config = config || {};
-		var target = this.config['target'];
-		var head = $([
-			'<div class="M-head">',
-				'<div class="M-headLogo fl"/>',
-				'<div class="M-headNav fl"/>',
-				'<div class="M-headTool fr"/>',
-			'</div>'
-		].join(''));
-		var cssStyle = this.config.css;
-		if( cssStyle ) {
-			head.css( cssStyle );
-		}
-		var doms = {
-			'logo': $('.M-headLogo', head),
-			'nav': $('.M-headNav', head),
-			'tool': $('.M-headTool', head)
-		}
-		// 创建LOGO对象
-		var logo = new Logo();
-		logo.putTo( doms.logo );
-		// 创建导航对象
-		var nav = new Navigator( C.nav );
-		nav.putTo( doms.nav );
-		// 缓存对象
-		this.$ = {
-			'logo': logo,
-			'nav': nav
-		}
-		head.appendTo( target );
-		// 启用headroom插件
-		(new HeadRoom( target.addClass('head-fixed').get(0), {
-			'tolerance': {
-				'up': 5,
-				'down': 5
-			},
-			'offset': 200,
-			'classes': {
-			    'initial': 'animated',
-			    'pinned': 'slideInDown',
-			    'unpinned': 'fadeOutUp',
-			    'top': '',
-			    'notTop': ''
+	var Main = {
+		// 初始化方法
+		init: function( config, callback ) {
+			this.config = config || {};
+			this.callback = callback;
+			this.build();
+		},
+
+		// 更新导航激活状态
+		updateNav: function( link ) {
+			this.$['nav'].updateNav( link );
+			return this;
+		},
+
+		// 创建头部
+		build: function() {
+			var config = this.config;
+			var target = config['target'];
+			var head = $([
+				'<div class="M-head">',
+					'<div class="M-headLogo fl"/>',
+					'<div class="M-headNav fl"/>',
+					'<div class="M-headTool fr"/>',
+				'</div>'
+			].join(''));
+
+			var cssStyle = config.css;
+			if( cssStyle ) {
+				head.css( cssStyle );
 			}
-		})).init();
-		// 创建完成后回调
-		if( util.isFunc( callback ) ) {
-			callback.call( this, true );
-		}
-		return this;
-	}
 
-	// 更新导航激活状态
-	exports.updateNav = function( link ) {
-		this.$['nav'].updateNav( link );
-		return this;
+			var doms = {
+				'logo': $('.M-headLogo', head),
+				'nav': $('.M-headNav', head),
+				'tool': $('.M-headTool', head)
+			}
+			// 创建LOGO对象
+			var logo = new Logo();
+			logo.putTo( doms.logo );
+			// 创建导航对象
+			var nav = new Navigator( C.nav );
+			nav.putTo( doms.nav );
+
+			// 缓存对象
+			this.$ = {
+				'logo': logo,
+				'nav': nav
+			}
+			head.appendTo( target );
+
+			// 启用headroom插件
+			if( config.headroom ) {
+				(new HeadRoom( target.addClass('head-fixed').get(0), {
+					'tolerance': {
+						'up': 5,
+						'down': 5
+					},
+					'offset': 200,
+					'classes': {
+					    'initial': 'animated',
+					    'pinned': 'slideInDown',
+					    'unpinned': 'fadeOutUp',
+					    'top': '',
+					    'notTop': ''
+					}
+				})).init();
+			}
+			
+			// 创建完成后回调
+			if( util.isFunc( this.callback ) ) {
+				this.callback.call( this, true );
+			}
+			return this;
+		},
 	}
+	exports.base = Main;
 
 	// LOGO 站标
 	function Logo( src, size ) {

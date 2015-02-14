@@ -5,7 +5,7 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('@core/util');
 	var C = require('@core/config');
-	var header = require('@modules/header');
+	var header = require('@modules/header').base;
 
 	// 整体框架布局
 	var layout = [
@@ -64,23 +64,90 @@ define(function( require, exports ){
 		'blank' : 			$('.G-frameBodyBlank', body)
 	}
 
-	/**
-	 * init 初始化
-	 * @return {type} [layout]
-	 */
-	exports.init = function() {
-		// 移除一些提示
-		$('noScript,#welcome').remove();
-		// 全局缓存变量$tick
-		this.$tick = {
-			'headerType': [], // 头部类型 [blog,index]
-		}
+	var Main = {
 		/**
-		 * _setTick 缓存tick方法(内部调用)
-		 * @param {String} name [缓存的字段]
+		 * init 初始化
+		 * @return {type} [layout]
+		 */
+		init: function() {
+			// 移除一些提示
+			$('noScript,#welcome').remove();
+			// 缓存变量$tick
+			this.$tick = {
+				'headerType': [] // 头部类型 [blog,index]
+			}
+		},
+
+		/**
+		 * getDOM 获取指定DOM对象
+		 * @param  {String} domName [需要获取的DOM对象,格式为blog/head, 暂时支持两层]
+		 * @return {Object} [DOM]
+		 */
+		getDOM: function( domName ) {
+			var retDom, domArr = domName.toString().split('/');
+			return domArr.length === 2 ? doms[domArr[0]][domArr[1]] : doms[domArr[0]];
+		},
+
+		/**
+		 * buildHeader 创建头部
+		 * @param  {Object} config [配置,应包含创建头部的目标DOM]
+		 * @return {type} [layout]
+		 */
+		buildHeader: function( config ) {
+			var self = this;
+			var type = config['type']; // 头部类型, index,blog
+			var types = self._getTick('headerType');
+			var exist = util.inArray( type, types );
+			if( exist === -1 ) {
+				header.init( config , function( completed ) {
+					if( completed ) {
+						self._setTick( 'headerType', type );
+					}
+				});
+			}
+			return self;
+		},
+
+		/**
+		 * updateNav 更新导航选中状态
+		 * @param  {String} link [导航hash值]
+		 * @return {type}        [layout]
+		 */
+		updateNav: function( link ) {
+			header.updateNav( link );
+			return this;
+		},
+
+		/**
+		 * setTitle 设置网站title, 栏目与标题的组合，一个参数则直接设置
+		 * @param {type} name  [栏目名称]
+		 * @param {type} title [文章名称]
+		 */
+		setTitle: function( name, title ) {
+			var str = '', art, arc;
+			if( util.isString( name ) && arguments.length == 1 ) {
+				str = name;
+			}
+			else {
+				art = title == null ? '' : title + ' | ';
+				arc = C.archiveTitle[name] || C.archiveTitle.index;
+				str = art + arc;
+			}
+			$(document).attr('title', str);
+			return this;
+		},
+
+		/**
+		 * buildBanner 构建博客的Banner内容
+		 */
+		buildBanner: function() {},
+
+		/**
+		 * _setTick 设置tick(内部调用)
+		 * @param {String} name [缓存的字段,eg: field, field/subfield]
 		 * @param {Mixed}  val [缓存值]
 		 */
-		this._setTick = function( name, val ) {
+		_setTick: function( name, val ) {
 			var tick = this.$tick[name];
 			// 字符串
 			if( util.isString( tick ) ) {
@@ -95,70 +162,15 @@ define(function( require, exports ){
 				this.$tick[name] = val;
 			}
 			return false;
+		},
+
+		/**
+		 * _getTick 获取tick(内部调用)
+		 * @param {String} field [需要获取的tick字段]
+		 */
+		_getTick: function( field ) {
+			return this.$tick[field];
 		}
 	}
-
-	/**
-	 * getDOM 获取指定DOM对象
-	 * @param  {String} domName [需要获取的DOM对象,格式为blog/head, 暂时支持两层]
-	 * @return {Object} [DOM]
-	 */
-	exports.getDOM = function( domName ) {
-		var retDom, domArr = domName.toString().split('/');
-		return domArr.length === 2 ? doms[domArr[0]][domArr[1]] : doms[domArr[0]];
-	}
-
-	/**
-	 * buildHeader 创建头部
-	 * @param  {Object} config [配置,应包含创建头部的目标DOM]
-	 * @return {type} [layout]
-	 */
-	exports.buildHeader = function( config ) {
-		var self = this;
-		var type = config['type']; // 头部类型, index,blog
-		var exist = util.inArray( type, this.$tick.headerType );
-		if( exist === -1 ) {
-			header.init( config , function( completed ) {
-				if( completed ) {
-					self._setTick( 'headerType', type );
-				}
-			});
-		}
-		return self;
-	}
-
-	/**
-	 * updateNav 更新导航选中状态
-	 * @param  {String} link [导航hash值]
-	 * @return {type}        [layout]
-	 */
-	exports.updateNav = function( link ) {
-		header.updateNav( link );
-		return this;
-	}
-
-	/**
-	 * setTitle 设置网站title, 栏目与标题的组合，一个参数则直接设置
-	 * @param {type} name  [栏目名称]
-	 * @param {type} title [文章名称]
-	 */
-	exports.setTitle = function( name, title ) {
-		var str = '', art, arc;
-		if( util.isString( name ) && arguments.length == 1 ) {
-			str = name;
-		}
-		else {
-			art = title == null ? '' : title + ' | ';
-			arc = C.archiveTitle[name] || C.archiveTitle.index;
-			str = art + arc;
-		}
-		$(document).attr('title', str);
-		return this;
-	}
-
-	/**
-	 * buildBanner 构建博客的Banner内容
-	 */
-	exports.buildBanner = function() {}
-
+	exports.base = Main;
 });
