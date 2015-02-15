@@ -15,13 +15,7 @@ define(function( require, exports ){
 			this.build();
 		},
 
-		// 更新导航激活状态
-		updateNav: function( link ) {
-			this.$['nav'].updateNav( link );
-			return this;
-		},
-
-		// 创建头部
+		// 创建头部, target: 配置中头部创建的目标DOM
 		build: function() {
 			var config = this.config;
 			var target = config['target'];
@@ -51,7 +45,7 @@ define(function( require, exports ){
 			nav.putTo( doms.nav );
 
 			// 缓存对象
-			this.$ = {
+			this.$mods = {
 				'logo': logo,
 				'nav': nav
 			}
@@ -59,7 +53,7 @@ define(function( require, exports ){
 
 			// 启用headroom插件
 			if( config.headroom ) {
-				(new HeadRoom( target.addClass('head-fixed').get(0), {
+				var cfg = {
 					'tolerance': {
 						'up': 5,
 						'down': 5
@@ -72,15 +66,25 @@ define(function( require, exports ){
 					    'top': '',
 					    'notTop': ''
 					}
-				})).init();
+				}
+				// 需要转成原生对象
+				var elm = target.addClass('head-fixed').get(0);
+				var headroom = new HeadRoom( elm, cfg );
+				headroom.init();
 			}
-			
+
 			// 创建完成后回调
 			if( util.isFunc( this.callback ) ) {
 				this.callback.call( this, true );
 			}
 			return this;
 		},
+
+		// 获取header的子对象(模块)
+		getChild: function( childName ) {
+			var mods = this.$mods;
+			return arguments.length === 1 ? mods[childName] : mods;
+		}
 	}
 	exports.base = Main;
 

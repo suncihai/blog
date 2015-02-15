@@ -114,7 +114,8 @@ define(function( require, exports ){
 		 * @return {type}        [layout]
 		 */
 		updateNav: function( link ) {
-			header.updateNav( link );
+			var nav = header.getChild('nav');
+			nav.updateNav( link );
 			return this;
 		},
 
