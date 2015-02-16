@@ -31,8 +31,8 @@ define(function( require, exports ){
 				'</div>',
 			'</div>',
 		'</div>',
-		'<div id="LOADING"><span><em></em></span></div>',
-		'<div id="POPWIN"><span><em></em></span></div>'
+		'<div id="LOADING/">',
+		'<div id="POPWIN/">'
 	].join('');
 
 	var body = $('body').append( layout );
