@@ -6,7 +6,7 @@ define(function( require, exports ){
 	var LOC = WIN.location;
 	var URL = LOC.href;
 	var util = require('util');
-	var view = require('view');
+	var view = require('view').base;
 	var C = require('@core/config');
 	var action = C.action;
 	var data = {
