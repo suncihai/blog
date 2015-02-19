@@ -1,69 +1,92 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
+	var dataHelper = require('@core/dataHelper').base;
 	var layout = require('layout').base;
 	var C = require('@core/config');
 	var pager = require('@modules/pager');
 
-	var dc = C.dataCenter;
+	var Main = {
+		init: function( data ) {
+			this.$data = data;
+			this.$dataReady = true;
+			this.build();
+		},
 
-	exports.onMain = function( data ) {
-		var dom = data.dom;
-		$([
-			'<div class="P-archive-list"/>',
-			'<div class="P-archive-pager"/>'
-		].join('')).appendTo( dom );
-		var listBox = $('.P-archive-list', dom);
-		var pagerBox = $('.P-archive-pager', dom);
-		var url = dc.listarchives;
-		var requestParam = util.mergeParam( C.archiveOption, {
-			'catid': C.cat[data.name]
-		});
+		build: function() {
+			var data = this.$data;
+			var dom = data.dom;
+			$([
+				'<div class="P-archive-list"/>',
+				'<div class="P-archive-pager"/>'
+			].join('')).appendTo( dom );
+			this.$doms = {
+				listBox: $('.P-archive-list', dom),
+				pagerBox: $('.P-archive-pager', dom)
+			}
 
-		// 设置标题
-		layout.setTitle( C.archiveTitle[data.name] );
+			// 加载数据
+			this.load();
+		},
 
 		// 拉取数据
-		$.ajax({
-			'url': url,
-			'method': 'get',
-			'dataType': 'json',
-			'data': requestParam,
-			'success': fnSuccess,
-			'error': fnError
-		});
+		load: function( param ) {
+			var param = param || this.getParam();
+			var dc = C.dataCenter;
+			dataHelper.get( dc.listarchives, param, this.onData, this );
+		},
 
-		/**
-		 * fnSuccess 请求成功
-		 * @param  {JSON} res [返回数据]
-		 * @return {NULL}     [无返回值]
-		 */
-		function fnSuccess( res ) {
+		// 获取参数
+		getParam: function() {
+			var ret = null;
+			var data = this.$data;
+			ret = util.mergeParam( C.archiveOption, {
+				'catid': C.cat[data.name]
+			});
+			return ret;
+		},
+
+		// 拉取数据回调
+		onData: function( err, res ) {
+			if( err ) {
+				util.error('数据拉取失败！错误码:' + msg.status + ', 错误信息:' + msg.statusText);
+				return false;
+			}
+			var dom = this.$data.dom;
 			if( !res.success ) {
 				dom.html('拉取数据似乎出了点问题~');
 				return;
 			}
-			// 循环生成列表
-			listBox.empty();
-			pagerBox.empty();
-			$.each( res.result.items, createSections );
-			this.page = res.result.page;
-			// 分页器
-			pager.buildPager({
-				'target': pagerBox,
-				'page': res.result.page,
-				'pages': res.result.pages,
-				'total': res.result.total
-			}, afterPagerSelect);
-		}
+			var info = this.$info = res.result;
+			if( util.isEmpty( info ) ) {
+				dom.html('无数据');
+				return;
+			}
+			this.buildArchives( info );
+		},
 
-		/**
-		 * createSections 循环生成列表
-		 * @param  {Number} idx  [序号]
-		 * @param  {Object} item [选项对象]
-		 * @return {NULL}        [无返回值]
-		 */
-		function createSections( idx, item ) {
+		// 创建
+		buildArchives: function( info ) {
+			var data = this.$data;
+			
+			// 循环创建列表
+			util.each( info.items, this.buildItems, this );
+
+			// 创建分页
+			pager.buildPager({
+				'target': this.$doms.pagerBox,
+				'page': info.page,
+				'pages': info.pages,
+				'total': info.total
+			}, this.pagerSelected, this);
+
+			// 设置标题
+			layout.setTitle( C.archiveTitle[data.name] );
+		},
+
+		// * buildItems 循环生成列表. idx->序号, item->选项对象
+		buildItems: function( item, idx ) {
+			var data = this.$data;
 			var sections = [];
 			var str = item.publishDate.slice( 0, 10 );
 			var arr = str.split('-');
@@ -90,36 +113,25 @@ define(function( require, exports ){
 					'<a href="#'+ data.name +'/'+ item.id +'" class="all">阅读全文>></a>',
 				'</section>'
 			].join(''));
-			listBox.append( sections.join('') );
-		}
+			this.$doms.listBox.append( sections.join('') );
+		},
 
-		/**
-		 * afterPagerSelect 页码激活事件
-		 * @param  {Number} page [激活的页码]
-		 * @return {NULL}        [无返回值]
-		 */
-		function afterPagerSelect( page ) {
-			var newParam = util.mergeParam( requestParam, {
+		// pagerSelected 页码激活事件
+		pagerSelected: function( page ) {
+			var oldParam = this.getParam();
+			var newParam = util.mergeParam( oldParam, {
 				'page': page
 			});
-			// 重新拉取数据
-			$.ajax({
-				'url': url,
-				'method': 'get',
-				'dataType': 'json',
-				'data': newParam,
-				'success': fnSuccess,
-				'error': fnError
-			});
-		}
+			this.empty();
+			this.load( newParam );
+		},
 
-		/**
-		 * fnError 请求失败
-		 * @param  {JSON} msg [错误信息]
-		 * @return {NULL}     [无返回值]
-		 */
-		function fnError( msg ) {
-			util.error('数据拉取失败！错误码:' + msg.status + ', 错误信息:' + msg.statusText);
-		}
+		// 清空列表数据和分页信息
+		empty: function() {
+			var doms = this.$doms;
+			doms.listBox.empty();
+			doms.pagerBox.empty();
+		} 
 	}
+	exports.base = Main;
 });

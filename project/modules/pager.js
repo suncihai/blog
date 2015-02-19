@@ -7,11 +7,12 @@ define(function( require, exports ){
 
 	/**
 	 * buildPager 生成分页器
-	 * @param  {JSON} opt      [设置选项]
-	 * @param  {JSON} callback [回调函数]
+	 * @param  {JSON} 		opt      	[设置选项]
+	 * @param  {Function} 	callback 	[回调函数]
+	 * @param  {Object} 	scope 		[作用域]
 	 * @return {Number}        [选中的页码]
 	 */
-	exports.buildPager = function( opt, callback ) {
+	exports.buildPager = function( opt, callback, scope ) {
 		if( !util.isObject( opt ) || !util.isFunc( callback ) ) {
 			util.error('param type error!');
 			return false;
@@ -68,7 +69,7 @@ define(function( require, exports ){
 			if( id === 0 || id > pages ) {
 				return false;
 			}
-			callback.call( this, id );
+			callback.call( scope, id );
 			return false;
 		});
 
@@ -79,7 +80,7 @@ define(function( require, exports ){
 				return false;
 			}
 			$(this).addClass('M-pagerAct').siblings('.M-pagerItem').removeClass('M-pagerAct')
-			callback.call( this, id );
+			callback.call( scope, id );
 		});
 	}
 });

@@ -140,4 +140,51 @@ define(function( require, util ){
 		return false;
 	}
 
+	/**
+	 * isEmpty 检测是否为空对象或者空数组
+	 * @param  {String} val  [值]
+	 * @return {Boolean}     [空为真,非空为假]
+	 */
+	util.isEmpty = function( val ) {
+		if( isObject( val ) ) {
+			for( var property in val ) {
+				if( val.hasOwnProperty( property ) ) {
+					return false;
+				}
+				return true;
+			}
+		}
+		else if( isArray( val ) ) {
+			return ( val.length === 0 );
+		}
+	}
+
+	/**
+	 * each 遍历数组
+	 * @param  {Array} 		items  		[数组]
+	 * @param  {Fuction} 	callback 	[回调函数]
+	 * @param  {Object} 	scope  		[作用域]
+	 */
+	util.each = function( items, callback, scope ) {
+		if( !isArray( items ) || !isFunc( callback ) ) {
+			return false;
+		}
+		if( !scope ) {
+			scope = WIN;
+		}
+		var ret;
+		for( var i = 0; i < items.length; i++ ) {
+			ret = callback.call( scope, items[i], i );
+			// 回调返回false退出循环
+			if( ret === false ) {
+				break;
+			}
+			// 回调返回null删除当前选项
+			if( ret === null ) {
+				items.splice( i, 1 );
+				i--;
+			}
+		}
+	}
+
 });

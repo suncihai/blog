@@ -31,7 +31,9 @@ define(function( require, exports ) {
 		// 导航
 		nav: [
 			{'name': '首页', 'link': 'index'},
-			{'name': '前端那些事', 'link': 'matters'}
+			{'name': '前端那些事', 'link': 'matters'},
+			{'name': '心情笔记', 'link': 'rizhi'},
+			{'name': '2015旅游攻略', 'link': 'travel'}
 		],
 
 		// 栏目title

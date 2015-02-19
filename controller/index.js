@@ -5,8 +5,9 @@ define(function( require, exports ){
 			'container': data.name
 		});
 
-		require.async('@pages/index', function( module ) {
-			module['onMain']( data );
+		require.async('@pages/index', function( mod ) {
+			var module = mod.base;
+			module.init( data );
 		});
 	}
 });

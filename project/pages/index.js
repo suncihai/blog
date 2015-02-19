@@ -3,7 +3,15 @@ define(function( require, exports ){
 	var layout = require('layout').base;
 	var C = require('@core/config');
 
-	exports.onMain = function( data ) {
-		$(document).attr( 'title', C.archiveTitle[data.name] );
+	var Main = {
+		init: function( data ) {
+			this.data = data;
+			this.build();
+		},
+
+		build: function() {
+			$(document).attr( 'title', C.archiveTitle[this.data.name] );
+		}
 	}
+	exports.base = Main;
 });

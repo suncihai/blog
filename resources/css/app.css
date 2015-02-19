@@ -677,10 +677,8 @@ noscript {
   width: 100%;
   box-sizing: border-box;
 }
-.G-frameBodyFooter {
-  width: 100%;
-  height: 50px;
-  line-height: 50px;
+.G-frameBodyBlank {
+  position: relative;
 }
 .P-archives {
   margin: 0 auto;
