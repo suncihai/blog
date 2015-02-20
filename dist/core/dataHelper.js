@@ -44,22 +44,28 @@ define(function( require, exports ){
 
 			// 请求成功, 回调形式：err, data
 			function _fnSuccess( res ) {
-				callback.call( scope, null, res );
+				callback.call( scope, false, res );
 			}
 
 			function _fnError( msg ) {
-				callback.call( scope, msg, false );
+				callback.call( scope, msg, null );
 			}
 
 		},
 
 		// get方式
 		get: function( url, param, callback, scope ) {
+			if( !scope ){
+				scope = window;
+			}
 			this._send( 'get', url, param, callback, scope );
 		},
 
 		// pos方式
 		post: function( url, param, callback, scope ) {
+			if( !scope ){
+				scope = window;
+			}
 			this._send( 'post', url, param, callback, scope );
 		}
 	}

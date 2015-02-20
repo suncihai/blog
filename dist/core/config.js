@@ -39,9 +39,6 @@ define(function( require, exports ) {
 		// 栏目title
 		archiveTitle: {
 			index: '小前端',
-			javascript: 'JavaScript',
-			htmlcss: 'CSS',
-			uedesign: '用户体验设计',
 			matters: '前端那些事'
 		},
 

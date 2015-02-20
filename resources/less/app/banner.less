@@ -1,0 +1,29 @@
+.M-banner{
+	width: 100%;
+	color: #FFF;
+	// 栏目页
+	&Archive{
+		display: none;
+		width: 100%;
+		height: 100%;
+		.content{
+			.center;
+			width: @blogWidth;
+		}
+	}
+	// 文章页
+	&Article{
+		display: none;
+		padding-top: 80px;
+		width: @blogWidth;
+		height: 100%;
+		line-height: 260%;
+		.center;
+		.title{
+			font-weight: normal;
+		}
+		.info{
+			color: #D5C8CD;
+		}
+	}
+}

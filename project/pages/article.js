@@ -3,6 +3,7 @@ define(function( require, exports ){
 	var util = require('util');
 	var dataHelper = require('@core/dataHelper').base;
 	var layout = require('layout').base;
+	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
 
 	var Main = {
@@ -53,17 +54,22 @@ define(function( require, exports ){
 			var dom = this.$data.dom;
 			var html = $([
 				'<div class="content">',
-					'<h1>'+ info.title +'</h1>',
-					'<div class="info">',
-						'<span class="time">时间：'+ info.publishDate.toString().slice( 0, 10 ) +'</span> | ',
-						'<span class="tag">标签：性能</sapn> | ',
-						'<span class="comments">评论数：'+ info.comments +'</sapn>',
-					'</div>',
-					'<info class="article">'+ info.content +'</article>',
+					'<article class="article">'+ info.content +'</article>',
 				'</div>'
 			].join(''));
 			html.appendTo( dom );
+
+			// 标题
 			layout.setTitle( this.$data.name, info.title );
+
+			// 设置banner内容
+			banner.setData({
+				'type': 'article',
+				'title': info.title,
+				'time': '时间：'+ info.publishDate.toString().slice( 0, 10 ) + ' | ',
+				'tag': '标签：' + (info.tag || '无')  + ' | ',
+				'comments': '评论数：'+ info.comments
+			});
 		}
 	}
 	exports.base = Main;

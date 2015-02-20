@@ -160,7 +160,7 @@ define(function( require, util ){
 	}
 
 	/**
-	 * each 遍历数组
+	 * each 遍历数组 (TODO:遍历对象)
 	 * @param  {Array} 		items  		[数组]
 	 * @param  {Fuction} 	callback 	[回调函数]
 	 * @param  {Object} 	scope  		[作用域]

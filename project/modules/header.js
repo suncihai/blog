@@ -7,17 +7,17 @@ define(function( require, exports ){
 	var util = require('util');
 	var HeadRoom = require('@plugins/headroom/headroom').base;
 
-	var Main = {
+	var Header = {
 		// 初始化方法
 		init: function( config, callback ) {
-			this.config = config || {};
+			this.$config = config || {};
 			this.callback = callback;
 			this.build();
 		},
 
 		// 创建头部, target: 配置中头部创建的目标DOM
 		build: function() {
-			var config = this.config;
+			var config = this.$config;
 			var target = config['target'];
 			var head = $([
 				'<div class="M-head">',
@@ -37,9 +37,11 @@ define(function( require, exports ){
 				'nav': $('.M-headNav', head),
 				'tool': $('.M-headTool', head)
 			}
+
 			// 创建LOGO对象
 			var logo = new Logo();
 			logo.putTo( doms.logo );
+
 			// 创建导航对象
 			var nav = new Navigator( C.nav );
 			nav.putTo( doms.nav );
@@ -62,12 +64,11 @@ define(function( require, exports ){
 					'classes': {
 					    'initial': 'animated',
 					    'pinned': 'slideInDown',
-					    'unpinned': 'fadeOutUp',
-					    'top': '',
-					    'notTop': ''
+					    'unpinned': 'fadeOutUp'
+					    // 'top': '',
+					    // 'notTop': ''
 					}
 				}
-				// 需要转成原生对象
 				var elm = target.addClass('head-fixed').get(0);
 				var headroom = new HeadRoom( elm, cfg );
 				headroom.init();
@@ -86,7 +87,7 @@ define(function( require, exports ){
 			return arguments.length === 1 ? mods[childName] : mods;
 		}
 	}
-	exports.base = Main;
+	exports.base = Header;
 
 	// LOGO 站标
 	function Logo( src, size ) {

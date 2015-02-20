@@ -3,13 +3,13 @@ define(function( require, exports ){
 	var util = require('util');
 	var dataHelper = require('@core/dataHelper').base;
 	var layout = require('layout').base;
+	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
 	var pager = require('@modules/pager');
 
 	var Main = {
 		init: function( data ) {
 			this.$data = data;
-			this.$dataReady = true;
 			this.build();
 		},
 
@@ -27,6 +27,12 @@ define(function( require, exports ){
 
 			// 加载数据
 			this.load();
+
+			// banner设置
+			banner.setData({
+				'type': 'archive',
+				'content': ''
+			});
 		},
 
 		// 拉取数据
@@ -93,24 +99,20 @@ define(function( require, exports ){
 			var year = arr[0];
 			var mouth = +arr[1];
 			var day = +arr[2];
+			var anchor = data.name + '/' + item.id; // 超链接地址
 			sections.push([
 				'<section list-id="'+ idx +'">',
-					'<div class="P-archive-list-head">',
-						'<div class="P-archive-list-date">',
-							'<div class="day">'+ day +'号</div>',
-							'<div class="year">'+ year +'年-'+ mouth +'月</div>',
-						'</div>',
-						'<div class="P-archive-list-title">',
-							'<h2><a href="#'+ data.name +'/'+ item.id +'" title="'+ item.title +'">'+ item.title +'</a></h2>',
-							'<div class="P-archive-list-info">',
-								'<span class="tag">分类：'+ data.name +'</span>',
-								' | ',
-								'<span class="tag">评论：'+ item.comments +'</span>',
-							'</div>',
-						'</div>',
+					'<div class="P-archive-list-title">',
+						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">'+ item.title +'</a></h2>',
 					'</div>',
-					'<article>'+ item.content +' ……</article>',
-					'<a href="#'+ data.name +'/'+ item.id +'" class="all">阅读全文>></a>',
+					// '<a href="#'+ anchor +'" class="abstract">',
+						'<article>'+ item.content +' ……</article>',
+					// '</a>',
+					'<div class="P-archive-list-info">',
+						'<span class="tag">分类：'+ data.name +'</span>',
+						' | ',
+						'<span class="tag">评论：'+ item.comments +'</span>',
+					'</div>',
 				'</section>'
 			].join(''));
 			this.$doms.listBox.append( sections.join('') );
