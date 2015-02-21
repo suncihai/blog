@@ -23,7 +23,6 @@ define(function( require, exports ){
 		build: function() {
 			var self = this;
 			var config = self.$config;
-			var callback = self.callback;
 			var dom = config.target;  // 分页器的添加位置
 
 			// 分页器HTML结构
@@ -48,7 +47,7 @@ define(function( require, exports ){
 			doms.prev.attr('value', '<');
 			doms.next.attr('value', '>');
 
-			// 生成页码
+			// 生成页码并激活
 			self.buildPager().update();
 
 			// 翻页点击事件
@@ -79,13 +78,13 @@ define(function( require, exports ){
 			var page = +this.$config.page;
 			var pages = +this.$config.pages;
 			// 激活当前页码
-			$('.M-pagerItem').eq(page-1).addClass('M-pagerAct');
+			$('.M-pagerItem', this.$doms.list).eq(page-1).addClass('M-pagerAct');
 
 			if( page === 1 ) {
-				$('.M-pagerPrev').addClass('M-pagerDisabled');
+				this.$doms.prev.addClass('M-pagerDisabled');
 			}
 			else if( page === pages ) {
-				$('.M-pagerNext').addClass('M-pagerDisabled');
+				this.$doms.next.addClass('M-pagerDisabled');
 			}
 			return this;
 		},
