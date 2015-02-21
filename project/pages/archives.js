@@ -5,7 +5,7 @@ define(function( require, exports ){
 	var layout = require('layout').base;
 	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
-	var pager = require('@modules/pager');
+	var pager = require('@modules/pager').base;
 
 	var Main = {
 		init: function( data ) {
@@ -33,6 +33,7 @@ define(function( require, exports ){
 				'type': 'archive',
 				'content': ''
 			});
+			banner.hide();
 		},
 
 		// 拉取数据
@@ -79,7 +80,7 @@ define(function( require, exports ){
 			util.each( info.items, this.buildItems, this );
 
 			// 创建分页
-			pager.buildPager({
+			pager.init({
 				'target': this.$doms.pagerBox,
 				'page': info.page,
 				'pages': info.pages,

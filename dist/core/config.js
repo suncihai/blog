@@ -31,14 +31,12 @@ define(function( require, exports ) {
 		// 导航
 		nav: [
 			{'name': '首页', 'link': 'index'},
-			{'name': '前端那些事', 'link': 'matters'},
-			{'name': '心情笔记', 'link': 'rizhi'},
-			{'name': '2015旅游攻略', 'link': 'travel'}
+			{'name': '前端那些事', 'link': 'matters'}
 		],
 
 		// 栏目title
 		archiveTitle: {
-			index: '小前端',
+			index: 'TANGBC.COM',
 			matters: '前端那些事'
 		},
 
@@ -51,7 +49,7 @@ define(function( require, exports ) {
 		archiveOption: {
 			catid: 1,
 			page: 1,		// 请求第1页
-			limit: 10,		// 每页显示文章数
+			limit: 2,		// 每页显示文章数
 			brief: 180,		// 文章摘要长度
 			order: 'date' 	// 按时间顺序排列
 		},

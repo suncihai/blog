@@ -30,6 +30,7 @@ define(function( require, exports ) {
 
 			// dom缓存
 			this.$doms = {
+				'main': dom,
 				'archive': dom.find('.M-bannerArchive'),
 				'archives': {
 					'content': dom.find('.content')
@@ -51,6 +52,9 @@ define(function( require, exports ) {
 		setData: function( data ) {
 			if( !this.$domReady ) {
 				this.build();
+			}
+			if( !this.$show ) {
+				this.show();
 			}
 			var type = data['type'];
 			switch( type ) {
@@ -78,6 +82,16 @@ define(function( require, exports ) {
 			var dom = this.$doms.archives;
 			this.$doms.archive.show().siblings().hide();
 			dom.content.html( info['content'] || "" );
+		},
+
+		show: function() {
+			this.$doms.main.show();
+			this.$show = true;
+		},
+
+		hide: function() {
+			this.$doms.main.hide();
+			this.$show = false;
 		}
 	}
 	exports.base = Banner;
