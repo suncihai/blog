@@ -135,48 +135,6 @@ noscript {
 .tr {
   text-align: right !important;
 }
-.lh40 {
-  line-height: 40px;
-}
-.lh36 {
-  line-height: 36px;
-}
-.lh30 {
-  line-height: 30px;
-}
-.lh24 {
-  line-height: 24px;
-}
-.lh20 {
-  line-height: 20px;
-}
-.lh18 {
-  line-height: 18px;
-}
-.lh16 {
-  line-height: 16px;
-}
-.lh15 {
-  line-height: 15px;
-}
-.z1 {
-  z-index: 1;
-}
-.z2 {
-  z-index: 2;
-}
-.z10 {
-  z-index: 10;
-}
-.z99 {
-  z-index: 99;
-}
-.z100 {
-  z-index: 100;
-}
-.z999 {
-  z-index: 999;
-}
 .ti {
   font-style: italic;
 }
@@ -190,15 +148,6 @@ noscript {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-}
-.di {
-  display: inline;
-}
-.db {
-  display: block;
-}
-.dib {
-  display: inline-block;
 }
 .fl {
   float: left;
@@ -725,13 +674,17 @@ noscript {
   font-size: 14px;
 }
 .M-pager {
-  padding: 20px 0;
+  padding: 50px 0;
 }
 .M-pagerList {
   display: inline-block;
 }
 .M-pagerInfo {
   display: inline-block;
+}
+.M-pagerInfo .total {
+  margin-left: 20px;
+  color: #867878;
 }
 .M-pager input:active,
 .M-pager input:focus {
@@ -749,17 +702,36 @@ noscript {
   text-align: center;
   border: 1px solid #DDD;
   border-radius: 2px;
-  background: #FFF;
+  background: #FAFAFA;
+  color: #D23030;
   cursor: pointer;
   font-size: 18px;
+  transition: background 220ms cubic-bezier(0.42, 0, 0.58, 1);
 }
-.M-pager .M-pagerAct {
+.M-pager .M-pagerItem:hover,
+.M-pager .M-pagerPN:hover {
+  background: #4D4D4D;
+  color: #FFF;
+}
+.M-pager .M-pagerAct,
+.M-pager .M-pagerAct:hover {
   border: none;
   background: none;
+  color: #D23030;
   cursor: default;
 }
-.M-pager .M-pagerDisabled {
-  background: #F1F1EF;
+.M-pager .M-pagerOmit {
+  box-sizing: border-box;
+  position: relative;
+  margin-right: 10px;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border: none;
+  background: none;
+  color: #333;
   cursor: default;
 }
 .M-head {

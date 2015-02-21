@@ -130,6 +130,7 @@ define(function( require, exports ){
 		},
 
 		// 清空列表数据和分页信息
+		// TODO: 页码切换时不清空pagerBox
 		empty: function() {
 			var doms = this.$doms;
 			doms.listBox.empty();

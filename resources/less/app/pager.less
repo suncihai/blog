@@ -1,10 +1,14 @@
 .M-pager{
-	padding: 20px 0;
+	padding: 50px 0;
 	&List{
 		display: inline-block;
 	}
 	&Info{
 		display: inline-block;
+		.total{
+			margin-left: 20px;
+			color: #867878;
+		}
 	}
 	input:active, input:focus{
 		outline: none;
@@ -20,17 +24,38 @@
 		text-align: center;
 		border: 1px solid #DDD;
 		border-radius: 2px;
-		background: #FFF;
+		background: #FAFAFA;
+		color: #D23030;
 		cursor: pointer;
 		font-size: 18px;
+		transition: background 220ms cubic-bezier(0.42,0,.58,1);
 	}
-	.M-pagerAct{
+	.M-pagerItem:hover, .M-pagerPN:hover{
+		background: #4D4D4D;
+		color: #FFF;
+	}
+	// .M-pagerPN:hover{
+	// 	background: #0080FF;
+	// 	color: #FFF;
+	// }
+	.M-pagerAct, .M-pagerAct:hover{
 		border: none;
 		background: none;
+		color: #D23030;
 		cursor: default;
 	}
-	.M-pagerDisabled{
-		background: #F1F1EF;
+	.M-pagerOmit{
+		box-sizing: border-box;
+		position: relative;
+		margin-right: 10px;
+		display: inline-block;
+		width: 40px;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		border: none;
+		background: none;
+		color: #333;
 		cursor: default;
 	}
 	.M-pagerPrev, .M-pagerNext{
