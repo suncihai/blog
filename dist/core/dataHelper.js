@@ -44,10 +44,16 @@ define(function( require, exports ){
 
 			// 请求成功, 回调形式：err, data
 			function _fnSuccess( res ) {
+				if( !scope ) {
+					scope = this;
+				}
 				callback.call( scope, false, res );
 			}
 
 			function _fnError( msg ) {
+				if( !scope ) {
+					scope = this;
+				}
 				callback.call( scope, msg, null );
 			}
 
@@ -55,17 +61,11 @@ define(function( require, exports ){
 
 		// get方式
 		get: function( url, param, callback, scope ) {
-			if( !scope ){
-				scope = window;
-			}
 			this._send( 'get', url, param, callback, scope );
 		},
 
 		// pos方式
 		post: function( url, param, callback, scope ) {
-			if( !scope ){
-				scope = window;
-			}
 			this._send( 'post', url, param, callback, scope );
 		}
 	}

@@ -1,5 +1,5 @@
 /**
- * [事件处理模块]
+ * [事件绑定模块,封装jQuery事件绑定]
  */
 define(function( require, exports ){
 	var util = require('util');
@@ -24,8 +24,11 @@ define(function( require, exports ){
 			calllback = data;
 			data = null;
 		}
-		
+
 		elm.bind( type, function() {
+			if( !scope ) {
+				scope = this;
+			}
 			calllback.call( scope, this, data );
 		});
 	}
@@ -54,6 +57,9 @@ define(function( require, exports ){
 		}
 
 		elm.on( type, selector, function() {
+			if( !scope ) {
+				scope = this;
+			}
 			calllback.call( scope, this, data );
 		});
 	}
