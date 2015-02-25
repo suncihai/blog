@@ -88,7 +88,8 @@ define(function( require, exports ){
 			}, this.pagerSelected, this);
 
 			// 设置标题
-			layout.setTitle( C.archiveTitle[data.name] );
+			var prefix = info.page === 1 ? "" : ' - 第' + info.page + '页';
+			layout.setTitle( C.archiveTitle[data.name] + prefix );
 		},
 
 		// * buildItems 循环生成列表. idx->序号, item->选项对象
