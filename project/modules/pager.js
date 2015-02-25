@@ -73,10 +73,9 @@ define(function( require, exports ){
 			doms.info.html('<span class="total">[共 '+ pages +' 页]</span>');
 
 			// 构建页码
-			doms.list.empty();
 			util.each( items, function( num ) {
 				var item;
-				if( num === '---' ) {
+				if( num === '...' ) {
 					item = '<span class="M-pagerItem M-pagerOmit" title="部分页码已隐藏">···</span>';
 				}
 				else {
@@ -107,12 +106,11 @@ define(function( require, exports ){
 					for( i = 1; i < max + 1; i++ ) {
 						retArr.push( i );
 					}
-					retArr.push('---');
+					retArr.push('...');
 				}
 				else {
 					retArr = tmpArr;
 				}
-				
 			}
 			return retArr;
 		},
@@ -121,8 +119,8 @@ define(function( require, exports ){
 		formatPage: function( page ) {
 			var max = this.$max; // 显示选项的最多个数
 			var pages = +this.$config.pages;
-			var fontArr = [1,2,'---']; // 前面的页码选项(保留第1,2页)
-			var backArr = ['---']; // 后面的页码选项
+			var fontArr = [1,2,'...']; // 前面的页码选项(保留第1,2页)
+			var backArr = ['...']; // 后面的页码选项
 			var retArr = null;
 			// 激活的页码小于max的不作处理
 			if( page < max ) {

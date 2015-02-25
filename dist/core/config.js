@@ -49,7 +49,7 @@ define(function( require, exports ) {
 		archiveOption: {
 			catid: 1,
 			page: 1,		// 请求第1页
-			limit: 2,		// 每页显示文章数
+			limit: 8,		// 每页显示文章数
 			brief: 180,		// 文章摘要长度
 			order: 'date' 	// 按时间顺序排列
 		},
