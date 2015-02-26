@@ -138,7 +138,7 @@ define(function( require, exports ){
 				case 2:
 					backArr = [page - 2, page - 1, page, page + 1, page + 2]
 				break;
-				default: 
+				default:
 					backArr = [page - 2, page - 1, page, page + 1, page + 2].concat( backArr );
 			}
 			retArr = fontArr.concat( backArr )
@@ -163,7 +163,7 @@ define(function( require, exports ){
 		},
 
 		// 点击下一页
-		eventClickNext: function( elm, page ) {
+		eventClickNext: function( evt, elm, page ) {
 			var id = page + 1;
 			var pages = this.$config.pages;
 			if( id === 0 || id > pages ) {
@@ -173,7 +173,7 @@ define(function( require, exports ){
 		},
 
 		// 点击上一页
-		eventClickPreview: function( elm, page ) {
+		eventClickPreview: function( evt, elm, page ) {
 			var id = page - 1;
 			var pages = this.$config.pages;
 			if( id === 0 || id > pages ) {
@@ -183,7 +183,7 @@ define(function( require, exports ){
 		},
 
 		// 点击页码
-		eventClickPage: function( elm ) {
+		eventClickPage: function( evt, elm ) {
 			var id = +$(elm).val();
 			var page = this.$config.page;
 			if( id === page ) {
