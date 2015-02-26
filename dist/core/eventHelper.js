@@ -25,11 +25,11 @@ define(function( require, exports ){
 			data = null;
 		}
 
-		$elm.bind( type, function() {
+		$elm.bind( type, function( ev ) {
 			if( !scope ) {
 				scope = this;
 			}
-			calllback.call( scope, this, data );
+			calllback.call( scope, ev, this, data );
 		});
 	}
 
@@ -56,11 +56,11 @@ define(function( require, exports ){
 			data = null;
 		}
 
-		$elm.on( type, selector, function() {
+		$elm.on( type, selector, function( ev ) {
 			if( !scope ) {
 				scope = this;
 			}
-			calllback.call( scope, this, data );
+			calllback.call( scope, ev, this, data );
 		});
 	}
 });
