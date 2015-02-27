@@ -16,6 +16,14 @@ define(function( require, exports ){
 		build: function() {
 			var data = this.$data;
 			var dom = data.dom;
+
+			// banner设置
+			banner.setData({
+				'type': 'archive',
+				'content': ''
+			});
+			banner.hide();
+
 			if( !dom ) {
 				return false;
 			}
@@ -30,13 +38,6 @@ define(function( require, exports ){
 
 			// 加载数据
 			this.load();
-
-			// banner设置
-			banner.setData({
-				'type': 'archive',
-				'content': ''
-			});
-			banner.hide();
 		},
 
 		// 拉取数据
