@@ -196,6 +196,17 @@ define(function( require, exports ){
 	exports.base = Pager;
 
 	// 点击加载更多方式
-	var LoadMore = {};
+	var LoadMore = {
+		init: function( config, callback, scope ) {
+			if( !util.isObject( config ) || !util.isFunc( callback ) ) {
+				util.error('参数错误!');
+				return false;
+			}
+			this.$config = config || {};
+			this.callback = callback;
+			this.$scope = scope || window;
+			this.build();
+		}
+	};
 	exports.loadMore = LoadMore;
 });
