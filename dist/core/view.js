@@ -4,7 +4,6 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var C = require('@core/config');
-	var blogWidth = C['blogWidth'];
 
 	var Main = {
 		/**
@@ -40,117 +39,126 @@ define(function( require, exports ){
 		},
 
 		/**
-		 * createArchive 创建栏目容器
+		 * createBlog 创建博客容器<archive or article>
 		 * @param  {JSON} config   [配置参数]
-		 * @return {Object}        [容器对象]
 		 */
-		createArchive: function( config ) {
-			if( $.type( config ) !== 'object' ) {
-				return false;
-			}
-			var tag = 'div';
-			var	cont = $('<'+ tag +'/>');
-			var	contName = config.container;
+		createBlog: function( config ) {
+			var self = this;
+			var retDOM = null;
 
 			require.async('layout', function( mod ) {
 				var layout = mod.base;
 				var blogDOM = layout.getDOM('blog');
-				var	blogBody = blogDOM['body'];
-				var	head = blogDOM['head'];
-				var	archiveDom = blogDOM['archive'];
-				var	sons = archiveDom.children();
-				var	i = 0, len = sons.size();
+				var blogBody = blogDOM['body'];
+				var head = blogDOM['head'];
 
+				// 隐藏兄弟容器
 				blogBody.show().siblings().hide();
-				blogDOM['article'].hide();
-				blogDOM['archive'].show();
 
-				// 创建头部/激活导航状态
+				// 创建博客头部/激活导航状态
 				layout.buildHeader({
 					'target': head,
 					'type': 'blog',
 					'headroom': true,
 					'css': {
-						'width': blogWidth
+						'width': C.blogWidth
 					}
-				}).updateNav( contName );
+				}).updateNav( config.container );
 
-				// 防止重复创建
-				for( ; i < len; i++ ) {
-					if( sons.eq(i).attr('archive-name') === contName ) {
-						sons.eq(i).show().siblings().hide();
-						return;
-					}
+				// 创建博客页脚
+
+				// 存在pageid为文章页
+				if( config.pageid ) {
+					retDOM = self._createArticle( layout, config );
 				}
-
-				// 添加标识属性
-				cont.attr({
-					'class': 'P-archives',
-					'archive-name': contName
-				}).width( blogWidth );
-
-				// 隐藏其他栏目
-				sons.hide();
-				archiveDom.append( cont );
+				// 不存在则为列表页
+				else {
+					retDOM = self._createArchive( layout, config );
+				}
 			});
+			return retDOM;
+		},
+
+		/**
+		 * _createArchive 创建栏目容器
+		 * @param  {JSON} config   [配置参数]
+		 * @return {Object}        [容器对象]
+		 */
+		_createArchive: function( layout, config ) {
+			if( $.type( config ) !== 'object' ) {
+				return false;
+			}
+			var tag = 'div';
+			var cont = $('<'+ tag +'/>');
+			var contName = config.container;
+			var blogDOM = layout.getDOM('blog');
+			var archiveDom = blogDOM['archive'];
+			var sons = archiveDom.children();
+			var i = 0, len = sons.size();
+
+			blogDOM['article'].hide();
+			blogDOM['archive'].show();
+
+			// 防止重复创建 TODO: 不要用DOM查找的方式判断
+			for( ; i < len; i++ ) {
+				if( sons.eq(i).attr('archive-name') === contName ) {
+					sons.eq(i).show().siblings().hide();
+					return false;
+				}
+			}
+
+			// 添加标识属性
+			cont.attr({
+				'class': 'P-archives',
+				'archive-name': contName
+			}).width( C.blogWidth );
+
+			// 隐藏其他栏目
+			sons.hide();
+			archiveDom.append( cont );
 			return cont;
 		},
 
 		/**
-		 * createArticle 创建文章容器
+		 * _createArticle 创建文章容器
 		 * @param  {JSON} config   [配置参数]
 		 * @return {Object}        [容器对象]
 		 */
-		createArticle: function( config ) {
+		_createArticle: function( layout, config ) {
 			if( $.type( config ) !== 'object' ) {
 				return false;
 			}
 			var tag = 'div';
-			var	cont = $('<'+ tag +'/>');
-			var	contName = config.container;
-			var	marker = contName + '/' + config.pageid;
+			var cont = $('<'+ tag +'/>');
+			var contName = config.container;
+			var marker = contName + '/' + config.pageid;
 
-			require.async('layout', function( mod ) {
-				var layout = mod.base;
-				var blogDOM = layout.getDOM('blog');
-				var	blogBody = blogDOM['body'];
-				var	head = blogDOM['head'];
-				var	articleDom = blogDOM['article'];
-				var	sons = articleDom.children();
-				var	i = 0, len = sons.size();
+			var blogDOM = layout.getDOM('blog');
+			var articleDom = blogDOM['article'];
+			var sons = articleDom.children();
+			var i = 0, len = sons.size();
 
-				blogBody.show().siblings().hide();
-				blogDOM['archive'].hide();
-				blogDOM['article'].show();
+			blogDOM['archive'].hide();
+			blogDOM['article'].show();
 
-				// 创建头部/激活导航状态
-				layout.buildHeader({
-					'target': head,
-					'type': 'blog',
-					'headroom': true,
-					'css': {
-						'width': blogWidth
-					}
-				}).updateNav( contName );
-
-				// 防止重复创建
-				for( ; i < len; i++ ) {
-					if( sons.eq(i).attr('article-name') === marker ) {
-						sons.eq(i).show().siblings().hide();
-						return;
-					}
+			// 防止重复创建
+			for( ; i < len; i++ ) {
+				if( sons.eq(i).attr('article-name') === marker ) {
+					sons.eq(i).show().siblings().hide();
+					return false;
 				}
+			}
 
-				// 添加标识属性
-				cont.attr({
-					'class': 'P-article',
-					'article-name': marker
-				}).width( blogWidth );
+			// 添加标识属性
+			cont.attr({
+				'class': 'P-article',
+				'article-name': marker
+			}).width( C.blogWidth );
 
-				// 隐藏其他栏目
-				sons.hide();
-				articleDom.append( cont );
-			});
+			// 隐藏其他栏目
+			sons.hide();
+			articleDom.append( cont );
+
 			return cont;
 		},
 

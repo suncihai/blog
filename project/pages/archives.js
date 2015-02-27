@@ -5,7 +5,7 @@ define(function( require, exports ){
 	var layout = require('layout').base;
 	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
-	var pager = require('@modules/pager').base;
+	var pager = require('@modules/pager');
 
 	var Main = {
 		init: function( data ) {
@@ -16,6 +16,9 @@ define(function( require, exports ){
 		build: function() {
 			var data = this.$data;
 			var dom = data.dom;
+			if( !dom ) {
+				return false;
+			}
 			$([
 				'<div class="P-archive-list"/>',
 				'<div class="P-archive-pager"/>'
@@ -75,12 +78,12 @@ define(function( require, exports ){
 		// 创建
 		buildArchives: function( info ) {
 			var data = this.$data;
-			
+
 			// 循环创建列表
 			util.each( info.items, this.buildItems, this );
 
-			// 创建分页
-			pager.init({
+			// 创建分页方式
+			pager.base.init({
 				'target': this.$doms.pagerBox,
 				'page': info.page,
 				'pages': info.pages,
@@ -136,7 +139,7 @@ define(function( require, exports ){
 			var doms = this.$doms;
 			doms.listBox.empty();
 			doms.pagerBox.empty();
-		} 
+		}
 	}
 	exports.base = Main;
 });
