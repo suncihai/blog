@@ -6,7 +6,7 @@ define(function( require, exports ){
 	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
 
-	var Main = {
+	var Article = {
 		// 初始化
 		init: function( data ) {
 			this.$data = data;
@@ -72,5 +72,5 @@ define(function( require, exports ){
 			});
 		}
 	}
-	exports.base = Main;
+	exports.base = Article;
 });

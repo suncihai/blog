@@ -7,7 +7,7 @@ define(function( require, exports ){
 	var C = require('@core/config');
 	var pager = require('@modules/pager');
 
-	var Main = {
+	var Archive = {
 		init: function( data ) {
 			this.$data = data;
 			this.build();
@@ -141,5 +141,5 @@ define(function( require, exports ){
 			doms.pagerBox.empty();
 		}
 	}
-	exports.base = Main;
+	exports.base = Archive;
 });

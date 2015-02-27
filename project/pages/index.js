@@ -3,7 +3,7 @@ define(function( require, exports ){
 	var layout = require('layout').base;
 	var C = require('@core/config');
 
-	var Main = {
+	var Index = {
 		init: function( data ) {
 			this.data = data;
 			this.build();
@@ -13,5 +13,5 @@ define(function( require, exports ){
 			$(document).attr( 'title', C.archiveTitle[this.data.name] );
 		}
 	}
-	exports.base = Main;
+	exports.base = Index;
 });
