@@ -17,6 +17,9 @@ define(function( require, exports ){
 			var data = this.$data;
 			var dom = data.dom;
 
+			// 设置标题
+			layout.setTitle( C.archiveTitle[data.name] );
+
 			// banner设置
 			banner.setData({
 				'type': 'archive',
@@ -93,7 +96,9 @@ define(function( require, exports ){
 
 			// 设置标题
 			var prefix = info.page === 1 ? "" : ' - 第' + info.page + '页';
-			layout.setTitle( C.archiveTitle[data.name] + prefix );
+			if( prefix ) {
+				layout.setTitle( C.archiveTitle[data.name] + prefix );
+			}
 		},
 
 		// * buildItems 循环生成列表. idx->序号, item->选项对象

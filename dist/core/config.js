@@ -17,7 +17,7 @@ define(function( require, exports ) {
 		},
 
 		// 页脚文字
-		copyright: '©2012-2014 TANGBC.COM 桂ICP备12002316号',
+		copyright: 'Copyright ©2012-2014 TANGBC.COM',
 
 		// 统计代码
 		stat: '',

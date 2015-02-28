@@ -6,6 +6,7 @@ define(function( require, exports ){
 	var util = require('@core/util');
 	var C = require('@core/config');
 	var header = require('@modules/header').base;
+	var footer = require('@modules/footer').base;
 
 	// 整体框架布局
 	var layout = [
@@ -74,7 +75,8 @@ define(function( require, exports ){
 			$('noScript,#welcome').remove();
 			// 缓存变量$tick
 			this.$tick = {
-				'headerType': [] // 头部类型 [blog,index]
+				'headerType': [], 	// 头部类型 [blog,index]
+				'footerType': [] 	// 页脚类型 [blog,index]
 			}
 		},
 
@@ -120,6 +122,26 @@ define(function( require, exports ){
 		},
 
 		/**
+		 * buildFooter 创建页脚
+		 * @param  {Object} config [配置,应包含创建头部的目标DOM,和content]
+		 * @return {type} [layout]
+		 */
+		buildFooter: function( config ) {
+			var self = this;
+			var type = config['type']; // 页脚类型, index,blog
+			var types = self._getTick('footerType');
+			var exist = util.inArray( type, types );
+			if( exist === -1 ) {
+				footer.init( config , function( completed ) {
+					if( completed ) {
+						self._setTick( 'footerType', type );
+					}
+				});
+			}
+			return self;
+		},
+
+		/**
 		 * setTitle 设置网站title, 栏目与标题的组合，一个参数则直接设置
 		 * @param {type} name  [栏目名称]
 		 * @param {type} title [文章名称]
@@ -137,11 +159,6 @@ define(function( require, exports ){
 			$(document).attr('title', str);
 			return this;
 		},
-
-		/**
-		 * buildBanner 构建博客的Banner内容
-		 */
-		buildBanner: function() {},
 
 		/**
 		 * _setTick 设置tick(内部调用)

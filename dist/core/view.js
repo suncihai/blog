@@ -51,6 +51,7 @@ define(function( require, exports ){
 				var blogDOM = layout.getDOM('blog');
 				var blogBody = blogDOM['body'];
 				var head = blogDOM['head'];
+				var foot = blogDOM['footer']
 
 				// 隐藏兄弟容器
 				blogBody.show().siblings().hide();
@@ -66,6 +67,14 @@ define(function( require, exports ){
 				}).updateNav( config.container );
 
 				// 创建博客页脚
+				layout.buildFooter({
+					'target': foot,
+					'type': 'blog',
+					'css': {
+						'width': C.blogWidth
+					},
+					'content': C.copyright
+				});
 
 				// 存在pageid为文章页
 				if( config.pageid ) {
