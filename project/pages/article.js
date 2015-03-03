@@ -5,6 +5,7 @@ define(function( require, exports ){
 	var layout = require('layout').base;
 	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
+	var loading = require('@modules/loading').base;
 
 	var Article = {
 		// 初始化
@@ -13,10 +14,24 @@ define(function( require, exports ){
 			this.load();
 		},
 
+		// 隐藏loading
+		hideLoading: function() {
+			this.loading.hide();
+			this.$dom.show();
+		},
+
 		// 拉取数据
 		load: function( param ) {
 			var param = param || this.getParam();
 			var dc = C.dataCenter;
+			// 数据加载之前显示loading
+			this.loading = loading.init({
+				'target': this.$data.dom,
+				'width':  this.$data.dom.width(),
+				'size': 25,
+				'class': 'center'
+			});
+
 			dataHelper.get( dc.showarticle, param, this.onData, this );
 		},
 
@@ -41,7 +56,7 @@ define(function( require, exports ){
 				dom.html('拉取数据似乎出了点问题~');
 				return;
 			}
-			var info = res.result;
+			var info = this.$info = res.result;
 			if( util.isEmpty( info ) ) {
 				dom.html('无数据');
 				return;
@@ -52,12 +67,12 @@ define(function( require, exports ){
 		// 创建
 		build: function( info ) {
 			var dom = this.$data.dom;
-			var html = $([
+			var html = this.$dom = $([
 				'<div class="content">',
 					'<article class="article">'+ info.content +'</article>',
 				'</div>'
 			].join(''));
-			html.appendTo( dom );
+			html.appendTo( dom ).hide();
 
 			// 标题
 			layout.setTitle( this.$data.name, info.title );
@@ -70,6 +85,9 @@ define(function( require, exports ){
 				'tag': '标签：' + (info.tag || '无')  + ' | ',
 				'comments': '评论数：'+ info.comments
 			});
+
+			// 隐藏loading
+			this.hideLoading();
 		}
 	}
 	exports.base = Article;

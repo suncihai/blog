@@ -154,7 +154,7 @@ define(function( require, exports ){
 			for( ; i < len; i++ ) {
 				if( sons.eq(i).attr('article-name') === marker ) {
 					sons.eq(i).show().siblings().hide();
-					return false;
+					return sons.eq(i);
 				}
 			}
 

@@ -105,7 +105,7 @@ define(function( require, exports ){
 				return;
 			}
 			this.buildArchives( info );
-			// this.hideLoading();
+			this.hideLoading();
 			// var self = this;
 			// setTimeout(function() {
 			// 	self.hideLoading();
