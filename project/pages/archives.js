@@ -6,6 +6,7 @@ define(function( require, exports ){
 	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
 	var pager = require('@modules/pager');
+	var loading = require('@modules/loading').base;
 
 	var Archive = {
 		init: function( data ) {
@@ -30,23 +31,50 @@ define(function( require, exports ){
 			if( !dom ) {
 				return false;
 			}
-			$([
-				'<div class="P-archive-list"/>',
-				'<div class="P-archive-pager"/>'
-			].join('')).appendTo( dom );
+
 			this.$doms = {
-				listBox: $('.P-archive-list', dom),
-				pagerBox: $('.P-archive-pager', dom)
+				listBox: $('<div class="P-archive-list"/>').appendTo( dom ).hide(),
+				pagerBox: $('<div class="P-archive-pager"/>').appendTo( dom ).hide()
 			}
+
+			// 数据加载之前显示loading
+			this.loading = loading.init({
+				'target': dom,
+				'width':  dom.width(),
+				'size': 25,
+				'class': 'center',
+				'autoHide': true
+			});
 
 			// 加载数据
 			this.load();
+		},
+
+		hide: function() {
+			this.$doms.listBox.hide();
+			this.$doms.pagerBox.hide();
+		},
+
+		show: function() {
+			this.$doms.listBox.show();
+			this.$doms.pagerBox.show();
+		},
+
+		showLoading: function() {
+			this.loading.show();
+			this.hide();
+		},
+
+		hideLoading: function() {
+			this.loading.hide();
+			this.show();
 		},
 
 		// 拉取数据
 		load: function( param ) {
 			var param = param || this.getParam();
 			var dc = C.dataCenter;
+			this.showLoading();
 			dataHelper.get( dc.listarchives, param, this.onData, this );
 		},
 
@@ -77,6 +105,11 @@ define(function( require, exports ){
 				return;
 			}
 			this.buildArchives( info );
+			// this.hideLoading();
+			// var self = this;
+			// setTimeout(function() {
+			// 	self.hideLoading();
+			// }, 15000);
 		},
 
 		// 创建

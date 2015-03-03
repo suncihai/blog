@@ -82,10 +82,10 @@
 		'debug': 0
 	};
 	/**
-	 * fnInitApp 初始化配置
+	 * appInit 初始化配置
 	 */
 	var i = 0;
-	var fnInitApp = function() {
+	var appInit = function() {
 		var cb = stepFunc[i++];
 		if( cb ) {
 			cb.apply( win, arguments );
@@ -96,12 +96,12 @@
 		function() {
 			// 应用SeaJS配置
 			sea.config( seaConfig );
-			sea.use( ['jquery', 'util', 'layout'], fnInitApp );
+			sea.use( ['jquery', 'util', 'layout'], appInit );
 		},
 		// 初始化布局
 		function( jquery, util, layout ) {
 			layout.base.init();
-			sea.use( 'router', fnInitApp );
+			sea.use( 'router', appInit );
 		},
 		// 启动路由
 		function( router ) {
@@ -109,5 +109,5 @@
 		}
 	];
 	// 初始化开始
-	fnInitApp();
+	appInit();
 })( seajs, window, document );
