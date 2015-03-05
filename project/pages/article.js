@@ -6,6 +6,7 @@ define(function( require, exports ){
 	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
 	var loading = require('@modules/loading').base;
+	var prism = require('@plugins/prism/prism');
 
 	var Article = {
 		// 初始化
@@ -48,7 +49,7 @@ define(function( require, exports ){
 		// 请求回调
 		onData: function( err, res ) {
 			if( err ) {
-				util.error('数据拉取失败！错误码:' + msg.status + ', 错误信息:' + msg.statusText);
+				util.error('数据拉取失败！错误码:' + err.status + ', 错误信息:' + err.statusText);
 				return false;
 			}
 			var dom = this.$data.dom;
@@ -74,6 +75,9 @@ define(function( require, exports ){
 			].join(''));
 			html.appendTo( dom ).hide();
 
+			// 代码高亮渲染
+			this.renderHighLighter();
+
 			// 标题
 			layout.setTitle( this.$data.name, info.title );
 
@@ -88,6 +92,17 @@ define(function( require, exports ){
 
 			// 隐藏loading
 			this.hideLoading();
+		},
+
+		// 代码高亮渲染
+		renderHighLighter: function() {
+			var preDOM = this.$dom.find('pre');
+			var num = preDOM.size(), i = 0;
+			for( ; i < num; i++ ) {
+				var pre = preDOM.eq(i);
+				var cls = pre.attr('class');
+				console.log(cls)
+			}
 		}
 	}
 	exports.base = Article;

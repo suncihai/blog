@@ -91,7 +91,7 @@ define(function( require, exports ){
 		// 拉取数据回调
 		onData: function( err, res ) {
 			if( err ) {
-				util.error('数据拉取失败！错误码:' + msg.status + ', 错误信息:' + msg.statusText);
+				util.error('数据拉取失败！错误码:' + err.status + ', 错误信息:' + err.statusText);
 				return false;
 			}
 			var dom = this.$data.dom;

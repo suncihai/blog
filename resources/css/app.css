@@ -935,7 +935,7 @@ noscript {
   color: #867878;
   line-height: 150%;
   background: #FAF9F9;
-  border-left: 10px solid #DDD;
+  border-left: 8px solid #DDD;
 }
 .P-archives section:last-child {
   border-bottom: none;
@@ -968,6 +968,10 @@ noscript {
   padding: 15px 0;
   line-height: 180%;
 }
+.P-article .content article p {
+  padding: 5px 0;
+  text-indent: 2em;
+}
 .P-article .content article img {
   display: block;
   margin: 10px 0;
@@ -977,7 +981,7 @@ noscript {
 .P-article pre {
   border: 5px solid #DDD;
   padding: 10px;
-  margin: 10px 0;
+  margin: 5px 0 15px 0;
   border-radius: 5px;
   line-height: 125%;
   font-family: Consolas, Tahoma 'Microsoft Yahei';
