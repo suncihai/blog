@@ -109,7 +109,6 @@ define(function( require, exports ){
 				pre.empty().html('<code class="language-'+ type +'">' + tmp + '</code>');
 			}
 			prism.highlightAll();
-
 		}
 	}
 	exports.base = Article;
