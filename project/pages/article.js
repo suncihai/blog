@@ -6,7 +6,7 @@ define(function( require, exports ){
 	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
 	var loading = require('@modules/loading').base;
-	var prism = require('@plugins/prism/prism');
+	var prism = require('@plugins/prism/prism').base;
 
 	var Article = {
 		// 初始化
@@ -96,13 +96,20 @@ define(function( require, exports ){
 
 		// 代码高亮渲染
 		renderHighLighter: function() {
-			var preDOM = this.$dom.find('pre');
+			var self = this;
+			var preDOM = self.$dom.find('pre');
 			var num = preDOM.size(), i = 0;
 			for( ; i < num; i++ ) {
 				var pre = preDOM.eq(i);
 				var cls = pre.attr('class');
-				console.log(cls)
+				var b = cls.indexOf(':') + 1;
+				var e = cls.indexOf(';');
+				var type = cls.slice( b, e ).trim();
+				var tmp = pre.html();
+				pre.empty().html('<code class="language-'+ type +'">' + tmp + '</code>');
 			}
+			prism.highlightAll();
+
 		}
 	}
 	exports.base = Article;

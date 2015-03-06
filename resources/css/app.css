@@ -984,6 +984,5 @@ noscript {
   margin: 5px 0 15px 0;
   border-radius: 5px;
   line-height: 125%;
-  font-family: Consolas, Tahoma 'Microsoft Yahei';
-  background: #FCFCFC;
+  font-size: 16px;
 }
