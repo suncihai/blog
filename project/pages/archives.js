@@ -99,6 +99,7 @@ define(function( require, exports ){
 				dom.html('拉取数据似乎出了点问题~');
 				return;
 			}
+			console.log(res)
 			var info = this.$info = res.result;
 			if( util.isEmpty( info ) ) {
 				dom.html('无数据');
@@ -144,13 +145,17 @@ define(function( require, exports ){
 			var mouth = +arr[1];
 			var day = +arr[2];
 			var anchor = data.name + '/' + item.id; // 超链接地址
+			var cover = item.cover ? '<img class="cover" src="'+ item.cover +'">' : "";
 			sections.push([
 				'<section list-id="'+ idx +'">',
 					'<div class="P-archive-list-title">',
 						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">'+ item.title +'</a></h2>',
 					'</div>',
 					// '<a href="#'+ anchor +'" class="abstract">',
-						'<article>'+ item.content +' ……</article>',
+						'<article>',
+							'<p class="abstract">' + item.content +' ……</p>',
+							cover,
+						'</article>',
 					// '</a>',
 					'<div class="P-archive-list-info">',
 						'<span class="tag">分类：'+ data.name +'</span>',

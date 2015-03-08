@@ -124,6 +124,7 @@ class SQL
                 // $abstract = strip_tags( fixHtmlTags( $text ) );
 
                 // 摘要截取, 先检测再截取(确保字数)
+                $cover = getFirstImg( $assoc['post_content'] );
                 $text = fixHtmlTags( $assoc['post_content'] );
                 $abstract = mb_substr( strip_tags( $text ), 0, $brief, 'utf8');
                 $itemFormat = array
@@ -133,7 +134,8 @@ class SQL
                     'publishDate'  => $assoc['post_date'],
                     'modifiedDate' => $assoc['post_modified'],
                     'content'      => $abstract,
-                    'comments'     => $assoc['comment_count']
+                    'comments'     => $assoc['comment_count'],
+                    'cover'        => $cover
                 );
                 array_push( $itemArray, $itemFormat );
             }
@@ -270,6 +272,15 @@ class SQL
         return json_encode( $retArray );
     }
 }
+
+// 简单的获取第一张图片
+function getFirstImg( $text ) {
+    preg_match("<img.*src=[\"](.*?)[\"].*?>", $text, $match);
+    if( $match ) {
+        return $match[1];
+    }
+    return "";
+} 
 
 // HTML标签闭合检测, $text的数据过大时, 可能存在一定的性能问题
 function fixHtmlTags( $text ) {

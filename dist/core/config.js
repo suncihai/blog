@@ -62,10 +62,10 @@ define(function( require, exports ) {
 		// 数据中心
 		dataCenter: {
 			// 处理文件目录
-			listarchives: '/blog/Sprint/operation/listarchives/query.php',
-			showarticle: '/blog/Sprint/operation/showarticle/query.php',
-			showcomment: '/blog/Sprint/operation/showcomment/query.php',
-			listtitle: '/blog/Sprint/operation/listtitle/query.php'
+			listarchives: '/blog/sprint/operation/listarchives/query.php',
+			showarticle: '/blog/sprint/operation/showarticle/query.php',
+			showcomment: '/blog/sprint/operation/showcomment/query.php',
+			listtitle: '/blog/sprint/operation/listtitle/query.php'
 		}
 	}
 	return CONFIG;

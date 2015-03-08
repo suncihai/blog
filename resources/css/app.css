@@ -937,6 +937,14 @@ noscript {
   background: #FAF9F9;
   border-left: 8px solid #DDD;
 }
+.P-archives section article .abstract {
+  display: inline-block;
+}
+.P-archives section article .cover {
+  display: inline-block;
+  margin-top: 15px;
+  border: 1px solid #DDD;
+}
 .P-archives section:last-child {
   border-bottom: none;
 }
@@ -964,25 +972,30 @@ noscript {
   padding: 15px 15px 15px 0;
 }
 .P-article .content article {
-  font-size: 18px;
+  font-size: 17px;
   padding: 15px 0;
-  line-height: 180%;
+  line-height: 150%;
+}
+.P-article .content article a {
+  color: #0080FF;
+  text-decoration: underline;
 }
 .P-article .content article p {
-  padding: 5px 0;
+  padding-top: 25px;
   text-indent: 2em;
 }
 .P-article .content article img {
   display: block;
-  margin: 10px 0;
-  border: 5px solid #DDD;
-  border-radius: 5px;
+  position: relative;
+  left: 2em;
+  border: 4px solid #E8E4E1;
+  border-radius: 2px;
 }
 .P-article pre {
-  border: 5px solid #DDD;
-  padding: 10px;
-  margin: 5px 0 15px 0;
-  border-radius: 5px;
-  line-height: 125%;
+  width: 88%;
+  position: relative;
+  left: 2em;
+  border: 4px double #E8E4E1;
+  border-radius: 2px;
   font-size: 16px;
 }
