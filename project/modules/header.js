@@ -20,7 +20,7 @@ define(function( require, exports ){
 			var config = this.$config;
 			var target = config['target'];
 			var head = $([
-				'<div class="M-head">',
+				'<div class="M-head center">',
 					'<div class="M-headLogo fl"/>',
 					'<div class="M-headNav fl"/>',
 					'<div class="M-headTool fr"/>',
@@ -39,7 +39,8 @@ define(function( require, exports ){
 			}
 
 			// 创建LOGO对象
-			var logo = new Logo();
+			var src = config.type === 'index' ? 'resources/images/indexlogo.png' : 'resources/images/navlogo.png';
+			var logo = new Logo(src);
 			logo.putTo( doms.logo );
 
 			// 创建导航对象
@@ -91,27 +92,27 @@ define(function( require, exports ){
 
 	// LOGO 站标
 	function Logo( src, size ) {
-		// this.src = src || '';
-		// this.size = size || {};
+		this.src = src || '';
+		this.size = size || {};
 	}
 	Logo.prototype = {
 		constructor : Logo,
 		// 创建LOGO布局
 		buildLogo: function() {
-			// var width = this.size['width'], height = this.size['height'];
-			// var logo = this.$dom = $('<img src="'+ this.src +'"/>');
-			// if( width && height ) {
-			// 	logo.css({
-			// 		'width': width,
-			// 		'height': height
-			// 	});
-			// }
-			var logo = this.$dom = $([
+			var width = this.size['width'], height = this.size['height'];
+			var logo = '<img src="'+ this.src +'"/>';
+			if( width && height ) {
+				logo.css({
+					'width': width,
+					'height': height
+				});
+			}
+			var dom = $([
 				'<a href="/blog/" class="logoAnchor">',
-					'<h1>TANGBC</h1>',
+					logo,
 				'</a>'
 			].join(''));
-			return logo;
+			return dom;
 		},
 		putTo: function( target ) {
 			var dom = this.buildLogo();

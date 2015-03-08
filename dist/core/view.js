@@ -25,7 +25,7 @@ define(function( require, exports ){
 				layout.buildHeader({
 					'target': indexDOM['head'],
 					'type': 'index',
-					'headroom': true,
+					'headroom': false,
 					'css': {
 						'width': C.indexWidth
 					}

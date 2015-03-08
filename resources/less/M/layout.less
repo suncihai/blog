@@ -7,19 +7,38 @@
 .G-frame{
 	width: @globalWidth;
 	margin: 0 auto;
+	height: 100%;
 	&Body{
 		position: relative;
+		height: 100%;
 		// 主页
 		&Index{
 			width: 100%;
-			height: 400px;
+			height: 100%;
+			background: url(../images/bg.gif) repeat;
 			// 主页头部
 			&Head{
 				width: 100%;
-				height: @headHeight;
-				line-height: @headHeight;
+				height: 40px;
+				line-height: 40px;
 				overflow: hidden;
-				background:#F7F7F7;
+				background:#5F5A5A;
+				border-bottom: 4px solid #444;
+				ul{
+					float: right;
+					padding-left: 40px;
+				}
+				li{
+					display: inline-block;
+					margin-right: 2.5em;
+					font-size: 15px;
+					a{
+						color: #FFF;
+					}
+					a.act{
+						color: rgb(249, 246, 18);
+					}
+				}
 			}
 		}
 		// 博客
@@ -35,6 +54,24 @@
 				overflow: hidden;
 				background:#F7F7F7;
 				border-bottom: 1px solid #DDD;
+				.logoAnchor{
+					display: block;
+					height: 50px;
+					padding-top: 13px;
+					opacity: 0.7;
+				}
+				ul{
+					float: right;
+					padding-left: 40px;
+				}
+				li{
+					display: inline-block;
+					margin-right: 2em;
+					font-size: 18px;
+					a.act{
+						color: red;
+					}
+				}
 			}
 			// Banner
 			&Banner{

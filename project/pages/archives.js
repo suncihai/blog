@@ -99,7 +99,6 @@ define(function( require, exports ){
 				dom.html('拉取数据似乎出了点问题~');
 				return;
 			}
-			console.log(res)
 			var info = this.$info = res.result;
 			if( util.isEmpty( info ) ) {
 				dom.html('无数据');

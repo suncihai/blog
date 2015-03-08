@@ -85,6 +85,7 @@ a:hover {
 }
 #MAIN {
   width: 100%;
+  height: 100%;
 }
 #LOADING {
   display: none;
@@ -585,20 +586,39 @@ noscript {
 .G-frame {
   width: 100%;
   margin: 0 auto;
+  height: 100%;
 }
 .G-frameBody {
   position: relative;
+  height: 100%;
 }
 .G-frameBodyIndex {
   width: 100%;
-  height: 400px;
+  height: 100%;
+  background: url(../images/bg.gif) repeat;
 }
 .G-frameBodyIndexHead {
   width: 100%;
-  height: 70px;
-  line-height: 70px;
+  height: 40px;
+  line-height: 40px;
   overflow: hidden;
-  background: #F7F7F7;
+  background: #5F5A5A;
+  border-bottom: 4px solid #444;
+}
+.G-frameBodyIndexHead ul {
+  float: right;
+  padding-left: 40px;
+}
+.G-frameBodyIndexHead li {
+  display: inline-block;
+  margin-right: 2.5em;
+  font-size: 15px;
+}
+.G-frameBodyIndexHead li a {
+  color: #FFF;
+}
+.G-frameBodyIndexHead li a.act {
+  color: #f9f612;
 }
 .G-frameBodyBlog {
   display: none;
@@ -612,6 +632,24 @@ noscript {
   overflow: hidden;
   background: #F7F7F7;
   border-bottom: 1px solid #DDD;
+}
+.G-frameBodyBlogHead .logoAnchor {
+  display: block;
+  height: 50px;
+  padding-top: 13px;
+  opacity: 0.7;
+}
+.G-frameBodyBlogHead ul {
+  float: right;
+  padding-left: 40px;
+}
+.G-frameBodyBlogHead li {
+  display: inline-block;
+  margin-right: 2em;
+  font-size: 18px;
+}
+.G-frameBodyBlogHead li a.act {
+  color: red;
 }
 .G-frameBodyBlogBanner {
   position: relative;
@@ -692,31 +730,6 @@ noscript {
   background: none;
   color: #A39A9A;
   cursor: default;
-}
-.M-head {
-  margin: 0 auto;
-}
-.M-headLogo {
-  line-height: 70px;
-  width: 18%;
-}
-.M-headLogo h1 {
-  font-size: 34px;
-  letter-spacing: 3px;
-}
-.M-headLogo .logoText {
-  color: #686599;
-}
-.M-headNav ul {
-  float: right;
-}
-.M-headNav li {
-  display: inline-block;
-  margin-right: 2.5em;
-  font-size: 18px;
-}
-.M-headNav li a.act {
-  color: red;
 }
 .M-footer {
   margin: 0 auto;
@@ -993,9 +1006,11 @@ noscript {
 }
 .P-article pre {
   width: 88%;
+  padding: 15px;
   position: relative;
   left: 2em;
   border: 4px double #E8E4E1;
   border-radius: 2px;
   font-size: 16px;
+  background: #f5f2f0;
 }
