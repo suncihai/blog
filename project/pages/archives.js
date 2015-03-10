@@ -28,10 +28,6 @@ define(function( require, exports ){
 			});
 			banner.hide();
 
-			if( !dom ) {
-				return false;
-			}
-
 			this.$doms = {
 				listBox: $('<div class="P-archive-list"/>').appendTo( dom ).hide(),
 				pagerBox: $('<div class="P-archive-pager"/>').appendTo( dom ).hide()

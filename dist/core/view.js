@@ -102,19 +102,11 @@ define(function( require, exports ){
 			var contName = config.container;
 			var blogDOM = layout.getDOM('blog');
 			var archiveDom = blogDOM['archive'];
-			var sons = archiveDom.children();
-			var i = 0, len = sons.size();
+			archiveDom.empty();
 
 			blogDOM['article'].hide();
 			blogDOM['archive'].show();
 
-			// 防止重复创建 TODO: 不要用DOM查找的方式判断
-			for( ; i < len; i++ ) {
-				if( sons.eq(i).attr('archive-name') === contName ) {
-					sons.eq(i).show().siblings().hide();
-					return false;
-				}
-			}
 
 			// 添加标识属性
 			cont.attr({
@@ -122,9 +114,11 @@ define(function( require, exports ){
 				'archive-name': contName
 			}).width( C.blogWidth );
 
-			// 隐藏其他栏目
-			sons.hide();
 			archiveDom.append( cont );
+
+			// 缓存
+			layout.setCache( contName );
+
 			return cont;
 		},
 
@@ -144,19 +138,10 @@ define(function( require, exports ){
 
 			var blogDOM = layout.getDOM('blog');
 			var articleDom = blogDOM['article'];
-			var sons = articleDom.children();
-			var i = 0, len = sons.size();
+			articleDom.empty();
 
 			blogDOM['archive'].hide();
 			blogDOM['article'].show();
-
-			// 防止重复创建
-			for( ; i < len; i++ ) {
-				if( sons.eq(i).attr('article-name') === marker ) {
-					sons.eq(i).show().siblings().hide();
-					return sons.eq(i);
-				}
-			}
 
 			// 添加标识属性
 			cont.attr({
@@ -164,9 +149,10 @@ define(function( require, exports ){
 				'article-name': marker
 			}).width( C.blogWidth );
 
-			// 隐藏其他栏目
-			sons.hide();
 			articleDom.append( cont );
+
+			// 缓存
+			layout.setCache( marker );
 
 			return cont;
 		},
