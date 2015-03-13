@@ -116,9 +116,6 @@ define(function( require, exports ){
 
 			archiveDom.append( cont );
 
-			// 缓存
-			layout.setCache( contName );
-
 			return cont;
 		},
 
@@ -150,9 +147,6 @@ define(function( require, exports ){
 			}).width( C.blogWidth );
 
 			articleDom.append( cont );
-
-			// 缓存
-			layout.setCache( marker );
 
 			return cont;
 		},

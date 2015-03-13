@@ -68,8 +68,8 @@ define(function( require, exports ){
 
 		// 拉取数据
 		load: function( param ) {
-			var param = param || this.getParam();
 			var dc = C.dataCenter;
+			param = param || this.getParam();
 			this.showLoading();
 			dataHelper.get( dc.listarchives, param, this.onData, this );
 		},
