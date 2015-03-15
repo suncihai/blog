@@ -64,6 +64,7 @@ body {
   background: #FFF;
   font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑', Tahoma;
   font-size: 16px;
+  color: #000;
 }
 input,
 textarea {
@@ -945,13 +946,16 @@ noscript {
 .P-archives section article {
   margin: 10px 40px;
   padding: 10px 15px;
-  color: #867878;
+  color: #444;
   line-height: 150%;
   background: #FAF9F9;
   border-left: 8px solid #DDD;
 }
 .P-archives section article .abstract {
   display: inline-block;
+}
+.P-archives section article .abstract:hover {
+  color: #000;
 }
 .P-archives section article .cover {
   display: inline-block;
@@ -1006,11 +1010,13 @@ noscript {
 }
 .P-article pre {
   width: 88%;
-  padding: 15px;
+  padding: 1.5em;
+  margin-top: 0.3em;
+  overflow: auto;
+  border: 8px solid #DDD;
+  border-radius: 1em;
   position: relative;
   left: 2em;
-  border: 4px double #E8E4E1;
-  border-radius: 2px;
   font-size: 16px;
-  background: #f5f2f0;
+  background: #272822;
 }
