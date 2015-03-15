@@ -599,6 +599,7 @@ noscript {
   background: url(../images/bg.gif) repeat;
 }
 .G-frameBodyIndexHead {
+  display: none;
   width: 100%;
   height: 40px;
   line-height: 40px;
@@ -627,6 +628,7 @@ noscript {
   min-height: 500px;
 }
 .G-frameBodyBlogHead {
+  display: none;
   width: 100%;
   height: 70px;
   line-height: 70px;
@@ -981,6 +983,10 @@ noscript {
   color: #666;
   font-style: italic;
   font-size: 14px;
+}
+.bannerTxt {
+  margin-top: 70px;
+  font-size: 40px;
 }
 .P-article {
   margin: 0 auto;

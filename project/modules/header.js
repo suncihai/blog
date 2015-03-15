@@ -52,7 +52,7 @@ define(function( require, exports ){
 				'logo': logo,
 				'nav': nav
 			}
-			head.appendTo( target );
+			head.appendTo( target.show() );
 
 			// 启用headroom插件
 			if( config.headroom ) {

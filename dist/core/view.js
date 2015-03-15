@@ -22,14 +22,14 @@ define(function( require, exports ){
 				var indexBody = body = indexDOM['body'];
 
 				// 创建头部/激活导航状态
-				layout.buildHeader({
-					'target': indexDOM['head'],
-					'type': 'index',
-					'headroom': false,
-					'css': {
-						'width': C.indexWidth
-					}
-				}).updateNav( config.container );
+				// layout.buildHeader({
+				// 	'target': indexDOM['head'],
+				// 	'type': 'index',
+				// 	'headroom': false,
+				// 	'css': {
+				// 		'width': C.indexWidth
+				// 	}
+				// }).updateNav( config.container );
 
 				// 隐藏blog容器
 				indexBody.show().siblings().hide();

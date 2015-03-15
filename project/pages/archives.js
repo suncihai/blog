@@ -24,9 +24,9 @@ define(function( require, exports ){
 			// banner设置
 			banner.setData({
 				'type': 'archive',
-				'content': ''
+				'content': '<h1 class="bannerTxt">Keep smiling, keep codeing ......</h1>'
 			});
-			banner.hide();
+			// banner.hide();
 
 			this.$doms = {
 				listBox: $('<div class="P-archive-list"/>').appendTo( dom ).hide(),
