@@ -187,4 +187,18 @@ define(function( require, util ){
 		}
 	}
 
+	/**
+	 * 获取一个唯一的ID
+	 * @param  {String} fix 	[前缀]
+	 * @return {Mix} 返回唯一的ID号
+	 */
+	var _guid = 1;
+	util.guid = function( fix ) {
+		if( fix ) {
+			return '' + fix + ( _guid++ );
+		}
+		else {
+			return _guid++;
+		}
+	}
 });
