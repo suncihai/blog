@@ -19,8 +19,8 @@ define(function( require, exports ){
 			require.async('layout', function( mod ) {
 				var layout = mod.base;
 				var indexDOM = layout.getDOM('index');
-				var indexBody = body = indexDOM['body'];
-
+				var indexBody = indexDOM['body'];
+				body = indexBody;
 				// 创建头部/激活导航状态
 				// layout.buildHeader({
 				// 	'target': indexDOM['head'],

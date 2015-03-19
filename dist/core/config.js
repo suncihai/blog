@@ -51,7 +51,7 @@ define(function( require, exports ) {
 			page: 1,		// 请求第1页
 			limit: 8,		// 每页显示文章数
 			brief: 180,		// 文章摘要长度
-			order: 'date' 	// 按时间顺序排列
+			order: 'date'	// 按时间顺序排列
 		},
 
 		// article默认请求选项

@@ -11,8 +11,8 @@ define(function( require, exports ) {
 			var target = layout.getDOM('blog/banner');
 			// 布局
 			var dom = $([
-				'<div class="M-banner">',	
-					// 列表banner 
+				'<div class="M-banner">',
+					// 列表banner
 					'<div class="M-bannerArchive">',
 						'<div class="content"/>',
 					'</div>',

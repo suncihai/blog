@@ -23,8 +23,8 @@ define(function( require, exports ){
 
 		// 拉取数据
 		load: function( param ) {
-			var param = param || this.getParam();
 			var dc = C.dataCenter;
+			param = param || this.getParam();
 			// 数据加载之前显示loading
 			this.loading = loading.init({
 				'target': this.$data.dom,

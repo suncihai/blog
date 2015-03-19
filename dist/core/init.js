@@ -54,23 +54,23 @@
 		// 路径缩写
 		'paths': {
 			// 核心模块目录
-			'@dist':        'dist',
-			'@core':        'dist/core',
-			'@plugins':     'dist/plugins',
+			'@dist'       : 'dist',
+			'@core'       : 'dist/core',
+			'@plugins'    : 'dist/plugins',
 			// 控制器模块目录
-			'@controller':	'controller',
+			'@controller' :	'controller',
 			// 项目模块目录
-			'@project': 	'project',
-			'@modules':     'project/modules',
-			'@pages':     	'project/pages'
+			'@project'    : 'project',
+			'@modules'    : 'project/modules',
+			'@pages'      : 'project/pages'
 		},
 		// 常用模块别名配置
 		'alias': {
-			'util':         '@core/util.js',
-			'view':         '@core/view.js',
-			'router':       '@core/router.js',
-			'layout':       '@modules/layout.js',
-			'jquery':       '@dist/jquery/jquery-1.8.3.min.js'
+			'util'   : '@core/util.js',
+			'view'   : '@core/view.js',
+			'router' : '@core/router.js',
+			'layout' : '@modules/layout.js',
+			'jquery' : '@dist/jquery/jquery-1.8.3.min.js'
 		},
 		'map': [
 			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=20140000']

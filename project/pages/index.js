@@ -1,6 +1,5 @@
 define(function( require, exports ){
 	var $ = require('jquery');
-	var layout = require('layout').base;
 	var C = require('@core/config');
 
 	var Index = {

@@ -10,9 +10,9 @@ define(function( require, exports ){
 	var C = require('@core/config');
 	var action = C.action;
 	var data = {
-		dom: null, 	  // 容器对象
-		name: null,   // 模块名称
-		param: null   // 请求参数
+		dom: null,   // 容器对象
+		name: null,  // 模块名称
+		param: null  // 请求参数
 	}
 
 	/**
@@ -31,7 +31,7 @@ define(function( require, exports ){
 			case 2:
 				param = arr[1];
 			break;
-			default: param = arr[2] == '' ? arr[1] : null;
+			default: param = arr[2] === '' ? arr[1] : null;
 		}
 		run( name, param );
 		util.scrollTo(0);
@@ -107,7 +107,7 @@ define(function( require, exports ){
 			}
 		}
 		else {
-			Win.history.go( uri );
+			WIN.history.go( uri );
 		}
 	}
 });

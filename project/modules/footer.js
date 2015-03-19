@@ -3,7 +3,6 @@
  */
 define(function( require, exports ){
 	var $ = require('jquery');
-	var C = require('@core/config');
 	var util = require('util');
 
 	var Footer = {

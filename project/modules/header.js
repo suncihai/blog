@@ -167,4 +167,5 @@ define(function( require, exports ){
 
 	// Tool构造函数
 	var Tool = function() {};
+	Tool.prototype = {};
 });

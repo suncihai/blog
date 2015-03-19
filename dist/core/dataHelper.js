@@ -8,12 +8,12 @@ define(function( require, exports ){
 	var DataHelper = {
 		/**
 		 * _send 发送Ajax请求
-		 * @param  {String} 	type 		[请求类型get,post]
-		 * @param  {String} 	url 		[请求地址]
-		 * @param  {JSON} 		param 		[请求参数]
-		 * @param  {Function} 	callback 	[成功或者错误的回调函数]
-		 * @param  {Object} 	scope 		[作用域]
-		 * @return {NULL}     				[无返回值]
+		 * @param  {String}    type      [请求类型get,post]
+		 * @param  {String}    url       [请求地址]
+		 * @param  {JSON}      param     [请求参数]
+		 * @param  {Function}  callback  [成功或者错误的回调函数]
+		 * @param  {Object}    scope     [作用域]
+		 * @return {NULL}                [无返回值]
 		 */
 		_send: function( type, url, param, callback, scope ) {
 			// 参数检测
@@ -32,16 +32,6 @@ define(function( require, exports ){
 				return false;
 			}
 
-			// 拉取数据
-			jquery.ajax({
-				'url': url,
-				'method': type,
-				'dataType': 'json',
-				'data': param,
-				'success': _fnSuccess,
-				'error': _fnError
-			});
-
 			// 请求成功, 回调形式：err, data
 			function _fnSuccess( res ) {
 				if( !scope ) {
@@ -57,6 +47,15 @@ define(function( require, exports ){
 				callback.call( scope, msg, null );
 			}
 
+			// 拉取数据
+			jquery.ajax({
+				'url': url,
+				'method': type,
+				'dataType': 'json',
+				'data': param,
+				'success': _fnSuccess,
+				'error': _fnError
+			});
 		},
 
 		// get方式

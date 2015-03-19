@@ -39,30 +39,30 @@ define(function( require, exports ){
 	var body = $('body').append( layout );
 	var doms = {
 		// 框架结构：
-		'MAIN'    : 		$('#MAIN'),
-		'LOADING' :  		$('#LOADING'),
-		'POPWIN'  : 		$('#POPWIN'),
+		'MAIN'    : $('#MAIN'),
+		'LOADING' : $('#LOADING'),
+		'POPWIN'  : $('#POPWIN'),
 		// 框架容器：
-		'frame'   : 		$('.G-frame', body),
-		'body'    : 		$('.G-frameBody', body),
+		'frame'   : $('.G-frame', body),
+		'body'    : $('.G-frameBody', body),
 		// 主页容器：
 		'index': {
-			'body'    : 	$('.G-frameBodyIndex', body),
-			'head'    : 	$('.G-frameBodyIndexHead', body),
-			'content' : 	$('.G-frameBodyIndexContent', body),
-			'footer'  : 	$('.G-frameBodyIndexFooter', body)
+			'body'    : $('.G-frameBodyIndex', body),
+			'head'    : $('.G-frameBodyIndexHead', body),
+			'content' : $('.G-frameBodyIndexContent', body),
+			'footer'  : $('.G-frameBodyIndexFooter', body)
 		},
 		// 博客容器
 		'blog': {
-			'body'    : 	$('.G-frameBodyBlog', body),
-			'head'    : 	$('.G-frameBodyBlogHead', body),	// 头部LOGO、导航、TOOL容器
-			'banner'  : 	$('.G-frameBodyBlogBanner', body),	// Banner容器
-			'archive' : 	$('.G-frameBodyBlogArchive', body),	// 栏目列表容器
-			'article' : 	$('.G-frameBodyBlogArticle', body),	// 文章内容容器
-			'footer'  : 	$('.G-frameBodyBlogFooter', body)
+			'body'    : $('.G-frameBodyBlog', body),
+			'head'    : $('.G-frameBodyBlogHead', body),	// 头部LOGO、导航、TOOL容器
+			'banner'  : $('.G-frameBodyBlogBanner', body),	// Banner容器
+			'archive' : $('.G-frameBodyBlogArchive', body),	// 栏目列表容器
+			'article' : $('.G-frameBodyBlogArticle', body),	// 文章内容容器
+			'footer'  : $('.G-frameBodyBlogFooter', body)
 		},
 		// 空白容器
-		'blank' : 			$('.G-frameBodyBlank', body)
+		'blank' : $('.G-frameBodyBlank', body)
 	}
 
 	var Main = {
@@ -75,8 +75,8 @@ define(function( require, exports ){
 			$('noScript,#welcome').remove();
 			// 缓存变量$tick
 			this.$tick = {
-				'headerType': [], 	// 头部类型 [blog,index]
-				'footerType': [] 	// 页脚类型 [blog,index]
+				'headerType': [], // 头部类型 [blog,index]
+				'footerType': []  // 页脚类型 [blog,index]
 			}
 		},
 
@@ -86,7 +86,7 @@ define(function( require, exports ){
 		 * @return {Object} [DOM]
 		 */
 		getDOM: function( domName ) {
-			var retDom, domArr = domName.toString().split('/');
+			var domArr = domName.toString().split('/');
 			return domArr.length === 2 ? doms[domArr[0]][domArr[1]] : doms[domArr[0]];
 		},
 

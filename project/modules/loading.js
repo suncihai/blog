@@ -147,4 +147,5 @@ define(function( require, exports ){
 	}
 
 	exports.base = ThreeRings;
+	exports.chrysanthemum = Chrysanthemum;
 });

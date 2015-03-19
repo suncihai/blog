@@ -134,11 +134,11 @@ define(function( require, exports ){
 		buildItems: function( item, idx ) {
 			var data = this.$data;
 			var sections = [];
-			var str = item.publishDate.slice( 0, 10 );
-			var arr = str.split('-');
-			var year = arr[0];
-			var mouth = +arr[1];
-			var day = +arr[2];
+			// var str = item.publishDate.slice( 0, 10 );
+			// var arr = str.split('-');
+			// var year = arr[0];
+			// var mouth = +arr[1];
+			// var day = +arr[2];
 			var anchor = data.name + '/' + item.id; // 超链接地址
 			var cover = item.cover ? '<img class="cover" src="'+ item.cover +'">' : "";
 			sections.push([

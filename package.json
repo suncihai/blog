@@ -1,6 +1,7 @@
 {
-	"name": "blog",
-	"version": "0.0.1",
+	"name": "blogFrameWork",
+	"version": "2.0.0",
+	"description": "blogFrameWork gruntConfig",
 	"dependencies": {},
 	"devDependencies": {
 		"grunt": "0.4.1",

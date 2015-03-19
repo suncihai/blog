@@ -6,11 +6,11 @@ define(function( require, exports ){
 
 	/**
 	 * bind 绑定事件
-	 * @param  {Object}   	$elm 		[jquery对象]
-	 * @param  {String} 	type 		[事件类型]
-	 * @param  {Mix} 		data 		[callback中接受的数据]
-	 * @param  {Function} 	calllback 	[事件函数]
-	 * @param  {Object} 	scope 		[作用域]
+	 * @param  {Object}   $elm     [jquery对象]
+	 * @param  {String}   type     [事件类型]
+	 * @param  {Mix}      data     [callback中接受的数据]
+	 * @param  {Function} calllback[事件函数]
+	 * @param  {Object}   scope    [作用域]
 	 */
 	exports.bind = function( $elm, type, data, calllback, scope ) {
 		// 参数检测
@@ -35,8 +35,8 @@ define(function( require, exports ){
 
 	/**
 	 * unbind 取消绑定事件
-	 * @param  {Object}   	$elm 		[jquery对象]
-	 * @param  {String} 	type 		[事件类型]
+	 * @param  {Object}  $elm  [jquery对象]
+	 * @param  {String}  type  [事件类型]
 	 */
 	exports.unbind = function( $elm, type ) {
 		// 参数检测
@@ -49,12 +49,12 @@ define(function( require, exports ){
 
 	/**
 	 * proxy 代理事件
-	 * @param  {Object}   	$elm 		[jquery对象]
-	 * @param  {String} 	type 		[事件类型]
-	 * @param  {Mix} 		selector 	[选择器,可为单个元素或者元素数组]
-	 * @param  {Mix} 		data 		[callback中接受的数据]
-	 * @param  {Function} 	calllback 	[事件函数]
-	 * @param  {Object} 	scope 		[作用域]
+	 * @param  {Object}  $elm      [jquery对象]
+	 * @param  {String}  type      [事件类型]
+	 * @param  {Mix}     selector  [选择器,可为单个元素或者元素数组]
+	 * @param  {Mix}     data      [callback中接受的数据]
+	 * @param  {Function}calllback [事件函数]
+	 * @param  {Object}  scope     [作用域]
 	 */
 	exports.proxy = function( $elm, type, selector, data, calllback, scope ) {
 		// 参数检测
@@ -80,10 +80,10 @@ define(function( require, exports ){
 
 	/**
 	 * unproxy 取消代理事件
-	 * @param  {Object}   	$elm 		[jquery对象]
-	 * @param  {String} 	type 		[事件类型]
-	 * @param  {Mix} 		selector 	[选择器,可为单个元素或者元素数组]
-	 * @param  {Function} 	calllback 	[事件函数]
+	 * @param  {Object}   $elm      [jquery对象]
+	 * @param  {String}   type      [事件类型]
+	 * @param  {Mix}      selector  [选择器,可为单个元素或者元素数组]
+	 * @param  {Function} calllback [事件函数]
 	 */
 	exports.unproxy = function( $elm, type, selector, calllback ) {
 		// 参数检测

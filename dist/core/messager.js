@@ -18,11 +18,7 @@ define(function( require, exports ){
 		 * @param  {Func} callback [发完后的回调]
 		 */
 		send: function( method, param, callback ) {
-			addEventListener( method, callback );
-			var _event = new CustomEvent( method, {
-				'detail': param
-			});
-			this.events[method] = _event;
+			//
 		},
 
 		/**
@@ -32,10 +28,7 @@ define(function( require, exports ){
 		 * @param  {Object} scope [作用域]
 		 */
 		on: function( method, callback, scope ) {
-			var _event = this.events[method];
-			if( _event ) {
-				dispatchEvent( _event );
-			}
+			//
 		}
 	}
 	exports.base = new Messager();

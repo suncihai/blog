@@ -3,9 +3,7 @@
  */
 define(function( require, util ){
 	var WIN = window;
-	var DOC = document;
 	var OP = Object.prototype;
-	var SP = String.prototype;
 	var AP = Array.prototype;
 
 	/**
@@ -101,11 +99,11 @@ define(function( require, util ){
 	 * @param  {Number} x [横位置]
 	 * @param  {Number} y [纵位置]
 	 */
-	 util.scrollTo = function( x, y ) {
-	 	var _x = x || 0;
-	 	var _y = y || 0;
-	 	window.scrollTo( _x, _y );
-	 }
+	util.scrollTo = function( x, y ) {
+		var _x = x || 0;
+		var _y = y || 0;
+		window.scrollTo( _x, _y );
+	}
 
 	/**
 	 * argumentsToArray 参数转数组
@@ -161,9 +159,9 @@ define(function( require, util ){
 
 	/**
 	 * each 遍历数组 (TODO:遍历对象)
-	 * @param  {Array} 		items  		[数组]
-	 * @param  {Fuction} 	callback 	[回调函数]
-	 * @param  {Object} 	scope  		[作用域]
+	 * @param  {Array}     items     [数组]
+	 * @param  {Fuction}   callback  [回调函数]
+	 * @param  {Object}    scope     [作用域]
 	 */
 	util.each = function( items, callback, scope ) {
 		if( !isArray( items ) || !isFunc( callback ) ) {
@@ -189,7 +187,7 @@ define(function( require, util ){
 
 	/**
 	 * 获取一个唯一的ID
-	 * @param  {String} fix 	[前缀]
+	 * @param  {String} fix [前缀]
 	 * @return {Mix} 返回唯一的ID号
 	 */
 	var _guid = 1;

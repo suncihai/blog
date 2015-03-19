@@ -14,10 +14,11 @@ module.exports = function( grunt ) {
 		},
 		jshint: {
 			config: ['Gruntfile.js'],
-            client: ['module/*.js', 'dist/core/*.js'],
+            client: ['dist/core/*.js', 'project/modules/*.js', 'project/pages/*.js'],
             options: {
-				curly: true,	// 语句必须紧随其后的代码块
-				latedef: true,	// 确保变量和函数在使用之前声明
+				asi: true,
+				curly: true,
+				latedef: true,
 				forin: false,
 				noarg: false,
 				sub: true,
@@ -46,18 +47,22 @@ module.exports = function( grunt ) {
 			less: {
 				files: ['resources/less/**/*.less', 'resources/less/*/*.less'],
 				tasks: ['less:compile']
+			},
+			client: {
+				files: ['dist/core/*.js', 'project/modules/*.js', 'project/pages/*.js'],
+				tasks: ['jshint:client']
 			}
 		}
 	});
 
 	// 加载任务
 	grunt.loadNpmTasks('grunt-contrib-less');
-	// grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	// 监听的任务
 	grunt.registerTask('watch-all', ['less', 'watch']);
-	// grunt.registerTask('watch-client', ['jshint:client','watch:client']);
+	grunt.registerTask('watch-client', ['jshint:client','watch:client']);
 
 	// 默认任务
 	grunt.registerTask('default', ['watch-all']);
