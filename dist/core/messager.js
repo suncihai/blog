@@ -64,8 +64,8 @@ define(function( require, exports ){
 		/**
 		 * on 接收消息
 		 * @param  {String} method  [消息名]
-		 * @param  {Func} callback [发完后的回调]
-		 * @param  {Object} scope [作用域]
+		 * @param  {Func} callback  [发完后的回调]
+		 * @param  {Object} scope   [作用域]
 		 */
 		on: function( method, callback, scope ) {
 			// 还未注册
@@ -83,7 +83,6 @@ define(function( require, exports ){
 		 */
 		cancel: function( method ) {
 			var methodId = this.msgMap[method];
-			var cachce = this.cacheMap[methodId];
 			delete this.msgMap[method];
 			delete this.cacheMap[methodId];
 		}
