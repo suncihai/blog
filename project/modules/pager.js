@@ -5,6 +5,7 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
 	var eventHelper = require('@core/eventHelper');
+	var messager = require('@core/messager').base;
 
 	// 传统的的分页方式
 	var Pager = {
@@ -169,6 +170,7 @@ define(function( require, exports ){
 			if( id === 0 || id > pages ) {
 				return false;
 			}
+			messager.fire('pagerSelectd', this);
 			this.callback.call( this.$scope, id );
 		},
 

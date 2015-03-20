@@ -7,6 +7,7 @@ define(function( require, exports ){
 	var C = require('@core/config');
 	var pager = require('@modules/pager');
 	var loading = require('@modules/loading').base;
+	var messager = require('@core/messager').base;
 
 	var Archive = {
 		init: function( data ) {
@@ -122,6 +123,10 @@ define(function( require, exports ){
 				'pages': info.pages,
 				'total': info.total
 			}, this.pagerSelected, this);
+
+			messager.on('pagerSelectd', function( e ) {
+				console.log(e.constructor.toString())
+			})
 
 			// 设置标题
 			var prefix = info.page === 1 ? "" : ' - 第' + info.page + '页';
