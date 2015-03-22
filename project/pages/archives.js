@@ -1,13 +1,13 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
-	var dataHelper = require('@core/dataHelper').base;
-	var layout = require('layout').base;
-	var banner = require('@modules/banner').base;
 	var C = require('@core/config');
-	var pager = require('@modules/pager');
-	var loading = require('@modules/loading').base;
+	var layout = require('layout').base;
+	var pager = require('@modules/pager').base;
+	var banner = require('@modules/banner').base;
 	var messager = require('@core/messager').base;
+	var loading = require('@modules/loading').base;
+	var dataHelper = require('@core/dataHelper').base;
 
 	var Archive = {
 		init: function( data ) {
@@ -33,6 +33,11 @@ define(function( require, exports ){
 				listBox: $('<div class="P-archive-list"/>').appendTo( dom ).hide(),
 				pagerBox: $('<div class="P-archive-pager"/>').appendTo( dom ).hide()
 			}
+
+			// 创建分页模块
+			pager.init({
+				'target': this.$doms.pagerBox
+			});
 
 			// 数据加载之前显示loading
 			this.loading = loading.init({
@@ -101,7 +106,14 @@ define(function( require, exports ){
 				dom.html('无数据');
 				return;
 			}
+			// 创建列表
 			this.buildArchives( info );
+			// 更新页码
+			pager.setParam({
+				'page': info.page,
+				'pages': info.pages,
+				'total': info.total
+			});
 			this.hideLoading();
 			// var self = this;
 			// setTimeout(function() {
@@ -116,17 +128,8 @@ define(function( require, exports ){
 			// 循环创建列表
 			util.each( info.items, this.buildItems, this );
 
-			// 创建分页方式
-			pager.base.init({
-				'target': this.$doms.pagerBox,
-				'page': info.page,
-				'pages': info.pages,
-				'total': info.total
-			}, this.pagerSelected, this);
-
-			messager.on('pagerSelectd', function( e ) {
-				console.log(e.constructor.toString())
-			})
+			// 监听页码选择事件
+			messager.on('pagerSelected', function( ee ) {console,log(ee)});
 
 			// 设置标题
 			var prefix = info.page === 1 ? "" : ' - 第' + info.page + '页';
@@ -167,22 +170,14 @@ define(function( require, exports ){
 			this.$doms.listBox.append( sections.join('') );
 		},
 
-		// pagerSelected 页码激活事件
-		pagerSelected: function( page ) {
+		// 页码激活事件
+		onPagerSelected: function( page ) {
 			var oldParam = this.getParam();
 			var newParam = util.mergeParam( oldParam, {
 				'page': page
 			});
-			this.empty();
+			this.$doms.listBox.empty();
 			this.load( newParam );
-		},
-
-		// 清空列表数据和分页信息
-		// TODO: 页码切换时不清空pagerBox
-		empty: function() {
-			var doms = this.$doms;
-			doms.listBox.empty();
-			doms.pagerBox.empty();
 		}
 	}
 	exports.base = Archive;

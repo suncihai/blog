@@ -10,9 +10,6 @@ define(function( require, exports ){
 		// 消息映射
 		msgMap: {},
 
-		// 消息数据缓存映射
-		cacheMap: {},
-
 		/**
 		 * fire 发送消息
 		 * @param  {String} method    [消息名]
@@ -21,60 +18,53 @@ define(function( require, exports ){
 		 * @param  {Object} scope     [上下文]
 		 */
 		fire: function( method, data, afterSend, scope ) {
+			var self = this;
 			// 没有传data的情况
 			if( util.isFunc( data ) ) {
 				afterSend = data;
 				scope = afterSend;
 				data = null;
 			}
-			if( this.msgMap[method] ) {
-				this._update( method, data, scope );
-				return true;
-			}
+
 			// 注册消息
-			var self = this;
-			var guid = util.guid('_msg_');
 			setTimeout(function() {
-				self.msgMap[method] = guid;
-				self.cacheMap[guid] = {
-					'param': data || null,
-					'scope': scope || window
+				self.msgMap[method] = {
+					'param': data || null
 				}
+
+				// 触发消息
+				self._trigger( method );
+
 				// 有回调, 执行回调
 				if( afterSend ) {
 					afterSend.call( scope );
 				}
+
 			}, 0);
 		},
 
 		/**
-		 * _update 更新消息参数
+		 * _trigger 触发消息
 		 * @param  {String} method  [消息名]
-		 * @param  {Mix}    data    [消息携带的参数]
-		 * @param  {Object} scope   [上下文]
 		 */
-		_update: function( method, data, scope ) {
-			var methodId = this.msgMap[method];
-			this.cacheMap[methodId].param = data;
-			if( scope ) {
-				this.cacheMap[methodId].scope = scope;
-			}
+		_trigger: function( method ) {
+			var scope = this.msgMap[method].scope;
+			var param = this.msgMap[method].param;
+			this.msgMap[method].callback.call( scope, param );
 		},
 
 		/**
 		 * on 接收消息
-		 * @param  {String} method  [消息名]
-		 * @param  {Func} callback  [发完后的回调]
-		 * @param  {Object} scope   [作用域]
+		 * @param  {String} method    [消息名]
+		 * @param  {Func}   callback  [发完后的回调]
+		 * @param  {Object} scope     [上下文]
 		 */
 		on: function( method, callback, scope ) {
-			// 还未注册
 			if( !this.msgMap[method] ) {
-				return false;
+				this.msgMap[method] = {};
 			}
-			var methodId = this.msgMap[method];
-			var cachce = this.cacheMap[methodId];
-			callback.call( cachce.scope, cachce.param );
+			this.msgMap[method].callback = callback;
+			this.msgMap[method].scope = scope;
 		},
 
 		/**
@@ -82,9 +72,7 @@ define(function( require, exports ){
 		 * @param  {String} method  [消息名]
 		 */
 		cancel: function( method ) {
-			var methodId = this.msgMap[method];
 			delete this.msgMap[method];
-			delete this.cacheMap[methodId];
 		}
 	}
 	exports.base = Messager;

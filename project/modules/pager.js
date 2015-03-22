@@ -9,16 +9,17 @@ define(function( require, exports ){
 
 	// 传统的的分页方式
 	var Pager = {
-		init: function( config, callback, scope ) {
-			if( !util.isObject( config ) || !util.isFunc( callback ) ) {
-				util.error('参数错误!');
-				return false;
-			}
+		init: function( config ) {
 			this.$config = config || {};
-			this.callback = callback;
-			this.$scope = scope || window;
+			this.$param = {}, // 当前页page, 总页数pages, 总条数total
 			this.$max = 7; // 最多显示选项条数
 			this.build();
+		},
+
+		setParam: function( param ) {
+			this.$param = param;
+			// 生成页码
+			this.buildPager();
 		},
 
 		// 创建分页器
@@ -48,13 +49,10 @@ define(function( require, exports ){
 			doms.prev.attr('value', '<');
 			doms.next.attr('value', '>');
 
-			// 生成页码
-			this.buildPager();
-
-			var page = +this.$config.page;
+			// var page = this.$param.page || 0;
 			// 翻页点击事件
-			eventHelper.bind( doms.prev, 'click', page, this.eventClickPreview, this );
-			eventHelper.bind( doms.next, 'click', page, this.eventClickNext, this );
+			eventHelper.bind( doms.prev, 'click', this.eventClickPreview, this );
+			eventHelper.bind( doms.next, 'click', this.eventClickNext, this );
 
 			// 页码点击事件
 			eventHelper.proxy( $('.M-pager'), 'click', 'input.M-pagerItem', this.eventClickPage, this );
@@ -62,12 +60,12 @@ define(function( require, exports ){
 
 		// 创建页码选项
 		buildPager: function() {
-			var config = this.$config;
+			var param = this.$param;
 			var doms = this.$doms;
 
 			// 分页信息
-			var pages = +config.pages; // 总页数
-			var page = +config.page; // 当前页
+			var pages = param.pages; // 总页数
+			var page = param.page; // 当前页
 			var items = this.makePageArray( page, pages );
 
 			// 构建总条数
@@ -119,7 +117,7 @@ define(function( require, exports ){
 		// 更新页码展现格式,增加省略号
 		formatPage: function( page ) {
 			var max = this.$max; // 显示选项的最多个数
-			var pages = +this.$config.pages;
+			var pages = this.$param.pages; // 总页数
 			var fontArr = [1,2,'...']; // 前面的页码选项(保留第1,2页)
 			var backArr = ['...']; // 后面的页码选项
 			var retArr = null;
@@ -166,49 +164,33 @@ define(function( require, exports ){
 		// 点击下一页
 		eventClickNext: function( evt, elm, page ) {
 			var id = page + 1;
-			var pages = this.$config.pages;
+			var pages = this.$param.pages;
 			if( id === 0 || id > pages ) {
 				return false;
 			}
-			messager.fire('pagerSelectd', this);
-			this.callback.call( this.$scope, id );
+			messager.fire('pagerSelected', id);
 		},
 
 		// 点击上一页
 		eventClickPreview: function( evt, elm, page ) {
 			var id = page - 1;
-			var pages = this.$config.pages;
+			var pages = this.$param.pages;
 			if( id === 0 || id > pages ) {
 				return false;
 			}
-			this.callback.call( this.$scope, id );
+			messager.fire('pagerSelected', id);
 		},
 
 		// 点击页码
 		eventClickPage: function( evt, elm ) {
 			var id = +$(elm).val();
-			var page = this.$config.page;
+			var page = this.$param.page;
 			if( id === page ) {
 				return false;
 			}
 			$(elm).addClass('M-pagerAct').siblings('.M-pagerItem').removeClass('M-pagerAct');
-			this.callback.call( this.$scope, id );
+			messager.fire('pagerSelected', id);
 		}
 	}
 	exports.base = Pager;
-
-	// 点击加载更多方式
-	var LoadMore = {
-		init: function( config, callback, scope ) {
-			if( !util.isObject( config ) || !util.isFunc( callback ) ) {
-				util.error('参数错误!');
-				return false;
-			}
-			this.$config = config || {};
-			this.callback = callback;
-			this.$scope = scope || window;
-			this.build();
-		}
-	};
-	exports.loadMore = LoadMore;
 });
