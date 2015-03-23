@@ -626,6 +626,7 @@ noscript {
   display: none;
   width: 100%;
   min-height: 500px;
+  background: #F9F6F6;
 }
 .G-frameBodyBlogHead {
   display: none;
@@ -935,7 +936,6 @@ noscript {
 .P-archives section {
   padding: 15px 0;
   box-sizing: border-box;
-  border: 1px solid #FFF;
   border-radius: 2px;
   border-bottom: 1px dashed #999;
 }

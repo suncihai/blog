@@ -172,7 +172,7 @@ define(function( require, exports ){
 			if( id <= 0 || id > pages ) {
 				return false;
 			}
-			eventHelper.fire('pagerSelected', [id]);
+			eventHelper.fire('pagerSelected', id);
 		},
 
 		// 点击上一页
