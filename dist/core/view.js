@@ -152,18 +152,18 @@ define(function( require, exports ){
 		},
 
 		/**
-		 * createNotFound 返回404容器
+		 * createBlank 返回空白容器<与index/blog同级>
 		 * @param  {JSON} config   [配置参数]
 		 * @return {Object}        [容器对象]
 		 */
-		createNotFound: function() {
+		createBlank: function() {
 			var blank = null;
 			require.async('layout', function( mod ) {
 				var layout = mod.base;
 				blank = layout.getDOM('blank');
 				blank.show().siblings().hide();
 			});
-			return blank;
+			return blank.empty();
 		}
 	}
 	exports.base = Main;
