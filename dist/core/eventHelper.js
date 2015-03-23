@@ -1,8 +1,13 @@
 /**
  * [事件绑定模块,封装jQuery事件绑定]
+ * 事件绑定用bind、proxy; 反操作为unbind、unproxy
+ * 消息发布用fire, 消息订阅用on; 反操作为cancel
  */
 define(function( require, exports ){
 	var util = require('util');
+	var jquery = require('jquery');
+	var messager = jquery({});
+	var WIN = window;
 
 	/**
 	 * bind 绑定事件
@@ -48,7 +53,7 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * proxy 代理事件
+	 * proxy 代理事件<封装on函数>
 	 * @param  {Object}  $elm      [jquery对象]
 	 * @param  {String}  type      [事件类型]
 	 * @param  {Mix}     selector  [选择器,可为单个元素或者元素数组]
@@ -79,7 +84,7 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * unproxy 取消代理事件
+	 * unproxy 取消代理事件<封装off函数>
 	 * @param  {Object}   $elm      [jquery对象]
 	 * @param  {String}   type      [事件类型]
 	 * @param  {Mix}      selector  [选择器,可为单个元素或者元素数组]
@@ -111,6 +116,57 @@ define(function( require, exports ){
 			default: return false;
 
 		}
+	},
 
+	/**
+	 * fire 发送/发布消息<封装trigger函数>
+	 * @param  {String} method    [消息名]
+	 * @param  {Mix}    data      [消息携带的参数]
+	 * @param  {Func}   afterSend [发完后的回调]
+	 * @param  {Object} scope     [上下文]
+	 */
+	exports.fire = function( method, data, afterSend, scope ) {
+		data = data || null;
+		scope = scope || WIN;
+		messager.trigger.call( messager, method, data );
+		if( afterSend ) {
+			afterSend.call( scope );
+		}
+	},
+
+	/**
+	 * on 接收/订阅消息<封装on函数,只回调部分数据>
+	 * @param  {String} method    [消息名]
+	 * @param  {Func}   callback  [接受消息的回调]
+	 * @param  {Object} scope     [上下文]
+	 */
+	exports.on = function( method, callback, scope ) {
+		// 必须要有回调,不然接收消息干嘛
+		if( !callback && !util.isFunc( callback ) ) {
+			return false;
+		}
+		var args = null, evData = null, evt, data;
+		scope = scope || WIN;
+		messager.on.call( messager, method, function() {
+			args = util.argumentsToArray( arguments );
+			evt = args[0]; // event源数据
+			data = args[1]; // 事件传递数据
+			evData = {
+				'param': data,
+				'type':evt.type,
+				'target': evt.target,
+				'timeStamp': evt.timeStamp,
+				'nameSpace': evt.namespace
+			};
+			callback.call( scope, evData );
+		});
+	},
+
+	/**
+	 * cancel 取消消息的订阅和发布<封装off函数>
+	 * @param  {String} method    [消息名]
+	 */
+	exports.cancel = function( method ) {
+		this.unproxy.call( messager, method );
 	}
 });

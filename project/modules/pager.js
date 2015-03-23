@@ -5,7 +5,6 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
 	var eventHelper = require('@core/eventHelper');
-	var messager = require('@core/messager').base;
 
 	// 传统的的分页方式
 	var Pager = {
@@ -18,8 +17,8 @@ define(function( require, exports ){
 
 		setParam: function( param ) {
 			this.$param = param;
-			// 生成页码
-			this.buildPager();
+			// 重新生成页码
+			this.empty().buildPager();
 		},
 
 		// 创建分页器
@@ -49,7 +48,6 @@ define(function( require, exports ){
 			doms.prev.attr('value', '<');
 			doms.next.attr('value', '>');
 
-			// var page = this.$param.page || 0;
 			// 翻页点击事件
 			eventHelper.bind( doms.prev, 'click', this.eventClickPreview, this );
 			eventHelper.bind( doms.next, 'click', this.eventClickNext, this );
@@ -161,24 +159,30 @@ define(function( require, exports ){
 			// page === pages && self.$doms.next.hide();
 		},
 
+		// 清空DOM
+		empty: function() {
+			this.$doms.list.empty();
+			return this;
+		},
+
 		// 点击下一页
-		eventClickNext: function( evt, elm, page ) {
-			var id = page + 1;
+		eventClickNext: function( evt, elm ) {
+			var id = this.$param.page + 1;
 			var pages = this.$param.pages;
-			if( id === 0 || id > pages ) {
+			if( id <= 0 || id > pages ) {
 				return false;
 			}
-			messager.fire('pagerSelected', id);
+			eventHelper.fire('pagerSelected', [id]);
 		},
 
 		// 点击上一页
-		eventClickPreview: function( evt, elm, page ) {
-			var id = page - 1;
+		eventClickPreview: function( evt, elm ) {
+			var id = this.$param.page - 1;
 			var pages = this.$param.pages;
-			if( id === 0 || id > pages ) {
+			if( id <= 0 || id > pages ) {
 				return false;
 			}
-			messager.fire('pagerSelected', id);
+			eventHelper.fire('pagerSelected', id);
 		},
 
 		// 点击页码
@@ -189,7 +193,7 @@ define(function( require, exports ){
 				return false;
 			}
 			$(elm).addClass('M-pagerAct').siblings('.M-pagerItem').removeClass('M-pagerAct');
-			messager.fire('pagerSelected', id);
+			eventHelper.fire('pagerSelected', id);
 		}
 	}
 	exports.base = Pager;

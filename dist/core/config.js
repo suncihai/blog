@@ -36,7 +36,7 @@ define(function( require, exports ) {
 
 		// 栏目title
 		archiveTitle: {
-			index: 'TANGBC.COM',
+			index: '小前端 - TANGBC.COM',
 			matters: '前端那些事'
 		},
 
@@ -49,7 +49,7 @@ define(function( require, exports ) {
 		archiveOption: {
 			catid: 1,
 			page: 1,		// 请求第1页
-			limit: 3,		// 每页显示文章数
+			limit: 6,		// 每页显示文章数
 			brief: 180,		// 文章摘要长度
 			order: 'date'	// 按时间顺序排列
 		},

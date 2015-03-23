@@ -5,7 +5,7 @@ define(function( require, exports ){
 	var layout = require('layout').base;
 	var pager = require('@modules/pager').base;
 	var banner = require('@modules/banner').base;
-	var messager = require('@core/messager').base;
+	var eventHelper = require('@core/eventHelper');
 	var loading = require('@modules/loading').base;
 	var dataHelper = require('@core/dataHelper').base;
 
@@ -38,6 +38,9 @@ define(function( require, exports ){
 			pager.init({
 				'target': this.$doms.pagerBox
 			});
+
+			// 监听页码选择事件
+			eventHelper.on('pagerSelected', this.onPagerSelected, this);
 
 			// 数据加载之前显示loading
 			this.loading = loading.init({
@@ -128,9 +131,6 @@ define(function( require, exports ){
 			// 循环创建列表
 			util.each( info.items, this.buildItems, this );
 
-			// 监听页码选择事件
-			messager.on('pagerSelected', function( ee ) {console,log(ee)});
-
 			// 设置标题
 			var prefix = info.page === 1 ? "" : ' - 第' + info.page + '页';
 			if( prefix ) {
@@ -171,7 +171,8 @@ define(function( require, exports ){
 		},
 
 		// 页码激活事件
-		onPagerSelected: function( page ) {
+		onPagerSelected: function( ev ) {
+			var page = ev.param;
 			var oldParam = this.getParam();
 			var newParam = util.mergeParam( oldParam, {
 				'page': page
