@@ -93,11 +93,11 @@ define(function( require, exports ){
 	}
 
 	/**
-	 * goto 路由切换方法
+	 * go 路由切换方法
 	 * @param  {String} uri [路由地址 / 数字表示跳转的历史]
 	 * @return {null}       [无返回]
 	 */
-	exports.goto = function( uri ) {
+	exports.go = function( uri ) {
 		if ( util.isString( uri ) ){
 			if ( uri.charAt(0) == '/' ){
 				LOC.href = uri;

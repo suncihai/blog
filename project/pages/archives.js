@@ -25,7 +25,7 @@ define(function( require, exports ){
 			// banner设置
 			banner.setData({
 				'type': 'archive',
-				'content': '<h1 class="bannerTxt">Keep smiling, keep codeing ......</h1>'
+				'content': '<h1 class="bannerTxt">Keep living, keep codeing ......</h1>'
 			});
 			// banner.hide();
 

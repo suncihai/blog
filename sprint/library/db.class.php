@@ -36,9 +36,10 @@ class SQL
 
     /**
      * query 基本查询,返回没有格式化字段的结果
-     * param  [String] $sql [SQL语句]
+     * param  [String]  $sql      [SQL语句]
+     * param  [Boolean] $private  [内部使用]
      */
-    public function query( $sql )
+    public function query( $sql, $private )
     {
         $result = mysql_query( $sql, $this->conn );
         if( $result )
@@ -72,7 +73,12 @@ class SQL
                 'result'  => null
             );
         }
-        return json_encode( $retArray );
+        if( $private ) {
+            return $retArray;
+        }
+        else {
+            return json_encode( $retArray );
+        }
     }
 
     /**
@@ -273,16 +279,16 @@ class SQL
     }
 }
 
-// 简单的获取第一张图片
+// 获取第一张图片作为缩略图
 function getFirstImg( $text ) {
     preg_match("<img.*src=[\"](.*?)[\"].*?>", $text, $match);
     if( $match ) {
         return $match[1];
     }
     return "";
-} 
+}
 
-// HTML标签闭合检测, $text的数据过大时, 可能存在一定的性能问题
+// HTML标签闭合检测, $text的数据过大时, 可能存在一定的性能问题, 取自XXX
 function fixHtmlTags( $text ) {
     $text = preg_replace( "/&quot;/", "&quot;\"", htmlspecialchars( $text ) );
     $tags = "/&lt;(!|)(\/|)(\w*)(\ |)(\w*)([\\\=]*)(?|(\")\"&quot;\"|)(?|(.*)?&quot;(\")|)([\ ]?)(\/|)&gt;/i";

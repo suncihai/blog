@@ -15,27 +15,21 @@ define(function( require, exports ){
 			if( $.type( config ) !== 'object' ) {
 				return false;
 			}
-			var body = null;
+			var content = null;
 			require.async('layout', function( mod ) {
 				var layout = mod.base;
 				var indexDOM = layout.getDOM('index');
 				var indexBody = indexDOM['body'];
-				body = indexBody;
-				// 创建头部/激活导航状态
-				// layout.buildHeader({
-				// 	'target': indexDOM['head'],
-				// 	'type': 'index',
-				// 	'headroom': false,
-				// 	'css': {
-				// 		'width': C.indexWidth
-				// 	}
-				// }).updateNav( config.container );
+				content = layout.getDOM('index/content');
+
+				// 隐藏滚动条
+				layout.getDOM('frame').addClass('overflowHidden');
 
 				// 隐藏blog容器
 				indexBody.show().siblings().hide();
 
 			});
-			return body;
+			return content;
 		},
 
 		/**
@@ -51,7 +45,10 @@ define(function( require, exports ){
 				var blogDOM = layout.getDOM('blog');
 				var blogBody = blogDOM['body'];
 				var head = blogDOM['head'];
-				var foot = blogDOM['footer']
+				var foot = blogDOM['footer'];
+
+				// 显示滚动条
+				layout.getDOM('frame').removeClass('overflowHidden');
 
 				// 隐藏兄弟容器
 				blogBody.show().siblings().hide();

@@ -142,7 +142,7 @@ define(function( require, exports ){
 	 */
 	exports.on = function( method, callback, scope ) {
 		// 必须要有回调,不然接收消息干嘛
-		if( !callback && !util.isFunc( callback ) ) {
+		if( !callback || !util.isFunc( callback ) ) {
 			return false;
 		}
 		var args = null, evData = null, evt, data;
@@ -164,9 +164,8 @@ define(function( require, exports ){
 
 	/**
 	 * cancel 取消消息的订阅和发布<封装off函数>
-	 * @param  {String} method    [消息名]
 	 */
-	exports.cancel = function( method ) {
-		this.unproxy.call( messager, method );
+	exports.cancel = function() {
+		this.unproxy.apply( messager, arguments );
 	}
 });

@@ -99,13 +99,14 @@ define(function( require, exports ){
 			var self = this;
 			var preDOM = self.$dom.find('pre');
 			var num = preDOM.size(), i = 0;
+			var pre, cls, b, e, type, tmp;
 			for( ; i < num; i++ ) {
-				var pre = preDOM.eq(i);
-				var cls = pre.attr('class');
-				var b = cls.indexOf(':') + 1;
-				var e = cls.indexOf(';');
-				var type = cls.slice( b, e ).trim();
-				var tmp = pre.html();
+				pre = preDOM.eq(i);
+				cls = pre.attr('class');
+				b = cls.indexOf(':') + 1;
+				e = cls.indexOf(';');
+				type = cls.slice( b, e ).trim();
+				tmp = pre.html();
 				pre.empty().html('<code class="language-'+ type +'">' + tmp + '</code>');
 			}
 			prism.highlightAll();

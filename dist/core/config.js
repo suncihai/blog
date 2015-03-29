@@ -30,13 +30,15 @@ define(function( require, exports ) {
 
 		// 导航
 		nav: [
-			{'name': '首页', 'link': 'index'},
-			{'name': '前端那些事', 'link': 'matters'}
+			{'name': '首页', 'link': ''},
+			{'name': '前端那些事', 'link': 'matters'},
+			{'name': '零碎笔记墙', 'link': 'notes'},
+			{'name': '心情日志', 'link': 'moods'}
 		],
 
 		// 栏目title
 		archiveTitle: {
-			index: '小前端 - TANGBC.COM',
+			index: '小前端 - tangbc.com',
 			matters: '前端那些事'
 		},
 
