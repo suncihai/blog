@@ -18,6 +18,8 @@ define(function( require, exports ){
 		build: function() {
 			var data = this.$data;
 			var dom = data.dom;
+			var quotations = C.quotations;
+			var num = quotations.length - 1;
 
 			// 设置标题
 			layout.setTitle( C.archiveTitle[data.name] );
@@ -25,7 +27,7 @@ define(function( require, exports ){
 			// banner设置
 			banner.setData({
 				'type': 'archive',
-				'content': '<h1 class="bannerTxt">Keep living, keep codeing ......</h1>'
+				'content': '<h1 class="bannerTxt">'+ quotations[util.random(0, num)] +'</h1>'
 			});
 			// banner.hide();
 
@@ -128,6 +130,9 @@ define(function( require, exports ){
 		buildArchives: function( info ) {
 			var data = this.$data;
 
+			// 先清空之前的列表
+			this.$doms.listBox.empty();
+
 			// 循环创建列表
 			util.each( info.items, this.buildItems, this );
 
@@ -177,7 +182,6 @@ define(function( require, exports ){
 			var newParam = util.mergeParam( oldParam, {
 				'page': page
 			});
-			this.$doms.listBox.empty();
 			this.load( newParam );
 		}
 	}
