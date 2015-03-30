@@ -41,7 +41,9 @@ define(function( require, exports ) {
 
 		// 栏目hash对应的category数据库id(表wp_terms)
 		cat: {
-			matters: 1
+			matters: 1,
+			notes: 23,
+			moods: 24
 		},
 
 		// archive列表默认请求选项
