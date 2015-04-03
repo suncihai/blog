@@ -10,17 +10,8 @@ define(function( require, exports ) {
 		// 控制器的调用方法
 		action: 'onRun',
 
-		//Logo
-		logo: {
-			alt: '小前端-前端那些事~',
-			src: 'resources/images/logo.png'
-		},
-
 		// 页脚文字
 		copyright: 'Copyright ©2012-2014 TANGBC.COM',
-
-		// 统计代码
-		stat: '',
 
 		// 主页容器固定长度
 		indexWidth: 1024,
@@ -36,6 +27,12 @@ define(function( require, exports ) {
 			{'name': '心情日志', 'link': 'moods'}
 		],
 
+		// 语录集合
+		quotations: [
+			'Keep living, keep codeing ......',
+			'The quieter you become, the more you are able to hear'
+		],
+
 		// 栏目title
 		archiveTitle: {
 			index: '小前端 - tangbc.com',
@@ -44,7 +41,9 @@ define(function( require, exports ) {
 
 		// 栏目hash对应的category数据库id(表wp_terms)
 		cat: {
-			matters: 1
+			matters: 1,
+			notes: 23,
+			moods: 24
 		},
 
 		// archive列表默认请求选项
@@ -64,10 +63,10 @@ define(function( require, exports ) {
 		// 数据中心
 		dataCenter: {
 			// 处理文件目录
-			listarchives: '/blog/sprint/operation/listarchives/query.php',
-			showarticle: '/blog/sprint/operation/showarticle/query.php',
-			showcomment: '/blog/sprint/operation/showcomment/query.php',
-			listtitle: '/blog/sprint/operation/listtitle/query.php'
+			listarchives : '/blog/sprint/api/listarchives/query.php',
+			showarticle  : '/blog/sprint/api/showarticle/query.php',
+			showcomment  : '/blog/sprint/api/showcomment/query.php',
+			listtitle    : '/blog/sprint/api/listtitle/query.php'
 		}
 	}
 	return CONFIG;

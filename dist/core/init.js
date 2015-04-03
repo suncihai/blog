@@ -1,4 +1,4 @@
-﻿(function( sea, win, doc ){
+﻿(function( sea, win ){
 
 	var config = {
 		'base': '/blog/',
@@ -47,12 +47,12 @@
 		function() {
 			// 应用SeaJS配置
 			sea.config( config );
-			sea.use( ['jquery', 'util', 'layout'], appInit );
+			sea.use('layout', appInit);
 		},
 		// 初始化布局
-		function( jquery, util, layout ) {
+		function( layout ) {
 			layout.base.init();
-			sea.use( 'router', appInit );
+			sea.use('router', appInit);
 		},
 		// 启动路由
 		function( router ) {
@@ -69,4 +69,4 @@
 		appInit();
 	});
 
-})( seajs, window, document );
+})( seajs, window );

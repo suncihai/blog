@@ -186,7 +186,7 @@ define(function( require, util ){
 	}
 
 	/**
-	 * 获取一个唯一的ID
+	 * guid 获取一个唯一的ID
 	 * @param  {String} fix [前缀]
 	 * @return {Mix} 返回唯一的ID号
 	 */
@@ -198,5 +198,14 @@ define(function( require, util ){
 		else {
 			return _guid++;
 		}
+	}
+
+	/**
+	 * random 生成指定范围的随机整数
+	 * @param  {Number} begin  [开始]
+	 * @param  {Number} end    [结束]
+	 */
+	util.random = function( begin, end ) {
+		return parseInt( Math.random() * ( end - begin + 1 ) + begin );
 	}
 });

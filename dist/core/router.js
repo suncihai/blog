@@ -34,7 +34,7 @@ define(function( require, exports ){
 			default: param = arr[2] === '' ? arr[1] : null;
 		}
 		run( name, param );
-		util.scrollTo(0);
+		// util.scrollTo(0);
 	}
 
 	/**
