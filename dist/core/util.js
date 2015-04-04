@@ -206,6 +206,6 @@ define(function( require, util ){
 	 * @param  {Number} end    [结束]
 	 */
 	util.random = function( begin, end ) {
-		return parseInt( Math.random() * ( end - begin + 1 ) + begin );
+		return parseInt( Math.random() * ( end - begin + 1 ) + begin, 10 );
 	}
 });

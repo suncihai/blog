@@ -163,6 +163,60 @@ noscript {
 .fr {
   float: right;
 }
+.db {
+  display: block;
+}
+.dib {
+  display: inline-block;
+}
+.fts12 {
+  font-size: 12px !important;
+}
+.fts13 {
+  font-size: 13px !important;
+}
+.fts14 {
+  font-size: 14px !important;
+}
+.fts15 {
+  font-size: 15px !important;
+}
+.fts16 {
+  font-size: 16px !important;
+}
+.fts18 {
+  font-size: 18px !important;
+}
+.fts20 {
+  font-size: 20px !important;
+}
+.fts22 {
+  font-size: 22px !important;
+}
+.fts24 {
+  font-size: 24px !important;
+}
+.fts26 {
+  font-size: 26px !important;
+}
+.lsp0 {
+  letter-spacing: .0 !important;
+}
+.lsp1 {
+  letter-spacing: .1em !important;
+}
+.lsp2 {
+  letter-spacing: .2em !important;
+}
+.lsp3 {
+  letter-spacing: .3em !important;
+}
+.lsp4 {
+  letter-spacing: .4em !important;
+}
+.lsp5 {
+  letter-spacing: .5em !important;
+}
 .pr {
   position: relative;
 }
@@ -903,44 +957,32 @@ noscript {
 .M-index {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 45%;
   width: 70%;
-  height: 70%;
 }
 .M-indexWraper {
   position: absolute;
   left: -50%;
-  top: -50%;
   width: 100%;
-  height: 100%;
-}
-.M-indexWraper .word {
-  padding: 0.4em 0;
-  font-size: 38px;
-  color: #FFF;
-  font-weight: normal;
-  letter-spacing: .1em;
-  text-align: center !important;
-}
-.M-indexWraper .smaller {
-  font-size: 26px;
 }
 .M-indexWraper .myBlog {
-  display: inline-block;
+  display: block;
+  width: 272px;
   margin: 0 auto;
   cursor: pointer;
+  margin: auto auto;
   font-weight: normal;
-  margin-top: 1em;
   color: #563d7c;
   border: 2px solid #79429E;
-  padding: 7px 70px;
-  font-size: 24px;
+  padding: 15px 20px;
   line-height: 1.3;
-  letter-spacing: .2em;
-  transition: all 218ms cubic-bezier(0.42, 0, 0.58, 1);
+  transition: all 444ms cubic-bezier(0.42, 0, 0.58, 1);
   border-radius: 2px;
+  box-shadow: -1px 3px 8px #63a6dd, 1px -3px 8px #63a6dd;
+  background: #A7CCEF;
 }
 .M-indexWraper .myBlog:hover {
-  border-color: #B965F2;
-  color: #B965F2;
+  border-color: #EFEFEF;
+  color: #fff;
+  box-shadow: -1px 3px 8px #cccccc, 1px -3px 8px #cccccc;
 }

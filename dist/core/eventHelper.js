@@ -53,6 +53,39 @@ define(function( require, exports ){
 	}
 
 	/**
+	 * hover 鼠标移入移出事件
+	 * @param  {Object}    $elm<必选>       [jquery对象]
+	 * @param  {Function}  handleIn<必选>   [事件类型]
+	 * @param  {Function}  handleOut<必选>  [事件类型]
+	 * @param  {Function}  data<可选>       [回调中传递数据]
+	 * @param  {Object}    scope<可选>      [作用域]
+	 */
+	exports.hover = function( $elm, handleIn, handleOut, data, scope ) {
+		// 参数检测
+		if( !$elm instanceof jQuery ) {
+			util.error('绑定的元素必须为jQuery对象');
+			return false;
+		}
+		if( arguments.length === 4 ) {
+			scope = data;
+			data = null;
+		}
+		function _mouseEnter( ev ) {
+			if( !scope ) {
+				scope = this;
+			}
+			handleIn.call( scope, ev, this, data );
+		}
+		function _mouseLeave( ev ) {
+			if( !scope ) {
+				scope = this;
+			}
+			handleOut.call( scope, ev, this, data );
+		}
+		$elm.hover( _mouseEnter, _mouseLeave );
+	}
+
+	/**
 	 * proxy 代理事件<封装on函数>
 	 * @param  {Object}  $elm      [jquery对象]
 	 * @param  {String}  type      [事件类型]

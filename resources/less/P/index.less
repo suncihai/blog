@@ -1,44 +1,36 @@
 .M-index{
 	position: absolute;
 	left: 50%;
-	top: 50%;
+	top: 45%;
 	width: 70%;
-	height: 70%;
+	// height: 70%;
 	&Wraper{
 		position: absolute;
 		left: -50%;
-		top: -50%;
+		// top: -50%;
 		width: 100%;
-		height: 100%;
-		.word{
-			padding: 0.4em 0;
-			font-size: 38px;
-			color: #FFF;
-			font-weight: normal;
-			letter-spacing: .1em;
-			.tc;
-		}
-		.smaller{
-			font-size: 26px;
-		}
+		// height: 100%;
 		.myBlog{
-			display: inline-block;
+			display: block;
+			width: 272px;
 			.center;
 			.cur_p;
+			margin: auto auto;
 			font-weight: normal;
-			margin-top: 1em;
+			// margin-top: 1em;
 			color: #563d7c;
 			border: 2px solid #79429E;
-			padding: 7px 70px;
-			font-size: 24px;
+			padding: 15px 20px;
 			line-height: 1.3;
-			letter-spacing: .2em;
-			transition: all 218ms cubic-bezier(0.42,0,.58,1);
+			transition: all 444ms cubic-bezier(0.42,0,.58,1);
 			border-radius: 2px;
+			box-shadow: -1px 3px 8px #63A6DD, 1px -3px 8px #63A6DD;
+			background: #A7CCEF;
 		}
 		.myBlog:hover{
-			border-color: #B965F2;
-			color: #B965F2;
+			border-color: #EFEFEF;
+			color: #fff;
+			box-shadow: -1px 3px 8px #CCC, 1px -3px 8px #CCC;
 		}
 	}
 }

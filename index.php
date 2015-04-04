@@ -3,14 +3,14 @@
 	$regMatch = '/(iphone|android)/i';
 	$isWap = preg_match( $regMatch, strtolower($_SERVER['HTTP_USER_AGENT']) );
 	if( $isWap ) {
-		// header( 'HTTP/1.1 301 Moved Permanently' );
+		// header('HTTP/1.1 301 Moved Permanently');
 		header('Location:http://'.$_SERVER['HTTP_HOST'].'/blog/waproot/');
 	}
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="utf-8"/>
+	<meta charset="utf-8">
 	<title>应用加载中……</title>
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/sea/sea.js"></script>
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/core/init.js"></script>

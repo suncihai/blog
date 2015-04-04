@@ -29,7 +29,7 @@ define(function( require, exports ){
 				indexBody.show().siblings().hide();
 
 			});
-			return content;
+			return content.empty();
 		},
 
 		/**
