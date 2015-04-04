@@ -24,7 +24,7 @@ define(function( require, exports ){
 					config.content,
 				'</div>'
 			].join(''));
-			foot.appendTo( target );
+			foot.appendTo( target.hide() );
 
 			var cssStyle = config.css;
 			if( cssStyle ) {
@@ -35,6 +35,14 @@ define(function( require, exports ){
 			if( util.isFunc( this.callback ) ) {
 				this.callback.call( this, true );
 			}
+		},
+
+		show: function() {
+			this.$config.target.show();
+		},
+
+		hide: function() {
+			this.$config.target.hide();
 		}
 	}
 	exports.base = Footer;

@@ -3,8 +3,8 @@
  */
 define(function( require, exports ){
 	var $ = require('jquery');
-	var util = require('@core/util');
 	var C = require('@core/config');
+	var util = require('@core/util');
 	var header = require('@modules/header').base;
 	var footer = require('@modules/footer').base;
 
@@ -139,6 +139,16 @@ define(function( require, exports ){
 				});
 			}
 			return self;
+		},
+
+		showFooter: function() {
+			footer.show();
+			return this;
+		},
+
+		hideFooter: function() {
+			footer.hide();
+			return this;
 		},
 
 		/**

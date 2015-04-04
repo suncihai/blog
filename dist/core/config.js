@@ -13,12 +13,6 @@ define(function( require, exports ) {
 		// 页脚文字
 		copyright: 'Copyright ©2012-2014 TANGBC.COM',
 
-		// 主页容器固定长度
-		indexWidth: 1024,
-
-		// 博客容器固定长度
-		blogWidth: 1024,
-
 		// 导航
 		nav: [
 			{'name': '首页', 'link': ''},

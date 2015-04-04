@@ -12,6 +12,7 @@ define(function( require, exports ){
 		// 初始化
 		init: function( data ) {
 			this.$data = data;
+			layout.hideFooter();
 			this.load();
 		},
 
@@ -92,6 +93,7 @@ define(function( require, exports ){
 
 			// 隐藏loading
 			this.hideLoading();
+			layout.showFooter();
 		},
 
 		// 代码高亮渲染

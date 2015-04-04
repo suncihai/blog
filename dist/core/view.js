@@ -109,7 +109,7 @@ define(function( require, exports ){
 			cont.attr({
 				'class': 'P-archives',
 				'archive-name': contName
-			}).width( C.blogWidth );
+			});
 
 			archiveDom.append( cont );
 
@@ -141,7 +141,7 @@ define(function( require, exports ){
 			cont.attr({
 				'class': 'P-article',
 				'article-name': marker
-			}).width( C.blogWidth );
+			});
 
 			articleDom.append( cont );
 

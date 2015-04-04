@@ -13,6 +13,7 @@ define(function( require, exports ){
 		init: function( data ) {
 			this.$data = data;
 			this.build();
+			layout.hideFooter();
 		},
 
 		build: function() {
@@ -119,11 +120,10 @@ define(function( require, exports ){
 				'pages': info.pages,
 				'total': info.total
 			});
+
+			// 隐藏loading
 			this.hideLoading();
-			// var self = this;
-			// setTimeout(function() {
-			// 	self.hideLoading();
-			// }, 15000);
+			layout.showFooter();
 		},
 
 		// 创建

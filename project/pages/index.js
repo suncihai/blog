@@ -4,6 +4,7 @@ define(function( require, exports ){
 	var C = require('@core/config');
 	var layout = require('layout').base;
 	// var eventHelper = require('@core/eventHelper');
+	var animate = require('@core/animate');
 
 	var Index = {
 		init: function( data ) {
@@ -19,7 +20,7 @@ define(function( require, exports ){
 				'<div class="M-index">',
 					'<div class="M-indexWraper">',
 						'<h2 class="tc">',
-							'<a href="/blog/#matters" class="myBlog rotateIn animated">',
+							'<a href="/blog/#matters" class="myBlog">',
 								'<span class="db center fts24 lsp2">欢迎光临我的博客</span>',
 								'<span class="db center fts14 lsp1">www.tangbc.com/blog/</span>',
 							'</a>',
@@ -30,19 +31,13 @@ define(function( require, exports ){
 			dom.append( html );
 
 			var animateds = [
-				'rotateIn',
-				'rotateInDownLeft',
-				'rotateInUpRight',
-				'rotateInUpLeft',
-				'rotateInDownRight',
-				'zoomIn',
 				'zoomInUp',
 				'zoomInDown',
 				'zoomInLeft',
 				'zoomInRight'
 			];
-			this.$animateCls = animateds[util.random( 0, animateds.length - 1 )];
-			$('.myBlog', html).addClass( this.$animateCls );
+			var animateCls = animateds[util.random( 0, animateds.length - 1 )];
+			animate.going( $('.myBlog', html), animateCls, 2 );
 
 			// 按钮绑定鼠标事件
 			// eventHelper.hover( myBlog, this.eventBtnMouseEnter, this.eventBtnMouseLeaver, this );

@@ -35,6 +35,20 @@ define(function( require, util ){
 	}
 
 	/**
+	 * isBoolean 是否是布尔值
+	 */
+	function isBoolean( bool ) {
+		return ( typeof( str ) === 'boolean' );
+	}
+
+	/**
+	 * isNumber 是否是数字
+	 */
+	function isNumber( num ) {
+		return ( typeof( num ) === 'number' && !isNaN( num ) );
+	}
+
+	/**
 	 * inArray 数组中是否存在某元素
 	 * @param  {Mix}   ele [目标元素]
 	 * @param  {Array} arr [查询数组]
@@ -60,6 +74,8 @@ define(function( require, util ){
 	util.isFunc = isFunc;
 	util.isString = isString;
 	util.inArray = inArray;
+	util.isBoolean = isBoolean;
+	util.isNumber = isNumber;
 
 	/**
 	 * 系统日志函数

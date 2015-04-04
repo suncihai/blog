@@ -323,7 +323,6 @@ noscript {
   display: none;
   width: 100%;
   min-height: 500px;
-  background: #F9F6F6;
 }
 .G-frameBodyBlogHead {
   display: none;
@@ -385,6 +384,8 @@ noscript {
   position: relative;
 }
 .M-pager {
+  width: 1024px;
+  margin: 0 auto;
   padding: 50px 0;
 }
 .M-pagerList {
@@ -441,6 +442,7 @@ noscript {
   cursor: default;
 }
 .M-footer {
+  width: 1024px;
   margin: 0 auto;
   color: #FFF;
   font-size: 18px;
@@ -633,6 +635,10 @@ noscript {
     transform: scale(1);
     -webkit-transform: scale(1);
   }
+}
+.M-head {
+  width: 1024px;
+  margin: 0 auto;
 }
 .P-404 {
   width: 1000px;
@@ -858,8 +864,11 @@ noscript {
   transform: rotate(-10deg);
 }
 .P-archives {
+  padding-top: 1em;
+}
+.P-archives .P-archive-list {
+  width: 1024px;
   margin: 0 auto;
-  padding: 15px 15px 15px 0;
 }
 .P-archives section {
   padding: 15px 0;
@@ -916,10 +925,13 @@ noscript {
   margin-top: 70px;
   font-size: 40px;
 }
-.P-article {
-  margin: 0 auto;
+.P-archive-pager {
+  border-top: 3px solid #EDEDED;
+  background: #F5F5F4;
 }
 .P-article .content {
+  width: 1024px;
+  margin: 0 auto;
   padding: 15px 15px 15px 0;
 }
 .P-article .content article {

@@ -20,7 +20,7 @@ define(function( require, exports ){
 			var config = this.$config;
 			var target = config['target'];
 			var head = $([
-				'<div class="M-head center">',
+				'<div class="M-head">',
 					'<div class="M-headLogo fl"/>',
 					'<div class="M-headNav fl"/>',
 					'<div class="M-headTool fr"/>',
