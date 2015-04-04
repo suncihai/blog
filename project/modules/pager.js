@@ -4,7 +4,7 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
-	var eventHelper = require('@core/eventHelper');
+	var app = require('app');
 
 	// 传统的的分页方式
 	var Pager = {
@@ -49,11 +49,11 @@ define(function( require, exports ){
 			doms.next.attr('value', '>');
 
 			// 翻页点击事件
-			eventHelper.bind( doms.prev, 'click', this.eventClickPreview, this );
-			eventHelper.bind( doms.next, 'click', this.eventClickNext, this );
+			app.event.bind( doms.prev, 'click', this.eventClickPreview, this );
+			app.event.bind( doms.next, 'click', this.eventClickNext, this );
 
 			// 页码点击事件
-			eventHelper.proxy( $('.M-pager'), 'click', 'input.M-pagerItem', this.eventClickPage, this );
+			app.event.proxy( $('.M-pager'), 'click', 'input.M-pagerItem', this.eventClickPage, this );
 		},
 
 		// 创建页码选项
@@ -172,7 +172,7 @@ define(function( require, exports ){
 			if( id <= 0 || id > pages ) {
 				return false;
 			}
-			eventHelper.fire('pagerSelected', id);
+			app.event.fire('pagerSelected', id);
 		},
 
 		// 点击上一页
@@ -182,7 +182,7 @@ define(function( require, exports ){
 			if( id <= 0 || id > pages ) {
 				return false;
 			}
-			eventHelper.fire('pagerSelected', id);
+			app.event.fire('pagerSelected', id);
 		},
 
 		// 点击页码
@@ -193,7 +193,7 @@ define(function( require, exports ){
 				return false;
 			}
 			$(elm).addClass('M-pagerAct').siblings('.M-pagerItem').removeClass('M-pagerAct');
-			eventHelper.fire('pagerSelected', id);
+			app.event.fire('pagerSelected', id);
 		}
 	}
 	exports.base = Pager;

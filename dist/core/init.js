@@ -15,10 +15,8 @@
 			'@pages'      : 'project/pages'
 		},
 		'alias': {
+			'app'    : '@core/app.js',
 			'util'   : '@core/util.js',
-			'view'   : '@core/view.js',
-			'router' : '@core/router.js',
-			'layout' : '@modules/layout.js',
 			'jquery' : '@dist/jquery/jquery-1.8.3.min.js'
 		},
 		'map': [
@@ -47,12 +45,12 @@
 		function() {
 			// 应用SeaJS配置
 			sea.config( config );
-			sea.use('layout', appInit);
+			sea.use('@modules/layout', appInit);
 		},
 		// 初始化布局
 		function( layout ) {
 			layout.base.init();
-			sea.use('router', appInit);
+			sea.use('@core/router', appInit);
 		},
 		// 启动路由
 		function( router ) {

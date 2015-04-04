@@ -1,19 +1,18 @@
 define(function( require, exports ){
+	var app = require('app');
+	var C = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
-	var C = require('@core/config');
-	var layout = require('layout').base;
+
 	var pager = require('@modules/pager').base;
 	var banner = require('@modules/banner').base;
-	var eventHelper = require('@core/eventHelper');
+	var layout = require('@modules/layout').base;
 	var loading = require('@modules/loading').base;
-	var dataHelper = require('@core/dataHelper').base;
 
 	var Archive = {
 		init: function( data ) {
 			this.$data = data;
 			this.build();
-			layout.hideFooter();
 		},
 
 		build: function() {
@@ -43,7 +42,7 @@ define(function( require, exports ){
 			});
 
 			// 监听页码选择事件
-			eventHelper.on('pagerSelected', this.onPagerSelected, this);
+			app.event.on('pagerSelected', this.onPagerSelected, this);
 
 			// 数据加载之前显示loading
 			this.loading = loading.init({
@@ -82,8 +81,9 @@ define(function( require, exports ){
 		load: function( param ) {
 			var dc = C.dataCenter;
 			param = param || this.getParam();
+			layout.hideFooter();
 			this.showLoading();
-			dataHelper.get( dc.listarchives, param, this.onData, this );
+			app.data.get( dc.listarchives, param, this.onData, this );
 		},
 
 		// 获取参数

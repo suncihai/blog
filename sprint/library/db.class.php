@@ -184,6 +184,8 @@ class SQL
         $sql = "SELECT $fields FROM wp_posts WHERE ID = $artid $filter";
         // 执行查询操作
         $result = mysql_query( $sql, $this->conn );
+        // 结果数
+        $num = mysql_num_rows( $result );
         // 查询是否成功
         if( $result )
         {
@@ -201,7 +203,8 @@ class SQL
             $retArray = array
             (
                 'success' => true,
-                'result'  => $itemFormat
+                'result'  => $num === 0 ? null : $itemFormat,
+                'total'   => $num
             );
         }
         else

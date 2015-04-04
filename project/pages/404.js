@@ -1,8 +1,7 @@
 define(function( require, exports ){
 	var $ = require('jquery');
-	var layout = require('layout').base;
-	var router = require('router');
-	var eventHelper = require('@core/eventHelper');
+	var app = require('app');
+	var layout = require('@modules/layout').base;
 
 	var NotFound = {
 		init: function( data ) {
@@ -89,11 +88,11 @@ define(function( require, exports ){
 			rightPart.appendTo( this.$doms.right );
 
 			// 绑定返回上一页
-			eventHelper.bind( $('.back', rightPart), 'click', this.goToBack, this );
+			app.event.bind( $('.back', rightPart), 'click', this.goToBack, this );
 		},
 
 		goToBack: function() {
-			router.go(-1);
+			app.controller.go(-1);
 			return false;
 		}
 	}

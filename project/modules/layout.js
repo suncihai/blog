@@ -3,8 +3,8 @@
  */
 define(function( require, exports ){
 	var $ = require('jquery');
-	var C = require('@core/config');
-	var util = require('@core/util');
+	var util = require('util');
+	var C = require('app').getConfig();
 	var header = require('@modules/header').base;
 	var footer = require('@modules/footer').base;
 

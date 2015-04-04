@@ -1,10 +1,11 @@
 define(function( require, exports ){
+	var app = require('app');
+	var C = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
-	var dataHelper = require('@core/dataHelper').base;
-	var layout = require('layout').base;
+
+	var layout = require('@modules/layout').base;
 	var banner = require('@modules/banner').base;
-	var C = require('@core/config');
 	var loading = require('@modules/loading').base;
 	var prism = require('@plugins/prism/prism').base;
 
@@ -34,7 +35,7 @@ define(function( require, exports ){
 				'class': 'center'
 			});
 
-			dataHelper.get( dc.showarticle, param, this.onData, this );
+			app.data.get( dc.showarticle, param, this.onData, this );
 		},
 
 		// 获取Ajax请求参数
@@ -59,8 +60,17 @@ define(function( require, exports ){
 				return;
 			}
 			var info = this.$info = res.result;
-			if( util.isEmpty( info ) ) {
-				dom.html('无数据');
+			if( res.total === 0 ) {
+				var noText = '数据库无该文章记录：' + this.$data.param;
+				dom.html('<div class="noRecord animated bounce">'+ noText +'</div>');
+				layout.setTitle( noText );
+				banner.setData({
+					'type': 'article',
+					'title': '******************',
+					'time': '时间：0000-00-00 | ',
+					'tag': '标签：* | ',
+					'comments': '评论数：0'
+				});
 				return;
 			}
 			this.build( info );

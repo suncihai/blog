@@ -1,10 +1,9 @@
 define(function( require, exports ){
+	var app = require('app');
 	var $ = require('jquery');
 	var util = require('util');
-	var C = require('@core/config');
-	var layout = require('layout').base;
-	// var eventHelper = require('@core/eventHelper');
-	var animate = require('@core/animate');
+	var C = app.getConfig();
+	var layout = require('@modules/layout').base;
 
 	var Index = {
 		init: function( data ) {
@@ -37,10 +36,10 @@ define(function( require, exports ){
 				'zoomInRight'
 			];
 			var animateCls = animateds[util.random( 0, animateds.length - 1 )];
-			animate.going( $('.myBlog', html), animateCls, 2 );
+			app.animate.going( $('.myBlog', html), animateCls, 2 );
 
 			// 按钮绑定鼠标事件
-			// eventHelper.hover( myBlog, this.eventBtnMouseEnter, this.eventBtnMouseLeaver, this );
+			// app.event.hover( myBlog, this.eventBtnMouseEnter, this.eventBtnMouseLeaver, this );
 		},
 
 		eventBtnMouseEnter: function( evt, elm ) {

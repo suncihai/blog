@@ -4,6 +4,7 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var C = require('@core/config');
+	var LAYOUT_PATH = '@modules/layout';
 
 	var Main = {
 		/**
@@ -16,7 +17,7 @@ define(function( require, exports ){
 				return false;
 			}
 			var content = null;
-			require.async('layout', function( mod ) {
+			require.async( LAYOUT_PATH, function( mod ) {
 				var layout = mod.base;
 				var indexDOM = layout.getDOM('index');
 				var indexBody = indexDOM['body'];
@@ -40,7 +41,7 @@ define(function( require, exports ){
 			var self = this;
 			var retDOM = null;
 
-			require.async('layout', function( mod ) {
+			require.async( LAYOUT_PATH, function( mod ) {
 				var layout = mod.base;
 				var blogDOM = layout.getDOM('blog');
 				var blogBody = blogDOM['body'];
@@ -155,7 +156,7 @@ define(function( require, exports ){
 		 */
 		createBlank: function() {
 			var blank = null;
-			require.async('layout', function( mod ) {
+			require.async( LAYOUT_PATH, function( mod ) {
 				var layout = mod.base;
 				blank = layout.getDOM('blank');
 				blank.show().siblings().hide();

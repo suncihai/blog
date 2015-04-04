@@ -217,6 +217,114 @@ noscript {
 .lsp5 {
   letter-spacing: .5em !important;
 }
+.pd20 {
+  padding: 20px !important;
+}
+.pb20 {
+  padding-bottom: 20px !important;
+}
+.pt20 {
+  padding-top: 20px !important;
+}
+.pl20 {
+  padding-left: 20px !important;
+}
+.pr20 {
+  padding-right: 20px !important;
+}
+.pd15 {
+  padding: 15px !important;
+}
+.pb15 {
+  padding-bottom: 15px !important;
+}
+.pt15 {
+  padding-top: 15px !important;
+}
+.pl15 {
+  padding-left: 15px !important;
+}
+.pr15 {
+  padding-right: 15px !important;
+}
+.pd10 {
+  padding: 10px !important;
+}
+.pb10 {
+  padding-bottom: 10px !important;
+}
+.pt10 {
+  padding-top: 10px !important;
+}
+.pl10 {
+  padding-left: 10px !important;
+}
+.pr10 {
+  padding-right: 10px !important;
+}
+.pd5 {
+  padding: 5px !important;
+}
+.pb5 {
+  padding-bottom: 5px !important;
+}
+.pt5 {
+  padding-top: 5px !important;
+}
+.pl5 {
+  padding-left: 5px !important;
+}
+.pr5 {
+  padding-right: 5px !important;
+}
+.ml20 {
+  margin-left: 20px !important;
+}
+.mr20 {
+  margin-right: 20px !important;
+}
+.mb20 {
+  margin-bottom: 20px !important;
+}
+.mt20 {
+  margin-top: 20px !important;
+}
+.ml15 {
+  margin-left: 15px !important;
+}
+.mr15 {
+  margin-right: 15px !important;
+}
+.mb15 {
+  margin-bottom: 15px !important;
+}
+.mt15 {
+  margin-top: 15px !important;
+}
+.ml10 {
+  margin-left: 10px !important;
+}
+.mr10 {
+  margin-right: 10px !important;
+}
+.mb10 {
+  margin-bottom: 10px !important;
+}
+.mt10 {
+  margin-top: 10px !important;
+}
+.ml5 {
+  margin-left: 5px !important;
+}
+.mr5 {
+  margin-right: 5px !important;
+}
+.mb5 {
+  margin-bottom: 5px !important;
+}
+.mt5 {
+  margin-top: 5px !important;
+}
 .pr {
   position: relative;
 }
@@ -384,7 +492,7 @@ noscript {
   position: relative;
 }
 .M-pager {
-  width: 1024px;
+  width: 75%;
   margin: 0 auto;
   padding: 50px 0;
 }
@@ -442,7 +550,7 @@ noscript {
   cursor: default;
 }
 .M-footer {
-  width: 1024px;
+  width: 75%;
   margin: 0 auto;
   color: #FFF;
   font-size: 18px;
@@ -459,12 +567,12 @@ noscript {
 }
 .M-bannerArchive .content {
   margin: 0 auto;
-  width: 1024px;
+  width: 75%;
 }
 .M-bannerArticle {
   display: none;
   padding-top: 80px;
-  width: 1024px;
+  width: 75%;
   height: 100%;
   line-height: 260%;
   margin: 0 auto;
@@ -637,7 +745,7 @@ noscript {
   }
 }
 .M-head {
-  width: 1024px;
+  width: 75%;
   margin: 0 auto;
 }
 .P-404 {
@@ -867,7 +975,7 @@ noscript {
   padding-top: 1em;
 }
 .P-archives .P-archive-list {
-  width: 1024px;
+  width: 75%;
   margin: 0 auto;
 }
 .P-archives section {
@@ -929,8 +1037,16 @@ noscript {
   border-top: 3px solid #EDEDED;
   background: #F5F5F4;
 }
+.P-article .noRecord {
+  width: 75%;
+  margin: 0 auto;
+  text-align: center !important;
+  padding-top: 3em;
+  font-size: xx-large;
+  color: red;
+}
 .P-article .content {
-  width: 1024px;
+  width: 75%;
   margin: 0 auto;
   padding: 15px 15px 15px 0;
 }

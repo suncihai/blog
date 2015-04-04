@@ -6,7 +6,7 @@ define(function( require, exports ){
 	var LOC = WIN.location;
 	var URL = LOC.href;
 	var util = require('util');
-	var view = require('view').base;
+	var view = require('@core/view').base;
 	var C = require('@core/config');
 	var action = C.action;
 	var data = {
@@ -34,7 +34,7 @@ define(function( require, exports ){
 			default: param = arr[2] === '' ? arr[1] : null;
 		}
 		run( name, param );
-		// util.scrollTo(0);
+		util.scrollTo(0);
 	}
 
 	/**

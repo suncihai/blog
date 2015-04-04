@@ -66,8 +66,6 @@ define(function( require, exports ){
 					    'initial': 'animated',
 					    'pinned': 'slideInDown',
 					    'unpinned': 'fadeOutUp'
-					    // 'top': '',
-					    // 'notTop': ''
 					}
 				}
 				var elm = target.addClass('head-fixed').get(0);
