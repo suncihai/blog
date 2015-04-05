@@ -19,18 +19,16 @@ define(function( require, exports ){
 			var content = null;
 			require.async( LAYOUT_PATH, function( mod ) {
 				var layout = mod.base;
-				var indexDOM = layout.getDOM('index');
-				var indexBody = indexDOM['body'];
 				content = layout.getDOM('index/content');
 
 				// 隐藏滚动条
 				layout.getDOM('frame').addClass('overflowHidden');
 
 				// 隐藏blog容器
-				indexBody.show().siblings().hide();
+				layout.switchContainer('index');
 
 			});
-			return content.empty();
+			return content;
 		},
 
 		/**
@@ -44,7 +42,6 @@ define(function( require, exports ){
 			require.async( LAYOUT_PATH, function( mod ) {
 				var layout = mod.base;
 				var blogDOM = layout.getDOM('blog');
-				var blogBody = blogDOM['body'];
 				var head = blogDOM['head'];
 				var foot = blogDOM['footer'];
 
@@ -52,7 +49,8 @@ define(function( require, exports ){
 				layout.getDOM('frame').removeClass('overflowHidden');
 
 				// 隐藏兄弟容器
-				blogBody.show().siblings().hide();
+				layout.switchContainer('blog');
+
 
 				// 创建博客头部/激活导航状态
 				layout.buildHeader({
@@ -159,9 +157,9 @@ define(function( require, exports ){
 			require.async( LAYOUT_PATH, function( mod ) {
 				var layout = mod.base;
 				blank = layout.getDOM('blank');
-				blank.show().siblings().hide();
+				layout.switchContainer('blank');
 			});
-			return blank.empty();
+			return blank;
 		}
 	}
 	exports.base = Main;

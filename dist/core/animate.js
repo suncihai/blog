@@ -45,7 +45,7 @@ define(function( require, exports ){
 		$elm.addClass( animateCls ).one(
 			'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
 			function() {
-				if( remove ) {
+				if( !remove ) {
 					jQuery(this).removeClass( animateCls );
 				}
 				if( callback ) {

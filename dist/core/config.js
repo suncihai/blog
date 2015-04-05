@@ -16,9 +16,10 @@ define(function( require, exports ) {
 		// 导航
 		nav: [
 			{'name': '首页', 'link': ''},
-			{'name': '前端那些事', 'link': 'matters'},
-			{'name': '零碎笔记墙', 'link': 'notes'},
-			{'name': '心情日志', 'link': 'moods'}
+			{'name': '前端那些事', 'link': '#matters'},
+			{'name': '零碎笔记墙', 'link': '#notes'},
+			{'name': '心情日志', 'link': '#moods'},
+			{'name': '2015旅游攻略', 'link': '#lygl'}
 		],
 
 		// 语录集合

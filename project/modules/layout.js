@@ -75,8 +75,8 @@ define(function( require, exports ){
 			$('noScript,#welcome').remove();
 			// 缓存变量$tick
 			this.$tick = {
-				'headerType': [], // 头部类型 [blog,index]
-				'footerType': []  // 页脚类型 [blog,index]
+				'headerType': [],   // 头部类型 [blog,index]
+				'footerType': []    // 页脚类型 [blog,index]
 			}
 		},
 
@@ -88,6 +88,53 @@ define(function( require, exports ){
 		getDOM: function( domName ) {
 			var domArr = domName.toString().split('/');
 			return domArr.length === 2 ? doms[domArr[0]][domArr[1]] : doms[domArr[0]];
+		},
+
+		/**
+		 * switchContainer 切换显示/清空视图容器<blog容器隐藏,其他清空>
+		 * @param  {String} contName [正在hash中的容器]
+		 */
+		switchContainer: function( contName ) {
+			var index = this.getDOM('index/body');
+			var blog = this.getDOM('blog/body');
+			var blank = this.getDOM('blank');
+			var indexContent = this.getDOM('index/content');
+			switch( contName ) {
+				case 'index':
+					blog.hide();
+					index.show();
+					if( this.hasLayout( blank ) ) {
+						blank.hide().empty();
+					}
+				break;
+				case 'blog':
+					index.hide();
+					blog.show();
+					if( this.hasLayout( indexContent ) ) {
+						indexContent.empty();
+					}
+					if( this.hasLayout( blank ) ) {
+						blank.hide().empty();
+					}
+				break;
+				case 'blank':
+					blog.hide();
+					index.hide();
+					blank.show();
+					if( this.hasLayout( indexContent ) ) {
+						indexContent.empty();
+					}
+				break;
+			}
+		},
+
+		/**
+		 * hasLayout 是否有布局元素
+		 * @param  {Object}  $elm [DOM对象]
+		 * @return {Boolean} [有->true, 无->false]
+		 */
+		hasLayout: function( $elm ) {
+			return $elm.length && $elm.html() !== '';
 		},
 
 		/**

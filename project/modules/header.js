@@ -133,7 +133,7 @@ define(function( require, exports ){
 			$.each( options, function( idx, item ) {
 				navs.push([
 					'<li>',
-						'<a href="#' + item.link + '" data-id="' + idx + '">' + item.name + '</a>',
+						'<a href="' + item.link + '" data-id="' + idx + '">' + item.name + '</a>',
 					'</li>'
 				].join(''));
 			});
@@ -144,6 +144,9 @@ define(function( require, exports ){
 		updateNav: function( link ) {
 			var options = this.options;
 			var self = this;
+			if( link ) {
+				link = '#' + link;
+			}
 			$.each( options, function( idx, item ) {
 				if( item.link === link ) {
 					self.$dom

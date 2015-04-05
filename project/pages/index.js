@@ -37,17 +37,6 @@ define(function( require, exports ){
 			];
 			var animateCls = animateds[util.random( 0, animateds.length - 1 )];
 			app.animate.going( $('.myBlog', html), animateCls, 2 );
-
-			// 按钮绑定鼠标事件
-			// app.event.hover( myBlog, this.eventBtnMouseEnter, this.eventBtnMouseLeaver, this );
-		},
-
-		eventBtnMouseEnter: function( evt, elm ) {
-			$(elm).removeClass( this.$animateCls ).addClass('bounce');
-		},
-
-		eventBtnMouseLeaver: function( evt, elm ) {
-			$(elm).removeClass('bounce');
 		}
 	}
 	exports.base = Index;
