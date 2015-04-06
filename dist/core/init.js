@@ -24,8 +24,9 @@
 		],
 		'preload': [
 			'resources/css/app.css',
-			'resources/css/animate.css',
-			'dist/plugins/prism/prism.css'
+			// 'resources/css/app.min.css',
+			'@dist/plugins/prism/prism.min.css',
+			'@dist/plugins/animate/animate.min.css'
 		],
 		'debug': 0
 	};

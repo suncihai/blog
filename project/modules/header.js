@@ -2,8 +2,9 @@
  * [头部模块(LOGO、导航、快捷菜单)]
  */
 define(function( require, exports ){
+	var app = require('app');
 	var $ = require('jquery');
-	var C = require('@core/config');
+	var C = app.getConfig();
 	var util = require('util');
 	var HeadRoom = require('@plugins/headroom/headroom').base;
 
@@ -21,8 +22,12 @@ define(function( require, exports ){
 			var target = config['target'];
 			var head = $([
 				'<div class="M-head">',
-					'<div class="M-headLogo fl"/>',
-					'<div class="M-headNav fl"/>',
+					'<div class="M-headLogo dib">',
+						'<a href="/blog/" class="logoAnchor">',
+							'&lt;TANGBC/&gt;',
+						'</a>',
+					'</div>',
+					'<div class="M-headNav dib"/>',
 					'<div class="M-headTool fr"/>',
 				'</div>'
 			].join(''));
@@ -32,24 +37,21 @@ define(function( require, exports ){
 				head.css( cssStyle );
 			}
 
-			var doms = {
+			var doms = this.$doms = {
 				'logo': $('.M-headLogo', head),
 				'nav': $('.M-headNav', head),
 				'tool': $('.M-headTool', head)
 			}
 
-			// 创建LOGO对象
-			var src = config.type === 'index' ? 'resources/images/indexlogo.png' : 'resources/images/navlogo.png';
-			var logo = new Logo(src);
-			logo.putTo( doms.logo );
-
 			// 创建导航对象
 			var nav = new Navigator( C.nav );
 			nav.putTo( doms.nav );
 
+			// 创建工具
+			this.buildTool();
+
 			// 缓存对象
 			this.$mods = {
-				'logo': logo,
 				'nav': nav
 			}
 			head.appendTo( target.show() );
@@ -64,12 +66,13 @@ define(function( require, exports ){
 					'offset': 200,
 					'classes': {
 					    'initial': 'animated',
-					    'pinned': 'slideInDown',
-					    'unpinned': 'fadeOutUp'
+					    'pinned': 'flipInX',
+					    'unpinned': 'flipOutX'
 					}
 				}
 				var elm = target.addClass('head-fixed').get(0);
 				var headroom = new HeadRoom( elm, cfg );
+				this.$mods.headroom = headroom;
 				headroom.init();
 			}
 
@@ -84,40 +87,29 @@ define(function( require, exports ){
 		getChild: function( childName ) {
 			var mods = this.$mods;
 			return arguments.length === 1 ? mods[childName] : mods;
+		},
+
+		buildTool: function() {
+			var html = $([
+				'<div class="M-headToolSearch">',
+					// '<input type="text" class="searchIpt">',
+					// '<div class="searchBtn">',
+					// 	'<span class="circle"/>',
+					// 	'<span class="line"/>',
+					// '</div>',
+				'</div>',
+				'<div class="M-headToolOption">',
+					'<div class="btn">',
+						'<span/>',
+						'<span/>',
+						'<span/>',
+					'</div>',
+				'</div>'
+			].join(''));
+			html.appendTo( this.$doms.tool );
 		}
 	}
 	exports.base = Header;
-
-	// LOGO 站标
-	function Logo( src, size ) {
-		this.src = src || '';
-		this.size = size || {};
-	}
-	Logo.prototype = {
-		constructor : Logo,
-		// 创建LOGO布局
-		buildLogo: function() {
-			var width = this.size['width'], height = this.size['height'];
-			var logo = '<img src="'+ this.src +'"/>';
-			if( width && height ) {
-				logo.css({
-					'width': width,
-					'height': height
-				});
-			}
-			var dom = $([
-				'<a href="/blog/" class="logoAnchor">',
-					logo,
-				'</a>'
-			].join(''));
-			return dom;
-		},
-		putTo: function( target ) {
-			var dom = this.buildLogo();
-			dom.appendTo( target );
-			return this;
-		}
-	}
 
 	// Navigator 导航
 	function Navigator( options ) {
@@ -130,7 +122,7 @@ define(function( require, exports ){
 			var options = this.options;
 			var dom = this.$dom = $('<div class="M-nav"/>');
 			var navs = [];
-			$.each( options, function( idx, item ) {
+			util.each( options, function( item, idx ) {
 				navs.push([
 					'<li>',
 						'<a href="' + item.link + '" data-id="' + idx + '">' + item.name + '</a>',
@@ -165,8 +157,4 @@ define(function( require, exports ){
 			return this;
 		}
 	}
-
-	// Tool构造函数
-	var Tool = function() {};
-	Tool.prototype = {};
 });

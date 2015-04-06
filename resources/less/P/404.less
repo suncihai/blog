@@ -34,6 +34,7 @@
 	// 小丑
 	.P-obscener{
 		width: 90%;
+		-webkit-transform:scale(0.75);
 		transform: scale(0.75);
 		.center;
 		div{
@@ -123,30 +124,35 @@
 				width: 12px;
 				height: 100px;
 				background: #CCC;
+				-webkit-transform-origin: 50% 50%;
 				transform-origin: 50% 50%;
 			}
 			// 左上手臂
 			.upleft{
 				top: 0;
 				left: 22px;
+				-webkit-transform: rotate(5deg);
 				transform: rotate(5deg);
 			}
 			// 右上手臂
 			.upRight{
 				top: 0;
 				right: 22px;
+				-webkit-transform: rotate(-5deg);
 				transform: rotate(-5deg);
 			}
 			// 左下手臂
 			.lowerleft{
 				top: 85px;
 				left: 50px;
+				-webkit-transform: rotate(-40deg);
 				transform: rotate(-40deg);
 			}
 			// 右下手臂
 			.lowerRight{
 				top: 85px;
 				right: 50px;
+				-webkit-transform: rotate(40deg);
 				transform: rotate(40deg);
 			}
 		}
@@ -173,18 +179,21 @@
 				width: 12px;
 				height: 130px;
 				background: #CCC;
+				-webkit-transform-origin: 50% 50%;
 				transform-origin: 50% 50%;
 			}
 			// 左上腿
 			.upleft{
 				top: -5px;
 				left: 70px;
+				-webkit-transform: rotate(-15deg);
 				transform: rotate(-15deg);
 			}
 			// 右上腿
 			.upRight{
 				top: -5px;
 				right: 70px;
+				-webkit-transform: rotate(15deg);
 				transform: rotate(15deg);
 			}
 			// 左下腿
@@ -192,6 +201,7 @@
 				top: 114px;
 				left: 62px;
 				height: 115px;
+				-webkit-transform: rotate(25deg);
 				transform: rotate(25deg);
 			}
 			// 右下腿
@@ -199,6 +209,7 @@
 				top: 114px;
 				right: 62px;
 				height: 115px;
+				-webkit-transform: rotate(-25deg);
 				transform: rotate(-25deg);
 			}
 		}
@@ -217,6 +228,8 @@
 				.top-left;
 				border-top-right-radius: 100%;
 				border-bottom-left-radius: 30%;
+				-webkit-transform-origin: top;
+				-webkit-transform: rotate(10deg);
 				transform-origin: top;
 				transform: rotate(10deg);
 			}
@@ -224,6 +237,8 @@
 				.top-right;
 				border-top-left-radius: 100%;
 				border-bottom-right-radius: 30%;
+				-webkit-transform-origin: top;
+				-webkit-transform: rotate(-10deg);
 				transform-origin: top;
 				transform: rotate(-10deg);
 			}

@@ -41,7 +41,7 @@ define(function( require, exports ){
 			2: 'animated hinge'     // 2s的单次动画
 		}
 		var animateType = typeMap[type] || typeMap[1];
-		var animateCls = keyframe + ' ' + animateType;
+		var animateCls = animateType + ' ' + keyframe;
 		$elm.addClass( animateCls ).one(
 			'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
 			function() {

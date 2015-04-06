@@ -70,7 +70,7 @@ define(function( require, exports ){
 					'time': '时间：0000-00-00 | ',
 					'tag': '标签：* | ',
 					'comments': '评论数：0'
-				});
+				}).setCrumbs( C.archiveTitle[this.$data.name], this.$data.param );
 				return;
 			}
 			this.build( info );
@@ -99,7 +99,7 @@ define(function( require, exports ){
 				'time': '时间：'+ info.publishDate.toString().slice( 0, 10 ) + ' | ',
 				'tag': '标签：' + (info.tag || '无')  + ' | ',
 				'comments': '评论数：'+ info.comments
-			});
+			}).setCrumbs( C.archiveTitle[this.$data.name], this.$data.param );
 
 			// 隐藏loading
 			this.hideLoading();

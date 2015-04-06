@@ -12,6 +12,20 @@ module.exports = function( grunt ) {
 				}
 			}
 		},
+		cssmin: {
+			app: {
+                src : 'resources/css/app.css',
+                dest: 'resources/css/app.min.css'
+            },
+            prism: {
+                src: 'dist/plugins/prism/prism.css',
+                dest: 'dist/plugins/prism/prism.min.css'
+            },
+            animate: {
+                src: 'dist/plugins/animate/animate.debug.css',
+                dest: 'dist/plugins/animate/animate.min.css'
+            }
+        },
 		jshint: {
 			config: ['Gruntfile.js'],
             client: ['dist/core/*.js', 'project/modules/*.js', 'project/pages/*.js'],
@@ -59,6 +73,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-css');
 
 	// 监听的任务
 	grunt.registerTask('watch-all', ['less', 'watch']);

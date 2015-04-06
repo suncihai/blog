@@ -1,6 +1,19 @@
 .M-banner{
 	width: 100%;
 	color: #FFF;
+	// 面包屑
+	&Crumbs{
+		.center;
+		.ti;
+		width: @blogWidth;
+		padding-top: .8em;
+		line-height: 1.2;
+		font-size: 16px;
+		color: #426B68;
+		&Arrow{
+			margin: 0 .4em;
+		}
+	}
 	// 栏目页
 	&Archive{
 		display: none;
@@ -10,11 +23,15 @@
 			.center;
 			width: @blogWidth;
 		}
+		.bannerTxt{
+			margin-top: .65em;
+			font-size: 36px;
+		}
 	}
 	// 文章页
 	&Article{
 		display: none;
-		padding-top: 80px;
+		padding-top: .85em;
 		width: @blogWidth;
 		height: 100%;
 		line-height: 260%;
@@ -23,7 +40,7 @@
 			font-weight: normal;
 		}
 		.info{
-			color: #D5C8CD;
+			color: #E8E7E8;
 		}
 	}
 }

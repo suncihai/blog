@@ -11,13 +11,12 @@ define(function( require, exports ) {
 		action: 'onRun',
 
 		// 页脚文字
-		copyright: 'Copyright ©2012-2014 TANGBC.COM',
+		copyright: 'Copyright ©2012-2015 TANGBC.COM',
 
 		// 导航
 		nav: [
 			{'name': '首页', 'link': ''},
 			{'name': '前端那些事', 'link': '#matters'},
-			{'name': '零碎笔记墙', 'link': '#notes'},
 			{'name': '心情日志', 'link': '#moods'},
 			{'name': '2015旅游攻略', 'link': '#lygl'}
 		],
@@ -25,7 +24,7 @@ define(function( require, exports ) {
 		// 语录集合
 		quotations: [
 			'Keep living, keep codeing ......',
-			'The quieter you become, the more you are able to hear'
+			'The quieter you become, the more you are able to think'
 		],
 
 		// 栏目title

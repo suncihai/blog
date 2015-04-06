@@ -12,6 +12,7 @@ define(function( require, exports ){
 	var Archive = {
 		init: function( data ) {
 			this.$data = data;
+			this.$title = C.archiveTitle[data.name];
 			this.build();
 		},
 
@@ -22,14 +23,13 @@ define(function( require, exports ){
 			var num = quotations.length - 1;
 
 			// 设置标题
-			layout.setTitle( C.archiveTitle[data.name] );
+			layout.setTitle( this.$title );
 
 			// banner设置
 			banner.setData({
 				'type': 'archive',
 				'content': '<h1 class="bannerTxt">'+ quotations[util.random(0, num)] +'</h1>'
-			});
-			// banner.hide();
+			}).setCrumbs( this.$title, '' );
 
 			this.$doms = {
 				listBox: $('<div class="P-archive-list"/>').appendTo( dom ).hide(),
@@ -128,18 +128,19 @@ define(function( require, exports ){
 
 		// 创建
 		buildArchives: function( info ) {
-			var data = this.$data;
-
 			// 先清空之前的列表
 			this.$doms.listBox.empty();
 
 			// 循环创建列表
 			util.each( info.items, this.buildItems, this );
 
+			// 创建完显示缩略图
+			this.showThumb();
+
 			// 设置标题
 			var prefix = info.page === 1 ? "" : ' - 第' + info.page + '页';
 			if( prefix ) {
-				layout.setTitle( C.archiveTitle[data.name] + prefix );
+				layout.setTitle( this.$title + prefix );
 			}
 		},
 
@@ -147,13 +148,14 @@ define(function( require, exports ){
 		buildItems: function( item, idx ) {
 			var data = this.$data;
 			var sections = [];
-			// var str = item.publishDate.slice( 0, 10 );
-			// var arr = str.split('-');
-			// var year = arr[0];
-			// var mouth = +arr[1];
-			// var day = +arr[2];
+			var str = item.publishDate.slice( 0, 10 );
+			var arr = str.split('-');
+			var year = arr[0];
+			var mouth = +arr[1];
+			var day = +arr[2];
+			var date = year + '年' + mouth + '月' + day + '日';
 			var anchor = data.name + '/' + item.id; // 超链接地址
-			var cover = item.cover ? '<img class="cover" src="'+ item.cover +'">' : "";
+			var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
 			sections.push([
 				'<section list-id="'+ idx +'">',
 					'<div class="P-archive-list-title">',
@@ -166,13 +168,27 @@ define(function( require, exports ){
 						'</article>',
 					// '</a>',
 					'<div class="P-archive-list-info">',
-						'<span class="tag">分类：'+ data.name +'</span>',
+						'<span class="tag">分类：'+ this.$title || data.name +'</span>',
 						' | ',
 						'<span class="tag">评论：'+ item.comments +'</span>',
+						' | ',
+						'<span class="tag">日期：'+ date +'</span>',
 					'</div>',
 				'</section>'
 			].join(''));
 			this.$doms.listBox.append( sections.join('') );
+		},
+
+		// 显示缩略图
+		showThumb: function() {
+			var listBox = this.$doms.listBox;
+			var oImgs = null;
+			$(document).ready(function() {
+				oImgs = listBox.find('img.cover');
+				$.each( oImgs, function( i, item ) {
+					$(item).attr( 'src', $(item).attr('data-src') );
+				});
+			});
 		},
 
 		// 页码激活事件
