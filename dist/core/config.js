@@ -18,7 +18,7 @@ define(function( require, exports ) {
 			{'name': '首页', 'link': ''},
 			{'name': '前端那些事', 'link': '#matters'},
 			{'name': '心情日志', 'link': '#moods'},
-			{'name': '2015旅游攻略', 'link': '#lygl'}
+			{'name': '2015旅游攻略', 'link': '#travelGuide'}
 		],
 
 		// 语录集合
@@ -36,7 +36,6 @@ define(function( require, exports ) {
 		// 栏目hash对应的category数据库id(表wp_terms)
 		cat: {
 			matters: 1,
-			notes: 23,
 			moods: 24
 		},
 

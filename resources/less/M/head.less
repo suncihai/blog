@@ -1,6 +1,7 @@
 .M-head{
 	width: @blogWidth;
 	height: 100%;
+	position: relative;
 	.center;
 	&Logo{
 		.fl;
@@ -12,15 +13,67 @@
 		line-height: @headHeight;
 	}
 	&Tool{
-		position: relative;
+		position: absolute;
+		right: 0;
+		top: 0;
 		height: 100%;
-		width: 100px;
-		&Search{}
+		max-width: 20%;
+		&Search{
+			position: relative;
+			padding-right: 2em;
+			top: 1.3em;
+			height: 2em;
+			line-height: 2em;
+			// z-index: 5;
+			// border: 1px solid #FFF;
+			.searchBtn{
+				width: 30px;
+				height: 30px;
+				cursor: pointer;
+				position: relative;
+				top: .1em;
+				right: .4em;
+				-webkit-transform: scale(.58);
+				transform: scale(.58);
+				.circle, .line{
+					.db;
+					position: absolute;
+				}
+				.circle{
+					top: 2px;
+					left: 4px;
+					width: 50%;
+					height: 50%;
+					border: 3px solid #B6B6B6;
+					border-radius: 50%;
+				}
+				.line{
+					bottom: 2px;
+					right: -3px;
+					width: 12px;
+					height: 0;
+					border: 2px solid #B6B6B6;
+					border-top-right-radius: 2px;
+					border-bottom-right-radius: 2px;
+					-webkit-transform-origin: 50% 50%;
+					transform-origin: 50% 50%;
+					-webkit-transform: rotate(50deg);
+					transform: rotate(50deg);
+				}
+			}
+			.searchBtn:hover{
+				.circle, .line{
+					border-color: #FFF;
+				}
+			}
+		}
 		&Option{
-			// position: relative;
+			height: 100%;
+			// z-index: 3;
 			.btn{
 				position: absolute;
 				top: 50%;
+				right: 0;
 				margin-top: -10px;
 				padding: 6px 5px 5px 5px;
 				width: 20px;

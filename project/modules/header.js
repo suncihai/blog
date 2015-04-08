@@ -92,11 +92,11 @@ define(function( require, exports ){
 		buildTool: function() {
 			var html = $([
 				'<div class="M-headToolSearch">',
+					'<div class="searchBtn">',
+						'<span class="circle"/>',
+						'<span class="line"/>',
+					'</div>',
 					// '<input type="text" class="searchIpt">',
-					// '<div class="searchBtn">',
-					// 	'<span class="circle"/>',
-					// 	'<span class="line"/>',
-					// '</div>',
 				'</div>',
 				'<div class="M-headToolOption">',
 					'<div class="btn">',

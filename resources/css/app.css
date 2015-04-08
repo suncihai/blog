@@ -772,6 +772,7 @@ noscript {
 .M-head {
   width: 75%;
   height: 100%;
+  position: relative;
   margin: 0 auto;
 }
 .M-headLogo {
@@ -784,13 +785,66 @@ noscript {
   line-height: 70px;
 }
 .M-headTool {
-  position: relative;
+  position: absolute;
+  right: 0;
+  top: 0;
   height: 100%;
-  width: 100px;
+  max-width: 20%;
+}
+.M-headToolSearch {
+  position: relative;
+  padding-right: 2em;
+  top: 1.3em;
+  height: 2em;
+  line-height: 2em;
+}
+.M-headToolSearch .searchBtn {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  position: relative;
+  top: .1em;
+  right: .4em;
+  -webkit-transform: scale(0.58);
+  transform: scale(0.58);
+}
+.M-headToolSearch .searchBtn .circle,
+.M-headToolSearch .searchBtn .line {
+  display: block;
+  position: absolute;
+}
+.M-headToolSearch .searchBtn .circle {
+  top: 2px;
+  left: 4px;
+  width: 50%;
+  height: 50%;
+  border: 3px solid #B6B6B6;
+  border-radius: 50%;
+}
+.M-headToolSearch .searchBtn .line {
+  bottom: 2px;
+  right: -3px;
+  width: 12px;
+  height: 0;
+  border: 2px solid #B6B6B6;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transform: rotate(50deg);
+  transform: rotate(50deg);
+}
+.M-headToolSearch .searchBtn:hover .circle,
+.M-headToolSearch .searchBtn:hover .line {
+  border-color: #FFF;
+}
+.M-headToolOption {
+  height: 100%;
 }
 .M-headToolOption .btn {
   position: absolute;
   top: 50%;
+  right: 0;
   margin-top: -10px;
   padding: 6px 5px 5px 5px;
   width: 20px;
