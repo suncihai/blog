@@ -54,7 +54,7 @@ section {
   padding: 0;
 }
 html {
-  font-size: 100%;
+  font-size: 62.5%;
   width: 100%;
   height: 100%;
 }
@@ -63,8 +63,9 @@ body {
   height: 100%;
   background: #FFF;
   font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑', Tahoma;
-  font-size: 16px;
+  font-size: 1.6rem;
   color: #000;
+  min-width: 320px;
 }
 input,
 textarea,
@@ -104,26 +105,6 @@ a:hover {
   display: none;
   width: 100%;
   height: 100%;
-}
-#noScript {
-  width: 60%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-}
-noscript {
-  display: block;
-  width: 550px;
-  height: 80px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -275px;
-  margin-top: -40px;
-  text-align: center;
-  font-size: 35px;
-  color: #666;
-  text-shadow: 2px 2px 3px #CCC;
 }
 .center {
   margin: 0 auto;
@@ -174,34 +155,34 @@ noscript {
   display: inline-block;
 }
 .fts12 {
-  font-size: 12px !important;
+  font-size: 1.2rem !important;
 }
 .fts13 {
-  font-size: 13px !important;
+  font-size: 1.3rem !important;
 }
 .fts14 {
-  font-size: 14px !important;
+  font-size: 1.4rem !important;
 }
 .fts15 {
-  font-size: 15px !important;
+  font-size: 1.5rem !important;
 }
 .fts16 {
-  font-size: 16px !important;
+  font-size: 1.6rem !important;
 }
 .fts18 {
-  font-size: 18px !important;
+  font-size: 1.8rem !important;
 }
 .fts20 {
-  font-size: 20px !important;
+  font-size: 2.0rem !important;
 }
 .fts22 {
-  font-size: 22px !important;
+  font-size: 2.2rem !important;
 }
 .fts24 {
-  font-size: 24px !important;
+  font-size: 2.4rem !important;
 }
 .fts26 {
-  font-size: 26px !important;
+  font-size: 2.6rem !important;
 }
 .lsp0 {
   letter-spacing: .0 !important;
@@ -415,7 +396,7 @@ noscript {
 .G-frameBodyIndexHead li {
   display: inline-block;
   margin-right: 2.5em;
-  font-size: 15px;
+  font-size: 1.5rem;
 }
 .G-frameBodyIndexHead li a {
   color: #FFF;
@@ -449,7 +430,7 @@ noscript {
   display: block;
   position: relative;
   color: #2AADA3;
-  font-size: 30px;
+  font-size: 3.0rem;
   font-weight: bold;
 }
 .G-frameBodyBlogHead .logoAnchor:hover {
@@ -462,7 +443,7 @@ noscript {
 .G-frameBodyBlogHead li {
   display: inline-block;
   margin-right: 2em;
-  font-size: 18px;
+  font-size: 1.8rem;
 }
 .G-frameBodyBlogHead li a {
   color: #FFF;
@@ -534,7 +515,7 @@ noscript {
   background: #FAFAFA;
   color: #B6AEAE;
   cursor: pointer;
-  font-size: 21px;
+  font-size: 2.1rem;
   transition: background 220ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 .M-pager .M-pagerItem:hover,
@@ -562,8 +543,8 @@ noscript {
   width: 75%;
   margin: 0 auto;
   color: #FFF;
-  font-size: 18px;
-  line-height: 80px;
+  font-size: 1.8rem;
+  line-height: 8.0rem;
 }
 .M-banner {
   width: 100%;
@@ -575,7 +556,7 @@ noscript {
   width: 75%;
   padding-top: .8em;
   line-height: 1.2;
-  font-size: 16px;
+  font-size: 1.6rem;
   color: #426B68;
 }
 .M-bannerCrumbsArrow {
@@ -592,7 +573,7 @@ noscript {
 }
 .M-bannerArchive .bannerTxt {
   margin-top: .65em;
-  font-size: 36px;
+  font-size: 3.6rem;
 }
 .M-bannerArticle {
   display: none;
@@ -964,7 +945,7 @@ noscript {
   background: #666;
   border-radius: 10px 10px 0 0;
   color: #FFF;
-  font-size: 20px;
+  font-size: 2.0rem;
   line-height: 1.5;
 }
 .P-404 .P-obscener .head .face .mouth {
@@ -1025,7 +1006,7 @@ noscript {
   line-height: 45px;
   text-align: center !important;
   letter-spacing: .1em;
-  font-size: 34px;
+  font-size: 3.4rem;
   background: #429314;
   color: #FFF;
   border-radius: 5%;
@@ -1114,7 +1095,7 @@ noscript {
 .P-archives section h2 {
   padding: 6px 0;
   font-weight: normal;
-  font-size: 22px;
+  font-size: 2.2rem;
   padding-left: 10px;
 }
 .P-archives section article {
@@ -1141,7 +1122,7 @@ noscript {
 }
 .P-archive-list-title .title {
   display: inline-block;
-  font-size: 24px;
+  font-size: 2.4rem;
   font-weight: normal;
   color: #0080C0;
   transition: color 218ms cubic-bezier(0.42, 0, 0.58, 1);
@@ -1154,7 +1135,7 @@ noscript {
   padding-bottom: 10px;
   color: #666;
   font-style: italic;
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 .P-archive-pager {
   border-top: 3px solid #EDEDED;
@@ -1174,7 +1155,7 @@ noscript {
   padding: 1.5em 1.5em 1.5em 0;
 }
 .P-article .content article {
-  font-size: 17px;
+  font-size: 1.8rem;
   line-height: 150%;
 }
 .P-article .content article a {
@@ -1201,7 +1182,7 @@ noscript {
   border-radius: 1em;
   position: relative;
   left: 2em;
-  font-size: 16px;
+  font-size: 1.6rem;
   background: #272822;
 }
 .M-index {
