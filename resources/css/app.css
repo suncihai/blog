@@ -780,14 +780,16 @@ a:hover {
   line-height: 2em;
 }
 .M-headToolSearch .searchBtn {
+  display: inline-block;
   width: 30px;
   height: 30px;
   cursor: pointer;
   position: relative;
   top: .1em;
-  right: .4em;
+  right: -1.5em;
   -webkit-transform: scale(0.58);
   transform: scale(0.58);
+  z-index: 1;
 }
 .M-headToolSearch .searchBtn .circle,
 .M-headToolSearch .searchBtn .line {
@@ -819,6 +821,17 @@ a:hover {
 .M-headToolSearch .searchBtn:hover .line {
   border-color: #FFF;
 }
+.M-headToolSearch .searchIpt {
+  padding: .3em .5em;
+  position: relative;
+  top: -0.65em;
+  width: 40px;
+  border: none;
+  background: #EEE;
+  outline: none;
+  border-radius: .2em;
+  z-index: 0;
+}
 .M-headToolOption {
   height: 100%;
 }
@@ -826,7 +839,7 @@ a:hover {
   position: absolute;
   top: 50%;
   right: 0;
-  margin-top: -10px;
+  margin-top: -11px;
   padding: 6px 5px 5px 5px;
   width: 20px;
   height: 15px;
