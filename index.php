@@ -4,7 +4,7 @@
 	$isWap = preg_match( $regMatch, strtolower($_SERVER['HTTP_USER_AGENT']) );
 	if( $isWap ) {
 		// header('HTTP/1.1 301 Moved Permanently');
-		header('Location:http://'.$_SERVER['HTTP_HOST'].'/blog/waproot/');
+		// header('Location:http://'.$_SERVER['HTTP_HOST'].'/blog/waproot/');
 	}
 ?>
 <!DOCTYPE html>
