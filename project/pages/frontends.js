@@ -108,22 +108,26 @@ define(function( require, exports ){
 
 		// 拉取数据回调
 		onData: function( err, res ) {
+			var self = this;
+			var dom = self.$data.dom;
 			if( err ) {
 				util.error('数据拉取失败！错误码:' + err.status + ', 错误信息:' + err.statusText);
+				if( err.timeout ) {
+					dom.html('<div class="noData animated bounce">请求超时，请稍后再试~</div>');
+				}
 				return false;
 			}
-			var dom = this.$data.dom;
 			if( !res.success ) {
 				dom.html('<div class="noData animated bounce">拉取数据似乎出了点问题~</div>');
 				return;
 			}
-			var info = this.$info = res.result;
+			var info = self.$info = res.result;
 			if( util.isEmpty( info ) ) {
-				dom.html('无数据');
+				dom.html('<div class="noData animated bounce">无数据</div>');
 				return;
 			}
 			// 创建列表
-			this.buildArchives( info );
+			self.buildArchives( info );
 			// 更新页码
 			pager.setParam({
 				'page': info.page,
@@ -132,8 +136,11 @@ define(function( require, exports ){
 			});
 
 			// 隐藏loading
-			this.hideLoading();
-			layout.showFooter();
+			setTimeout(function() {
+				self.hideLoading();
+				layout.showFooter();
+			}, 0);
+
 		},
 
 		// 创建

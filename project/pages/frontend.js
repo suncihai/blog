@@ -45,13 +45,16 @@ define(function( require, exports ){
 
 		// 请求回调
 		onData: function( err, res ) {
+			var dom = this.$data.dom;
 			if( err ) {
 				util.error('数据拉取失败！错误码:' + err.status + ', 错误信息:' + err.statusText);
+				if( err.timeout ) {
+					dom.html('<div class="noData animated bounce">请求超时，请稍后再试~</div>');
+				}
 				return false;
 			}
-			var dom = this.$data.dom;
 			if( !res.success ) {
-				dom.html('拉取数据似乎出了点问题~');
+				dom.html('<div class="noRecord animated bounce">拉取数据似乎出了点问题~</div>');
 				return;
 			}
 			var info = this.$info = res.result;
@@ -74,8 +77,9 @@ define(function( require, exports ){
 
 		// 创建
 		build: function( info ) {
-			var dom = this.$data.dom;
-			var html = this.$dom = $([
+			var self = this;
+			var dom = self.$data.dom;
+			var html = self.$dom = $([
 				'<div class="content">',
 					'<article class="article">'+ info.content +'</article>',
 				'</div>'
@@ -83,24 +87,27 @@ define(function( require, exports ){
 			html.appendTo( dom ).hide();
 
 			// 代码高亮渲染
-			this.renderHighLighter();
+			self.renderHighLighter();
 
 			// 标题
-			layout.setTitle( this.$data.name, info.title );
+			layout.setTitle( self.$data.name, info.title );
 
 			// 设置banner内容
 			banner.setData({
 				'type': 'article',
 				'title': info.title,
 				'time': '时间：'+ info.publishDate.toString().slice( 0, 10 ) + ' | ',
-				'tag': '标签：' + (info.tag || '无')  + ' | ',
+				// 'tag': '标签：' + (info.tag || '无')  + ' | ',
 				'comments': '评论数：'+ info.comments
 			})
-			// .setCrumbs( C.archiveTitle[this.$data.name], this.$data.param );
+			// .setCrumbs( C.archiveTitle[self.$data.name], self.$data.param );
 
 			// 隐藏loading
-			this.hideLoading();
-			layout.showFooter();
+			setTimeout(function() {
+				self.hideLoading();
+				layout.showFooter();
+			}, 0);
+
 		},
 
 		// 代码高亮渲染

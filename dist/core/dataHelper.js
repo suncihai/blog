@@ -47,14 +47,30 @@ define(function( require, exports ){
 				callback.call( scope, msg, null );
 			}
 
+			// 完成状态,主要处理超时的情况
+			function _fnComplete( rqs, status ) {
+				if( !scope ) {
+					scope = this;
+				}
+				if( status == 'timeout' ) {
+					AJAX.abort();
+					callback.call( scope, {
+						'timeout': true,
+						'status': '请求超时'
+					}, null );
+				}
+			}
+
 			// 拉取数据
-			jquery.ajax({
+			var AJAX = jquery.ajax({
 				'url': url,
 				'method': type,
 				'dataType': 'json',
 				'data': param,
+				'timeout': 15000,
 				'success': _fnSuccess,
-				'error': _fnError
+				'error': _fnError,
+				'complete' : _fnComplete
 			});
 		},
 
