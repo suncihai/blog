@@ -45,7 +45,7 @@ define(function( require, exports ) {
 		if( archive === '' || archive === 'index' ) {
 			path = ''
 		}
-		if( archive && !aid ) {
+		if( archive && archive !== 'index' && !aid ) {
 			path = '/p/' + archive
 		}
 		if( archive && aid ) {
@@ -58,7 +58,7 @@ define(function( require, exports ) {
 	// 检查是否需要跳转, 需要->true, 不需要->false
 	exports.checkJump = function() {
 		// 页面跳转
-		if( isSupportCSS3() || doc.documentMode == 10 ) {
+		if( !isSupportCSS3() || doc.documentMode == 10 ) {
 			var path = getJumpPath();
 			win.location.href = 'http://' + host + path;
 			return true;
