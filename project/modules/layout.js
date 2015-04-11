@@ -32,8 +32,7 @@ define(function( require, exports ){
 				'</div>',
 			'</div>',
 		'</div>',
-		'<div id="LOADING/">',
-		'<div id="POPWIN/">'
+		'<div id="LOADING/">'
 	].join('');
 
 	var body = $('body').append( layout );
@@ -76,7 +75,8 @@ define(function( require, exports ){
 			// 缓存变量$tick
 			this.$tick = {
 				'headerType': [],   // 头部类型 [blog,index]
-				'footerType': []    // 页脚类型 [blog,index]
+				'footerType': [],   // 页脚类型 [blog,index]
+				'specialCls': []    // 特殊布局样式集合
 			}
 		},
 
@@ -100,6 +100,7 @@ define(function( require, exports ){
 			var blank = this.getDOM('blank');
 			var indexContent = this.getDOM('index/content');
 			switch( contName ) {
+				// 主页
 				case 'index':
 					blog.hide();
 					index.show();
@@ -107,6 +108,7 @@ define(function( require, exports ){
 						blank.hide().empty();
 					}
 				break;
+				// 博客
 				case 'blog':
 					index.hide();
 					blog.show();
@@ -117,6 +119,7 @@ define(function( require, exports ){
 						blank.hide().empty();
 					}
 				break;
+				// 空白页
 				case 'blank':
 					blog.hide();
 					index.hide();
@@ -188,11 +191,17 @@ define(function( require, exports ){
 			return self;
 		},
 
+		/**
+		 * showFooter 显示页脚
+		 */
 		showFooter: function() {
 			footer.show();
 			return this;
 		},
 
+		/**
+		 * hideFooter 隐藏页脚
+		 */
 		hideFooter: function() {
 			footer.hide();
 			return this;

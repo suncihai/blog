@@ -104,11 +104,6 @@ a:hover {
   width: 100%;
   height: 100%;
 }
-#POPWIN {
-  display: none;
-  width: 100%;
-  height: 100%;
-}
 .center {
   margin: 0 auto;
 }
@@ -557,6 +552,7 @@ a:hover {
   margin: 0 auto;
   font-style: italic;
   width: 75%;
+  min-height: 1.5em;
   padding-top: .8em;
   line-height: 1.2;
   font-size: 1.6rem;
@@ -591,6 +587,9 @@ a:hover {
 }
 .M-bannerArticle .info {
   color: #E8E7E8;
+}
+.M-bannerMoods {
+  background: rgba(220, 77, 229, 0.5);
 }
 .M-threeRings {
   padding: 50px 0;
@@ -1102,6 +1101,14 @@ a:hover {
   width: 75%;
   margin: 0 auto;
 }
+.P-archives .noData {
+  width: 75%;
+  margin: 0 auto;
+  text-align: center !important;
+  padding-top: 3em;
+  font-size: xx-large;
+  color: red;
+}
 .P-archives section {
   padding: 1.5em 0;
   box-sizing: border-box;
@@ -1214,7 +1221,8 @@ a:hover {
 }
 .M-indexWraper .myBlog {
   display: block;
-  width: 272px;
+  width: 25%;
+  min-width: 250px;
   margin: 0 auto;
   cursor: pointer;
   margin: auto auto;

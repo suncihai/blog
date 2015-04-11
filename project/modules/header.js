@@ -48,7 +48,7 @@ define(function( require, exports ){
 			nav.putTo( doms.nav );
 
 			// 创建工具
-			this.buildTool();
+			// this.buildTool();
 
 			// 缓存对象
 			this.$mods = {

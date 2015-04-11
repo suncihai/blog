@@ -16,9 +16,9 @@ define(function( require, exports ) {
 		// 导航
 		nav: [
 			{'name': '首页', 'link': ''},
-			{'name': '前端那些事', 'link': '#matters'},
-			{'name': '心情日志', 'link': '#moods'},
-			{'name': '2015旅游攻略', 'link': '#travelGuide'}
+			{'name': '前端那些事', 'link': '#frontends'},
+			{'name': '心情日志', 'link': '#moods'}
+			// {'name': '2015旅游攻略', 'link': '#travelGuide'}
 		],
 
 		// 语录集合
@@ -30,27 +30,13 @@ define(function( require, exports ) {
 		// 栏目title
 		archiveTitle: {
 			index: '小前端 - tangbc.com',
-			matters: '前端那些事'
+			frontends: '前端那些事'
 		},
 
 		// 栏目hash对应的category数据库id(表wp_terms)
 		cat: {
-			matters: 1,
+			frontends: 1,
 			moods: 24
-		},
-
-		// archive列表默认请求选项
-		archiveOption: {
-			catid: 1,
-			page: 1,		// 请求第1页
-			limit: 6,		// 每页显示文章数
-			brief: 180,		// 文章摘要长度
-			order: 'date'	// 按时间顺序排列
-		},
-
-		// article默认请求选项
-		articleOption: {
-			artid: 2
 		},
 
 		// 数据中心
