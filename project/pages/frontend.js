@@ -46,6 +46,7 @@ define(function( require, exports ){
 		// 请求回调
 		onData: function( err, res ) {
 			var dom = this.$data.dom;
+			var dataError = '拉取数据似乎出了点问题~';
 			if( err ) {
 				util.error('数据拉取失败！错误码:' + err.status + ', 错误信息:' + err.statusText);
 				if( err.timeout ) {
@@ -54,7 +55,10 @@ define(function( require, exports ){
 				return false;
 			}
 			if( !res.success ) {
-				dom.html('<div class="noRecord animated bounce">拉取数据似乎出了点问题~</div>');
+				if( res.message ) {
+					dataError = res.message;
+				}
+				dom.html('<div class="noRecord animated bounce">'+ dataError +'</div>');
 				return;
 			}
 			var info = this.$info = res.result;

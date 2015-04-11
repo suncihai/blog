@@ -85,18 +85,12 @@ class SQL
      * getArchiveList 获取某个栏目的文章列表
      * param  [Number] $catid   [栏目ID]
      * param  [Number] $limit   [每页显示文章数目]
-     * param  [Number] $order   [排序方式]
      * param  [Number] $brief   [摘要的长度(字数)]
      */
-    public function getArchiveList( $catid, $page, $limit, $order, $brief )
+    public function getArchiveList( $catid, $page, $limit, $brief )
     {
         // 结果排序方式
-        switch( $order )
-        {
-            case 'date':
-               $orderBy = 'post_date';
-            break;
-        }
+        $orderBy = 'post_date';
         // 查询$catid栏目下的所有文章ID
         $resultIDs = mysql_query("SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id=$catid");
         $IDArr = array();
@@ -125,22 +119,26 @@ class SQL
             $itemArray = array();
             while( $assoc = mysql_fetch_assoc( $result ) )
             {
-                // 摘要截取, 先截取再检测(确保性能)
-                // $text = mb_substr( $assoc['post_content'], 0, $brief, 'utf8' );
-                // $abstract = strip_tags( fixHtmlTags( $text ) );
+                $abstract = '';
+                if( $brief !== 0 ) {
+                    // 摘要截取, 先截取再检测(确保性能)
+                    // $text = mb_substr( $assoc['post_content'], 0, $brief, 'utf8' );
+                    // $abstract = strip_tags( fixHtmlTags( $text ) );
 
-                // 摘要截取, 先检测再截取(确保字数)
-                $cover = getFirstImg( $assoc['post_content'] );
-                $text = fixHtmlTags( $assoc['post_content'] );
-                $abstract = mb_substr( strip_tags( $text ), 0, $brief, 'utf8');
+                    // 摘要截取, 先检测再截取(确保字数)
+                    $cover = getFirstImg( $assoc['post_content'] );
+                    $text = fixHtmlTags( $assoc['post_content'] );
+                    $abstract = mb_substr( strip_tags( $text ), 0, $brief, 'utf8');
+                }
+
                 $itemFormat = array
                 (
-                    'id'           => $assoc['ID'],
+                    'id'           => intval( $assoc['ID'] ),
                     'title'        => $assoc['post_title'],
                     'publishDate'  => $assoc['post_date'],
                     'modifiedDate' => $assoc['post_modified'],
                     'content'      => $abstract,
-                    'comments'     => $assoc['comment_count'],
+                    'comments'     => intval( $assoc['comment_count'] ),
                     'cover'        => $cover
                 );
                 array_push( $itemArray, $itemFormat );
@@ -149,9 +147,9 @@ class SQL
             $resArray = array
             (
                 'items' => $itemArray,               // 选项数组
-                'total' => $total,                   // 总条数
+                'total' => intval( $total ),                   // 总条数
                 'pages' => ceil( $total / $limit ),  // 总页数
-                'page'  => $page                     // 当前第几页
+                'page'  => intval( $page )                     // 当前第几页
             );
             // 最终返回的结果
             $retArray = array
@@ -196,7 +194,7 @@ class SQL
                 'title'        => $assoc['post_title'],
                 'publishDate'  => $assoc['post_date'],
                 'modifiedDate' => $assoc['post_modified'],
-                'comments'     => $assoc['comment_count'],
+                'comments'     => intval( $assoc['comment_count'] ),
                 'content'      => postAutoP( $assoc['post_content'] )
             );
             // 最终返回的结果

@@ -6,25 +6,46 @@
 
 	require_once('../../library/db.class.php');
 
-	// 栏目iD
-	$catid = isset( $_GET['catid'] ) ? intval( $_GET['catid'] ) : 3;
-	// 请求第几页
-	$page = isset( $_GET['page'] ) ? intval( $_GET['page'] ) : 1;
-	// 每页行数
-	$limit = isset( $_GET['limit'] ) ? intval( $_GET['limit'] ) : 8;
-	// 排序方式
-	$order = isset( $_GET['order'] ) ? $_GET['order'] : 'date';
-	// 摘要长度
-	$brief = isset( $_GET['brief'] ) ? intval( $_GET['brief'] ) : 200;
+	// 请求参数过滤
+	$paramFormat =
+		isset( $_GET['catid'] )
+			&& is_numeric( $_GET['catid'] )
+		&& isset( $_GET['page'] )
+			&& is_numeric( $_GET['page'] )
+		&& isset( $_GET['limit'] )
+			&& is_numeric( $_GET['limit'] )
+		&& isset( $_GET['brief'] )
+			&& is_numeric( $_GET['brief'] );
 
-	$Sql = new SQL();
+	if( $paramFormat )
+	{
+		// 栏目ID
+		$catid =  $_GET['catid'];
+		// 请求第几页
+		$page = $_GET['page'];
+		// 每页行数
+		$limit = $_GET['limit'];
+		// 摘要长度
+		$brief = $_GET['brief'];
 
-	$Sql->open();
+		$Sql = new SQL();
 
-	$result = $Sql->getArchiveList( $catid, $page, $limit, $order, $brief );
+		$Sql->open();
 
-	echo( $result );
+		$result = $Sql->getArchiveList( $catid, $page, $limit, $brief );
 
-	$Sql->close();
+		echo( $result );
 
+		$Sql->close();
+	}
+	else
+	{
+		$retError = array
+        (
+            'success' => false,
+            'result'  => null,
+            'message' => 'One of your request parameters is error!'
+        );
+        echo json_encode( $retError );
+	}
 ?>

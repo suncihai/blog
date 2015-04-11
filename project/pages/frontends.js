@@ -110,6 +110,7 @@ define(function( require, exports ){
 		onData: function( err, res ) {
 			var self = this;
 			var dom = self.$data.dom;
+			var dataError = '拉取数据似乎出了点问题~';
 			if( err ) {
 				util.error('数据拉取失败！错误码:' + err.status + ', 错误信息:' + err.statusText);
 				if( err.timeout ) {
@@ -118,7 +119,10 @@ define(function( require, exports ){
 				return false;
 			}
 			if( !res.success ) {
-				dom.html('<div class="noData animated bounce">拉取数据似乎出了点问题~</div>');
+				if( res.message ) {
+					dataError = res.message;
+				}
+				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
 				return;
 			}
 			var info = self.$info = res.result;
