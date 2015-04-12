@@ -1153,7 +1153,7 @@ a:hover {
   text-decoration: underline;
 }
 .P-article .content article p {
-  padding-top: 25px;
+  padding-top: 1.5rem;
 }
 .P-article .content article img {
   display: inline-block;
@@ -1163,6 +1163,25 @@ a:hover {
 }
 .P-article .content article p > img {
   margin-top: -1em;
+}
+.P-article .content article ul,
+.P-article .content article ol {
+  padding-left: 2rem;
+  padding-top: 1.5rem;
+  list-style-type: circle;
+  list-style-position: inside;
+}
+.P-article .content article ul li,
+.P-article .content article ol li {
+  padding: .2em 0;
+}
+.P-article .content article blockquote {
+  background: #F8F8F8;
+  padding: 1em;
+  border-left: 6px solid #DDD;
+}
+.P-article .content article blockquote p {
+  padding: 0;
 }
 .P-article pre {
   box-sizing: border-box;

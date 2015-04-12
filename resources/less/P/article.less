@@ -14,7 +14,7 @@
 				text-decoration: underline;
 			}
 			p{
-				padding-top: 25px;
+				padding-top: 1.5rem;
 				// text-indent: 2em;
 			}
 			img{
@@ -27,6 +27,24 @@
 			// p标签里的图片上边距修补
 			p > img{
 				margin-top: -1.0em;
+			}
+			ul, ol {
+				li{
+					padding: .2em 0;
+				}
+				padding-left: 2rem;
+				padding-top: 1.5rem;
+				list-style-type: circle;
+				list-style-position: inside;
+			}
+			// 块引用
+			blockquote{
+				p{
+					padding: 0;
+				}
+				background: #F8F8F8;
+				padding: 1em;
+				border-left: 6px solid #DDD;
 			}
 		}
 	}

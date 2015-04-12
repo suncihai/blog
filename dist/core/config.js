@@ -30,7 +30,8 @@ define(function( require, exports ) {
 		// 栏目title
 		archiveTitle: {
 			'index': '小前端 - tangbc.com',
-			'frontends': '前端那些事'
+			'frontends': '前端那些事',
+			'moods': '心情日志'
 		},
 
 		// 栏目默认请求参数

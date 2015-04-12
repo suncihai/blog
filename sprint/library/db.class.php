@@ -148,7 +148,7 @@ class SQL
             (
                 'items' => $itemArray,               // 选项数组
                 'total' => intval( $total ),         // 总条数
-                'pages' => floor( $total / $limit ), // 总页数
+                'pages' => ceil( $total / $limit ), // 总页数
                 'page'  => intval( $page )           // 当前第几页
             );
             // 最终返回的结果
