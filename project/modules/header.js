@@ -22,13 +22,13 @@ define(function( require, exports ){
 			var target = config['target'];
 			var head = $([
 				'<div class="M-head">',
-					'<div class="M-headLogo dib">',
+					'<div class="M-headLogo">',
 						'<a href="/blog/" class="logoAnchor">',
 							'&lt;TANGBC/&gt;',
 						'</a>',
 					'</div>',
-					'<div class="M-headNav dib"/>',
-					'<div class="M-headTool fr"/>',
+					'<div class="M-headNav"/>',
+					'<div class="M-headTool"/>',
 				'</div>'
 			].join(''));
 
@@ -48,7 +48,7 @@ define(function( require, exports ){
 			nav.putTo( doms.nav );
 
 			// 创建工具
-			// this.buildTool();
+			this.buildTool();
 
 			// 缓存对象
 			this.$mods = {

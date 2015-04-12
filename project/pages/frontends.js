@@ -171,7 +171,7 @@ define(function( require, exports ){
 			sections.push([
 				'<section list-id="'+ idx +'">',
 					'<div class="P-archive-list-title">',
-						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">'+ item.title +'</a></h2>',
+						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">▪ '+ item.title +'</a></h2>',
 					'</div>',
 					// '<a href="#'+ anchor +'" class="abstract">',
 						'<article>',

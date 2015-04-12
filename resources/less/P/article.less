@@ -8,33 +8,39 @@
 			font-size: 1.8rem;
 			// padding: 1.5em 0;
 			line-height: 150%;
+			font-family: Consolas, Arial, Tahoma;
 			a{
 				color: #0080FF;
 				text-decoration: underline;
 			}
 			p{
 				padding-top: 25px;
-				text-indent: 2em;
+				// text-indent: 2em;
 			}
 			img{
-				display: block;
+				display: inline-block;
 				position: relative;
-				left: 2em;
+				// left: 2em;
 				border: 4px solid #E8E4E1;
 				border-radius: 2px;
+			}
+			// p标签里的图片上边距修补
+			p > img{
+				margin-top: -1.0em;
 			}
 		}
 	}
 	// 代码区域
 	pre{
-		width: 88%;
+		box-sizing: border-box;
+		width: 100%;
 		padding: 1.5em;
 		margin-top: 0.3em;
 		overflow: auto;
 		border: 8px solid #DDD;
 		border-radius: 1em;
 		position: relative;
-		left: 2em;
+		// left: 2em;
 		font-size: 1.6rem;
 		background: #272822;
 	}

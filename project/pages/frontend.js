@@ -70,7 +70,7 @@ define(function( require, exports ){
 					'type': 'article',
 					'title': '******************',
 					'time': '时间：0000-00-00 | ',
-					'tag': '标签：* | ',
+					// 'tag': '标签：* | ',
 					'comments': '评论数：0'
 				})
 				// .setCrumbs( C.archiveTitle[this.$data.name], this.$data.param );
