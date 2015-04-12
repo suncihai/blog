@@ -16,12 +16,7 @@ define(function( require, exports ){
 		init: function( data ) {
 			this.$data = data;
 			this.$title = C.archiveTitle[data.name];
-			this.$param = {
-				'catid' : 1,  // 分类ID
-				'page'  : 1,  // 请求第1页
-				'limit' : 6,  // 每页显示数
-				'brief' : 180 // 摘要长度
-			}
+			this.$param = C.archiveParam;
 			this.build();
 		},
 
@@ -97,13 +92,12 @@ define(function( require, exports ){
 		},
 
 		// 获取/更新请求参数<>
-		getParam: function( param, val ) {
+		getParam: function() {
 			var data = this.$data;
-			this.$param.catid = C.cat[data.name];
-			if( param ) {
-				this.$param[param] = val;
-			}
-			return this.$param;
+			var param = util.mergeParam( this.$param, {
+				'catid': C.cat[data.name]
+			});
+			return param;
 		},
 
 		// 拉取数据回调
@@ -159,10 +153,7 @@ define(function( require, exports ){
 			this.showThumb();
 
 			// 设置标题
-			var prefix = info.page === 1 ? "" : ' - 第' + info.page + '页';
-			if( prefix ) {
-				layout.setTitle( this.$title + prefix );
-			}
+			layout.setTitle( this.$title + ' - 第' + info.page + '页' );
 		},
 
 		// * buildItems 循环生成列表. idx->序号, item->选项对象
@@ -215,8 +206,11 @@ define(function( require, exports ){
 		// 页码激活事件
 		onPagerSelected: function( ev ) {
 			var page = ev.param;
-			var newParam = this.getParam('page', page);
+			var newParam = util.mergeParam( this.$param, {
+				'page': page
+			});
 			this.load( newParam );
+			return false;
 		}
 	}
 	exports.base = Archives;

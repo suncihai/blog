@@ -147,9 +147,9 @@ class SQL
             $resArray = array
             (
                 'items' => $itemArray,               // 选项数组
-                'total' => intval( $total ),                   // 总条数
-                'pages' => ceil( $total / $limit ),  // 总页数
-                'page'  => intval( $page )                     // 当前第几页
+                'total' => intval( $total ),         // 总条数
+                'pages' => floor( $total / $limit ), // 总页数
+                'page'  => intval( $page )           // 当前第几页
             );
             // 最终返回的结果
             $retArray = array
@@ -189,21 +189,36 @@ class SQL
         {
             $assoc = mysql_fetch_assoc( $result );
             mysql_free_result( $result );
-            $itemFormat = array
-            (
-                'title'        => $assoc['post_title'],
-                'publishDate'  => $assoc['post_date'],
-                'modifiedDate' => $assoc['post_modified'],
-                'comments'     => intval( $assoc['comment_count'] ),
-                'content'      => postAutoP( $assoc['post_content'] )
-            );
-            // 最终返回的结果
-            $retArray = array
-            (
-                'success' => true,
-                'result'  => $num === 0 ? null : $itemFormat,
-                'total'   => $num
-            );
+            $isEmtpty = $assoc['post_content'] === '';
+            // 只返回内容不为空的数据
+            if( !$isEmtpty )
+            {
+                $itemFormat = array
+                (
+                    'title'        => $assoc['post_title'],
+                    'publishDate'  => $assoc['post_date'],
+                    'modifiedDate' => $assoc['post_modified'],
+                    'comments'     => intval( $assoc['comment_count'] ),
+                    'content'      => postAutoP( $assoc['post_content'] )
+                );
+                // 最终返回的结果
+                $retArray = array
+                (
+                    'success' => true,
+                    'result'  => $num === 0 ? null : $itemFormat,
+                    'total'   => $num
+                );
+            }
+            else
+            {
+                $retArray = array
+                (
+                    'success' => true,
+                    'result'  => null,
+                    'total'   => 0
+                );
+            }
+
         }
         else
         {

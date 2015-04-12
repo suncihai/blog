@@ -29,7 +29,7 @@ define(function( require, exports ){
 				param = null;
 			break;
 			case 2:
-				param = arr[1];
+				param = arr[1] === '' ? null : arr[1];
 			break;
 			default: param = arr[2] === '' ? arr[1] : null;
 		}

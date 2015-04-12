@@ -58,13 +58,13 @@ define(function( require, exports ){
 				if( res.message ) {
 					dataError = res.message;
 				}
-				dom.html('<div class="noRecord animated bounce">'+ dataError +'</div>');
+				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
 				return;
 			}
 			var info = this.$info = res.result;
 			if( res.total === 0 ) {
 				var noText = '数据库无该文章记录：' + this.$data.param;
-				dom.html('<div class="noRecord animated bounce">'+ noText +'</div>');
+				dom.html('<div class="noData animated bounce">'+ noText +'</div>');
 				layout.setTitle( noText );
 				banner.setData({
 					'type': 'article',

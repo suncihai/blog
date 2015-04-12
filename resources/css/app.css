@@ -1101,14 +1101,6 @@ a:hover {
   width: 75%;
   margin: 0 auto;
 }
-.P-archives .noData {
-  width: 75%;
-  margin: 0 auto;
-  text-align: center !important;
-  padding-top: 3em;
-  font-size: xx-large;
-  color: red;
-}
 .P-archives section {
   padding: 1.5em 0;
   box-sizing: border-box;
@@ -1164,14 +1156,6 @@ a:hover {
   border-top: 3px solid #EDEDED;
   background: #F5F5F4;
 }
-.P-article .noRecord {
-  width: 75%;
-  margin: 0 auto;
-  text-align: center !important;
-  padding-top: 3em;
-  font-size: xx-large;
-  color: red;
-}
 .P-article .content {
   width: 75%;
   margin: 0 auto;
@@ -1207,6 +1191,14 @@ a:hover {
   left: 2em;
   font-size: 1.6rem;
   background: #272822;
+}
+.noData {
+  width: 75%;
+  margin: 0 auto;
+  text-align: center !important;
+  padding-top: 3em;
+  font-size: xx-large;
+  color: red;
 }
 .M-index {
   position: absolute;

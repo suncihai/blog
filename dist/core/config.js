@@ -29,23 +29,31 @@ define(function( require, exports ) {
 
 		// 栏目title
 		archiveTitle: {
-			index: '小前端 - tangbc.com',
-			frontends: '前端那些事'
+			'index': '小前端 - tangbc.com',
+			'frontends': '前端那些事'
+		},
+
+		// 栏目默认请求参数
+		archiveParam: {
+			'catid' : 1,  // 分类ID
+			'page'  : 1,  // 请求第1页
+			'limit' : 6,  // 每页显示数
+			'brief' : 180 // 摘要长度
 		},
 
 		// 栏目hash对应的category数据库id(表wp_terms)
 		cat: {
-			frontends: 1,
-			moods: 24
+			'frontends': 1,
+			'moods': 24
 		},
 
 		// 数据中心
 		dataCenter: {
 			// 处理文件目录
-			listarchives : '/blog/sprint/api/listarchives/query.php',
-			showarticle  : '/blog/sprint/api/showarticle/query.php',
-			showcomment  : '/blog/sprint/api/showcomment/query.php',
-			listtitle    : '/blog/sprint/api/listtitle/query.php'
+			'listarchives' : '/blog/sprint/api/listarchives/query.php',
+			'showarticle'  : '/blog/sprint/api/showarticle/query.php',
+			'showcomment'  : '/blog/sprint/api/showcomment/query.php',
+			'listtitle'    : '/blog/sprint/api/listtitle/query.php'
 		}
 	}
 	return CONFIG;
