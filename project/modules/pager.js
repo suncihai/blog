@@ -67,7 +67,7 @@ define(function( require, exports ){
 			var items = this.makePageArray( page, pages );
 
 			// 构建总条数
-			doms.info.html('<span class="total">[共 '+ pages +' 页]</span>');
+			doms.info.html('<span class="total lsp2">[共'+ pages +'页，'+ param.total +'条记录]</span>');
 
 			// 构建页码
 			util.each( items, function( num ) {
@@ -83,6 +83,12 @@ define(function( require, exports ){
 
 			// 激活当前页码
 			this.checkStatus( page, items );
+
+			if( pages <= 1 ) {
+				doms.prev.hide();
+				doms.list.hide();
+				doms.next.hide();
+			}
 			return this;
 		},
 

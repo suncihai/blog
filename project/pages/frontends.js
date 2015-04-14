@@ -16,7 +16,9 @@ define(function( require, exports ){
 		init: function( data ) {
 			this.$data = data;
 			this.$title = C.archiveTitle[data.name];
-			this.$param = C.archiveParam;
+			this.$param = util.merge( C.archiveParam, {
+				'page': 1
+			});
 			this.build();
 		},
 
@@ -94,7 +96,7 @@ define(function( require, exports ){
 		// 获取/更新请求参数<>
 		getParam: function() {
 			var data = this.$data;
-			var param = util.mergeParam( this.$param, {
+			var param = util.merge( this.$param, {
 				'catid': C.cat[data.name]
 			});
 			return param;
@@ -146,11 +148,16 @@ define(function( require, exports ){
 			// 先清空之前的列表
 			this.$doms.listBox.empty();
 
-			// 循环创建列表
-			util.each( info.items, this.buildItems, this );
+			if( util.isEmpty( info.items ) ) {
+				this.$doms.listBox.html('<div class="pt20 pb20">该页无数据！</div>');
+			}
+			else {
+				// 循环创建列表
+				util.each( info.items, this.buildItems, this );
 
-			// 创建完显示缩略图
-			this.showThumb();
+				// 创建完显示缩略图
+				this.showThumb();
+			}
 
 			// 设置标题
 			layout.setTitle( this.$title + ' - 第' + info.page + '页' );
@@ -206,7 +213,7 @@ define(function( require, exports ){
 		// 页码激活事件
 		onPagerSelected: function( ev ) {
 			var page = ev.param;
-			var newParam = util.mergeParam( this.$param, {
+			var newParam = util.merge( this.$param, {
 				'page': page
 			});
 			this.load( newParam );

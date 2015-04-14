@@ -94,12 +94,12 @@ define(function( require, util ){
 	}
 
 	/**
-	 * mergeParam AJAX请求参数的合并/更新/格式化
+	 * merge AJAX请求参数的合并/更新/格式化
 	 * @param  {JSON} Jold [默认参数]
 	 * @param  {JSON} Jnew [指定参数]
 	 * @return {JSON}      [最新参数]
 	 */
-	util.mergeParam = function( Jold, Jnew ) {
+	util.merge = function( Jold, Jnew ) {
 		Jnew = arguments.length === 1 ? {} : Jnew;
 		if( !isObject( Jold ) || !isObject( Jnew ) ) {
 			return false;
