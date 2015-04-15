@@ -733,27 +733,25 @@ a:hover {
   height: 100%;
   position: relative;
   margin: 0 auto;
-  display: -webkit-flex;
-  display: flex;
 }
 .M-headLogo {
-  -webkit-flex: 1;
-  flex: 1;
+  display: inline-block;
+  float: left;
   max-width: 10em;
   height: 100%;
   line-height: 70px;
   z-index: 3;
 }
 .M-headNav {
-  -webkit-flex: 3;
-  flex: 3;
+  display: inline-block;
   height: 100%;
   line-height: 70px;
   z-index: 2;
 }
 .M-headTool {
-  -webkit-flex: 1;
-  flex: 1;
+  position: absolute;
+  right: 0;
+  top: 0;
   height: 100%;
   max-width: 20%;
   z-index: 3;
