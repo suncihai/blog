@@ -91,22 +91,82 @@ define(function( require, exports ){
 
 		buildTool: function() {
 			var html = $([
-				// '<div class="M-headToolSearch">',
-				// 	'<div class="searchBtn">',
-				// 		'<span class="circle"/>',
-				// 		'<span class="line"/>',
-				// 	'</div>',
-				// 	'<input type="text" class="searchIpt">',
-				// '</div>',
-				'<div class="M-headToolOption">',
-					'<div class="btn">',
-						'<span/>',
-						'<span/>',
-						'<span/>',
+				'<div class="M-headToolSearch">',
+					'<input type="text" class="searchIpt animated" placeholder="请输入关键字">',
+					'<div class="searchBtn" title="搜索文章">',
+						'<div class="circle"/>',
+						'<div class="line"/>',
 					'</div>',
 				'</div>'
+				// '<div class="M-headToolOption">',
+				// 	'<div class="btn">',
+				// 		'<span/>',
+				// 		'<span/>',
+				// 		'<span/>',
+				// 	'</div>',
+				// '</div>'
 			].join(''));
 			html.appendTo( this.$doms.tool );
+			this.$doms.tool.input = $('.searchIpt', html);
+
+			app.event.proxy( html, 'click.search', this.eventClickSearch, this );
+		},
+
+		// 点击搜索框
+		eventClickSearch: function( evt, elm ) {
+			var input = this.$doms.tool.input;
+			var val = input.val();
+			this.$timeStamp = evt.timeStamp;
+			// 点击空白处收起INPUT
+			app.event.bind( $(document), 'click.blank', this.eventClickBlank, this );
+			// 按下回车键响应搜索操作
+			app.event.bind( $(document), 'keydown.search', this.eventKeydownSearch, this );
+			input.show().removeClass('inputInit').addClass('inputReady');
+			if( !val ) {
+				input.focus();
+			}
+			else {
+				if( evt.target.tagName !== 'INPUT' ) {
+					this.searching( val );
+				}
+			}
+			return false;
+		},
+
+		// 跳转到搜索页面
+		searching: function( val ) {
+			app.controller.go('search?word=' + val);
+		},
+
+		// 响应回车键搜索
+		eventKeydownSearch: function( evt ) {
+			if( evt.keyCode === 13 ) {
+				var val = this.$doms.tool.input.val();
+				if( val ) {
+					this.searching( val );
+				}
+			}
+			return false;
+		},
+
+		// 点击空白处隐藏INPUT
+		eventClickBlank: function( evt ) {
+			if( this.$timeStamp !== evt.timeStamp ) {
+				this.hideSearchInput();
+			}
+			return false;
+		},
+
+		// 隐藏搜索框+解除事件的绑定
+		hideSearchInput: function() {
+			var self = this;
+			self.$doms.tool.input
+				.val('')
+				.addClass('inputInit')
+				.removeClass('inputReady');
+			// 解除绑定
+			app.event.unbind( $(document), 'click.blank' );
+			app.event.unbind( $(document), 'keydown.search' );
 		}
 	}
 	exports.base = Header;

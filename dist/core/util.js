@@ -224,4 +224,43 @@ define(function( require, util ){
 	util.random = function( begin, end ) {
 		return parseInt( Math.random() * ( end - begin + 1 ) + begin, 10 );
 	}
+
+	/**
+	 * htmlEncode 将html标签转义
+	 * @param  {String} html  [字符]
+	 */
+	util.htmlEncode = function( html ) {
+		var tag = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;'
+		}
+		function esc_rp( m ) {
+			return tag[m];
+		}
+		return ( typeof( html ) != 'string' ) ? html : html.replace(/[&<>"]/g, esc_rp );
+	}
+
+	/**
+	 * formatSearch 格式化url参数为JSON
+	 * @param  {String}  str    [字符]
+	 * @param  {Number}  limit  [参数限制个数]
+	 * @param  {Boolean} strict [进行转义]
+	 */
+	util.formatSearch = function( str, limit, strict ) {
+		var arr = str.split('&'), retJSON = {};
+		var self = this;
+		this.each( arr, function( item, idx ) {
+			var ts = item.split('=');
+			if( ts.length === 2 ) {
+				retJSON[ts[0]] = strict ? self.htmlEncode( ts[1] ) : ts[1];
+			}
+			if( idx + 1 === limit ) {
+				return false;
+			}
+		});
+		return retJSON;
+	}
+
 });

@@ -40,8 +40,8 @@ define(function( require, exports ){
 
 	/**
 	 * unbind 取消绑定事件
-	 * @param  {Object}  $elm  [jquery对象]
-	 * @param  {String}  type  [事件类型]
+	 * @param  {Object}  $elm    [jquery对象]
+	 * @param  {String}  type    [事件类型]
 	 */
 	exports.unbind = function( $elm, type ) {
 		// 参数检测
@@ -116,6 +116,14 @@ define(function( require, exports ){
 		if( !$elm instanceof jQuery ) {
 			util.error('绑定的元素必须为jQuery对象');
 			return false;
+		}
+
+		// 不传selector
+		if( util.isFunc( selector ) ) {
+			calllback = selector;
+			scope = data;
+			selector = null;
+			data = null;
 		}
 
 		// 不传data

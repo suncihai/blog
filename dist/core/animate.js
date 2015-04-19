@@ -3,6 +3,7 @@
  */
 define(function( require, exports ){
 	var util = require('util');
+	var C = require('@core/config');
 
 	/**
 	 * going 应用CSS3 keframe
@@ -43,7 +44,7 @@ define(function( require, exports ){
 		var animateType = typeMap[type] || typeMap[1];
 		var animateCls = animateType + ' ' + keyframe;
 		$elm.addClass( animateCls ).one(
-			'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+			C.animationdEnd,
 			function() {
 				if( !remove ) {
 					jQuery(this).removeClass( animateCls );

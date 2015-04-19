@@ -42,7 +42,7 @@ define(function( require, exports ) {
 			'brief' : 180 // 摘要长度
 		},
 
-		// 栏目hash对应的category数据库id(表wp_terms)
+		// 栏目hash对应的category数据库id
 		cat: {
 			'frontends': 1,
 			'moods': 24
@@ -54,8 +54,12 @@ define(function( require, exports ) {
 			'listarchives' : '/blog/sprint/api/listarchives/query.php',
 			'showarticle'  : '/blog/sprint/api/showarticle/query.php',
 			'showcomment'  : '/blog/sprint/api/showcomment/query.php',
-			'listtitle'    : '/blog/sprint/api/listtitle/query.php'
-		}
+			'listtitle'    : '/blog/sprint/api/listtitle/query.php',
+			'search'       : '/blog/sprint/api/search/query.php'
+		},
+
+		// 动画结束事件
+		animationdEnd: 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend'
 	}
 	return CONFIG;
 });

@@ -103,7 +103,7 @@ class SQL
         mysql_free_result( $resultIDs );
         $IDs = implode(",", $IDArr);
         // 查询字段
-        $_fields = "ID, post_title, post_date, post_modified, post_content, comment_count";
+        $_fields = "ID, post_title, post_date, post_content, comment_count";
         // 查询条件(返回正常的文章必须指定post_status和post_type)
         $_where = "ID in($IDs) AND post_status='publish' AND post_type='post'";
         // 排序方式
@@ -136,7 +136,7 @@ class SQL
                     'id'           => intval( $assoc['ID'] ),
                     'title'        => $assoc['post_title'],
                     'publishDate'  => $assoc['post_date'],
-                    'modifiedDate' => $assoc['post_modified'],
+                    // 'modifiedDate' => $assoc['post_modified'],
                     'content'      => $abstract,
                     'comments'     => intval( $assoc['comment_count'] ),
                     'cover'        => $cover
@@ -176,7 +176,7 @@ class SQL
     public function getArticle( $artid )
     {
         // 查询字段
-        $fields = "post_title, post_date, post_modified, post_content, comment_count";
+        $fields = "post_title, post_date, post_content, comment_count";
         // 查询条件
         $filter = "LIMIT 1";
         $sql = "SELECT $fields FROM wp_posts WHERE ID = $artid $filter";
@@ -197,7 +197,7 @@ class SQL
                 (
                     'title'        => $assoc['post_title'],
                     'publishDate'  => $assoc['post_date'],
-                    'modifiedDate' => $assoc['post_modified'],
+                    // 'modifiedDate' => $assoc['post_modified'],
                     'comments'     => intval( $assoc['comment_count'] ),
                     'content'      => postAutoP( $assoc['post_content'] )
                 );
@@ -281,6 +281,80 @@ class SQL
             (
                 'success' => true,
                 'result'  => $resultObject
+            );
+        }
+        else
+        {
+            $retArray = array
+            (
+                'success' => false,
+                'result'  => null
+            );
+        }
+        return json_encode( $retArray );
+    }
+
+    /**
+     * filterWord 关键字查询
+     * param  [String]  $word   [关键字]
+     */
+    public function filterWord( $word )
+    {
+        // 查询字段
+        $_fields = "ID, post_title, post_date, post_content, comment_count";
+        // 查询条件(返回正常的文章必须指定post_status和post_type)
+        $_where = "(post_title LIKE '%".$word."%' OR post_content LIKE '%".$word."%') AND post_status='publish' AND post_type='post'";
+        // SQL语句
+        $sql = "SELECT $_fields FROM wp_posts WHERE $_where";
+        $result = mysql_query( $sql, $this->conn );
+        // 结果总条数
+        $total = mysql_num_rows( $result );
+        if( $result )
+        {
+            // 选项数组集合
+            $itemArray = array();
+            while( $assoc = mysql_fetch_assoc( $result ) )
+            {
+                // 查询每条文章对应的栏目ID
+                $artid = $assoc['ID'];
+                $resultIDs = mysql_query("SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$artid");
+                $assocID = mysql_fetch_assoc( $resultIDs );
+                mysql_free_result( $resultIDs );
+                $archiveID = $assocID['term_taxonomy_id'];
+
+                // 关键字相关的段落截取(只截取第一次出现的段落)
+                $brief = "";
+                if( preg_match("/(.{100}".$word.".{100})/su", $assoc['post_content'], $matches) )
+                {
+                    if( count( $matches ) !== 0 )
+                    {
+                        $brief =  $matches[0];
+                    }
+                }
+
+                $itemFormat = array
+                (
+                    'id'           => $artid,
+                    'catId'        => intval( $archiveID ),
+                    'title'        => $assoc['post_title'],
+                    'publishDate'  => $assoc['post_date'],
+                    'brief'        => fixHtmlTags( $brief ),
+                    // 'modifiedDate' => $assoc['post_modified'],
+                    'comments'     => intval( $assoc['comment_count'] )
+                );
+                array_push( $itemArray, $itemFormat );
+            }
+            mysql_free_result( $result );
+            $resArray = array
+            (
+                'items' => $itemArray,               // 选项数组
+                'total' => intval( $total )          // 总条数
+            );
+            // 最终返回的结果
+            $retArray = array
+            (
+                'success' => true,
+                'result'  => $resArray
             );
         }
         else

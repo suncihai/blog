@@ -10,53 +10,90 @@ define(function( require, exports ){
 	var C = require('@core/config');
 	var action = C.action;
 	var data = {
-		dom: null,   // 容器对象
-		name: null,  // 模块名称
-		param: null  // 请求参数
+		dom    : null, // 容器对象
+		name   : null, // 模块名称
+		param  : null, // 页面参数
+		search : null  // url参数
 	}
 
-	/**
-	 * hashChanged 监听hash变化
-	 */
-	function hashChanged() {
-		var hash, arr, len, name, param;
-		hash = LOC.hash.replace(/^[#\/\!]+/, '') || C.defaultPage;
-		arr = hash.split('/');
-		len = arr.length;
-		name = arr[0];
-		switch( len ) {
-			case 1:
-				param = null;
-			break;
-			case 2:
-				param = arr[1] === '' ? null : arr[1];
-			break;
-			default: param = arr[2] === '' ? arr[1] : null;
+	function string2parts( str, pos ) {
+		var p1, p2;
+		p1 = str.substr( 0, pos );
+		p2 = str.substr( pos + 1 );
+		return [p1, p2];
+	}
+
+	function formatHash( hash ) {
+		var name = '', param = null, search = null, ms, tmp;
+		var ix = hash.indexOf('/'), hx = ( ix !== -1 );
+		var iw = hash.indexOf('?'), hw = ( iw !== -1 );
+		if( !hx && !hw ) {
+			ms = [hash];
 		}
-		run( name, param );
+		if( hx && !hw ) {
+			ms = string2parts( hash, ix );
+			param = ms[1] === '' ? null :
+				ms[1].charAt(ms[1].length - 1) === '/' ? ms[1] = ms[1].substr(0, ms[1].length - 1) : ms[1];
+		}
+		if( !hx && hw ) {
+			ms = string2parts( hash, iw );
+			search = ms[1];
+		}
+		if( hx && hw ) {
+			// frontends/tag?name=
+			if( ix < iw ) {
+				tmp = string2parts( hash, ix );
+				ms = [tmp[0]].concat( string2parts( tmp[1], tmp[1].indexOf('?') ) );
+				param = ms[1];
+				search = ms[2];
+			}
+			// search?word=aa//sss
+			else if( ix > iw ) {
+				ms = string2parts( hash, iw );
+				search = ms[1];
+			}
+		}
+		name = ms[0];
+		return {
+			'ms'     : ms,
+			'name'   : name,
+			'param'  : param,
+			'search' : search
+		}
+	}
+
+	function hashChanged() {
+		var hash, ms;
+		hash = LOC.hash.replace(/^[#\/\!]+/, '') || C.defaultPage;
+		ms = formatHash( hash );
+		run( ms.name, ms.param, ms.search );
 		util.scrollTo(0);
 	}
 
 	/**
 	 * run 启用模块
-	 * @param  {type} name  [模块名]
-	 * @param  {type} param [请求参数]
+	 * @param  {type} name   [模块名]
+	 * @param  {type} param  [页面参数]
+	 * @param  {type} search [url参数]
 	 */
-	function run( name, param ) {
+	function run( name, param, search ) {
 		data.name = name;
-		data.param = param;
+		data.param = isNaN( param ) ? util.htmlEncode( param ) : param;
+		if( search ) {
+			data.search = util.formatSearch( search, 1, true );
+		}
 		require.async( '@controller/' + name, afterRun );
 	}
 
 	/**
-	 * afterRun 启用后执行相应的操作
-	 * @param  {type} module [启用的模块]
+	 * afterRun 加载模块回调
+	 * @param  {type} module [模块]
 	 */
 	function afterRun( module ) {
 		// 404
 		if( !module ) {
 			util.error('404 - 找不到该页面: ' + data.name);
-			require.async( '@controller/404', afterRun );
+			require.async('@controller/404', afterRun);
 			return false;
 		}
 		else {
@@ -70,9 +107,6 @@ define(function( require, exports ){
 
 	}
 
-	/**
-	 * start 开始执行路由控制
-	 */
 	exports.start = function() {
 		if( 'onhashchange' in WIN ) {
 			if( WIN.addEventListener ) {
