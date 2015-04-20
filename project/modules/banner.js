@@ -20,7 +20,7 @@ define(function( require, exports ) {
 						'<div class="content"/>',
 					'</div>',
 					// 内容banner
-					'<div class="M-bannerArticle">',
+					'<div class="M-bannerArticle animated">',
 						'<h1 class="title"/>',
 						'<div class="info">',
 							'<span class="time"/>',
@@ -76,6 +76,7 @@ define(function( require, exports ) {
 		// 文章页
 		setArticleInfo: function( info ) {
 			var dom = this.$doms.articles;
+			this.$doms.article.addClass('fadeIn');
 			this.$doms.article.show().siblings('.M-bannerArchive').hide();
 			dom.title.text( info['title'] );
 			dom.time.text( info['time'] );
@@ -86,6 +87,7 @@ define(function( require, exports ) {
 		// 列表页
 		setArchiveInfo: function( info ) {
 			var dom = this.$doms.archives;
+			this.$doms.article.removeClass('fadeIn');
 			this.$doms.archive.show().siblings('.M-bannerArticle').hide();
 			dom.content.html( info['content'] || "" );
 		},

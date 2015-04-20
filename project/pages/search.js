@@ -16,6 +16,7 @@ define(function( require, exports ){
 			this.$data = data;
 			this.$dom = data.dom;
 			this.$word = data.search && data.search.word;
+			this.$renderWord = this.$word || '';
 			this.build();
 		},
 
@@ -24,7 +25,7 @@ define(function( require, exports ){
 			// 设置标题
 			layout.setTitle( (this.$word || '') + '_搜索结果' );
 
-			var bannerTxt = '搜索“' + (this.$word || ' ') +'”的结果: ';
+			var bannerTxt = '正在搜索有关“' + this.$renderWord +'”的文章记录 ……';
 			// banner设置
 			banner.setData({
 				'type': 'archive',
@@ -33,7 +34,7 @@ define(function( require, exports ){
 			// .setCrumbs( this.$title, '' );
 
 			this.$doms = {
-				listBox: $('<div class="P-archive-list"/>').appendTo( this.$dom ).hide()
+				listBox: $('<div class="P-search-list"/>').appendTo( this.$dom ).hide()
 			}
 
 			// 数据加载之前显示loading
@@ -41,7 +42,7 @@ define(function( require, exports ){
 			'target': this.$dom,
 			'width':  this.$dom.width(),
 				'size': 25,
-				'class': 'center',
+				'class': 'center mt20',
 				'autoHide': true
 			});
 
@@ -102,11 +103,17 @@ define(function( require, exports ){
 			// 创建列表
 			self.buildArchives( info );
 
+			var bannerTxt = "搜到与“"+ this.$renderWord +"”相关的结果共" + (info.total || 0) + "条：";
+
 			// 隐藏loading
 			setTimeout(function() {
 				self.hideLoading();
 				layout.showFooter();
-			}, 0);
+				banner.setData({
+					'type': 'archive',
+					'content': '<h1 class="bannerTxt fts30 animated shake">'+ bannerTxt +'</h1>'
+				});
+			}, C.delay);
 		},
 
 		// 创建
@@ -115,7 +122,7 @@ define(function( require, exports ){
 			this.$doms.listBox.empty();
 
 			if( util.isEmpty( info.items ) ) {
-				this.$doms.listBox.html('<div class="pt20 pb20">该页无数据！</div>');
+				this.$doms.listBox.html('<div class="pt20 pb20">抱歉没有搜到相关内容！</div>');
 			}
 			else {
 				util.each( info.items, this.buildItems, this );
@@ -133,13 +140,12 @@ define(function( require, exports ){
 			var date = year + '年' + mouth + '月' + day + '日';
 			var catName = util.getKeyName( item.catId, C.cat );
 			var anchor = catName + '/' + item.id; // 超链接地址
+			var brief = item.brief === "" ? "(请进入内页查看)" : item.brief + " ……";
 			sections.push([
-				'<section list-id="'+ idx +'">',
-					'<div class="P-archive-list-title">',
-						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">'+ item.title +'</a></h2>',
-					'</div>',
-					'<div>'+ item.brief + '</div>',
-					'<div class="P-archive-list-info">',
+				'<section class="section">',
+					'<a href="#'+ anchor +'" title="'+ item.tips +'" class="title">'+ item.title +'</a>',
+					'<p class="brief">'+ brief + '</p>',
+					'<div class="info">',
 						'<span class="tag">分类：'+ C.archiveTitle[catName] || '未知分类' +'</span>',
 						' | ',
 						'<span class="tag">评论：'+ item.comments +'</span>',

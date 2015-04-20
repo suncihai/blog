@@ -6,6 +6,13 @@
 
 	require_once('../../library/db.class.php');
 	require_once('../../library/op.class.php');
+	// 错误信息
+	$retError = array
+    (
+        'success' => false,
+        'result'  => null,
+        'message' => 'One of your request parameters is error!'
+    );
 
 	// 请求参数过滤
 	if( isset( $_GET['word'] ) && $_GET['word'] != '' )
@@ -18,20 +25,21 @@
 
 		$word = $OP->clearXss( $_GET['word'] );
 
-		$result = $Sql->filterWord( $word );
+		if( $word )
+		{
+			$result = $Sql->filterWord( $word );
 
-		echo( $result );
+			echo( $result );
+		}
+		else
+		{
+	        echo json_encode( $retError );
+		}
 
 		$Sql->close();
 	}
 	else
 	{
-		$retError = array
-        (
-            'success' => false,
-            'result'  => null,
-            'message' => 'One of your request parameters is error!'
-        );
         echo json_encode( $retError );
 	}
 

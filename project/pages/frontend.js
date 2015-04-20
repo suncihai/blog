@@ -37,7 +37,7 @@ define(function( require, exports ){
 				'target': this.$data.dom,
 				'width':  this.$data.dom.width(),
 				'size': 25,
-				'class': 'center'
+				'class': 'center mt20'
 			});
 
 			app.data.get( dc.showarticle, param, this.onData, this );
@@ -110,7 +110,7 @@ define(function( require, exports ){
 			setTimeout(function() {
 				self.hideLoading();
 				layout.showFooter();
-			}, 0);
+			}, C.delay);
 
 		},
 

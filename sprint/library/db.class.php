@@ -324,36 +324,46 @@ class SQL
 
                 // 关键字相关的片段截取(目标的前后100字符)
                 $brief = "";
+                $pattern = '/('.$word.')/i';
+                $isMatch = false;
                 if( preg_match("/(.{100}".$word.".{100})/su", $assoc['post_content'], $matches) )
                 {
                     if( count( $matches ) !== 0 )
                     {
+                        $isMatch = true;
                         // 取完整模式匹配到的片段
                         $brief =  $matches[0];
                         // 去掉原有的html标签
                         $brief = preg_replace('/<\/?[^>]+>/i', '', $brief);
                         // 高亮关键字
-                        $brief = preg_replace('/('.$word.')/i', '<b class="keyword">$1</b>', $brief);
+                        $brief = preg_replace($pattern, '<b class="keyword">$1</b>', fixHtmlTags($brief));
                     }
                 }
+                // 标题也加高亮
+                $title = preg_replace($pattern, '<b class="keyword">$1</b>', $assoc['post_title']);
 
-                $itemFormat = array
-                (
-                    'id'           => intval( $artid ),
-                    'catId'        => intval( $archiveID ),
-                    'title'        => $assoc['post_title'],
-                    'publishDate'  => $assoc['post_date'],
-                    'brief'        => $brief,
-                    // 'modifiedDate' => $assoc['post_modified'],
-                    'comments'     => intval( $assoc['comment_count'] )
-                );
-                array_push( $itemArray, $itemFormat );
+                if( $isMatch || $title )
+                {
+                    $itemFormat = array
+                    (
+                        'id'           => intval( $artid ),
+                        'catId'        => intval( $archiveID ),
+                        'title'        => $title,
+                        'tips'         => $assoc['post_title'],
+                        'publishDate'  => $assoc['post_date'],
+                        'brief'        => $brief,
+                        // 'modifiedDate' => $assoc['post_modified'],
+                        'comments'     => intval( $assoc['comment_count'] )
+                    );
+                    array_push( $itemArray, $itemFormat );
+                }
+
             }
             mysql_free_result( $result );
             $resArray = array
             (
                 'items' => $itemArray,               // 选项数组
-                'total' => intval( $total )          // 总条数
+                'total' => count( $itemArray )          // 总条数
             );
             // 最终返回的结果
             $retArray = array

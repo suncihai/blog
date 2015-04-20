@@ -34,7 +34,7 @@ define(function( require, exports ){
 			// banner设置
 			banner.setData({
 				'type': 'archive',
-				'content': '<h1 class="bannerTxt">'+ quotations[util.random(0, num)] +'</h1>'
+				'content': '<h1 class="bannerTxt animated fadeIn">'+ quotations[util.random(0, num)] +'</h1>'
 			})
 			// .setCrumbs( this.$title, '' );
 
@@ -56,7 +56,7 @@ define(function( require, exports ){
 				'target': dom,
 				'width':  dom.width(),
 				'size': 25,
-				'class': 'center',
+				'class': 'center mt20',
 				'autoHide': true
 			});
 
@@ -139,7 +139,7 @@ define(function( require, exports ){
 			setTimeout(function() {
 				self.hideLoading();
 				layout.showFooter();
-			}, 0);
+			}, C.delay);
 
 		},
 

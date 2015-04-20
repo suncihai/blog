@@ -23,8 +23,8 @@ define(function( require, exports ) {
 
 		// 语录集合
 		quotations: [
-			'Keep living, keep codeing ......',
-			'The quieter you become, the more you are able to think'
+			"Keep living, keep codeing ......",
+			"Do all you can to be a better man"
 		],
 
 		// 栏目title
@@ -59,7 +59,10 @@ define(function( require, exports ) {
 		},
 
 		// 动画结束事件
-		animationdEnd: 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend'
+		animationdEnd: 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+
+		// 延迟展示(毫秒)
+		delay: 500
 	}
 	return CONFIG;
 });
