@@ -322,23 +322,28 @@ class SQL
                 mysql_free_result( $resultIDs );
                 $archiveID = $assocID['term_taxonomy_id'];
 
-                // 关键字相关的段落截取(只截取第一次出现的段落)
+                // 关键字相关的片段截取(目标的前后100字符)
                 $brief = "";
                 if( preg_match("/(.{100}".$word.".{100})/su", $assoc['post_content'], $matches) )
                 {
                     if( count( $matches ) !== 0 )
                     {
+                        // 取完整模式匹配到的片段
                         $brief =  $matches[0];
+                        // 去掉原有的html标签
+                        $brief = preg_replace('/<\/?[^>]+>/i', '', $brief);
+                        // 高亮关键字
+                        $brief = preg_replace('/('.$word.')/i', '<b class="keyword">$1</b>', $brief);
                     }
                 }
 
                 $itemFormat = array
                 (
-                    'id'           => $artid,
+                    'id'           => intval( $artid ),
                     'catId'        => intval( $archiveID ),
                     'title'        => $assoc['post_title'],
                     'publishDate'  => $assoc['post_date'],
-                    'brief'        => fixHtmlTags( $brief ),
+                    'brief'        => $brief,
                     // 'modifiedDate' => $assoc['post_modified'],
                     'comments'     => intval( $assoc['comment_count'] )
                 );
