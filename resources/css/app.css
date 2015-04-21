@@ -129,10 +129,13 @@ a:hover {
 .ti {
   font-style: italic;
 }
+.tdl {
+  text-decoration: underline;
+}
 .tdef {
   font-style: italic;
   text-align: center;
-  color: #ccc;
+  color: #aaa;
 }
 .text_limit {
   overflow: hidden;

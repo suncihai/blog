@@ -140,7 +140,7 @@ define(function( require, exports ){
 			var date = year + '年' + mouth + '月' + day + '日';
 			var catName = util.getKeyName( item.catId, C.cat );
 			var anchor = catName + '/' + item.id; // 超链接地址
-			var brief = item.brief === "" ? "(请进入内页查看)" : item.brief + " ……";
+			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">请进入内页查看</a>' : item.brief + ' ……';
 			sections.push([
 				'<section class="section">',
 					'<a href="#'+ anchor +'" title="'+ item.tips +'" class="title">'+ item.title +'</a>',

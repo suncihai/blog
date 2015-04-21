@@ -121,13 +121,10 @@ class SQL
             {
                 $abstract = '';
                 if( $brief !== 0 ) {
-                    // 摘要截取, 先截取再检测(确保性能)
-                    // $text = mb_substr( $assoc['post_content'], 0, $brief, 'utf8' );
-                    // $abstract = strip_tags( fixHtmlTags( $text ) );
-
                     // 摘要截取, 先检测再截取(确保字数)
                     $cover = getFirstImg( $assoc['post_content'] );
-                    $text = fixHtmlTags( $assoc['post_content'] );
+                    $text = removeTag( $assoc['post_content'] );
+                    // $text = fixHtmlTags( $text );
                     $abstract = mb_substr( strip_tags( $text ), 0, $brief, 'utf8');
                 }
 
@@ -326,23 +323,23 @@ class SQL
                 $brief = "";
                 $pattern = '/('.$word.')/i';
                 $isMatch = false;
-                if( preg_match("/(.{100}".$word.".{100})/su", $assoc['post_content'], $matches) )
+                // 先去掉html标签再进行关键字匹配
+                $content = removeTag( $assoc['post_content'] );
+                if( preg_match("/(.{100}".$word.".{100})/sui", $content, $matches) )
                 {
                     if( count( $matches ) !== 0 )
                     {
                         $isMatch = true;
                         // 取完整模式匹配到的片段
                         $brief =  $matches[0];
-                        // 去掉原有的html标签
-                        $brief = preg_replace('/<\/?[^>]+>/i', '', $brief);
                         // 高亮关键字
-                        $brief = preg_replace($pattern, '<b class="keyword">$1</b>', fixHtmlTags($brief));
+                        $brief = preg_replace($pattern, '<b class="keyword">$1</b>', $brief);
                     }
                 }
                 // 标题也加高亮
                 $title = preg_replace($pattern, '<b class="keyword">$1</b>', $assoc['post_title']);
 
-                if( $isMatch || $title )
+                if( $isMatch || ($title !== $assoc['post_title']) )
                 {
                     $itemFormat = array
                     (
@@ -384,6 +381,11 @@ class SQL
     }
 }
 
+// 去掉文章的html标签
+function removeTag( $pee ) {
+    return preg_replace('/<\/?[^>]+>/i', '', $pee);
+}
+
 // 获取第一张图片作为缩略图
 function getFirstImg( $text ) {
     preg_match("<img.*src=[\"](.*?)[\"].*?>", $text, $match);
@@ -405,7 +407,7 @@ function fixHtmlTags( $text ) {
 }
 
 // 文章自动加上段落标签<p></p>, 取自WordPress: wp-includes/formatting.php wpautop() Line 245
-function postAutoP($pee, $br = true) {
+function postAutoP( $pee, $br = true ) {
     $pre_tags = array();
 
     if ( trim($pee) === '' )

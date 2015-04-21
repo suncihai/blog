@@ -16,6 +16,14 @@ define(function( require, exports ){
 		search : null  // url参数
 	}
 
+	function hashChanged() {
+		var hash, ms;
+		hash = LOC.hash.replace(/^[#\/\!]+/, '') || C.defaultPage;
+		ms = formatHash( hash );
+		run( ms.name, ms.param, ms.search );
+		util.scrollTo(0);
+	}
+
 	function string2parts( str, pos ) {
 		var p1, p2;
 		p1 = str.substr( 0, pos );
@@ -60,14 +68,6 @@ define(function( require, exports ){
 			'param'  : param,
 			'search' : search
 		}
-	}
-
-	function hashChanged() {
-		var hash, ms;
-		hash = LOC.hash.replace(/^[#\/\!]+/, '') || C.defaultPage;
-		ms = formatHash( hash );
-		run( ms.name, ms.param, ms.search );
-		util.scrollTo(0);
 	}
 
 	/**
