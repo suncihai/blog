@@ -8,11 +8,11 @@
 	require_once('../../library/op.class.php');
 	// 错误信息
 	$retError = array
-    (
-        'success' => false,
-        'result'  => null,
-        'message' => 'One of your request parameters is error!'
-    );
+	(
+		'success' => false,
+		'result'  => null,
+		'message' => 'One of your request parameters is error!'
+	);
 
 	// 请求参数过滤
 	if( isset( $_GET['word'] ) && $_GET['word'] != '' )
@@ -33,14 +33,14 @@
 		}
 		else
 		{
-	        echo json_encode( $retError );
+			echo json_encode( $retError );
 		}
 
 		$Sql->close();
 	}
 	else
 	{
-        echo json_encode( $retError );
+		echo json_encode( $retError );
 	}
 
 ?>

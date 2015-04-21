@@ -24,12 +24,12 @@
 	else
 	{
 		$retError = array
-        (
-            'success' => false,
-            'result'  => null,
-            'message' => 'One of your request parameters is error!'
-        );
-        echo json_encode( $retError );
+		(
+			'success' => false,
+			'result'  => null,
+			'message' => 'One of your request parameters is error!'
+		);
+		echo json_encode( $retError );
 	}
 
 ?>
