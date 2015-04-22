@@ -1,4 +1,7 @@
 ﻿<?php
+/**
+ * 数据增查操作类
+ */
 
 header("Content-type: text/html; charset=utf-8");
 require_once('config.php');
@@ -39,7 +42,7 @@ class SQL
      * param  [String]  $sql      [SQL语句]
      * param  [Boolean] $private  [内部使用]
      */
-    public function query( $sql, $private )
+    public function query( $sql, $private = true )
     {
         $result = mysql_query( $sql, $this->conn );
         if( $result )
@@ -73,10 +76,12 @@ class SQL
                 'result'  => null
             );
         }
-        if( $private ) {
-            return $retArray;
+        if( $private )
+        {
+            return $itemArray;
         }
-        else {
+        else
+        {
             return json_encode( $retArray );
         }
     }
@@ -120,7 +125,8 @@ class SQL
             while( $assoc = mysql_fetch_assoc( $result ) )
             {
                 $abstract = '';
-                if( $brief !== 0 ) {
+                if( $brief !== 0 )
+                {
                     // 摘要截取, 先检测再截取(确保字数)
                     $cover = getFirstImg( $assoc['post_content'] );
                     $text = removeTag( $assoc['post_content'] );
@@ -331,7 +337,7 @@ class SQL
                     {
                         $isMatch = true;
                         // 取完整模式匹配到的片段
-                        $brief =  $matches[0];
+                        $brief = $matches[0];
                         // 高亮关键字
                         $brief = preg_replace($pattern, '<b class="keyword">$1</b>', $brief);
                     }
@@ -395,7 +401,7 @@ function getFirstImg( $text ) {
     return "";
 }
 
-// HTML标签闭合检测, $text的数据过大时, 可能存在一定的性能问题, 取自XXX
+// HTML标签闭合检测, 取自XXX
 function fixHtmlTags( $text ) {
     $text = preg_replace( "/&quot;/", "&quot;\"", htmlspecialchars( $text ) );
     $tags = "/&lt;(!|)(\/|)(\w*)(\ |)(\w*)([\\\=]*)(?|(\")\"&quot;\"|)(?|(.*)?&quot;(\")|)([\ ]?)(\/|)&gt;/i";
