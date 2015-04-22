@@ -7,7 +7,7 @@ define(function( require, exports ){
 	var URL = LOC.href;
 	var util = require('util');
 	var view = require('@core/view').base;
-	var C = require('@core/config');
+	var C = require('@data/config');
 	var action = C.action;
 	var data = {
 		dom    : null, // 容器对象

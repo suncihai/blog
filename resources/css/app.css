@@ -416,6 +416,7 @@ a:hover {
   box-sizing: border-box;
 }
 .G-frameBodyBlogFooter {
+  display: none;
   position: relative;
   width: 100%;
   min-height: 80px;

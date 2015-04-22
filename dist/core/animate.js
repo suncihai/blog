@@ -3,7 +3,7 @@
  */
 define(function( require, exports ){
 	var util = require('util');
-	var C = require('@core/config');
+	var C = require('@data/config');
 
 	/**
 	 * going 应用CSS3 keframe

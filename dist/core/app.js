@@ -11,7 +11,7 @@
 define(function( require, exports ) {
 	var view = require('@core/view').base,
 		router = require('@core/router'),
-		config = require('@core/config'),
+		config = require('@data/config'),
 		animate = require('@core/animate'),
 		eventHelper = require('@core/eventHelper'),
 		dataHelper = require('@core/dataHelper').base;
@@ -24,7 +24,7 @@ define(function( require, exports ) {
 	exports.controller = router;
 
 	// 方法导出
-	exports.getConfig = function() {
-		return config;
+	exports.getConfig = function( field ) {
+		return field ? config[field] : config;
 	}
 });

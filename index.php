@@ -15,7 +15,7 @@
 	<title>应用加载中……</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/sea/sea.js"></script>
-	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/core/init.js"></script>
+	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/data/init.js"></script>
 	<style>
 	noscript{
 		font-family: Arial, 'Microsoft Yahei'; display: block; width: 550px; height: 80px;

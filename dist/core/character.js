@@ -1,5 +1,5 @@
 /*
-	客户端判断模块
+	浏览器特性判断模块
  */
 define(function( require, exports ) {
 	var win = window;
@@ -56,7 +56,7 @@ define(function( require, exports ) {
 	}
 
 	// 检查是否需要跳转, 需要->true, 不需要->false
-	exports.checkJump = function() {
+	exports.j = function() {
 		// 页面跳转
 		if( !isSupportCSS3() || doc.documentMode == 10 ) {
 			var path = getJumpPath();

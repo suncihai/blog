@@ -19,6 +19,7 @@ define(function( require, exports ){
 			this.$param = util.merge( C.archiveParam, {
 				'page': 1
 			});
+			layout.hideFooter();
 			this.build();
 		},
 

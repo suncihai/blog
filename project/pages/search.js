@@ -17,6 +17,7 @@ define(function( require, exports ){
 			this.$dom = data.dom;
 			this.$word = data.search && data.search.word;
 			this.$renderWord = this.$word || '';
+			layout.hideFooter();
 			this.build();
 		},
 

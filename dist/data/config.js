@@ -62,7 +62,7 @@ define(function( require, exports ) {
 		animationdEnd: 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
 
 		// 延迟展示(毫秒)
-		delay: 500
+		delay: 388
 	}
 	return CONFIG;
 });

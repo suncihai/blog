@@ -6,6 +6,7 @@
 			// 核心模块
 			'@dist'       : 'dist',
 			'@core'       : 'dist/core',
+			'@data'       : 'dist/data',
 			'@plugins'    : 'dist/plugins',
 			// 控制器模块
 			'@controller' :	'controller',
@@ -60,8 +61,8 @@
 	];
 
 	// 浏览器特性判断
-	sea.use('/blog/dist/core/browser', function( browser ) {
-		if( browser.checkJump() ){
+	sea.use('/blog/dist/core/character', function( b ) {
+		if( b.j() ){
 			return false;
 		}
 		// 初始化开始

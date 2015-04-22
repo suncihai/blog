@@ -3,7 +3,7 @@
  */
 define(function( require, exports ){
 	var $ = require('jquery');
-	var C = require('@core/config');
+	var C = require('@data/config');
 	var LAYOUT_PATH = '@modules/layout';
 
 	var Main = {
