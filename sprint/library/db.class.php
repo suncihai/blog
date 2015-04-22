@@ -38,9 +38,10 @@ class SQL
     }
 
     /**
-     * query 基本查询,返回没有格式化字段的结果
-     * param  [String]  $sql      [SQL语句]
-     * param  [Boolean] $private  [内部使用]
+     * query 基本查询接口,返回查询的结果数组(原始字段)
+     * param  [String]  $sql     [SQL语句]
+     * param  [Boolean] $private [内部使用]
+     * param  [Return]           [返回items->结果集合, total->结果总数]
      */
     public function query( $sql, $private = true )
     {
@@ -56,12 +57,13 @@ class SQL
             // 结果行数
             $total = mysql_num_rows( $result );
             mysql_free_result( $result );
+            // 结果
             $resultObject = array
             (
                 'items' => $itemArray,
                 'total' => $total
             );
-            // 最终返回的结果
+            // 返回结构
             $retArray = array
             (
                 'success' => true,
@@ -70,15 +72,23 @@ class SQL
         }
         else
         {
+            // 结果
+            $resultObject = array
+            (
+                'items' => null,
+                'total' => 0
+            );
+            // 返回结构
             $retArray = array
             (
                 'success' => false,
-                'result'  => null
+                'result'  => $resultObject
             );
         }
+        // 函数返回体(内部调用只返回items和total)
         if( $private )
         {
-            return $itemArray;
+            return $resultObject;
         }
         else
         {
@@ -89,24 +99,22 @@ class SQL
     /**
      * getArchiveList 获取某个栏目的文章列表
      * param  [Number] $catid   [栏目ID]
+     * param  [Number] $page    [请求的页码]
      * param  [Number] $limit   [每页显示文章数目]
      * param  [Number] $brief   [摘要的长度(字数)]
      */
     public function getArchiveList( $catid, $page, $limit, $brief )
     {
+        // 查询$catid栏目下的所有文章ID记录
+        $resQueryID = $this->query("SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id=$catid");
+        $IDArr = array();
+        foreach( $resQueryID['items'] as $key => $item ) {
+            array_push( $IDArr, $item["object_id"] );
+        }
+        $IDs = implode(",", $IDArr);
+
         // 结果排序方式
         $orderBy = 'post_date';
-        // 查询$catid栏目下的所有文章ID
-        $resultIDs = mysql_query("SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id=$catid");
-        $IDArr = array();
-        while( $assocIDs = mysql_fetch_assoc( $resultIDs ) )
-        {
-            array_push( $IDArr, $assocIDs["object_id"] );
-        }
-        // 结果总条数
-        $total = mysql_num_rows( $resultIDs );
-        mysql_free_result( $resultIDs );
-        $IDs = implode(",", $IDArr);
         // 查询字段
         $_fields = "ID, post_title, post_date, post_content, comment_count";
         // 查询条件(返回正常的文章必须指定post_status和post_type)
@@ -115,43 +123,40 @@ class SQL
         $_order = "ORDER BY $orderBy DESC";
         // 分页起点
         $start = ( $page - 1 ) * $limit;
-        // SQL语句
-        $sql = "SELECT $_fields FROM wp_posts WHERE $_where $_order LIMIT $start, $limit";
-        $result = mysql_query( $sql, $this->conn );
-        if( $result )
+
+        // 查询结果总条数(直接用IDs的结果数会不准确)
+        $resQueryAll = $this->query("SELECT ID FROM wp_posts WHERE $_where");
+        $total = $resQueryAll['total'];
+        $resQueryList = $this->query("SELECT $_fields FROM wp_posts WHERE $_where $_order LIMIT $start, $limit");
+        // 转换数据格式
+        if( $resQueryList['total'] )
         {
-            // 选项数组集合
             $itemArray = array();
-            while( $assoc = mysql_fetch_assoc( $result ) )
-            {
+            foreach( $resQueryList['items'] as $key => $item ) {
                 $abstract = '';
                 if( $brief !== 0 )
                 {
-                    // 摘要截取, 先检测再截取(确保字数)
-                    $cover = getFirstImg( $assoc['post_content'] );
-                    $text = removeTag( $assoc['post_content'] );
-                    // $text = fixHtmlTags( $text );
+                    // 截取文章摘要
+                    $cover = getFirstImg( $item['post_content'] );
+                    $text = removeTag( $item['post_content'] );
                     $abstract = mb_substr( strip_tags( $text ), 0, $brief, 'utf8');
                 }
-
                 $itemFormat = array
                 (
-                    'id'           => intval( $assoc['ID'] ),
-                    'title'        => $assoc['post_title'],
-                    'publishDate'  => $assoc['post_date'],
-                    // 'modifiedDate' => $assoc['post_modified'],
+                    'id'           => intval( $item['ID'] ),
+                    'title'        => $item['post_title'],
+                    'publishDate'  => $item['post_date'],
                     'content'      => $abstract,
-                    'comments'     => intval( $assoc['comment_count'] ),
+                    'comments'     => intval( $item['comment_count'] ),
                     'cover'        => $cover
                 );
                 array_push( $itemArray, $itemFormat );
             }
-            mysql_free_result( $result );
             $resArray = array
             (
                 'items' => $itemArray,               // 选项数组
                 'total' => intval( $total ),         // 总条数
-                'pages' => ceil( $total / $limit ), // 总页数
+                'pages' => ceil( $total / $limit ),  // 总页数
                 'page'  => intval( $page )           // 当前第几页
             );
             // 最终返回的结果
@@ -169,6 +174,7 @@ class SQL
                 'result'  => null
             );
         }
+
         return json_encode( $retArray );
     }
 
@@ -182,27 +188,22 @@ class SQL
         $fields = "post_title, post_date, post_content, comment_count";
         // 查询条件
         $filter = "LIMIT 1";
-        $sql = "SELECT $fields FROM wp_posts WHERE ID = $artid $filter";
         // 执行查询操作
-        $result = mysql_query( $sql, $this->conn );
+        $resQueryArticle = $this->query("SELECT $fields FROM wp_posts WHERE ID = $artid $filter");
         // 结果数
-        $num = mysql_num_rows( $result );
-        // 查询是否成功
-        if( $result )
+        $num = $resQueryArticle['total'];
+        if( $num == 1 )
         {
-            $assoc = mysql_fetch_assoc( $result );
-            mysql_free_result( $result );
-            $isEmtpty = $assoc['post_content'] === '';
+            $article = $resQueryArticle['items'][0];
             // 只返回内容不为空的数据
-            if( !$isEmtpty )
+            if( $article['post_content'] != '' )
             {
                 $itemFormat = array
                 (
-                    'title'        => $assoc['post_title'],
-                    'publishDate'  => $assoc['post_date'],
-                    // 'modifiedDate' => $assoc['post_modified'],
-                    'comments'     => intval( $assoc['comment_count'] ),
-                    'content'      => postAutoP( $assoc['post_content'] )
+                    'title'        => $article['post_title'],
+                    'publishDate'  => $article['post_date'],
+                    'comments'     => intval( $article['comment_count'] ),
+                    'content'      => postAutoP( $article['post_content'] )
                 );
                 // 最终返回的结果
                 $retArray = array
@@ -231,6 +232,7 @@ class SQL
                 'result'  => null
             );
         }
+
         return json_encode( $retArray );
     }
 
@@ -247,37 +249,30 @@ class SQL
         $where = "post_status='publish' AND post_type='post'";
         // 限制条件
         $filter = "ORDER BY post_date DESC LIMIT $amount";
-        $sql = "SELECT $fields FROM wp_posts WHERE $where $filter";
-        $result = mysql_query( $sql, $this->conn );
-        if( $result )
+        // 执行查询
+        $resQueryList = $this->query("SELECT $fields FROM wp_posts WHERE $where $filter");
+        if( $resQueryList['total'] )
         {
             // 选项数组集合
             $itemArray = array();
-            while( $assoc = mysql_fetch_assoc( $result ) )
-            {
-                $ID = $assoc["ID"];
-                $sql_getArchive = "SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$ID LIMIT 1";
-                $resultArchie = mysql_query( $sql_getArchive );
-                $archiveAssoc = mysql_fetch_assoc( $resultArchie );
-                mysql_free_result( $resultArchie );
-                $archiveID = $archiveAssoc['term_taxonomy_id'];
+            foreach( $resQueryList['items'] as $key => $item ) {
+                $ID = $item["ID"];
+                $resQueryID = $this->query("SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$ID LIMIT 1");
+                $archiveID = $resQueryID['items'][0]['term_taxonomy_id'];
                 $itemFormat = array
                 (
                     'id'           => $ID,
                     'archive'      => $archiveID,
-                    'title'        => $assoc['post_title'],
-                    'publishDate'  => $assoc['post_date'],
-                    'comments'     => $assoc['comment_count']
+                    'title'        => $item['post_title'],
+                    'publishDate'  => $item['post_date'],
+                    'comments'     => $item['comment_count']
                 );
                 array_push( $itemArray, $itemFormat );
             }
-            // 结果行数
-            $total = mysql_num_rows( $result );
-            mysql_free_result( $result );
             $resultObject = array
             (
                 'items' => $itemArray,
-                'total' => $total
+                'total' => $resQueryList['total']
             );
             // 最终返回的结果
             $retArray = array
@@ -294,6 +289,7 @@ class SQL
                 'result'  => null
             );
         }
+
         return json_encode( $retArray );
     }
 
@@ -305,32 +301,27 @@ class SQL
     {
         // 查询字段
         $_fields = "ID, post_title, post_date, post_content, comment_count";
-        // 查询条件(返回正常的文章必须指定post_status和post_type)
+        // 模糊查询条件
         $_where = "(post_title LIKE '%".$word."%' OR post_content LIKE '%".$word."%') AND post_status='publish' AND post_type='post'";
-        // SQL语句
-        $sql = "SELECT $_fields FROM wp_posts WHERE $_where";
-        $result = mysql_query( $sql, $this->conn );
-        // 结果总条数
-        $total = mysql_num_rows( $result );
-        if( $result )
+        // 执行查询
+        $resQuery = $this->query("SELECT $_fields FROM wp_posts WHERE $_where");
+        if( $resQuery['total'] )
         {
             // 选项数组集合
             $itemArray = array();
-            while( $assoc = mysql_fetch_assoc( $result ) )
-            {
+            foreach( $resQuery['items'] as $key => $item ) {
+
                 // 查询每条文章对应的栏目ID
-                $artid = $assoc['ID'];
-                $resultIDs = mysql_query("SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$artid");
-                $assocID = mysql_fetch_assoc( $resultIDs );
-                mysql_free_result( $resultIDs );
-                $archiveID = $assocID['term_taxonomy_id'];
+                $artid = $item['ID'];
+                $resQueryTermID = $this->query("SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$artid");
+                $archiveID = $resQueryTermID['items'][0]['term_taxonomy_id'];
 
                 // 关键字相关的片段截取(目标的前后100字符)
                 $brief = "";
                 $pattern = '/('.$word.')/i';
                 $isMatch = false;
                 // 先去掉html标签再进行关键字匹配
-                $content = removeTag( $assoc['post_content'] );
+                $content = removeTag( $item['post_content'] );
                 if( preg_match("/(.{100}".$word.".{100})/sui", $content, $matches) )
                 {
                     if( count( $matches ) !== 0 )
@@ -339,34 +330,31 @@ class SQL
                         // 取完整模式匹配到的片段
                         $brief = $matches[0];
                         // 高亮关键字
-                        $brief = preg_replace($pattern, '<b class="keyword">$1</b>', $brief);
+                        $brief = preg_replace( $pattern, '<b class="keyword">$1</b>', $brief );
                     }
                 }
                 // 标题也加高亮
-                $title = preg_replace($pattern, '<b class="keyword">$1</b>', $assoc['post_title']);
+                $title = preg_replace( $pattern, '<b class="keyword">$1</b>', $item['post_title'] );
 
-                if( $isMatch || ($title !== $assoc['post_title']) )
+                if( $isMatch || ($title !== $item['post_title']) )
                 {
                     $itemFormat = array
                     (
                         'id'           => intval( $artid ),
                         'catId'        => intval( $archiveID ),
                         'title'        => $title,
-                        'tips'         => $assoc['post_title'],
-                        'publishDate'  => $assoc['post_date'],
+                        'tips'         => $item['post_title'],
+                        'publishDate'  => $item['post_date'],
                         'brief'        => $brief,
-                        // 'modifiedDate' => $assoc['post_modified'],
-                        'comments'     => intval( $assoc['comment_count'] )
+                        'comments'     => intval( $item['comment_count'] )
                     );
                     array_push( $itemArray, $itemFormat );
                 }
-
             }
-            mysql_free_result( $result );
             $resArray = array
             (
                 'items' => $itemArray,               // 选项数组
-                'total' => count( $itemArray )          // 总条数
+                'total' => count( $itemArray )       // 总条数
             );
             // 最终返回的结果
             $retArray = array
@@ -383,6 +371,7 @@ class SQL
                 'result'  => null
             );
         }
+
         return json_encode( $retArray );
     }
 }
