@@ -18,7 +18,7 @@
 		'alias': {
 			'app'    : '@core/app.js',
 			'util'   : '@core/util.js',
-			'jquery' : '@dist/jquery/jquery-2.1.3.min.js'
+			'jquery' : '@dist/jquery/jquery-1.8.3.min.js'
 		},
 		'map': [
 			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=20150402']

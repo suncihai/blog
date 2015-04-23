@@ -60,8 +60,9 @@ class SQL
             // 结果
             $resultObject = array
             (
-                'items' => $itemArray,
-                'total' => $total
+                'items'   => $itemArray,
+                'total'   => $total,
+                'success' => true
             );
             // 返回结构
             $retArray = array
@@ -76,7 +77,8 @@ class SQL
             $resultObject = array
             (
                 'items' => null,
-                'total' => 0
+                'total' => 0,
+                'success' => false
             );
             // 返回结构
             $retArray = array
@@ -129,7 +131,7 @@ class SQL
         $total = $resQueryAll['total'];
         $resQueryList = $this->query("SELECT $_fields FROM wp_posts WHERE $_where $_order LIMIT $start, $limit");
         // 转换数据格式
-        if( $resQueryList['total'] )
+        if( $resQueryList['success'] )
         {
             $itemArray = array();
             foreach( $resQueryList['items'] as $key => $item )
@@ -225,7 +227,6 @@ class SQL
                     'total'   => 0
                 );
             }
-
         }
         else
         {
@@ -254,7 +255,7 @@ class SQL
         $filter = "ORDER BY post_date DESC LIMIT $amount";
         // 执行查询
         $resQueryList = $this->query("SELECT $fields FROM wp_posts WHERE $where $filter");
-        if( $resQueryList['total'] )
+        if( $resQueryList['success'] )
         {
             // 选项数组集合
             $itemArray = array();
@@ -309,7 +310,7 @@ class SQL
         $_where = "(post_title LIKE '%".$word."%' OR post_content LIKE '%".$word."%') AND post_status='publish' AND post_type='post'";
         // 执行查询
         $resQuery = $this->query("SELECT $_fields FROM wp_posts WHERE $_where");
-        if( $resQuery['total'] )
+        if( $resQuery['success'] )
         {
             // 选项数组集合
             $itemArray = array();
