@@ -40,7 +40,7 @@ define(function( require, exports ){
 				callback.call( scope, false, res );
 			}
 
-			function _fnError( msg ) {
+			function _fnError( rqs, msg, error ) {
 				if( !scope ) {
 					scope = this;
 				}

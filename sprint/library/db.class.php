@@ -132,13 +132,16 @@ class SQL
         if( $resQueryList['total'] )
         {
             $itemArray = array();
-            foreach( $resQueryList['items'] as $key => $item ) {
+            foreach( $resQueryList['items'] as $key => $item )
+            {
                 $abstract = '';
                 if( $brief !== 0 )
                 {
                     // 截取文章摘要
                     $cover = getFirstImg( $item['post_content'] );
-                    $text = removeTag( $item['post_content'] );
+                    $text = $item['post_content'];
+                    $text = removeTag( $text );
+                    $text = fixStripHtmlTags( $text );
                     $abstract = mb_substr( strip_tags( $text ), 0, $brief, 'utf8');
                 }
                 $itemFormat = array
@@ -255,7 +258,8 @@ class SQL
         {
             // 选项数组集合
             $itemArray = array();
-            foreach( $resQueryList['items'] as $key => $item ) {
+            foreach( $resQueryList['items'] as $key => $item )
+            {
                 $ID = $item["ID"];
                 $resQueryID = $this->query("SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$ID LIMIT 1");
                 $archiveID = $resQueryID['items'][0]['term_taxonomy_id'];
@@ -309,7 +313,8 @@ class SQL
         {
             // 选项数组集合
             $itemArray = array();
-            foreach( $resQuery['items'] as $key => $item ) {
+            foreach( $resQuery['items'] as $key => $item )
+            {
 
                 // 查询每条文章对应的栏目ID
                 $artid = $item['ID'];
@@ -377,12 +382,14 @@ class SQL
 }
 
 // 去掉文章的html标签
-function removeTag( $pee ) {
+function removeTag( $pee )
+{
     return preg_replace('/<\/?[^>]+>/i', '', $pee);
 }
 
 // 获取第一张图片作为缩略图
-function getFirstImg( $text ) {
+function getFirstImg( $text )
+{
     preg_match("<img.*src=[\"](.*?)[\"].*?>", $text, $match);
     if( $match ) {
         return $match[1];
@@ -390,8 +397,9 @@ function getFirstImg( $text ) {
     return "";
 }
 
-// HTML标签闭合检测, 取自XXX
-function fixHtmlTags( $text ) {
+// 去掉HTML标签并作闭合检测, 取自XXX
+function fixStripHtmlTags( $text )
+{
     $text = preg_replace( "/&quot;/", "&quot;\"", htmlspecialchars( $text ) );
     $tags = "/&lt;(!|)(\/|)(\w*)(\ |)(\w*)([\\\=]*)(?|(\")\"&quot;\"|)(?|(.*)?&quot;(\")|)([\ ]?)(\/|)&gt;/i";
     $replacement = "<$1$2$3$4$5$6$7$8$9$10$11>";
@@ -402,7 +410,8 @@ function fixHtmlTags( $text ) {
 }
 
 // 文章自动加上段落标签<p></p>, 取自WordPress: wp-includes/formatting.php wpautop() Line 245
-function postAutoP( $pee, $br = true ) {
+function postAutoP( $pee, $br = true )
+{
     $pre_tags = array();
 
     if ( trim($pee) === '' )
@@ -490,7 +499,8 @@ function postAutoP( $pee, $br = true ) {
     return $pee;
 }
 
-function _autop_newline_preservation_helper( $matches ) {
+function _autop_newline_preservation_helper( $matches )
+{
     return str_replace("\n", "<WPPreserveNewline />", $matches[0]);
 }
 
