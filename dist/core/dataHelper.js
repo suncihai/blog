@@ -6,23 +6,24 @@ define(function( require, exports ){
 	var util = require('util');
 
 	var DataHelper = {
+
 		/**
 		 * _send 发送Ajax请求
 		 * @param  {String}    type      [请求类型get,post]
 		 * @param  {String}    url       [请求地址]
-		 * @param  {JSON}      param     [请求参数]
+		 * @param  {JSON}      data      [请求数据]
 		 * @param  {Function}  callback  [成功或者错误的回调函数]
 		 * @param  {Object}    scope     [作用域]
 		 * @return {NULL}                [无返回值]
 		 */
-		_send: function( type, url, param, callback, scope ) {
+		_send: function( type, url, data, callback, scope ) {
 			// 参数检测
 			if( !util.isString( url ) ) {
 				util.error('错误的请求URL');
 				return false;
 			}
 
-			if( !util.isObject( param ) ) {
+			if( !util.isObject( data ) ) {
 				util.error('错误的请求参数');
 				return false;
 			}
@@ -40,37 +41,46 @@ define(function( require, exports ){
 				callback.call( scope, false, res );
 			}
 
-			function _fnError( rqs, msg, error ) {
+			// 请求失败, 错误信息回调对象: {status: 状态, message: 信息}
+			// status可能值为：timeout, error, notmodified 和 parsererror
+			function _fnError( xhr, status, error ) {
+				var msg;
 				if( !scope ) {
 					scope = this;
 				}
-				callback.call( scope, msg, null );
-			}
-
-			// 完成状态,主要处理超时的情况
-			function _fnComplete( rqs, status ) {
-				if( !scope ) {
-					scope = this;
-				}
-				if( status == 'timeout' ) {
-					AJAX.abort();
-					callback.call( scope, {
-						'timeout': true,
-						'status': '请求超时'
-					}, null );
+				switch( status ) {
+					// 超时需要返回错误信息
+					case 'timeout':
+						xhr.abort();
+						msg = {
+							'status': status,
+							'message': '请求超时'
+						}
+						callback.call( scope, msg, null );
+					break;
+					// 服务器返回不严格的JSON数据
+					case 'parsererror':
+						msg = {
+							'status': status,
+							'message': 'JSON解析失败'
+						}
+						callback.call( scope, msg, null );
+					break;
+					// 其他直接log错误信息
+					default: util.error('请求失败', 'status: ' + status + ', error: ' + error );
 				}
 			}
 
 			// 拉取数据
-			var AJAX = jquery.ajax({
+			jquery.ajax({
 				'url': url,
 				'method': type,
 				'dataType': 'json',
-				'data': param,
-				'timeout': 15000,
+				'contentType': 'application/json; charset=UTF-8',
+				'data': data,
+				'timeout': 8888,
 				'success': _fnSuccess,
-				'error': _fnError,
-				'complete' : _fnComplete
+				'error': _fnError
 			});
 		},
 
