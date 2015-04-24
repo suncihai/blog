@@ -110,7 +110,8 @@ class SQL
         // 查询$catid栏目下的所有文章ID记录
         $resQueryID = $this->query("SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id=$catid");
         $IDArr = array();
-        foreach( $resQueryID['items'] as $key => $item ) {
+        foreach( $resQueryID['items'] as $key => $item )
+        {
             array_push( $IDArr, $item["object_id"] );
         }
         $IDs = implode(",", $IDArr);
@@ -380,6 +381,24 @@ class SQL
 
         return json_encode( $retArray );
     }
+
+     /**
+     * getCommentList 获取一篇文章的所有评论列表(暂不考虑分页)
+     * param  [Number]  $artid   [关键字]
+     */
+    public function getCommentList( $artid )
+    {
+        //
+    }
+
+     /**
+     * setComment 添加一条评论
+     * param  [Number]  $post_id   [文章ID]
+     */
+    public function setComment( $post_id )
+    {
+        //
+    }
 }
 
 // 去掉文章的html标签
@@ -392,7 +411,8 @@ function removeTag( $pee )
 function getFirstImg( $text )
 {
     preg_match("<img.*src=[\"](.*?)[\"].*?>", $text, $match);
-    if( $match ) {
+    if( $match )
+    {
         return $match[1];
     }
     return "";

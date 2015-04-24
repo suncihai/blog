@@ -109,8 +109,8 @@ define(function( require, exports ){
 			var dom = self.$data.dom;
 			var dataError = '拉取数据似乎出了点问题~';
 			if( err ) {
-				util.error('数据拉取失败！错误码:' + err.status + ', 错误信息:' + err.statusText);
-				if( err.timeout ) {
+				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
+				if( err.status === 'timeout' ) {
 					dom.html('<div class="noData animated bounce">请求超时，请按F5刷新重试~</div>');
 				}
 				return false;
