@@ -263,4 +263,30 @@ define(function( require, util ){
 		return retJSON;
 	}
 
+	/**
+	 * find 根据字段和值查找数组中的元素
+	 * @param  {Array}   arr    [数组]
+	 * @param  {Mix}     value  [查询值]
+	 * @param  {String}  field  [对应的字段名]
+	 */
+	util.find = function( arr, value, field ) {
+		var ret;
+		this.each( arr, function( item ) {
+			if( item[field] === value ) {
+				ret = item;
+				return false;
+			}
+		});
+		return ret;
+	}
+
+	/**
+	 * getClientHeight 获取页面可视区高度
+	 */
+	util.getClientHeight = function() {
+		var docElem = document.documentElement;
+		var docBody = document.body;
+		return document.compatMode === "CSS1Compat" ? docElem.clientHeight : docBody.clientHeight;
+	}
+
 });

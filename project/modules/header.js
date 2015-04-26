@@ -4,7 +4,7 @@
 define(function( require, exports ){
 	var app = require('app');
 	var $ = require('jquery');
-	var C = app.getConfig();
+	var c = app.getConfig();
 	var util = require('util');
 	var HeadRoom = require('@plugins/headroom/headroom').base;
 
@@ -44,7 +44,7 @@ define(function( require, exports ){
 			}
 
 			// 创建导航对象
-			var nav = new Navigator( C.nav );
+			var nav = new Navigator( c.nav );
 			nav.putTo( doms.nav );
 
 			// 创建工具

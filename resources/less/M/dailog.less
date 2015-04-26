@@ -1,0 +1,45 @@
+.M-dailog{
+	height: 100%;
+	background: #FFF;
+	&Head{
+		position: relative;
+		padding: 0 1em;
+		height: 2.8em;
+		line-height: 2.8em;
+		background: rgba(247,247,247,.55);
+		border-bottom: 1px solid #efefef;
+		&Title{
+			font-size: 1.8rem;
+			font-weight: normal;
+		}
+		&Close{
+			position: absolute;
+			right: 0;
+			top: 0;
+			width: 2.8em;
+			height: 2.8em;
+			cursor: pointer;
+			-webkit-transform: scale(0.55);
+			transform: scale(0.55);
+			&Line{
+				position: absolute;
+				top: -5px;
+				width: 2px;
+				height: 3.5em;
+				background: #AAA;
+				-webkit-transform-origin: 50% 50%;
+				transform-origin: 50% 50%;
+			}
+			&Line:nth-child(1) {
+				right: 1.4em;
+				-webkit-transform: rotate(45deg);
+				transform: rotate(45deg);
+			}
+			&Line:nth-child(2) {
+				left: 1.4em;
+				-webkit-transform: rotate(-45deg);
+				transform: rotate(-45deg);
+			}
+		}
+	}
+}

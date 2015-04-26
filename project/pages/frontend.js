@@ -3,7 +3,7 @@
  */
 define(function( require, exports ){
 	var app = require('app');
-	var C = app.getConfig();
+	var c = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
 
@@ -11,6 +11,7 @@ define(function( require, exports ){
 	var banner = require('@modules/banner').base;
 	var loading = require('@modules/loading').base;
 	var prism = require('@plugins/prism/prism').base;
+	var comment = require('@modules/comment').base;
 
 	var Article = {
 		// 初始化
@@ -28,7 +29,7 @@ define(function( require, exports ){
 
 		// 拉取数据
 		load: function( id ) {
-			var dc = C.dataCenter;
+			var dc = c.dataCenter;
 			var param = {
 				'artid': id || this.$data.param
 			}
@@ -73,7 +74,7 @@ define(function( require, exports ){
 					// 'tag': '标签：* | ',
 					'comments': '评论数：0'
 				})
-				// .setCrumbs( C.archiveTitle[this.$data.name], this.$data.param );
+				// .setCrumbs( c.archiveTitle[this.$data.name], this.$data.param );
 				return;
 			}
 			this.build( info );
@@ -83,12 +84,12 @@ define(function( require, exports ){
 		build: function( info ) {
 			var self = this;
 			var dom = self.$data.dom;
-			var html = self.$dom = $([
+			self.$dom = $([
 				'<div class="content">',
 					'<article class="article">'+ info.content +'</article>',
-				'</div>'
-			].join(''));
-			html.appendTo( dom ).hide();
+				'</div>',
+				'<div class="comments"/>'
+			].join('')).appendTo( dom ).hide();
 
 			// 代码高亮渲染
 			self.renderHighLighter();
@@ -96,21 +97,27 @@ define(function( require, exports ){
 			// 标题
 			layout.setTitle( self.$data.name, info.title );
 
+			// 创建评论模块
+			comment.init({
+				'target': dom.find('.comments'),
+				'artid': this.$data.param
+			});
+
 			// 设置banner内容
 			banner.setData({
 				'type': 'article',
 				'title': info.title,
-				'time': '时间：'+ info.publishDate.toString().slice( 0, 10 ) + ' | ',
+				'time': '时间：'+ info.date.toString().slice( 0, 10 ) + ' | ',
 				// 'tag': '标签：' + (info.tag || '无')  + ' | ',
 				'comments': '评论数：'+ info.comments
 			})
-			// .setCrumbs( C.archiveTitle[self.$data.name], self.$data.param );
+			// .setCrumbs( c.archiveTitle[self.$data.name], self.$data.param );
 
 			// 隐藏loading
 			setTimeout(function() {
 				self.hideLoading();
 				layout.showFooter();
-			}, C.delay);
+			}, c.delay);
 
 		},
 
