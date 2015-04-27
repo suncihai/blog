@@ -96,11 +96,24 @@ define(function( require, exports ){
 
 			// 绑定关闭对话框事件
 			app.event.bind( this.$doms.close, 'click', this.eventCloseDailog, this );
+			app.event.hover( this.$doms.close, this.eventCloseEnter, this.eventCloseOut, this );
+		},
+
+		eventCloseEnter: function() {
+			app.animate.going(this.$doms.close, 'rotateCloseForward');
+		},
+
+		eventCloseOut: function() {
+			app.animate.going(this.$doms.close, 'rotateCloseBack');
 		},
 
 		// 点击关闭对话框
 		eventCloseDailog: function() {
-			this.hide();
+			var self = this;
+			self.hide();
+			// app.animate.going( DAILOG, 'bounceOut', function() {
+			// 	self.$doms.close.removeClass('animated rotateCloseForward rotateCloseBack');
+			// });
 			app.event.fire('dailogClosed');
 			return false;
 		}

@@ -20,12 +20,14 @@
 			width: 2.8em;
 			height: 2.8em;
 			cursor: pointer;
-			-webkit-transform: scale(0.55);
-			transform: scale(0.55);
+			-webkit-transform-oringin: 50% 50%;
+			transform-oringin: 50% 50%;
+			-webkit-transform: rotate(0deg) scale(0.5);
+			transform: rotate(0deg) scale(0.5);
 			&Line{
 				position: absolute;
 				top: -5px;
-				width: 2px;
+				width: 3px;
 				height: 3.5em;
 				background: #AAA;
 				-webkit-transform-origin: 50% 50%;
@@ -42,5 +44,59 @@
 				transform: rotate(-45deg);
 			}
 		}
+	}
+}
+// 关闭按钮旋转动画
+.rotateCloseForward{
+	-webkit-animation-name: rotateCloseForward;
+	animation-name: rotateCloseForward;
+	-webkit-animation-duration: 50ms;
+	animation-duration: 50ms;
+	-webkit-animation-timing-function: liner;
+	animation-timing-function: liner;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+@-webkit-keyframes rotateCloseForward{
+	0%{
+		-webkit-transform: rotate(0deg) scale(0.5);
+	}
+	100%{
+		-webkit-transform: rotate(360deg) scale(0.5);
+	}
+}
+@keyframes rotateCloseForward{
+	0%{
+		transform: rotate(0deg) scale(0.5);
+	}
+	100%{
+		transform: rotate(360deg) scale(0.5);
+	}
+}
+// 反过来
+.rotateCloseBack{
+	-webkit-animation-name: rotateCloseBack;
+	animation-name: rotateCloseBack;
+	-webkit-animation-duration: 50ms;
+	animation-duration: 50ms;
+	-webkit-animation-timing-function: liner;
+	animation-timing-function: liner;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+}
+@-webkit-keyframes rotateCloseBack{
+	0%{
+		-webkit-transform: rotate(360deg) scale(0.5);
+	}
+	100%{
+		-webkit-transform: rotate(0deg) scale(0.5);
+	}
+}
+@keyframes rotateCloseBack{
+	0%{
+		transform: rotate(360deg) scale(0.5);
+	}
+	100%{
+		transform: rotate(0deg) scale(0.5);
 	}
 }
