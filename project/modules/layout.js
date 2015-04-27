@@ -73,7 +73,7 @@ define(function( require, exports ){
 			var mainScene = this.getDOM('MAIN');
 
 			// 移除初始元素
-			$('#LOADING,noscript,#painting').remove();
+			$('noscript,#painting').remove();
 
 			mainScene.show().siblings().hide();
 

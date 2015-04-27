@@ -70,10 +70,10 @@ define(function( require, exports ){
 							'<span class="M-commentIssuseHeadTime">'+ '发表于 ' + date +'</span>',
 							'<div class="M-commentIssuseHeadOp">',
 								'<span data-id="'+ item.id +'" class="op like">',
-									'支持(<i class="likes">123</i>)',
+									'支持(<i class="likes">0</i>)',
 								'</span>',
 								'<span data-id="'+ item.id +'" class="op dislike">',
-									'反对(<i class="dislikes">3</i>)',
+									'反对(<i class="dislikes">0</i>)',
 								'</span>',
 								'<span data-id="'+ item.id +'" class="op reply">'+ '回复TA' +'</span>',
 							'</div>',
@@ -100,7 +100,7 @@ define(function( require, exports ){
 				case 'dislike':
 				break;
 				case 'reply':
-					popwin.init( data );
+					popwin.init({'title': '回复评论：'}).setData( data );
 				break;
 			}
 			return false;
@@ -110,23 +110,96 @@ define(function( require, exports ){
 
 	// 评论弹出层
 	var popwin = {
-		init: function( data ) {
-			this.$dailog = dailog
+		// config配置参数：{title: 对话框标题}
+		init: function( config ) {
+			this.$data = null;
+			this.$dailogBody = dailog
 				.init()
-				.setTitle('添加评论')
+				.setTitle( config.title )
 				.show()
 				.getBody();
-			// 缓存评论数据
-			this.setData( data );
+			return this;
 		},
 
 		setData: function( data ) {
 			this.$data = data;
+			this.$dailogBody.empty();
 			this.buildComment();
 		},
 
 		buildComment: function() {
-			//
+			var holderTxt = '回复“'+ this.$data.content + '”' || '在这里输入评论内容~';
+			var holderNick = '在这输入昵称，不能为纯数字，不能包含特殊字符';
+			var holderCode = '输入验证码';
+			var dom = $([
+				'<div class="M-commentForm">',
+					'<textarea class="M-commentFormText"  placeholder="'+ holderTxt +'"/>',
+					'<input type="text" class="M-commentFormNick" placeholder="'+ holderNick +'">',
+					'<div class="M-commentFormFooter">',
+						'<input class="M-commentFormFooterCode"  placeholder="'+ holderCode +'">',
+						'<img class="M-commentFormFooterPic"/>',
+						'<button class="M-commentFormFooterSubmit">发表评论</button>',
+						'<button class="M-commentFormFooterReset">重置</button>',
+					'</div>',
+				'</div>'
+			].join(''));
+			dom.appendTo( this.$dailogBody );
+
+			this.$doms = {
+				'text'   : $('.M-commentFormText', dom).focus(),
+				'nick'   : $('.M-commentFormNick', dom),
+				'code'   : $('.M-commentFormFooterCode', dom),
+				'image'  : $('.M-commentFormFooterPic', dom),
+				'reset'  : $('.M-commentFormFooterReset', dom),
+				'submit' : $('.M-commentFormFooterSubmit', dom)
+			}
+
+			// 绑定重置
+			app.event.bind( this.$doms.reset, 'click.reset', this.eventClickReset, this );
+			// 绑定提交
+			app.event.bind( this.$doms.submit, 'click.submit', this.eventClickSubmit, this );
+			// 绑定更换验证码
+			app.event.bind( this.$doms.image, 'click.image', this.eventClickImage, this );
+			// 对话框关闭 解除绑定
+			app.event.on('dailogClosed', this.onDailogClosed, this);
+		},
+
+		// 对话框关闭事件
+		onDailogClosed: function() {
+			app.event.unbind(this.$doms.reset, 'click.reset');
+			app.event.unbind(this.$doms.submit, 'click.submit');
+			app.event.unbind(this.$doms.image, 'click.image');
+			return false;
+		},
+
+		// 获取提交数据
+		getData: function() {
+			return {
+				'content' : this.$doms.text.val(),
+				'nick'    : this.$doms.nick.val(),
+				'code'    : this.$doms.code.val()
+			}
+		},
+
+		// 点击重置
+		eventClickReset: function() {
+			this.$doms.text.val('').focus();
+			this.$doms.nick.val('');
+			this.$doms.code.val('');
+			return false;
+		},
+
+		// 点击提交
+		eventClickSubmit: function() {
+			var data = this.getData();
+			console.log(this.$data, data);
+			return false;
+		},
+
+		// 点击更换验证码
+		eventClickImage: function() {
+			console.log('change verify code')
+			return false;
 		}
 	}
 });

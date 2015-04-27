@@ -90,4 +90,77 @@
 			font-family: Consolas, Arial, Tahoma;
 		}
 	}
+	// 评论表单
+	&Form{
+		padding: 1.5em;
+		input,textarea{
+			border: 1px solid #DDD;
+			border-radius: 2px;
+			background: #FFF;
+			outline: none;
+			transition: background linear .5s;
+		}
+		input:focus,textarea:focus{
+			background: #F5FBFE;
+		}
+		.compent{
+			.db;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		&Text{
+			.compent;
+			.center;
+			height: 7em;
+			padding: .5em;
+			resize: none;
+		}
+		&Nick{
+			.compent;
+			margin: 2em auto;
+			height: 35px;
+			padding: .8em;
+		}
+		&Footer{
+			.compent;
+			.center;
+			// border: 1px solid #DDD;
+			button{
+				float: right;
+				padding: .5em 1em;
+				// background: #FFF;
+				border: none;
+				cursor: pointer;
+				outline: none;
+				opacity: 1;
+				transition: opacity 218ms cubic-bezier(0.42,0,.58,1);
+			}
+			button:hover{
+				opacity: .8;
+			}
+			&Reset{
+				background: #DDD;
+			}
+			&Submit{
+				margin-left: 1.5em;
+				background: #0d8454;
+				color: #FFF;
+			}
+			&Code{
+				float: left;
+				box-sizing: border-box;
+				width: 7em;
+				height: 35px;
+				padding: .8em;
+			}
+			&Pic{
+				float: left;
+				box-sizing: border-box;
+				width: 120px;
+				height: 35px;
+				margin-left: 1em;
+				background: #EEE;
+			}
+		}
+	}
 }

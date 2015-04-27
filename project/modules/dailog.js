@@ -4,13 +4,17 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var app = require('app');
+	var util = require('util');
 	var layout = require('@modules/layout').base;
 	var DAILOG = layout.getDOM('DAILOG');
 	var MASK = layout.getDOM('MASK');
 
 	// 弹出层对话框
 	var Dailog = {
-		init: function() {
+		init: function( config ) {
+			if( config ) {
+				this.update( config );
+			}
 			this.build();
 			return this;
 		},
@@ -20,11 +24,25 @@ define(function( require, exports ){
 			return this.$doms.body;
 		},
 
-		// 设置遮罩样式
-		setMask: function( css ) {
-			MASK.css( css );
-			this.show();
-			return this;
+		// 根据配置的宽高，更新弹窗的位置
+		// config配置：{width: xx, height: yy}, 单位em
+		update: function( config ) {
+			if( util.isObject( config ) ) {
+				var w = config.width, h = config.height;
+				var ml = -(w / 2) + 'em', mt = -(h / 2 + 2) + 'em';
+				if( w ) {
+					DAILOG.width( w );
+				}
+				if( h ) {
+					DAILOG.height( h );
+				}
+				DAILOG.css({
+					'width': w,
+					'height': h,
+					'margin-left': ml,
+					'margin-top': mt
+				});
+			}
 		},
 
 		// 设置对话框的标题
@@ -83,6 +101,7 @@ define(function( require, exports ){
 		// 点击关闭对话框
 		eventCloseDailog: function() {
 			this.hide();
+			app.event.fire('dailogClosed');
 			return false;
 		}
 	}
