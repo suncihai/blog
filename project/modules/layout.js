@@ -4,7 +4,7 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
-	var C = require('app').getConfig();
+	var c = require('app').getConfig();
 	var header = require('@modules/header').base;
 	var footer = require('@modules/footer').base;
 
@@ -32,15 +32,16 @@ define(function( require, exports ){
 				'</div>',
 			'</div>',
 		'</div>',
-		'<div id="LOADING/">'
+		'<div id="MASK"/>',
+		'<div id="DAILOG"/>'
 	].join('');
 
 	var body = $('body').append( layout );
 	var doms = {
 		// 框架结构：
 		'MAIN'    : $('#MAIN'),
-		'LOADING' : $('#LOADING'),
-		'POPWIN'  : $('#POPWIN'),
+		'MASK'    : $('#MASK'),
+		'DAILOG'  : $('#DAILOG'),
 		// 框架容器：
 		'frame'   : $('.G-frame', body),
 		'body'    : $('.G-frameBody', body),
@@ -67,11 +68,15 @@ define(function( require, exports ){
 	var Main = {
 		/**
 		 * init 初始化
-		 * @return {type} [layout]
 		 */
 		init: function() {
-			// 移除一些提示
-			$('noScript,#welcome').remove();
+			var mainScene = this.getDOM('MAIN');
+
+			// 移除初始元素
+			$('#LOADING,noscript,#painting').remove();
+
+			mainScene.show().siblings().hide();
+
 			// 缓存变量$tick
 			this.$tick = {
 				'headerType': [],   // 头部类型 [blog,index]
@@ -219,7 +224,7 @@ define(function( require, exports ){
 			}
 			else {
 				art = title == null ? '' : title + ' | ';
-				arc = C.archiveTitle[name] || C.archiveTitle.index;
+				arc = c.archiveTitle[name] || c.archiveTitle.index;
 				str = art + arc;
 			}
 			$(document).attr('title', str);

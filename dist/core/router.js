@@ -7,8 +7,8 @@ define(function( require, exports ){
 	var URL = LOC.href;
 	var util = require('util');
 	var view = require('@core/view').base;
-	var C = require('@data/config');
-	var action = C.action;
+	var c = require('@data/config');
+	var action = c.action;
 	var data = {
 		dom    : null, // 容器对象
 		name   : null, // 模块名称
@@ -18,7 +18,7 @@ define(function( require, exports ){
 
 	function hashChanged() {
 		var hash, ms;
-		hash = LOC.hash.replace(/^[#\/\!]+/, '') || C.defaultPage;
+		hash = LOC.hash.replace(/^[#\/\!]+/, '') || c.defaultPage;
 		ms = formatHash( hash );
 		run( ms.name, ms.param, ms.search );
 		util.scrollTo(0);

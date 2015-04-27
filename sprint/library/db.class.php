@@ -149,12 +149,12 @@ class SQL
                 }
                 $itemFormat = array
                 (
-                    'id'           => intval( $item['ID'] ),
-                    'title'        => $item['post_title'],
-                    'publishDate'  => $item['post_date'],
-                    'content'      => $abstract,
-                    'comments'     => intval( $item['comment_count'] ),
-                    'cover'        => $cover
+                    'id'       => intval( $item['ID'] ),
+                    'title'    => $item['post_title'],
+                    'date'     => $item['post_date'],
+                    'content'  => $abstract,
+                    'comments' => intval( $item['comment_count'] ),
+                    'cover'    => $cover
                 );
                 array_push( $itemArray, $itemFormat );
             }
@@ -206,10 +206,10 @@ class SQL
             {
                 $itemFormat = array
                 (
-                    'title'        => $article['post_title'],
-                    'publishDate'  => $article['post_date'],
-                    'comments'     => intval( $article['comment_count'] ),
-                    'content'      => postAutoP( $article['post_content'] )
+                    'title'    => $article['post_title'],
+                    'date'     => $article['post_date'],
+                    'comments' => intval( $article['comment_count'] ),
+                    'content'  => postAutoP( $article['post_content'] )
                 );
                 // 最终返回的结果
                 $retArray = array
@@ -267,11 +267,11 @@ class SQL
                 $archiveID = $resQueryID['items'][0]['term_taxonomy_id'];
                 $itemFormat = array
                 (
-                    'id'           => $ID,
-                    'archive'      => $archiveID,
-                    'title'        => $item['post_title'],
-                    'publishDate'  => $item['post_date'],
-                    'comments'     => $item['comment_count']
+                    'id'       => $ID,
+                    'archive'  => $archiveID,
+                    'title'    => $item['post_title'],
+                    'date'     => $item['post_date'],
+                    'comments' => $item['comment_count']
                 );
                 array_push( $itemArray, $itemFormat );
             }
@@ -347,13 +347,13 @@ class SQL
                 {
                     $itemFormat = array
                     (
-                        'id'           => intval( $artid ),
-                        'catId'        => intval( $archiveID ),
-                        'title'        => $title,
-                        'tips'         => $item['post_title'],
-                        'publishDate'  => $item['post_date'],
-                        'brief'        => $brief,
-                        'comments'     => intval( $item['comment_count'] )
+                        'id'       => intval( $artid ),
+                        'catId'    => intval( $archiveID ),
+                        'title'    => $title,
+                        'tips'     => $item['post_title'],
+                        'date'     => $item['post_date'],
+                        'brief'    => $brief,
+                        'comments' => intval( $item['comment_count'] )
                     );
                     array_push( $itemArray, $itemFormat );
                 }
@@ -382,22 +382,79 @@ class SQL
         return json_encode( $retArray );
     }
 
-     /**
-     * getCommentList 获取一篇文章的所有评论列表(暂不考虑分页)
-     * param  [Number]  $artid   [关键字]
+    /**
+     * getCommentList 获取指定文章的评论列表
+     * param  [Number] $artid   [文章ID]
+     * param  [Number] $page    [请求的页码]
+     * param  [Number] $limit   [每页显示文章数目]
+     * param  [Number] $date    [时间排序方式]
      */
-    public function getCommentList( $artid )
+    public function getCommentList( $artid, $page, $limit, $date )
     {
-        //
-    }
+        // 查询字段
+        $_fieldArr = array(
+            'comment_ID',
+            'comment_date',
+            'comment_author',
+            // 'comment_author_email',
+            // 'comment_agent',
+            'comment_author_IP',
+            'comment_content',
+            'comment_parent'
+        );
+        $_fields = implode(", ", $_fieldArr);
+        // 限制条件(只返回已经批准的评论)
+        $_where = "comment_approved=1 AND comment_post_ID=$artid";
+        // 评论总数
+        $resQueryAll = $this->query("SELECT comment_ID FROM wp_comments WHERE $_where");
+        $total = $resQueryAll['total'];
+        $sort = 'DESC'; // 默认按最新
+        if( $date === -1 )
+        {
+            $sort = 'ASC';
+        }
+        // 排序方式
+        $_order = "ORDER BY comment_date $sort";
+        // 分页起点(暂时不分页查询)
+        $start = ( $page - 1 ) * $limit;
+        $resQueryList = $this->query("SELECT $_fields FROM wp_comments WHERE $_where $_order");
+        if( $resQueryList['success'] )
+        {
+            $itemArray = array();
+            foreach( $resQueryList['items'] as $key => $item )
+            {
+                $itemFormat = array(
+                    'id'      => intval( $item['comment_ID'] ),
+                    'author'  => $item['comment_author'],
+                    'ip'      => $item['comment_author_IP'],
+                    'date'    => $item['comment_date'],
+                    'content' => $item['comment_content'],
+                    'parent'  => intval( $item['comment_parent'] )
+                );
+                array_push( $itemArray, $itemFormat );
+            }
+            $resArray = array
+            (
+                'items' => $itemArray,  // 选项数组
+                'total' => $total       // 总条数
+            );
+            // 最终返回的结果
+            $retArray = array
+            (
+                'success' => true,
+                'result'  => $resArray
+            );
+        }
+        else
+        {
+            $retArray = array
+            (
+                'success' => false,
+                'result'  => null
+            );
+        }
 
-     /**
-     * setComment 添加一条评论
-     * param  [Number]  $post_id   [文章ID]
-     */
-    public function setComment( $post_id )
-    {
-        //
+        return json_encode( $retArray );
     }
 }
 

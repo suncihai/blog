@@ -3,7 +3,7 @@
  */
 define(function( require, exports ){
 	var app = require('app');
-	var C = app.getConfig();
+	var c = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
 
@@ -71,7 +71,7 @@ define(function( require, exports ){
 
 		// 拉取数据
 		load: function() {
-			var dc = C.dataCenter;
+			var dc = c.dataCenter;
 			layout.hideFooter();
 			this.showLoading();
 			app.data.get( dc.search, {'word': this.$word}, this.onData, this );
@@ -114,7 +114,7 @@ define(function( require, exports ){
 					'type': 'archive',
 					'content': '<h1 class="bannerTxt fts30 animated shake">'+ bannerTxt +'</h1>'
 				});
-			}, C.delay);
+			}, c.delay);
 		},
 
 		// 创建
@@ -133,13 +133,13 @@ define(function( require, exports ){
 		// 循环生成列表
 		buildItems: function( item, idx ) {
 			var sections = [];
-			var str = item.publishDate.slice( 0, 10 );
+			var str = item.date.slice( 0, 10 );
 			var arr = str.split('-');
 			var year = arr[0];
 			var mouth = +arr[1];
 			var day = +arr[2];
 			var date = year + '年' + mouth + '月' + day + '日';
-			var catName = util.getKeyName( item.catId, C.cat );
+			var catName = util.getKeyName( item.catId, c.cat );
 			var anchor = catName + '/' + item.id; // 超链接地址
 			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">请进入内页查看</a>' : item.brief + ' ……';
 			sections.push([
@@ -147,7 +147,7 @@ define(function( require, exports ){
 					'<a href="#'+ anchor +'" title="'+ item.tips +'" class="title">'+ item.title +'</a>',
 					'<p class="brief">'+ brief + '</p>',
 					'<div class="info">',
-						'<span class="tag">分类：'+ C.archiveTitle[catName] || '未知分类' +'</span>',
+						'<span class="tag">分类：'+ c.archiveTitle[catName] || '未知分类' +'</span>',
 						' | ',
 						'<span class="tag">评论：'+ item.comments +'</span>',
 						' | ',

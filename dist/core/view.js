@@ -3,7 +3,7 @@
  */
 define(function( require, exports ){
 	var $ = require('jquery');
-	var C = require('@data/config');
+	var c = require('@data/config');
 	var LAYOUT_PATH = '@modules/layout';
 
 	var Main = {
@@ -58,7 +58,7 @@ define(function( require, exports ){
 					'type': 'blog',
 					'headroom': true,
 					'css': {
-						'width': C.blogWidth
+						'width': c.blogWidth
 					}
 				}).updateNav( config.container );
 
@@ -67,9 +67,9 @@ define(function( require, exports ){
 					'target': foot,
 					'type': 'blog',
 					'css': {
-						'width': C.blogWidth
+						'width': c.blogWidth
 					},
-					'content': C.copyright
+					'content': c.copyright
 				});
 
 				// 存在pageid为文章页

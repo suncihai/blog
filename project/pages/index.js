@@ -5,13 +5,13 @@ define(function( require, exports ){
 	var app = require('app');
 	var $ = require('jquery');
 	var util = require('util');
-	var C = app.getConfig();
+	var c = app.getConfig();
 	var layout = require('@modules/layout').base;
 
 	var Index = {
 		init: function( data ) {
 			this.$data = data;
-			layout.setTitle( C.archiveTitle[this.$data.name] );
+			layout.setTitle( c.archiveTitle[this.$data.name] );
 			this.build();
 		},
 

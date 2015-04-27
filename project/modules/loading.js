@@ -23,8 +23,8 @@ define(function( require, exports ){
 		},
 
 		build: function() {
-			var C = this.$config;
-			var target = C.target;
+			var c = this.$config;
+			var target = c.target;
 			// html结构
 			var dom = this.$dom = $([
 				'<div class="M-threeRings">',
@@ -36,26 +36,26 @@ define(function( require, exports ){
 
 			this.$status = 'show';
 
-			if( C.width ) {
-				dom.width( C.width );
+			if( c.width ) {
+				dom.width( c.width );
 			}
 
-			if( C.height ) {
-				dom.height( C.height );
+			if( c.height ) {
+				dom.height( c.height );
 			}
 
-			if( C.size ) {
+			if( c.size ) {
 				dom.find('.M-threeRingsItem').css({
-					'width': C.size,
-					'height': C.size
+					'width': c.size,
+					'height': c.size
 				});
 			}
 
-			if( C.class ) {
-				dom.addClass( C.class );
+			if( c.class ) {
+				dom.addClass( c.class );
 			}
 
-			if( C.autoHide ) {
+			if( c.autoHide ) {
 				this.hide();
 				this.$status = 'hide';
 			}
@@ -82,8 +82,8 @@ define(function( require, exports ){
 		},
 
 		build: function() {
-			var C = this.$config;
-			var target = C.target;
+			var c = this.$config;
+			var target = c.target;
 			// html结构
 			var dom = this.$dom = $([
 				'<div class="M-chrysanthemum">',
@@ -110,26 +110,26 @@ define(function( require, exports ){
 
 			this.$status = 'show';
 
-			if( C.width ) {
-				dom.width( C.width );
+			if( c.width ) {
+				dom.width( c.width );
 			}
 
-			if( C.height ) {
-				dom.height( C.height );
+			if( c.height ) {
+				dom.height( c.height );
 			}
 
-			if( C.size ) {
+			if( c.size ) {
 				dom.find('.spinner-container').css({
-					'width': C.size,
-					'height': C.size
+					'width': c.size,
+					'height': c.size
 				});
 			}
 
-			if( C.class ) {
-				dom.addClass( C.class );
+			if( c.class ) {
+				dom.addClass( c.class );
 			}
 
-			if( C.autoHide ) {
+			if( c.autoHide ) {
 				this.hide();
 				this.$status = 'hide';
 			}

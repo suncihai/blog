@@ -3,7 +3,7 @@
  */
 define(function( require, exports ){
 	var app = require('app');
-	var C = app.getConfig();
+	var c = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
 
@@ -15,8 +15,8 @@ define(function( require, exports ){
 	var Archives = {
 		init: function( data ) {
 			this.$data = data;
-			this.$title = C.archiveTitle[data.name];
-			this.$param = util.merge( C.archiveParam, {
+			this.$title = c.archiveTitle[data.name];
+			this.$param = util.merge( c.archiveParam, {
 				'page': 1
 			});
 			layout.hideFooter();
@@ -26,7 +26,7 @@ define(function( require, exports ){
 		build: function() {
 			var data = this.$data;
 			var dom = data.dom;
-			var quotations = C.quotations;
+			var quotations = c.quotations;
 			var num = quotations.length - 1;
 
 			// 设置标题
@@ -87,7 +87,7 @@ define(function( require, exports ){
 
 		// 拉取数据
 		load: function( param ) {
-			var dc = C.dataCenter;
+			var dc = c.dataCenter;
 			param = param || this.getParam();
 			layout.hideFooter();
 			this.showLoading();
@@ -98,7 +98,7 @@ define(function( require, exports ){
 		getParam: function() {
 			var data = this.$data;
 			var param = util.merge( this.$param, {
-				'catid': C.cat[data.name]
+				'catid': c.cat[data.name]
 			});
 			return param;
 		},
@@ -140,7 +140,7 @@ define(function( require, exports ){
 			setTimeout(function() {
 				self.hideLoading();
 				layout.showFooter();
-			}, C.delay);
+			}, c.delay);
 
 		},
 
@@ -168,7 +168,7 @@ define(function( require, exports ){
 		buildItems: function( item, idx ) {
 			var data = this.$data;
 			var sections = [];
-			var str = item.publishDate.slice( 0, 10 );
+			var str = item.date.slice( 0, 10 );
 			var arr = str.split('-');
 			var year = arr[0];
 			var mouth = +arr[1];
