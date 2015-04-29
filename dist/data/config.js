@@ -63,6 +63,7 @@ define(function( require, exports ) {
 			'search'       : '/blog/sprint/api/search/query.php',
 			'listtitle'    : '/blog/sprint/api/listtitle/query.php',
 			'listcomment'  : '/blog/sprint/api/listcomment/query.php',
+			'addcomment'   : '/blog/sprint/api/addcomment/query.php',
 			'showarticle'  : '/blog/sprint/api/showarticle/query.php',
 			'listarchives' : '/blog/sprint/api/listarchives/query.php'
 		},

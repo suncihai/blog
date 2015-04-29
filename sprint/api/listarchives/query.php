@@ -46,6 +46,6 @@
 			'result'  => null,
 			'message' => 'One of your request parameters is error!'
 		);
-		 echo json_encode( $retError );
+		echo json_encode( $retError );
 	}
 ?>

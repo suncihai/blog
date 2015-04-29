@@ -456,6 +456,51 @@ class SQL
 
         return json_encode( $retArray );
     }
+
+    /**
+     * getCommentList 获取指定文章的评论列表
+     * param  [Number] $postid   [被评论的文章ID]
+     * param  [String] $content  [评论内容]
+     * param  [String] $author   [作者/昵称]
+     */
+    public function addComment( $postid, $content, $author )
+    {
+        $content = removeTag( $content );
+        $author = removeTag( $author );
+        // 设置的字段
+        $_fieldArr = array(
+            "comment_post_ID",
+            "comment_author",
+            "comment_content"
+        );
+        $_sets = implode(", ", $_fieldArr);
+        // 对应的字段值
+        $_valueArr = array(
+            "$postid",
+            "$content",
+            "$author"
+        );
+        $_values = implode(", ", $_valueArr);;
+        $resQuery = $this->query("INSERT INTO wp_comments $_sets VALUES $_values");
+        if( $resQuery['success'] )
+        {
+            $ret = array
+            (
+                'success' => true,
+                'result'  => $resQuery['items'][0]
+            );
+        }
+        else
+        {
+            $ret = array
+            (
+                'success' => false,
+                'result'  => $resQuery,
+                'message' => '评论失败！'
+            );
+        }
+        json_encode( $ret );
+    }
 }
 
 // 去掉文章的html标签

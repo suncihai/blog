@@ -38,7 +38,7 @@ define(function( require, util ){
 	 * isBoolean 是否是布尔值
 	 */
 	function isBoolean( bool ) {
-		return ( typeof( str ) === 'boolean' );
+		return ( typeof( bool ) === 'boolean' );
 	}
 
 	/**
@@ -279,6 +279,19 @@ define(function( require, util ){
 		});
 		return ret;
 	}
+
+	/**
+	 * parse 解析get请求参数
+	 * @param   {Object}  param  [参数JSON]
+	 * @return  {String}         [解析的字符创]
+	 */
+	util.parse = function( param ) {
+		var arr = [];
+		for( var pro in param ) {
+			arr.push( pro + '=' + param[pro] );
+		}
+		return '?' + arr.join('&');
+	},
 
 	/**
 	 * getClientHeight 获取页面可视区高度

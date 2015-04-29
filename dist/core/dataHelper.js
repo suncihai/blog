@@ -23,11 +23,6 @@ define(function( require, exports ){
 				return false;
 			}
 
-			if( !util.isObject( data ) ) {
-				util.error('错误的请求参数');
-				return false;
-			}
-
 			if( !util.isFunc( callback ) ) {
 				util.error('错误的回调函数');
 				return false;
@@ -74,10 +69,10 @@ define(function( require, exports ){
 			// 拉取数据
 			jquery.ajax({
 				'url': url,
-				'method': type,
+				'type': type,
 				'dataType': 'json',
 				'contentType': 'application/json; charset=UTF-8',
-				'data': data,
+				'data': JSON.stringify( data ),
 				'timeout': 8888,
 				'success': _fnSuccess,
 				'error': _fnError
@@ -86,12 +81,14 @@ define(function( require, exports ){
 
 		// get方式
 		get: function( url, param, callback, scope ) {
-			this._send( 'get', url, param, callback, scope );
+			// 解析参数
+			var uri = util.parse( param );
+			this._send( 'GET', url + uri, null, callback, scope );
 		},
 
-		// pos方式
+		// post方式
 		post: function( url, param, callback, scope ) {
-			this._send( 'post', url, param, callback, scope );
+			this._send( 'POST', url, param, callback, scope );
 		}
 	}
 	exports.base = DataHelper;

@@ -94,6 +94,7 @@ define(function( require, exports ){
 			var op = $(elm).attr('class').substr(3);
 			var id = +$(elm).attr('data-id');
 			var data = util.find( this.$items, id, 'id' );
+			data.postid = this.$param.artid;
 			switch( op ) {
 				case 'like':
 				break;
@@ -123,12 +124,13 @@ define(function( require, exports ){
 
 		setData: function( data ) {
 			this.$data = data;
+			// TODO: 不要每次重新创建
 			this.$dailogBody.empty();
 			this.buildComment();
 		},
 
 		buildComment: function() {
-			var holderTxt = '回复“'+ this.$data.content + '”' || '在这里输入评论内容~';
+			var holderTxt = '回复“'+ util.htmlEncode(this.$data.content) + '”' || '在这里输入评论内容~';
 			var holderNick = '在这输入昵称，不能为纯数字，不能包含特殊字符';
 			var holderCode = '输入验证码';
 			var dom = $([
@@ -136,8 +138,8 @@ define(function( require, exports ){
 					'<textarea class="M-commentFormText"  placeholder="'+ holderTxt +'"/>',
 					'<input type="text" class="M-commentFormNick" placeholder="'+ holderNick +'">',
 					'<div class="M-commentFormFooter">',
-						'<input class="M-commentFormFooterCode"  placeholder="'+ holderCode +'">',
-						'<img class="M-commentFormFooterPic"/>',
+						// '<input class="M-commentFormFooterCode"  placeholder="'+ holderCode +'">',
+						// '<img class="M-commentFormFooterPic" src="/blog/sprint/api/verify_image.php"/>',
 						'<button class="M-commentFormFooterSubmit">发表评论</button>',
 						'<button class="M-commentFormFooterReset">重置</button>',
 					'</div>',
@@ -176,8 +178,8 @@ define(function( require, exports ){
 		getData: function() {
 			return {
 				'content' : this.$doms.text.val(),
-				'nick'    : this.$doms.nick.val(),
-				'code'    : this.$doms.code.val()
+				'author'  : this.$doms.nick.val(),
+				'postid'  : this.$data.postid
 			}
 		},
 
@@ -192,8 +194,12 @@ define(function( require, exports ){
 		// 点击提交
 		eventClickSubmit: function() {
 			var data = this.getData();
-			console.log(this.$data, data);
+			app.data.post( dc.addcomment, data, this.onData, this );
 			return false;
+		},
+
+		onData: function( err, data ) {
+			console.log( err, data );
 		},
 
 		// 点击更换验证码
