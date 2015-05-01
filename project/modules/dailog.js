@@ -12,7 +12,7 @@ define(function( require, exports ){
 	// 弹出层对话框
 	var Dailog = {
 		init: function( config ) {
-			if( config ) {
+			if ( config ) {
 				this.update( config );
 			}
 			this.build();
@@ -27,13 +27,13 @@ define(function( require, exports ){
 		// 根据配置的宽高，更新弹窗的位置
 		// config配置：{width: xx, height: yy}, 单位em
 		update: function( config ) {
-			if( util.isObject( config ) ) {
+			if ( util.isObject( config ) ) {
 				var w = config.width, h = config.height;
 				var ml = -(w / 2) + 'em', mt = -(h / 2 + 2) + 'em';
-				if( w ) {
+				if ( w ) {
 					DAILOG.width( w );
 				}
-				if( h ) {
+				if ( h ) {
 					DAILOG.height( h );
 				}
 				DAILOG.css({
@@ -67,7 +67,7 @@ define(function( require, exports ){
 
 		// 创建对话框
 		build: function() {
-			if( this.$ready ) {
+			if ( this.$ready ) {
 				this.show();
 				return this.getBody();
 			}

@@ -13,14 +13,14 @@ define(function( require, exports ) {
 		browsers = 'O-Moz-Webkit'.split('-'),
 		len = browsers.length,
 		prop = "Perspective";
-		if( prop in oDiv.style ) {
+		if ( prop in oDiv.style ) {
 			return true;
 		}
-		if( '-ms-' + prop in oDiv.style ) {
+		if ( '-ms-' + prop in oDiv.style ) {
 			return true;
 		}
 		while( len-- ) {
-			if( browsers[len] + prop in oDiv.style ) {
+			if ( browsers[len] + prop in oDiv.style ) {
 				return true;
 			}
 		}
@@ -42,13 +42,13 @@ define(function( require, exports ) {
 
 		archive = arr[0];
 
-		if( archive === '' || archive === 'index' ) {
+		if ( archive === '' || archive === 'index' ) {
 			path = ''
 		}
-		if( archive && archive !== 'index' && !aid ) {
+		if ( archive && archive !== 'index' && !aid ) {
 			path = '/p/' + archive
 		}
-		if( archive && aid ) {
+		if ( archive && aid ) {
 			path = '/' + aid + '.html'
 		}
 
@@ -58,7 +58,7 @@ define(function( require, exports ) {
 	// 检查是否需要跳转, 需要->true, 不需要->false
 	exports.j = function() {
 		// 页面跳转
-		if( !isSupportCSS3() || doc.documentMode == 10 ) {
+		if ( !isSupportCSS3() || doc.documentMode == 10 ) {
 			var path = getJumpPath();
 			win.location.href = 'http://' + host + path;
 			return true;

@@ -55,10 +55,10 @@ define(function( require, util ){
 	 * @return {Number}    [数组下标]
 	 */
 	function inArray( ele, arr ) {
-		if( isArray( arr ) ) {
+		if ( isArray( arr ) ) {
 			var leng = arr.length, i = 0;
-			for( ; i < leng; i++ ) {
-				if( arr[i] === ele ) {
+			for ( ; i < leng; i++ ) {
+				if ( arr[i] === ele ) {
 					return i;
 				}
 			}
@@ -85,7 +85,7 @@ define(function( require, util ){
 		cons.log.apply( cons, arguments );
 	}
 	util.error = function() {
-		if( cons.error.apply ) {
+		if ( cons.error.apply ) {
 			cons.error.apply( cons, arguments );
 		}
 		else {
@@ -101,10 +101,10 @@ define(function( require, util ){
 	 */
 	util.merge = function( Jold, Jnew ) {
 		Jnew = arguments.length === 1 ? {} : Jnew;
-		if( !isObject( Jold ) || !isObject( Jnew ) ) {
+		if ( !isObject( Jold ) || !isObject( Jnew ) ) {
 			return false;
 		}
-		for( var pro in Jold ) {
+		for ( var pro in Jold ) {
 			Jold[pro] = Jnew.hasOwnProperty( pro ) ? Jnew[pro] : Jold[pro];
 		}
 		return Jold;
@@ -127,7 +127,7 @@ define(function( require, util ){
 	 * @return {Array}       [数组]
 	 */
 	util.argumentsToArray = function( args ) {
-		if ( args instanceof arguments.constructor ) {
+		if  ( args instanceof arguments.constructor ) {
 			return AP.slice.call( args );
 		}
 		else {
@@ -143,11 +143,11 @@ define(function( require, util ){
 	 */
 	util.getKeyName = function( val, obj ) {
 		var key = '';
-		if( ( !val || !obj ) && !isObject( obj ) ) {
+		if ( ( !val || !obj ) && !isObject( obj ) ) {
 			return false;
 		}
-		for( key in obj ) {
-			if( obj[key] == val ) {
+		for ( key in obj ) {
+			if ( obj[key] == val ) {
 				return key;
 			}
 		}
@@ -160,15 +160,15 @@ define(function( require, util ){
 	 * @return {Boolean}     [空为真,非空为假]
 	 */
 	util.isEmpty = function( val ) {
-		if( isObject( val ) ) {
-			for( var property in val ) {
-				if( val.hasOwnProperty( property ) ) {
+		if ( isObject( val ) ) {
+			for ( var property in val ) {
+				if ( val.hasOwnProperty( property ) ) {
 					return false;
 				}
 				return true;
 			}
 		}
-		else if( isArray( val ) ) {
+		else if ( isArray( val ) ) {
 			return ( val.length === 0 );
 		}
 	}
@@ -177,24 +177,24 @@ define(function( require, util ){
 	 * each 遍历数组 (TODO:遍历对象)
 	 * @param  {Array}     items     [数组]
 	 * @param  {Fuction}   callback  [回调函数]
-	 * @param  {Object}    scope     [作用域]
+	 * @param  {Object}    context   [作用域]
 	 */
-	util.each = function( items, callback, scope ) {
-		if( !isArray( items ) || !isFunc( callback ) ) {
+	util.each = function( items, callback, context ) {
+		if ( !isArray( items ) || !isFunc( callback ) ) {
 			return false;
 		}
-		if( !scope ) {
-			scope = WIN;
+		if ( !context ) {
+			context = WIN;
 		}
 		var ret;
-		for( var i = 0; i < items.length; i++ ) {
-			ret = callback.call( scope, items[i], i );
+		for ( var i = 0; i < items.length; i++ ) {
+			ret = callback.call( context, items[i], i );
 			// 回调返回false退出循环
-			if( ret === false ) {
+			if ( ret === false ) {
 				break;
 			}
 			// 回调返回null删除当前选项
-			if( ret === null ) {
+			if ( ret === null ) {
 				items.splice( i, 1 );
 				i--;
 			}
@@ -208,7 +208,7 @@ define(function( require, util ){
 	 */
 	var _guid = 1;
 	util.guid = function( fix ) {
-		if( fix ) {
+		if ( fix ) {
 			return '' + fix + ( _guid++ );
 		}
 		else {
@@ -253,10 +253,10 @@ define(function( require, util ){
 		var self = this;
 		this.each( arr, function( item, idx ) {
 			var ts = item.split('=');
-			if( ts.length === 2 ) {
+			if ( ts.length === 2 ) {
 				retJSON[ts[0]] = strict ? self.htmlEncode( ts[1] ) : ts[1];
 			}
-			if( idx + 1 === limit ) {
+			if ( idx + 1 === limit ) {
 				return false;
 			}
 		});
@@ -272,7 +272,7 @@ define(function( require, util ){
 	util.find = function( arr, value, field ) {
 		var ret;
 		this.each( arr, function( item ) {
-			if( item[field] === value ) {
+			if ( item[field] === value ) {
 				ret = item;
 				return false;
 			}
@@ -287,7 +287,7 @@ define(function( require, util ){
 	 */
 	util.parse = function( param ) {
 		var arr = [];
-		for( var pro in param ) {
+		for ( var pro in param ) {
 			arr.push( pro + '=' + param[pro] );
 		}
 		return '?' + arr.join('&');

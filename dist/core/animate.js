@@ -12,28 +12,28 @@ define(function( require, exports ){
 	 * @param  {Number}   type<可选>      [循环类型/动画时长]
 	 * @param  {Boolean}  remove<可选>    [运动结束移除className]
 	 * @param  {Function} callback<可选>  [结束后的回调函数]
-	 * @param  {Mix}      scope<可选>     [回调上下文]
+	 * @param  {Mix}      context<可选>   [回调上下文]
 	 */
-	exports.going = function( $elm, keyframe, type, remove, callback, scope ) {
+	exports.going = function( $elm, keyframe, type, remove, callback, context ) {
 		// 参数检测
-		if( !$elm instanceof jQuery ) {
+		if ( !$elm instanceof jQuery ) {
 			util.error('绑定的元素必须为jQuery对象');
 			return false;
 		}
-		if( util.isFunc( type ) ) {
+		if ( util.isFunc( type ) ) {
 			callback = type;
-			scope = remove;
+			context = remove;
 			type = null;
 			remove = false;
 		}
-		if( util.isBoolean( type ) ) {
+		if ( util.isBoolean( type ) ) {
 			callback = remove;
-			scope = callback;
+			context = callback;
 			remove = type;
 		}
-		if( util.isNumber( type ) && util.isFunc( remove ) ) {
+		if ( util.isNumber( type ) && util.isFunc( remove ) ) {
 			callback = remove;
-			scope = callback;
+			context = callback;
 			remove = false;
 		}
 		var typeMap = {
@@ -46,14 +46,14 @@ define(function( require, exports ){
 		$elm.addClass( animateCls ).one(
 			c.animationdEnd,
 			function() {
-				if( !remove ) {
+				if ( !remove ) {
 					jQuery(this).removeClass( animateCls );
 				}
-				if( callback ) {
-					if( !scope ) {
-						scope = window;
+				if ( callback ) {
+					if ( !context ) {
+						context = window;
 					}
-					callback.call( scope, type, animateCls );
+					callback.call( context, type, animateCls );
 				}
 			}
 		);

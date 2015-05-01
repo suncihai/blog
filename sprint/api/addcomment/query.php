@@ -6,16 +6,21 @@
 
 	require_once('../../library/db.class.php');
 
-	$isFull = isset( $_POST['postid'] )
-				&& is_numeric( $_POST['postid'] )
-			&& isset( $_POST['content'] )
-			&& isset( $_POST['author'] );
+	// 原JSON数据
+	$postData = file_get_contents('php://input', 'r');
+	// 参数对象
+	$params = json_decode( $postData );
 
-	if( $isFull )
+	$isFull = isset( $params['postid'] )
+				&& is_numeric( $params['postid'] )
+			&& isset( $params['content'] )
+			&& isset( $params['author'] );
+
+	if ( $isFull )
 	{
-		$postid = $_POST['postid'];
-		$content = $_POST['content'];
-		$author = $_POST['author'];
+		$postid = $params['postid'];
+		$content = $params['content'];
+		$author = $params['author'];
 
 		$Sql = new SQL();
 
@@ -31,7 +36,6 @@
 		(
 			'success' => false,
 			'result'  => null,
-			'is'      => $_POST['content'],
 			'message' => 'One of your request parameters is error!'
 		);
 		echo json_encode( $retError );

@@ -7,7 +7,7 @@
 	require_once('../../library/db.class.php');
 
 	// 请求参数过滤
-	if( isset( $_GET['artid'] ) && is_numeric( $_GET['artid'] ) )
+	if ( isset( $_GET['artid'] ) && is_numeric( $_GET['artid'] ) )
 	{
 		$Sql = new SQL();
 

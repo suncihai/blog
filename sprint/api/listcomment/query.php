@@ -17,7 +17,7 @@
 		&& isset( $_GET['date'] )
 			&& is_numeric( $_GET['date'] );
 
-	if( $paramFormat )
+	if ( $paramFormat )
 	{
 		// 文章ID
 		$artid =  $_GET['artid'];

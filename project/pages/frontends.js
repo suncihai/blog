@@ -108,22 +108,22 @@ define(function( require, exports ){
 			var self = this;
 			var dom = self.$data.dom;
 			var dataError = '拉取数据似乎出了点问题~';
-			if( err ) {
+			if ( err ) {
 				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
-				if( err.status === 'timeout' ) {
+				if ( err.status === 'timeout' ) {
 					dom.html('<div class="noData animated bounce">请求超时，请按F5刷新重试~</div>');
 				}
 				return false;
 			}
-			if( !res.success ) {
-				if( res.message ) {
+			if ( !res.success ) {
+				if ( res.message ) {
 					dataError = res.message;
 				}
 				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
 				return;
 			}
 			var info = self.$info = res.result;
-			if( util.isEmpty( info ) ) {
+			if ( util.isEmpty( info ) ) {
 				dom.html('<div class="noData animated bounce">无数据</div>');
 				return;
 			}
@@ -149,7 +149,7 @@ define(function( require, exports ){
 			// 先清空之前的列表
 			this.$doms.listBox.empty();
 
-			if( util.isEmpty( info.items ) ) {
+			if ( util.isEmpty( info.items ) ) {
 				this.$doms.listBox.html('<div class="pt20 pb20">该页无数据！</div>');
 			}
 			else {

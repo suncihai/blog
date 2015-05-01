@@ -109,7 +109,7 @@ define(function( require, exports ){
 				case 'index':
 					blog.hide();
 					index.show();
-					if( this.hasLayout( blank ) ) {
+					if ( this.hasLayout( blank ) ) {
 						blank.hide().empty();
 					}
 				break;
@@ -117,10 +117,10 @@ define(function( require, exports ){
 				case 'blog':
 					index.hide();
 					blog.show();
-					if( this.hasLayout( indexContent ) ) {
+					if ( this.hasLayout( indexContent ) ) {
 						indexContent.empty();
 					}
-					if( this.hasLayout( blank ) ) {
+					if ( this.hasLayout( blank ) ) {
 						blank.hide().empty();
 					}
 				break;
@@ -129,7 +129,7 @@ define(function( require, exports ){
 					blog.hide();
 					index.hide();
 					blank.show();
-					if( this.hasLayout( indexContent ) ) {
+					if ( this.hasLayout( indexContent ) ) {
 						indexContent.empty();
 					}
 				break;
@@ -155,9 +155,9 @@ define(function( require, exports ){
 			var type = config['type']; // 头部类型, index,blog
 			var types = self._getTick('headerType');
 			var exist = util.inArray( type, types );
-			if( exist === -1 ) {
+			if ( exist === -1 ) {
 				header.init( config , function( completed ) {
-					if( completed ) {
+					if ( completed ) {
 						self._setTick( 'headerType', type );
 					}
 				});
@@ -186,9 +186,9 @@ define(function( require, exports ){
 			var type = config['type']; // 页脚类型, index,blog
 			var types = self._getTick('footerType');
 			var exist = util.inArray( type, types );
-			if( exist === -1 ) {
+			if ( exist === -1 ) {
 				footer.init( config , function( completed ) {
-					if( completed ) {
+					if ( completed ) {
 						self._setTick( 'footerType', type );
 					}
 				});
@@ -219,7 +219,7 @@ define(function( require, exports ){
 		 */
 		setTitle: function( name, title ) {
 			var str = '', art, arc;
-			if( util.isString( name ) && arguments.length == 1 ) {
+			if ( util.isString( name ) && arguments.length == 1 ) {
 				str = name;
 			}
 			else {
@@ -239,11 +239,11 @@ define(function( require, exports ){
 		_setTick: function( name, val ) {
 			var tick = this.$tick[name];
 			// 字符串
-			if( util.isString( tick ) ) {
+			if ( util.isString( tick ) ) {
 				this.$tick[name] = val.toString();
 			}
 			// 数组
-			else if( util.isArray( tick ) ) {
+			else if ( util.isArray( tick ) ) {
 				this.$tick[name].push( val );
 			}
 			// 对象及其他

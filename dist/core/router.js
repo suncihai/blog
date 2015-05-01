@@ -35,28 +35,28 @@ define(function( require, exports ){
 		var name = '', param = null, search = null, ms, tmp;
 		var ix = hash.indexOf('/'), hx = ( ix !== -1 );
 		var iw = hash.indexOf('?'), hw = ( iw !== -1 );
-		if( !hx && !hw ) {
+		if ( !hx && !hw ) {
 			ms = [hash];
 		}
-		if( hx && !hw ) {
+		if ( hx && !hw ) {
 			ms = string2parts( hash, ix );
 			param = ms[1] === '' ? null :
 				ms[1].charAt(ms[1].length - 1) === '/' ? ms[1] = ms[1].substr(0, ms[1].length - 1) : ms[1];
 		}
-		if( !hx && hw ) {
+		if ( !hx && hw ) {
 			ms = string2parts( hash, iw );
 			search = ms[1];
 		}
-		if( hx && hw ) {
+		if ( hx && hw ) {
 			// frontends/tag?name=
-			if( ix < iw ) {
+			if ( ix < iw ) {
 				tmp = string2parts( hash, ix );
 				ms = [tmp[0]].concat( string2parts( tmp[1], tmp[1].indexOf('?') ) );
 				param = ms[1];
 				search = ms[2];
 			}
 			// search?word=aa//sss
-			else if( ix > iw ) {
+			else if ( ix > iw ) {
 				ms = string2parts( hash, iw );
 				search = ms[1];
 			}
@@ -79,7 +79,7 @@ define(function( require, exports ){
 	function run( name, param, search ) {
 		data.name = name;
 		data.param = isNaN( param ) ? util.htmlEncode( param ) : param;
-		if( search ) {
+		if ( search ) {
 			data.search = util.formatSearch( search, 1, true );
 		}
 		require.async( '@controller/' + name, afterRun );
@@ -91,13 +91,13 @@ define(function( require, exports ){
 	 */
 	function afterRun( module ) {
 		// 404
-		if( !module ) {
+		if ( !module ) {
 			util.error('404 - 找不到该页面: ' + data.name);
 			require.async('@controller/404', afterRun);
 			return false;
 		}
 		else {
-			if( module[action] && util.isFunc( module[action] ) ) {
+			if ( module[action] && util.isFunc( module[action] ) ) {
 				module[action]( data, view );
 			}
 			else {
@@ -108,8 +108,8 @@ define(function( require, exports ){
 	}
 
 	exports.start = function() {
-		if( 'onhashchange' in WIN ) {
-			if( WIN.addEventListener ) {
+		if ( 'onhashchange' in WIN ) {
+			if ( WIN.addEventListener ) {
 				WIN.addEventListener( 'hashchange', hashChanged, false );
 			}
 			else {
@@ -118,7 +118,7 @@ define(function( require, exports ){
 		}
 		else {
 			setInterval(function() {
-				if( URL != LOC.href ) {
+				if ( URL != LOC.href ) {
 					hashChanged.call( WIN );
 				}
 			}, 150);
@@ -132,8 +132,8 @@ define(function( require, exports ){
 	 * @return {null}       [无返回]
 	 */
 	exports.go = function( uri ) {
-		if ( util.isString( uri ) ){
-			if ( uri.charAt(0) == '/' ){
+		if  ( util.isString( uri ) ){
+			if  ( uri.charAt(0) == '/' ){
 				LOC.href = uri;
 			}
 			else {

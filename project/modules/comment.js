@@ -45,12 +45,12 @@ define(function( require, exports ){
 
 		onData: function( err, res ) {
 			var dataError = '评论列表拉取失败~';
-			if( err ) {
+			if ( err ) {
 				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
 				return false;
 			}
-			if( !res.success ) {
-				if( res.message ) {
+			if ( !res.success ) {
+				if ( res.message ) {
 					dataError = res.message;
 				}
 				return false;

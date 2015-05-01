@@ -13,7 +13,7 @@ define(function( require, exports ){
 		 * @return {Object}        [容器对象]
 		 */
 		createIndex: function( config ) {
-			if( $.type( config ) !== 'object' ) {
+			if ( $.type( config ) !== 'object' ) {
 				return false;
 			}
 			var content = null;
@@ -73,7 +73,7 @@ define(function( require, exports ){
 				});
 
 				// 存在pageid为文章页
-				if( config.pageid ) {
+				if ( config.pageid ) {
 					retDOM = self._createArticle( layout, config );
 				}
 				// 不存在则为列表页
@@ -90,7 +90,7 @@ define(function( require, exports ){
 		 * @return {Object}        [容器对象]
 		 */
 		_createArchive: function( layout, config ) {
-			if( $.type( config ) !== 'object' ) {
+			if ( $.type( config ) !== 'object' ) {
 				return false;
 			}
 			var tag = 'div';
@@ -121,7 +121,7 @@ define(function( require, exports ){
 		 * @return {Object}        [容器对象]
 		 */
 		_createArticle: function( layout, config ) {
-			if( $.type( config ) !== 'object' ) {
+			if ( $.type( config ) !== 'object' ) {
 				return false;
 			}
 			var tag = 'div';

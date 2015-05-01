@@ -46,11 +46,11 @@ class SQL
     public function query( $sql, $private = true )
     {
         $result = mysql_query( $sql, $this->conn );
-        if( $result )
+        if ( $result )
         {
             // 选项数组集合
             $itemArray = array();
-            while( $assoc = mysql_fetch_assoc( $result ) )
+            while ( $assoc = mysql_fetch_assoc( $result ) )
             {
                 array_push( $itemArray, $assoc );
             }
@@ -88,7 +88,7 @@ class SQL
             );
         }
         // 函数返回体(内部调用只返回items和total)
-        if( $private )
+        if ( $private )
         {
             return $resultObject;
         }
@@ -110,7 +110,7 @@ class SQL
         // 查询$catid栏目下的所有文章ID记录
         $resQueryID = $this->query("SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id=$catid");
         $IDArr = array();
-        foreach( $resQueryID['items'] as $key => $item )
+        foreach ( $resQueryID['items'] as $key => $item )
         {
             array_push( $IDArr, $item["object_id"] );
         }
@@ -132,13 +132,13 @@ class SQL
         $total = $resQueryAll['total'];
         $resQueryList = $this->query("SELECT $_fields FROM wp_posts WHERE $_where $_order LIMIT $start, $limit");
         // 转换数据格式
-        if( $resQueryList['success'] )
+        if ( $resQueryList['success'] )
         {
             $itemArray = array();
-            foreach( $resQueryList['items'] as $key => $item )
+            foreach ( $resQueryList['items'] as $key => $item )
             {
                 $abstract = '';
-                if( $brief !== 0 )
+                if ( $brief !== 0 )
                 {
                     // 截取文章摘要
                     $cover = getFirstImg( $item['post_content'] );
@@ -198,11 +198,11 @@ class SQL
         $resQueryArticle = $this->query("SELECT $fields FROM wp_posts WHERE ID = $artid $filter");
         // 结果数
         $num = $resQueryArticle['total'];
-        if( $num == 1 )
+        if ( $num == 1 )
         {
             $article = $resQueryArticle['items'][0];
             // 只返回内容不为空的数据
-            if( $article['post_content'] != '' )
+            if ( $article['post_content'] != '' )
             {
                 $itemFormat = array
                 (
@@ -256,11 +256,11 @@ class SQL
         $filter = "ORDER BY post_date DESC LIMIT $amount";
         // 执行查询
         $resQueryList = $this->query("SELECT $fields FROM wp_posts WHERE $where $filter");
-        if( $resQueryList['success'] )
+        if ( $resQueryList['success'] )
         {
             // 选项数组集合
             $itemArray = array();
-            foreach( $resQueryList['items'] as $key => $item )
+            foreach ( $resQueryList['items'] as $key => $item )
             {
                 $ID = $item["ID"];
                 $resQueryID = $this->query("SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$ID LIMIT 1");
@@ -311,11 +311,11 @@ class SQL
         $_where = "(post_title LIKE '%".$word."%' OR post_content LIKE '%".$word."%') AND post_status='publish' AND post_type='post'";
         // 执行查询
         $resQuery = $this->query("SELECT $_fields FROM wp_posts WHERE $_where");
-        if( $resQuery['success'] )
+        if ( $resQuery['success'] )
         {
             // 选项数组集合
             $itemArray = array();
-            foreach( $resQuery['items'] as $key => $item )
+            foreach ( $resQuery['items'] as $key => $item )
             {
 
                 // 查询每条文章对应的栏目ID
@@ -329,9 +329,9 @@ class SQL
                 $isMatch = false;
                 // 先去掉html标签再进行关键字匹配
                 $content = removeTag( $item['post_content'] );
-                if( preg_match("/(.{100}".$word.".{100})/sui", $content, $matches) )
+                if ( preg_match("/(.{100}".$word.".{100})/sui", $content, $matches) )
                 {
-                    if( count( $matches ) !== 0 )
+                    if ( count( $matches ) !== 0 )
                     {
                         $isMatch = true;
                         // 取完整模式匹配到的片段
@@ -343,7 +343,7 @@ class SQL
                 // 标题也加高亮
                 $title = preg_replace( $pattern, '<b class="keyword">$1</b>', $item['post_title'] );
 
-                if( $isMatch || ($title !== $item['post_title']) )
+                if ( $isMatch || ($title !== $item['post_title']) )
                 {
                     $itemFormat = array
                     (
@@ -409,7 +409,7 @@ class SQL
         $resQueryAll = $this->query("SELECT comment_ID FROM wp_comments WHERE $_where");
         $total = $resQueryAll['total'];
         $sort = 'DESC'; // 默认按最新
-        if( $date === -1 )
+        if ( $date === -1 )
         {
             $sort = 'ASC';
         }
@@ -418,10 +418,10 @@ class SQL
         // 分页起点(暂时不分页查询)
         $start = ( $page - 1 ) * $limit;
         $resQueryList = $this->query("SELECT $_fields FROM wp_comments WHERE $_where $_order");
-        if( $resQueryList['success'] )
+        if ( $resQueryList['success'] )
         {
             $itemArray = array();
-            foreach( $resQueryList['items'] as $key => $item )
+            foreach ( $resQueryList['items'] as $key => $item )
             {
                 $itemFormat = array(
                     'id'      => intval( $item['comment_ID'] ),
@@ -482,7 +482,7 @@ class SQL
         );
         $_values = implode(", ", $_valueArr);;
         $resQuery = $this->query("INSERT INTO wp_comments $_sets VALUES $_values");
-        if( $resQuery['success'] )
+        if ( $resQuery['success'] )
         {
             $ret = array
             (
@@ -513,7 +513,7 @@ function removeTag( $pee )
 function getFirstImg( $text )
 {
     preg_match("<img.*src=[\"](.*?)[\"].*?>", $text, $match);
-    if( $match )
+    if ( $match )
     {
         return $match[1];
     }

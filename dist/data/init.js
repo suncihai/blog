@@ -38,7 +38,7 @@
 	var i = 0;
 	var appInit = function() {
 		var cb = stepFunc[i++];
-		if( cb ) {
+		if ( cb ) {
 			cb.apply( win, arguments );
 		}
 	};
@@ -62,7 +62,7 @@
 
 	// 浏览器特性判断
 	sea.use('/blog/dist/core/character', function( b ) {
-		if( b.j() ){
+		if ( b.j() ){
 			return false;
 		}
 		// 初始化开始

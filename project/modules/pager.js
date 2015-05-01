@@ -72,7 +72,7 @@ define(function( require, exports ){
 			// 构建页码
 			util.each( items, function( num ) {
 				var item;
-				if( num === '...' ) {
+				if ( num === '...' ) {
 					item = '<span class="M-pagerItem M-pagerOmit" title="部分页码已隐藏">···</span>';
 				}
 				else {
@@ -84,7 +84,7 @@ define(function( require, exports ){
 			// 激活当前页码
 			this.checkStatus( page, items );
 
-			if( pages <= 1 ) {
+			if ( pages <= 1 ) {
 				doms.prev.hide();
 				doms.list.hide();
 				doms.next.hide();
@@ -97,16 +97,16 @@ define(function( require, exports ){
 			var retArr = [], i;
 			var max = this.$max; // 显示选项的最多个数
 			// 不需要隐藏选项
-			if( all <= max ) {
-				for( i = 1; i < all + 1; i++ ) {
+			if ( all <= max ) {
+				for ( i = 1; i < all + 1; i++ ) {
 					retArr.push( i );
 				}
 			}
 			// 需要隐藏选项
 			else {
 				var tmpArr = this.formatPage( page );
-				if( !tmpArr ) {
-					for( i = 1; i < max + 1; i++ ) {
+				if ( !tmpArr ) {
+					for ( i = 1; i < max + 1; i++ ) {
 						retArr.push( i );
 					}
 					retArr.push('...');
@@ -126,7 +126,7 @@ define(function( require, exports ){
 			var backArr = ['...']; // 后面的页码选项
 			var retArr = null;
 			// 激活的页码小于max的不作处理
-			if( page < max ) {
+			if ( page < max ) {
 				return false;
 			}
 			// 激活页码大于等于max的做截断: 12...456...
@@ -153,7 +153,7 @@ define(function( require, exports ){
 			var self = this;
 			// 激活当前页码
 			util.each( items, function( item, idx ) {
-				if( item === page ) {
+				if ( item === page ) {
 					$('.M-pagerItem', self.$doms.list).eq(idx).addClass('M-pagerAct');
 					return false;
 				}
@@ -175,7 +175,7 @@ define(function( require, exports ){
 		eventClickNext: function( evt, elm ) {
 			var id = this.$param.page + 1;
 			var pages = this.$param.pages;
-			if( id <= 0 || id > pages ) {
+			if ( id <= 0 || id > pages ) {
 				return false;
 			}
 			app.event.fire('pagerSelected', id);
@@ -185,7 +185,7 @@ define(function( require, exports ){
 		eventClickPreview: function( evt, elm ) {
 			var id = this.$param.page - 1;
 			var pages = this.$param.pages;
-			if( id <= 0 || id > pages ) {
+			if ( id <= 0 || id > pages ) {
 				return false;
 			}
 			app.event.fire('pagerSelected', id);
@@ -195,7 +195,7 @@ define(function( require, exports ){
 		eventClickPage: function( evt, elm ) {
 			var id = +$(elm).val();
 			var page = this.$param.page;
-			if( id === page ) {
+			if ( id === page ) {
 				return false;
 			}
 			$(elm).addClass('M-pagerAct').siblings('.M-pagerItem').removeClass('M-pagerAct');

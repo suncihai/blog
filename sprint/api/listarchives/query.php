@@ -17,7 +17,7 @@
 		&& isset( $_GET['brief'] )
 			&& is_numeric( $_GET['brief'] );
 
-	if( $paramFormat )
+	if ( $paramFormat )
 	{
 		// 栏目ID
 		$catid =  $_GET['catid'];

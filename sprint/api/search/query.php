@@ -15,7 +15,7 @@
 	);
 
 	// 请求参数过滤
-	if( isset( $_GET['word'] ) && $_GET['word'] != '' )
+	if ( isset( $_GET['word'] ) && $_GET['word'] != '' )
 	{
 		$Sql = new SQL();
 
@@ -25,7 +25,7 @@
 
 		$word = $OP->clearXss( $_GET['word'] );
 
-		if( $word )
+		if ( $word )
 		{
 			$result = $Sql->filterWord( $word );
 

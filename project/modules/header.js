@@ -33,7 +33,7 @@ define(function( require, exports ){
 			].join(''));
 
 			var cssStyle = config.css;
-			if( cssStyle ) {
+			if ( cssStyle ) {
 				head.css( cssStyle );
 			}
 
@@ -57,7 +57,7 @@ define(function( require, exports ){
 			head.appendTo( target.show() );
 
 			// 启用headroom插件
-			if( config.headroom ) {
+			if ( config.headroom ) {
 				var cfg = {
 					'tolerance': {
 						'up': 5,
@@ -77,7 +77,7 @@ define(function( require, exports ){
 			}
 
 			// 创建完成后回调
-			if( util.isFunc( this.callback ) ) {
+			if ( util.isFunc( this.callback ) ) {
 				this.callback.call( this, true );
 			}
 			return this;
@@ -122,11 +122,11 @@ define(function( require, exports ){
 			// 按下回车键响应搜索操作
 			app.event.bind( $(document), 'keydown.search', this.eventKeydownSearch, this );
 			input.show().removeClass('inputInit').addClass('inputReady');
-			if( !val ) {
+			if ( !val ) {
 				input.focus();
 			}
 			else {
-				if( evt.target.tagName !== 'INPUT' ) {
+				if ( evt.target.tagName !== 'INPUT' ) {
 					this.searching( val );
 				}
 			}
@@ -140,9 +140,9 @@ define(function( require, exports ){
 
 		// 响应回车键搜索
 		eventKeydownSearch: function( evt ) {
-			if( evt.keyCode === 13 ) {
+			if ( evt.keyCode === 13 ) {
 				var val = this.$doms.tool.input.val();
-				if( val ) {
+				if ( val ) {
 					this.searching( val );
 				}
 			}
@@ -151,7 +151,7 @@ define(function( require, exports ){
 
 		// 点击空白处隐藏INPUT
 		eventClickBlank: function( evt ) {
-			if( this.$timeStamp !== evt.timeStamp ) {
+			if ( this.$timeStamp !== evt.timeStamp ) {
 				this.hideSearchInput();
 			}
 			return false;
@@ -196,11 +196,11 @@ define(function( require, exports ){
 		updateNav: function( link ) {
 			var options = this.options;
 			var self = this;
-			if( link ) {
+			if ( link ) {
 				link = '#' + link;
 			}
 			$.each( options, function( idx, item ) {
-				if( item.link === link ) {
+				if ( item.link === link ) {
 					self.$dom
 						.find('a[data-id=' + idx + ']')
 						.addClass('act')

@@ -55,10 +55,10 @@ define(function( require, exports ) {
 
 		// 设置数据
 		setData: function( data ) {
-			if( !this.$domReady ) {
+			if ( !this.$domReady ) {
 				this.build();
 			}
-			if( !this.$show ) {
+			if ( !this.$show ) {
 				this.show();
 			}
 			var type = data['type'];

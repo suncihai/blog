@@ -27,12 +27,12 @@ define(function( require, exports ){
 			foot.appendTo( target.hide() );
 
 			var cssStyle = config.css;
-			if( cssStyle ) {
+			if ( cssStyle ) {
 				foot.css( cssStyle );
 			}
 
 			// 创建完成后回调
-			if( util.isFunc( this.callback ) ) {
+			if ( util.isFunc( this.callback ) ) {
 				this.callback.call( this, true );
 			}
 		},

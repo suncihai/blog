@@ -48,22 +48,22 @@ define(function( require, exports ){
 		onData: function( err, res ) {
 			var dom = this.$data.dom;
 			var dataError = '拉取数据似乎出了点问题~';
-			if( err ) {
+			if ( err ) {
 				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
-				if( err.status === 'timeout' ) {
+				if ( err.status === 'timeout' ) {
 					dom.html('<div class="noData animated bounce">请求超时，请按F5刷新重试~</div>');
 				}
 				return false;
 			}
-			if( !res.success ) {
-				if( res.message ) {
+			if ( !res.success ) {
+				if ( res.message ) {
 					dataError = res.message;
 				}
 				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
 				return;
 			}
 			var info = this.$info = res.result;
-			if( res.total === 0 ) {
+			if ( res.total === 0 ) {
 				var noText = '数据库无该文章记录：' + this.$data.param;
 				dom.html('<div class="noData animated bounce">'+ noText +'</div>');
 				layout.setTitle( noText );
@@ -127,7 +127,7 @@ define(function( require, exports ){
 			var preDOM = self.$dom.find('pre');
 			var num = preDOM.size(), i = 0;
 			var pre, cls, b, e, type, tmp;
-			for( ; i < num; i++ ) {
+			for ( ; i < num; i++ ) {
 				pre = preDOM.eq(i);
 				cls = pre.attr('class');
 				b = cls.indexOf(':') + 1;

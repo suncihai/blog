@@ -36,26 +36,26 @@ define(function( require, exports ){
 
 			this.$status = 'show';
 
-			if( c.width ) {
+			if ( c.width ) {
 				dom.width( c.width );
 			}
 
-			if( c.height ) {
+			if ( c.height ) {
 				dom.height( c.height );
 			}
 
-			if( c.size ) {
+			if ( c.size ) {
 				dom.find('.M-threeRingsItem').css({
 					'width': c.size,
 					'height': c.size
 				});
 			}
 
-			if( c.class ) {
+			if ( c.class ) {
 				dom.addClass( c.class );
 			}
 
-			if( c.autoHide ) {
+			if ( c.autoHide ) {
 				this.hide();
 				this.$status = 'hide';
 			}
@@ -110,26 +110,26 @@ define(function( require, exports ){
 
 			this.$status = 'show';
 
-			if( c.width ) {
+			if ( c.width ) {
 				dom.width( c.width );
 			}
 
-			if( c.height ) {
+			if ( c.height ) {
 				dom.height( c.height );
 			}
 
-			if( c.size ) {
+			if ( c.size ) {
 				dom.find('.spinner-container').css({
 					'width': c.size,
 					'height': c.size
 				});
 			}
 
-			if( c.class ) {
+			if ( c.class ) {
 				dom.addClass( c.class );
 			}
 
-			if( c.autoHide ) {
+			if ( c.autoHide ) {
 				this.hide();
 				this.$status = 'hide';
 			}

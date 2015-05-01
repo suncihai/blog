@@ -7,12 +7,12 @@ class OP
     // 过滤XSS 取自xxx
     public function clearXss( $string, $low = false )
     {
-        if( !is_array( $string ) )
+        if ( !is_array( $string ) )
         {
             $string = trim( $string );
             $string = strip_tags( $string );
             $string = htmlspecialchars( $string );
-            if( $low )
+            if ( $low )
             {
                 return $string;
             }
@@ -26,7 +26,7 @@ class OP
             return $string;
         }
         $keys = array_keys( $string );
-        foreach( $keys as $key )
+        foreach ( $keys as $key )
         {
             $this->clearXss( $string[$key] );
         }

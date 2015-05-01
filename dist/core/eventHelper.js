@@ -15,26 +15,26 @@ define(function( require, exports ){
 	 * @param  {String}   type     [事件类型]
 	 * @param  {Mix}      data     [callback中接受的数据]
 	 * @param  {Function} calllback[事件函数]
-	 * @param  {Object}   scope    [作用域]
+	 * @param  {Object}   context  [作用域]
 	 */
-	exports.bind = function( $elm, type, data, calllback, scope ) {
+	exports.bind = function( $elm, type, data, calllback, context ) {
 		// 参数检测
-		if( !$elm instanceof jQuery ) {
+		if ( !$elm instanceof jQuery ) {
 			util.error('绑定的元素必须为jQuery对象');
 			return false;
 		}
 		// 不传data
-		if( util.isFunc( data ) ) {
-			scope = calllback;
+		if ( util.isFunc( data ) ) {
+			context = calllback;
 			calllback = data;
 			data = null;
 		}
 
 		$elm.bind( type, function( ev ) {
-			if( !scope ) {
-				scope = this;
+			if ( !context ) {
+				context = this;
 			}
-			calllback.call( scope, ev, this, data );
+			calllback.call( context, ev, this, data );
 		});
 	}
 
@@ -45,7 +45,7 @@ define(function( require, exports ){
 	 */
 	exports.unbind = function( $elm, type ) {
 		// 参数检测
-		if( !$elm instanceof jQuery ) {
+		if ( !$elm instanceof jQuery ) {
 			util.error('绑定的元素必须为jQuery对象');
 			return false;
 		}
@@ -58,45 +58,45 @@ define(function( require, exports ){
 	 * @param  {Function}  handleIn<必选>   [鼠标移入事件]
 	 * @param  {Function}  handleOut<可选>  [鼠标移出事件]
 	 * @param  {Function}  data<可选>       [回调中传递数据]
-	 * @param  {Object}    scope<可选>      [作用域]
+	 * @param  {Object}    context<可选>    [作用域]
 	 */
-	exports.hover = function( $elm, handleIn, handleOut, data, scope ) {
+	exports.hover = function( $elm, handleIn, handleOut, data, context ) {
 		var argLen = arguments.length;
 		// 参数检测
-		if( !$elm instanceof jQuery ) {
+		if ( !$elm instanceof jQuery ) {
 			util.error('绑定的元素必须为jQuery对象');
 			return false;
 		}
-		if( argLen === 4 ) {
-			scope = data;
+		if ( argLen === 4 ) {
+			context = data;
 			data = null;
 		}
-		if( !util.isFunc( handleOut ) ) {
-			if( argLen === 4 ) {
-				scope = data;
+		if ( !util.isFunc( handleOut ) ) {
+			if ( argLen === 4 ) {
+				context = data;
 				data = handleOut;
 				handleOut = null;
 			}
-			if( argLen === 3 ) {
-				scope = handleOut;
+			if ( argLen === 3 ) {
+				context = handleOut;
 				handleOut = null;
 				data = null;
 			}
 		}
 		function _mouseEnter( ev ) {
-			if( !scope ) {
-				scope = this;
+			if ( !context ) {
+				context = this;
 			}
-			if( handleIn ) {
-				handleIn.call( scope, ev, this, data );
+			if ( handleIn ) {
+				handleIn.call( context, ev, this, data );
 			}
 		}
 		function _mouseLeave( ev ) {
-			if( !scope ) {
-				scope = this;
+			if ( !context ) {
+				context = this;
 			}
-			if( handleOut ) {
-				handleOut.call( scope, ev, this, data );
+			if ( handleOut ) {
+				handleOut.call( context, ev, this, data );
 			}
 		}
 		$elm.hover( _mouseEnter, _mouseLeave );
@@ -109,35 +109,35 @@ define(function( require, exports ){
 	 * @param  {Mix}     selector  [选择器,可为单个元素或者元素数组]
 	 * @param  {Mix}     data      [callback中接受的数据]
 	 * @param  {Function}calllback [事件函数]
-	 * @param  {Object}  scope     [作用域]
+	 * @param  {Object}  context   [作用域]
 	 */
-	exports.proxy = function( $elm, type, selector, data, calllback, scope ) {
+	exports.proxy = function( $elm, type, selector, data, calllback, context ) {
 		// 参数检测
-		if( !$elm instanceof jQuery ) {
+		if ( !$elm instanceof jQuery ) {
 			util.error('绑定的元素必须为jQuery对象');
 			return false;
 		}
 
 		// 不传selector
-		if( util.isFunc( selector ) ) {
+		if ( util.isFunc( selector ) ) {
 			calllback = selector;
-			scope = data;
+			context = data;
 			selector = null;
 			data = null;
 		}
 
 		// 不传data
-		if( util.isFunc( data ) ) {
-			scope = calllback;
+		if ( util.isFunc( data ) ) {
+			context = calllback;
 			calllback = data;
 			data = null;
 		}
 
 		$elm.on( type, selector, function( ev ) {
-			if( !scope ) {
-				scope = this;
+			if ( !context ) {
+				context = this;
 			}
-			calllback.call( scope, ev, this, data );
+			calllback.call( context, ev, this, data );
 		});
 	}
 
@@ -150,7 +150,7 @@ define(function( require, exports ){
 	 */
 	exports.unproxy = function( $elm, type, selector, calllback ) {
 		// 参数检测
-		if( !$elm instanceof jQuery ) {
+		if ( !$elm instanceof jQuery ) {
 			util.error('绑定的元素必须为jQuery对象');
 			return false;
 		}
@@ -181,14 +181,14 @@ define(function( require, exports ){
 	 * @param  {String} method    [消息名]
 	 * @param  {Mix}    data      [消息携带的参数]
 	 * @param  {Func}   afterSend [发完后的回调]
-	 * @param  {Object} scope     [上下文]
+	 * @param  {Object} context   [上下文]
 	 */
-	exports.fire = function( method, data, afterSend, scope ) {
+	exports.fire = function( method, data, afterSend, context ) {
 		data = data || null;
-		scope = scope || WIN;
+		context = context || WIN;
 		messager.trigger.call( messager, method, data );
-		if( afterSend ) {
-			afterSend.call( scope );
+		if ( afterSend ) {
+			afterSend.call( context );
 		}
 	},
 
@@ -196,15 +196,15 @@ define(function( require, exports ){
 	 * on 接收/订阅消息<封装on函数,只回调部分数据>
 	 * @param  {String} method    [消息名]
 	 * @param  {Func}   callback  [接受消息的回调]
-	 * @param  {Object} scope     [上下文]
+	 * @param  {Object} context   [上下文]
 	 */
-	exports.on = function( method, callback, scope ) {
+	exports.on = function( method, callback, context ) {
 		// 必须要有回调,不然接收消息干嘛
-		if( !callback || !util.isFunc( callback ) ) {
+		if ( !callback || !util.isFunc( callback ) ) {
 			return false;
 		}
 		var args = null, evData = null, evt, data;
-		scope = scope || WIN;
+		context = context || WIN;
 		messager.on.call( messager, method, function() {
 			args = util.argumentsToArray( arguments );
 			evt = args[0]; // event源数据
@@ -216,7 +216,7 @@ define(function( require, exports ){
 				'timeStamp': evt.timeStamp,
 				'nameSpace': evt.namespace
 			};
-			callback.call( scope, evData );
+			callback.call( context, evData );
 		});
 	},
 
