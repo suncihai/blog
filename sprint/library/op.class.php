@@ -4,7 +4,12 @@
  */
 class OP
 {
-    // 过滤XSS 取自xxx
+    /**
+     * clearXss 过滤XSS 取自xxx
+     * param  [String]  $string  [需要过滤的字符串]
+     * param  [Boolean] $low     [true简单过滤]
+     * param  [Return]           [过滤后的字符串]
+     */
     public function clearXss( $string, $low = false )
     {
         if ( !is_array( $string ) )

@@ -68,6 +68,15 @@ a:hover{
 	// -webkit-filter: blur(150px);
 	// filter: blur(150px);
 }
+// 遮罩淡出动画
+@-webkit-keyframes maskOut {0% {opacity: .7;} 100% {opacity: 0;}}
+@keyframes maskOut {0% {opacity: .7;} 100% {opacity: 0;}}
+.maskOut{-webkit-animation-name: maskOut; animation-name: maskOut;}
+// 遮罩淡入动画
+@-webkit-keyframes maskIn {0% {opacity: 0;} 100% {opacity: .7;}}
+@keyframes maskIn {0% {opacity: 0;} 100% {opacity: .7;}}
+.maskIn{-webkit-animation-name: maskIn; animation-name: maskIn;}
+
 // 弹出层容器
 #DAILOG {
 	display: none;

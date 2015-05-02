@@ -217,12 +217,19 @@ define(function( require, util ){
 	}
 
 	/**
-	 * random 生成指定范围的随机整数
+	 * random 生成指定范围的随机整数(无范围返回时间戳)
 	 * @param  {Number} begin  [开始]
 	 * @param  {Number} end    [结束]
 	 */
 	util.random = function( begin, end ) {
-		return parseInt( Math.random() * ( end - begin + 1 ) + begin, 10 );
+		var ret;
+		if ( arguments.length === 2 ) {
+			ret = parseInt( Math.random() * ( end - begin + 1 ) + begin, 10 );
+		}
+		else {
+			ret = (new Date()).getTime();
+		}
+		return ret;
 	}
 
 	/**
@@ -300,6 +307,13 @@ define(function( require, util ){
 		var docElem = document.documentElement;
 		var docBody = document.body;
 		return document.compatMode === "CSS1Compat" ? docElem.clientHeight : docBody.clientHeight;
+	}
+
+	/**
+	 * removeTags 去掉Hhtml标签
+	 */
+	util.removeTags = function( html ) {
+		return html.toString().replace(/<[^>]+>/g, "");
 	}
 
 });

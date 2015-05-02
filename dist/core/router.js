@@ -4,7 +4,6 @@
 define(function( require, exports ){
 	var WIN = window;
 	var LOC = WIN.location;
-	var URL = LOC.href;
 	var util = require('util');
 	var view = require('@core/view').base;
 	var c = require('@data/config');
@@ -109,31 +108,21 @@ define(function( require, exports ){
 
 	exports.start = function() {
 		if ( 'onhashchange' in WIN ) {
-			if ( WIN.addEventListener ) {
-				WIN.addEventListener( 'hashchange', hashChanged, false );
-			}
-			else {
-				WIN.onhashchange = hashChanged;
-			}
+			WIN.addEventListener('hashchange', hashChanged, false);
 		}
 		else {
-			setInterval(function() {
-				if ( URL != LOC.href ) {
-					hashChanged.call( WIN );
-				}
-			}, 150);
+			WIN.onhashchange = hashChanged;
 		}
 		hashChanged();
 	}
 
 	/**
-	 * go 路由切换方法
-	 * @param  {String} uri [路由地址 / 数字表示跳转的历史]
-	 * @return {null}       [无返回]
+	 * go 手动切换路由
+	 * @param  {Mix} uri [路由地址/-1返回上一页]
 	 */
 	exports.go = function( uri ) {
-		if  ( util.isString( uri ) ){
-			if  ( uri.charAt(0) == '/' ){
+		if ( util.isString( uri ) ){
+			if ( uri.charAt(0) == '/' ) {
 				LOC.href = uri;
 			}
 			else {

@@ -41,53 +41,84 @@ class SQL
      * query 基本查询接口,返回查询的结果数组(原始字段)
      * param  [String]  $sql     [SQL语句]
      * param  [Boolean] $private [内部使用]
+     * param  [Boolean] $insert  [INSERT 语句]
      * param  [Return]           [返回items->结果集合, total->结果总数]
      */
-    public function query( $sql, $private = true )
+    public function query( $sql, $private = true, $insert = false )
     {
         $result = mysql_query( $sql, $this->conn );
+        // 查询成功
         if ( $result )
         {
-            // 选项数组集合
-            $itemArray = array();
-            while ( $assoc = mysql_fetch_assoc( $result ) )
+            // 非INSERT语句返回结果items和总数
+            if ( !$insert )
             {
-                array_push( $itemArray, $assoc );
+                // 选项数组集合
+                $itemArray = array();
+                while ( $assoc = mysql_fetch_assoc( $result ) )
+                {
+                    array_push( $itemArray, $assoc );
+                }
+                // 结果行数
+                $total = mysql_num_rows( $result );
+                mysql_free_result( $result );
+                // 结果
+                $resultObject = array
+                (
+                    'items'   => $itemArray,
+                    'total'   => $total,
+                    'success' => true
+                );
+                // 返回结构
+                $retArray = array
+                (
+                    'success' => true,
+                    'result'  => $resultObject
+                );
             }
-            // 结果行数
-            $total = mysql_num_rows( $result );
-            mysql_free_result( $result );
-            // 结果
-            $resultObject = array
-            (
-                'items'   => $itemArray,
-                'total'   => $total,
-                'success' => true
-            );
-            // 返回结构
-            $retArray = array
-            (
-                'success' => true,
-                'result'  => $resultObject
-            );
+            // INSERT语句只返回true或false
+            else
+            {
+                $resultObject = array
+                (
+                    'success' => true
+                );
+                $retArray = $resultObject;
+            }
         }
+        // 查询失败
         else
         {
-            // 结果
-            $resultObject = array
-            (
-                'items' => null,
-                'total' => 0,
-                'success' => false
-            );
-            // 返回结构
-            $retArray = array
-            (
-                'success' => false,
-                'result'  => $resultObject
-            );
+            // 非INSERT语句
+            if ( !$insert )
+            {
+                // 结果
+                $resultObject = array
+                (
+                    'items' => null,
+                    'total' => 0,
+                    'success' => false
+                );
+                // 返回结构
+                $retArray = array
+                (
+                    'success' => false,
+                    'result'  => $resultObject
+                );
+            }
+            // INSERT语句
+            else
+            {
+                $resultObject = array
+                (
+                    'success' => false
+                );
+                $retArray = $resultObject;
+            }
+
         }
-        // 函数返回体(内部调用只返回items和total)
+        // ******* 查询结果处理结束 *******
+        // 查询结果返回(内部调用只返回items和total)
         if ( $private )
         {
             return $resultObject;
@@ -152,7 +183,7 @@ class SQL
                     'id'       => intval( $item['ID'] ),
                     'title'    => $item['post_title'],
                     'date'     => $item['post_date'],
-                    'content'  => $abstract,
+                    'content'  => htmlspecialchars_decode( $abstract ),
                     'comments' => intval( $item['comment_count'] ),
                     'cover'    => $cover
                 );
@@ -352,7 +383,7 @@ class SQL
                         'title'    => $title,
                         'tips'     => $item['post_title'],
                         'date'     => $item['post_date'],
-                        'brief'    => $brief,
+                        'brief'    => htmlspecialchars_decode( $brief ),
                         'comments' => intval( $item['comment_count'] )
                     );
                     array_push( $itemArray, $itemFormat );
@@ -399,6 +430,7 @@ class SQL
             // 'comment_author_email',
             // 'comment_agent',
             'comment_author_IP',
+            "comment_author_url",
             'comment_content',
             'comment_parent'
         );
@@ -426,9 +458,10 @@ class SQL
                 $itemFormat = array(
                     'id'      => intval( $item['comment_ID'] ),
                     'author'  => $item['comment_author'],
+                    'url'     => preg_replace('/(http:)/', "", $item['comment_author_url']),
                     'ip'      => $item['comment_author_IP'],
                     'date'    => $item['comment_date'],
-                    'content' => $item['comment_content'],
+                    'content' => htmlspecialchars_decode( $item['comment_content'] ),
                     'parent'  => intval( $item['comment_parent'] )
                 );
                 array_push( $itemArray, $itemFormat );
@@ -462,44 +495,67 @@ class SQL
      * param  [Number] $postid   [被评论的文章ID]
      * param  [String] $content  [评论内容]
      * param  [String] $author   [作者/昵称]
+     * param  [String] $link     [网址]
      */
-    public function addComment( $postid, $content, $author )
+    public function addComment( $postid, $content, $author, $link )
     {
+        // 评论内容
         $content = removeTag( $content );
+        // 评论昵称
         $author = removeTag( $author );
+        // 存储的默认类型: 0待审核, 1通过, spam垃圾评论, trash回收站评论
+        $approved = 1;
+        // 当前时间
+        $date = date('y-m-d h:i:s', time());
+        // 当前GMT时间
+        $gmtdate = gmdate('y-m-d h:i:s', time());
+        // 客户端IP地址
+        $ip = getIP();
+        // 客户端UA
+        $useragent = $_SERVER['HTTP_USER_AGENT'];
         // 设置的字段
-        $_fieldArr = array(
+        $fieldArr = array(
             "comment_post_ID",
             "comment_author",
-            "comment_content"
+            "comment_author_url",
+            "comment_content",
+            "comment_approved",
+            "comment_date",
+            "comment_date_gmt",
+            "comment_author_IP",
+            "comment_agent"
         );
-        $_sets = implode(", ", $_fieldArr);
         // 对应的字段值
-        $_valueArr = array(
+        $valueArr = array(
             "$postid",
-            "$content",
-            "$author"
+            "'$author'",
+            "'$link'",
+            "'$content'",
+            "$approved",
+            "'$date'",
+            "'$gmtdate'",
+            "'$ip'",
+            "'$useragent'"
         );
-        $_values = implode(", ", $_valueArr);;
-        $resQuery = $this->query("INSERT INTO wp_comments $_sets VALUES $_values");
+        $_sets = implode(",", $fieldArr);
+        $_values = implode(",", $valueArr);
+        $sql = "INSERT INTO wp_comments ($_sets) VALUES ($_values)";
+        $resQuery = $this->query( $sql, $private = true, $insert = true );
         if ( $resQuery['success'] )
         {
             $ret = array
             (
-                'success' => true,
-                'result'  => $resQuery['items'][0]
+                'success' => true
             );
         }
         else
         {
             $ret = array
             (
-                'success' => false,
-                'result'  => $resQuery,
-                'message' => '评论失败！'
+                'success' => false
             );
         }
-        json_encode( $ret );
+        return json_encode( $ret );
     }
 }
 
@@ -530,6 +586,21 @@ function fixStripHtmlTags( $text )
     $text = preg_replace( "/=\"\"/", "=", $text );
     $text = preg_replace( "/&quot;\"/", "\"", $text );
     return $text;
+}
+
+// 获取IP地址
+function getIP() {
+    if (getenv("HTTP_CLIENT_IP") && strcasecmp(getenv("HTTP_CLIENT_IP"), "unknown"))
+        $ip = getenv("HTTP_CLIENT_IP");
+    else if (getenv("HTTP_X_FORWARDED_FOR") && strcasecmp(getenv("HTTP_X_FORWARDED_FOR"), "unknown"))
+        $ip = getenv("HTTP_X_FORWARDED_FOR");
+    else if (getenv("REMOTE_ADDR") && strcasecmp(getenv("REMOTE_ADDR"), "unknown"))
+        $ip = getenv("REMOTE_ADDR");
+    else if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], "unknown"))
+        $ip = $_SERVER['REMOTE_ADDR'];
+    else
+        $ip = "unknown";
+    return($ip);
 }
 
 // 文章自动加上段落标签<p></p>, 取自WordPress: wp-includes/formatting.php wpautop() Line 245

@@ -19,7 +19,11 @@ Copyright (c) 2015 Daniel Eden
   animation-iteration-count: infinite;
 }
 
-.animated.hinge {
+.animated.fast {
+  -webkit-animation-duration: 500ms;
+  animation-duration: 500ms;
+}
+.animated.slow {
   -webkit-animation-duration: 2s;
   animation-duration: 2s;
 }
