@@ -5,18 +5,50 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var app = require('app');
 	var util = require('util');
-	var dailog = require('@modules/dailog').base;
 	var c = app.getConfig();
 	var dc = c.dataCenter;
+
+	var pager = require('@modules/pager').base;
+	var dailog = require('@modules/dailog').base;
+	var loading = require('@modules/loading').chrysanthemum;
 
 	// 评论列表
 	var CommentList = {
 		init: function( config ) {
+			this.$ = {};
+			this.$dataReady = false;
 			this.$target = config.target;
 			this.$param = util.merge( c.commentParam, {
 				'artid': +config.artid
 			});
 			this.build();
+			return this;
+		},
+
+		// 显示评论列表及分页器
+		show: function() {
+			this.$doms.list.show();
+			this.$doms.pager.show();
+			return this;
+		},
+
+		// 隐藏评论列表及分页器
+		hide: function() {
+			this.$doms.list.hide();
+			this.$doms.pager.hide();
+			return this;
+		},
+
+		// 显示加载动画
+		showLoading: function() {
+			this.$.loading.show();
+			return this;
+		},
+
+		// 隐藏加载动画
+		hideLoading: function() {
+			this.$.loading.hide();
+			return this;
 		},
 
 		// 创建评论列表
@@ -29,30 +61,78 @@ define(function( require, exports ){
 						'<div class="M-commentHeadLine"/>',
 					'</header>',
 					'<article class="M-commentList"/>',
+					'<div class="M-commentPager"/>',
+					'<div class="M-commentLoading"/>',
 				'</div>'
 			].join('')).appendTo( this.$target );
 
 			this.$doms = {
-				'list': $('.M-commentList', html),
-				'add': $('.M-commentHeadAdd', html)
+				'title'   : $('.M-commentHeadTitle', html),
+				'add'     : $('.M-commentHeadAdd', html),
+				'loading' : $('.M-commentLoading', html),
+				'list'    : $('.M-commentList', html).hide(),
+				'pager'   : $('.M-commentPager', html).hide()
 			}
+
+			// 创建分页模块
+			pager.init({
+				'name': 'commentPager',
+				'target': this.$doms.pager,
+				'max': 5,
+				'showInfo': false
+			});
+
+			this.$.loading = loading.init({
+				'target': this.$doms.loading,
+				'width':  0,
+				'scale': 30,
+				// 'size': 8,
+				'class': 'center',
+				'autoHide': true
+			});
+
+			// 监听页码选择事件
+			app.event.on('pagerSelected', this.onPagerSelected, this);
 
 			// 绑定添加评论事件
 			app.event.bind( this.$doms.add, 'click', this.eventClickAdd, this );
+		},
 
-			// 拉取评论列表
-			this.load();
+		onPagerSelected: function( ev ) {
+			var param = ev.param;
+			var newParam;
+			if ( param.name === 'commentPager' ) {
+				newParam = util.merge( this.$param, {
+					'page': param.page
+				});
+				this.$dataReady = false;
+				this.load( newParam );
+			}
+			return false;
 		},
 
 		eventClickAdd: function() {
 			popwin.init({'title': '添加评论：'}).setData({'postid': this.$param.artid});
 		},
 
-		load: function() {
-			app.data.get( dc.listcomment, this.$param, this.onData, this );
+		// 清空评论列表
+		empty: function() {
+			this.$doms.list.empty();
+			return this;
 		},
 
+		// 拉取评论列表
+		load: function( param ) {
+			param = param || this.$param;
+			if ( !this.$dataReady ) {
+				this.hide().empty().showLoading();
+				app.data.get( dc.listcomment, param, this.onData, this );
+			}
+		},
+
+		// 数据返回
 		onData: function( err, res ) {
+			var self = this;
 			var dataError = '评论列表拉取失败~';
 			if ( err ) {
 				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
@@ -64,9 +144,30 @@ define(function( require, exports ){
 				}
 				return false;
 			}
-			this.buildList( res.result.items );
+			res = res.result;
+			self.$dataReady = true;
+
+			// 更新头部标题
+			self.$doms.title.text(res.total +'条评论');
+
+			// 更新页码
+			pager.setParam({
+				'page': res.page,
+				'pages': res.pages,
+				'total': res.total
+			});
+
+			setTimeout(function() {
+				self.show().hideLoading();
+			}, c.delay);
+
+			// 发通知消息
+			app.event.fire('commentDataLoaded');
+			// 构建评论列表
+			self.buildList( res.items );
 		},
 
+		// 创建评论列表
 		buildList: function( items ) {
 			var list = [];
 			this.$items = items;
@@ -75,7 +176,7 @@ define(function( require, exports ){
 				var nickName = '';
 				nickName = item.url ? '<a href="http://'+ item.url +'" target="_blank">'+ item.author +'</a>' : item.author;
 				list.push([
-					'<section class="M-commentIssuse">',
+					'<section class="M-commentIssuse" data-id="'+ idx +'">',
 						'<header class="M-commentIssuseHead">',
 							'<b class="M-commentIssuseHeadFloor">#'+ (idx + 1) +'</b>',
 							'<b class="M-commentIssuseHeadNick">'+ nickName +'</b>',
@@ -153,7 +254,15 @@ define(function( require, exports ){
 		},
 
 		buildComment: function() {
-			var holderTxt = this.$data && this.$data.content ? '[必填] 回复“'+ (this.$data.content) + '”：' : '[必填] 在这里输入评论内容~';
+			var holderTxt = '';
+			if ( this.$data && this.$data.content ) {
+				var content = util.removeTags(this.$data.content);
+				var brief = content.length > 20 ? content.substr(0, 20) + '……' : content;
+				holderTxt = '[必填] 回复“'+ this.$data.author +'”的评论：“' + brief + '”';
+			}
+			else {
+				holderTxt = '[必填] 在这里输入评论内容~';
+			}
 			var holderNick = '[必填] 在这输入您的昵称，不能为纯数字，不能包含特殊字符，不能超过16个字符。';
 			var holderLink = '[选填] 这里可以输入您的网址(例:www.tangbc.com)，链接会加在您的昵称上。';
 			var holderCode = '输入验证码';
@@ -275,10 +384,10 @@ define(function( require, exports ){
 				msg = '<span class="warning animated fadeIn">服务器出了点问题~<span>';
 			}
 			if ( !data.success ) {
-				msg = '<span class="warning animated fadeIn">×' + data.message + '</span>';
+				msg = '<span class="warning animated fadeIn"><i class="M-iconWarning">×</i>' + data.message + '</span>';
 			}
 			else {
-				msg = '<span class="ok animated fadeIn">√验证码正确！<span>';
+				msg = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>验证码正确！<span>';
 			}
 			this.$doms.tips.html( msg );
 		},
@@ -286,7 +395,7 @@ define(function( require, exports ){
 		// 点击更换验证码
 		eventClickImage: function( evt, elm ) {
 			var self = this;
-			var tip = '';
+			var tip = '', stop;
 			this.$clicks += 1;
 			self.$doms.code.val('').focus();
 			switch( this.$clicks ) {
@@ -299,21 +408,29 @@ define(function( require, exports ){
 				case 10:case 11:case 12:case 13:case 14:case 15:case 16:case 17:case 18:case 19:
 					tip = this.$fuckTips[util.random(0, this.$fuckTips.length - 1)];
 				break;
-				default: tip = '好吧，你继续无聊地刷吧……';
+				default: {
+					tip = '好了，不能再这么任性下去了……';
+					stop = true;
+				}
 			}
 			self.$doms.tips.html( tip );
-			app.animate.play(
-				$(elm),
-				[
-					'hinge',
-					'zoomOutDown',
-					'rotateOutDownLeft',
-					'rotateOutDownRight'
-				],
-				function() {
-					$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
-				}
-			);
+			if ( stop ) {
+				$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
+			}
+			else {
+				app.animate.play(
+					$(elm),
+					[
+						'hinge',
+						'zoomOutDown',
+						'rotateOutDownLeft',
+						'rotateOutDownRight'
+					],
+					function() {
+						$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
+					}
+				);
+			}
 			return false;
 		}
 	}

@@ -177,5 +177,5 @@ define(function( require, exports ){
 			return false;
 		}
 	}
-	exports.base = Dailog;
+	exports.base = $.extend(true, {}, Dailog);
 });

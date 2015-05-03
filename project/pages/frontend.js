@@ -16,6 +16,7 @@ define(function( require, exports ){
 	var Article = {
 		// 初始化
 		init: function( data ) {
+			this.$ = {};
 			this.$data = data;
 			layout.hideFooter();
 			this.load();
@@ -23,8 +24,8 @@ define(function( require, exports ){
 
 		// 隐藏loading
 		hideLoading: function() {
-			this.loading.hide();
-			this.$dom.show();
+			this.$.loading.hide();
+			this.$doms.content.show();
 		},
 
 		// 拉取数据
@@ -34,7 +35,7 @@ define(function( require, exports ){
 				'artid': id || this.$data.param
 			}
 			// 数据加载之前显示loading
-			this.loading = loading.init({
+			this.$.loading = loading.init({
 				'target': this.$data.dom,
 				'width':  this.$data.dom.width(),
 				'size': 25,
@@ -84,12 +85,17 @@ define(function( require, exports ){
 		build: function( info ) {
 			var self = this;
 			var dom = self.$data.dom;
-			self.$dom = $([
+			var cont = $([
 				'<div class="content">',
 					'<article class="article">'+ info.content +'</article>',
-				'</div>',
-				'<div class="comments"/>'
+				'</div>'
 			].join('')).appendTo( dom ).hide();
+
+			self.$doms = {
+				'content' : cont,
+				'article' : $('.article', cont),
+				'comment' : $('<div class="comments"/>').appendTo( dom )
+			}
 
 			// 代码高亮渲染
 			self.renderHighLighter();
@@ -98,8 +104,8 @@ define(function( require, exports ){
 			layout.setTitle( self.$data.name, info.title );
 
 			// 创建评论模块
-			comment.init({
-				'target': dom.find('.comments'),
+			this.$.comment = comment.init({
+				'target': self.$doms.comment,
 				'artid': this.$data.param
 			});
 
@@ -113,6 +119,11 @@ define(function( require, exports ){
 			})
 			// .setCrumbs( c.archiveTitle[self.$data.name], self.$data.param );
 
+			// 绑定鼠标滚动事件
+			app.event.bind( $(document), 'scroll.article', this.eventScrolling, this );
+			// 监听评论列表数据加载完成消息
+			app.event.on('commentDataLoaded', this.onCommentDataLoaded, this);
+
 			// 隐藏loading
 			setTimeout(function() {
 				self.hideLoading();
@@ -121,10 +132,27 @@ define(function( require, exports ){
 
 		},
 
+		// 监测滚动距离
+		eventScrolling: function( evt, doc ) {
+			var top = $(doc).scrollTop();
+			var distance = this.$doms.content.height();
+			// console.log(top)
+			// 滚动条到达评论区域
+			// if ( top > distance ) {
+			if ( top > distance - 200 ) {
+				this.$.comment.showLoading().load();
+			}
+		},
+
+		onCommentDataLoaded: function() {
+			app.event.unbind($(document), 'scroll.article');
+			// console.log('cancel bind scroll!!!');
+		},
+
 		// 代码高亮渲染
 		renderHighLighter: function() {
 			var self = this;
-			var preDOM = self.$dom.find('pre');
+			var preDOM = self.$doms.article.find('pre');
 			var num = preDOM.size(), i = 0;
 			var pre, cls, b, e, type, tmp;
 			for ( ; i < num; i++ ) {

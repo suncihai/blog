@@ -9,8 +9,8 @@
 		session_start();
 	}
 
-	// 验证码库
-	$word = "break|case|else|false|null|return|switch|this|true|typeof|while|window|width|height|color|left|border|float|bottom|clear|margin|cursor";
+	// 单词库
+	$word = "break|case|else|false|null|return|switch|this|true|typeof|define|join|slice|sort|shift|join|push|length|concat|trim|substr|while|window|width|height|color|left|border|float|bottom|clear|margin|cursor|block|none|fixed|auto|hidden|center|italic|both|inline|bold|normal|rgba|solid|italic|scale|rotate";
 
 	// 转成数组并随机抽取一个
 	$words = explode("|", $word);

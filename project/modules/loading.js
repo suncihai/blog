@@ -74,6 +74,16 @@ define(function( require, exports ){
 
 	// 经典菊花Loading
 	var Chrysanthemum = {
+		/*
+		 * config: {
+			'target':, // 目标容器
+			'width': , // 长度
+			'scale': , // 整个图标的大小px
+			'size': , // 小圆圈的大小px
+			'autoHide': , // 创建完自动隐藏
+			'class': // 额外的class
+		 }
+		 */
 		init: function( config ) {
 			this.$config = config;
 			this.$status = 'uncompleted';
@@ -118,8 +128,17 @@ define(function( require, exports ){
 				dom.height( c.height );
 			}
 
-			if ( c.size ) {
+			// 设置整个loading图标的尺寸
+			if ( c.scale ) {
 				dom.find('.spinner-container').css({
+					'width': c.scale,
+					'height': c.scale
+				});
+			}
+
+			// 设置每个小圆圈的尺寸
+			if ( c.size ) {
+				dom.find('.spinner-container > div').css({
 					'width': c.size,
 					'height': c.size
 				});
@@ -146,6 +165,6 @@ define(function( require, exports ){
 		}
 	}
 
-	exports.base = ThreeRings;
-	exports.chrysanthemum = Chrysanthemum;
+	exports.base = $.extend(true, {}, ThreeRings);
+	exports.chrysanthemum = $.extend(true, {}, Chrysanthemum);
 });

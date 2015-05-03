@@ -491,6 +491,26 @@ a:hover {
 .G-frameBodyBlank {
   position: relative;
 }
+.M-iconOk,
+.M-iconWarning {
+  display: inline-block;
+  position: relative;
+  right: .2em;
+  top: -0.1em;
+  width: 1.1em;
+  height: 1.15em;
+  line-height: 1.2;
+  font-weight: bold;
+  text-align: center;
+  background: #1BC36F;
+  color: #FFF;
+  font-style: normal;
+  border-radius: 20%;
+}
+.M-iconWarning {
+  background: #F76D53;
+  color: #FFF;
+}
 .M-dailog {
   height: 100%;
   background: #FFF;
@@ -649,6 +669,58 @@ a:hover {
   color: #A39A9A;
   cursor: default;
 }
+.M-commentPager .M-pager {
+  width: auto;
+  float: right;
+  padding: 0;
+}
+.M-commentPager .M-pagerList {
+  display: inline-block;
+}
+.M-commentPager .M-pager input:active,
+.M-commentPager .M-pager input:focus {
+  outline: none;
+}
+.M-commentPager .M-pager .M-pagerItem,
+.M-commentPager .M-pager .M-pagerPN {
+  box-sizing: border-box;
+  position: relative;
+  margin: 0 -1px;
+  display: inline-block;
+  width: 2.5em;
+  height: 2.5em;
+  line-height: 2.5em;
+  text-align: center;
+  border: 1px solid #E4E2E2;
+  border-radius: 0px;
+  background: #FFFFFF;
+  color: #B6AEAE;
+  cursor: pointer;
+  font-size: 1.6rem;
+  transition: background 220ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+.M-commentPager .M-pager .M-pagerItem:hover,
+.M-commentPager .M-pager .M-pagerPN:hover {
+  background: #EEEEEE;
+  color: #B6AEAE;
+}
+.M-commentPager .M-pager .M-pagerAct,
+.M-commentPager .M-pager .M-pagerAct:hover {
+  margin: 0px;
+  border: none;
+  background: none;
+  color: #B6AEAE;
+  font-style: italic;
+  cursor: default;
+}
+.M-commentPager .M-pager .M-pagerOmit,
+.M-commentPager .M-pager .M-pagerOmit:hover {
+  margin: 0 .5em;
+  border: none;
+  background: none;
+  color: #A39A9A;
+  cursor: default;
+}
 .M-footer {
   width: 75%;
   margin: 0 auto;
@@ -753,7 +825,6 @@ a:hover {
   }
 }
 .M-chrysanthemum {
-  padding: 50px 0;
   width: 20px;
   height: 20px;
   position: relative;
@@ -761,8 +832,8 @@ a:hover {
 .M-chrysanthemum .container1 > div,
 .M-chrysanthemum .container2 > div,
 .M-chrysanthemum .container3 > div {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background-color: #333;
   border-radius: 100%;
   position: absolute;
@@ -1088,23 +1159,12 @@ a:hover {
   margin: 0 auto;
   margin-bottom: 3.5em;
 }
-.M-comment:after {
-  display: block;
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 3.5em;
-  width: 2px;
-  background-color: #eee;
-  z-index: -1;
-}
 .M-commentHead {
   padding-bottom: 1em;
 }
 .M-commentHeadTitle {
   position: relative;
-  left: 2em;
+  left: 1.5em;
   padding: 0 .5em;
   display: inline-block;
   font-size: 2.2rem;
@@ -1132,16 +1192,37 @@ a:hover {
   top: -0.8em;
   z-index: 2;
 }
+.M-commentList {
+  position: relative;
+}
+.M-commentList:after {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3.5em;
+  width: 2px;
+  background-color: #E4E2E2;
+  z-index: -1;
+}
 .M-commentIssuse {
   margin-bottom: 1em;
-  border: 1px solid #eee;
+  border: 1px solid #E4E2E2;
   border-radius: 2px;
   background: #fff;
+  color: #666;
   z-index: 1;
+  transition: all 218ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+.M-commentIssuse:hover {
+  color: #333;
+  border-color: #CCC;
+  box-shadow: 2px 2px 5px #eeeeee, -2px -2px 5px #eeeeee;
 }
 .M-commentIssuseHead {
   padding: .6em .5em;
-  background: rgba(247, 247, 247, 0.55);
+  background: rgba(247, 247, 247, 0.75);
   border-bottom: 1px solid #efefef;
 }
 .M-commentIssuseHeadFloor {
@@ -1154,7 +1235,10 @@ a:hover {
   margin-right: 1em;
   font-weight: normal;
   color: #a52a2a;
-  font-style: italic;
+}
+.M-commentIssuseHeadTime {
+  color: #938E8E;
+  font-size: 1.4rem;
 }
 .M-commentIssuseHeadOp {
   float: right;
@@ -1185,8 +1269,12 @@ a:hover {
 }
 .M-commentIssuseContent {
   padding: .6em 1em;
-  color: #678;
+  line-height: 150%;
   font-family: Consolas, Arial, Tahoma;
+}
+.M-commentPager {
+  min-height: 1em;
+  padding-top: 1em;
 }
 .M-commentForm {
   padding: 1.5em;

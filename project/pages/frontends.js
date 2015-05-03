@@ -14,6 +14,7 @@ define(function( require, exports ){
 
 	var Archives = {
 		init: function( data ) {
+			this.$ = {};
 			this.$data = data;
 			this.$title = c.archiveTitle[data.name];
 			this.$param = util.merge( c.archiveParam, {
@@ -46,14 +47,17 @@ define(function( require, exports ){
 
 			// 创建分页模块
 			pager.init({
-				'target': this.$doms.pagerBox
+				'name': 'achivePager',
+				'target': this.$doms.pagerBox,
+				'showInfo': true,
+				'max': 7
 			});
 
 			// 监听页码选择事件
 			app.event.on('pagerSelected', this.onPagerSelected, this);
 
 			// 数据加载之前显示loading
-			this.loading = loading.init({
+			this.$.loading = loading.init({
 				'target': dom,
 				'width':  dom.width(),
 				'size': 25,
@@ -76,12 +80,12 @@ define(function( require, exports ){
 		},
 
 		showLoading: function() {
-			this.loading.show();
+			this.$.loading.show();
 			this.hide();
 		},
 
 		hideLoading: function() {
-			this.loading.hide();
+			this.$.loading.hide();
 			this.show();
 		},
 
@@ -213,11 +217,14 @@ define(function( require, exports ){
 
 		// 页码激活事件
 		onPagerSelected: function( ev ) {
-			var page = ev.param;
-			var newParam = util.merge( this.$param, {
-				'page': page
-			});
-			this.load( newParam );
+			var param = ev.param;
+			var newParam;
+			if ( param.name === 'achivePager' ) {
+				newParam = util.merge( this.$param, {
+					'page': param.page
+				});
+				this.load( newParam );
+			}
 			return false;
 		}
 	}

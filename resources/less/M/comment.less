@@ -3,23 +3,12 @@
 	position: relative;
 	.center;
 	margin-bottom: 3.5em;
-	&:after{
-		display: block;
-		content: "";
-		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 3.5em;
-		width: 2px;
-		background-color: #eee;
-		z-index: -1;
-	}
 	// 评论区域的头部“评论”二字
 	&Head{
 		padding-bottom: 1em;
 		&Title{
 			position: relative;
-			left: 2em;
+			left: 1.5em;
 			padding: 0 .5em;
 			display: inline-block;
 			font-size: 2.2rem;
@@ -48,17 +37,40 @@
 			z-index: 2;
 		}
 	}
+	// 评论列表
+	&List{
+		position: relative;
+		&:after{
+			display: block;
+			content: "";
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 3.5em;
+			width: 2px;
+			background-color: #E4E2E2;
+			z-index: -1;
+		}
+	}
 	// 每一条评论
 	&Issuse{
 		margin-bottom: 1em;
-		border: 1px solid #eee;
+		border: 1px solid #E4E2E2;
 		border-radius: 2px;
 		background: #fff;
+		color: #666;
 		z-index: 1;
+		// box-shadow: 1px 1px 3px #EEE, -1px -1px 3px #EEE;
+		transition: all 218ms cubic-bezier(0.42,0,.58,1);
+		&:hover{
+			color: #333;
+			border-color: #CCC;
+			box-shadow: 2px 2px 5px #EEE, -2px -2px 5px #EEE;
+		}
 		// 评论信息的头部，包括昵称和时间
 		&Head{
 			padding: .6em .5em;
-			background: rgba(247,247,247,.55);
+			background: rgba(247,247,247,.75);
 			border-bottom: 1px solid #efefef;
 			&Floor{
 				margin-right: 1em;
@@ -70,9 +82,12 @@
 				margin-right: 1em;
 				font-weight: normal;
 				color:#a52a2a;
-				font-style: italic;
+				// font-style: italic;
 			}
-			&Time{}
+			&Time{
+				color: #938E8E;
+				font-size: 1.4rem;
+			}
 			&Op{
 				float: right;
 				font-size: 1.5rem;
@@ -104,11 +119,17 @@
 		// 评论正文
 		&Content{
 			padding: .6em 1em;
-			color: #678;
-			font-family: Consolas, Arial, Tahoma;
+			line-height: 150%;
+			font-family: @zhFontFamily;
 		}
 	}
-	// 评论表单
+	// 评论分页
+	&Pager{
+		min-height: 1em;
+		padding-top: 1em;
+	}
+
+	// 弹窗 评论表单
 	&Form{
 		padding: 1.5em;
 		input,textarea{

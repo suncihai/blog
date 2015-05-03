@@ -8,10 +8,21 @@ define(function( require, exports ){
 
 	// 传统的的分页方式
 	var Pager = {
+		/*
+		 * config配置参数：
+		 * name：分页器模块名称
+		 * target：分页器创建目标DOM
+		 * max：分页器最多显示按钮的个数
+		 * class：额外class(用于写不同样式的CSS)
+		 * showInfo：是否显示分页信息
+		 */
 		init: function( config ) {
-			this.$config = config || {};
+			this.$config = config;
+			this.$name = config.name;
 			this.$param = {}, // 当前页page, 总页数pages, 总条数total
-			this.$max = 7; // 最多显示选项条数
+			this.$max = config.max || 7; // 最多显示选项条数
+			this.$showInfo = !!config.showInfo;
+			this.$class = config.class || '';
 			this.build();
 		},
 
@@ -28,7 +39,7 @@ define(function( require, exports ){
 
 			// 分页器HTML结构
 			var html = [
-				'<div class="M-pager">',
+				'<div class="M-pager '+ this.$class +'">',
 					'<input class="M-pagerPN M-pagerPrev" type="button" title="上一页"/>',
 					'<div class="M-pagerList"/>',
 					'<input class="M-pagerPN M-pagerNext" type="button" title="下一页"/>',
@@ -43,6 +54,10 @@ define(function( require, exports ){
 				'list': $('.M-pagerList', dom),
 				'next': $('.M-pagerNext', dom),
 				'info': $('.M-pagerInfo', dom)
+			}
+
+			if ( !this.$showInfo ) {
+				this.$doms.info.hide();
 			}
 
 			doms.prev.attr('value', '<');
@@ -65,6 +80,7 @@ define(function( require, exports ){
 			var pages = param.pages; // 总页数
 			var page = param.page; // 当前页
 			var items = this.makePageArray( page, pages );
+			var hides = pages - this.$max; // 隐藏的页码数
 
 			// 构建总条数
 			doms.info.html('<span class="total lsp2">[共'+ pages +'页，'+ param.total +'条记录]</span>');
@@ -73,7 +89,7 @@ define(function( require, exports ){
 			util.each( items, function( num ) {
 				var item;
 				if ( num === '...' ) {
-					item = '<span class="M-pagerItem M-pagerOmit" title="部分页码已隐藏">···</span>';
+					item = '<span class="M-pagerItem M-pagerOmit" title="已隐藏'+ hides +'条页码">···</span>';
 				}
 				else {
 					item = '<input type="button" class="M-pagerItem" value="'+ num +'"/>';
@@ -178,7 +194,10 @@ define(function( require, exports ){
 			if ( id <= 0 || id > pages ) {
 				return false;
 			}
-			app.event.fire('pagerSelected', id);
+			app.event.fire('pagerSelected', {
+				'page': id,
+				'name': this.$name
+			});
 		},
 
 		// 点击上一页
@@ -188,7 +207,10 @@ define(function( require, exports ){
 			if ( id <= 0 || id > pages ) {
 				return false;
 			}
-			app.event.fire('pagerSelected', id);
+			app.event.fire('pagerSelected', {
+				'page': id,
+				'name': this.$name
+			});
 		},
 
 		// 点击页码
@@ -199,8 +221,11 @@ define(function( require, exports ){
 				return false;
 			}
 			$(elm).addClass('M-pagerAct').siblings('.M-pagerItem').removeClass('M-pagerAct');
-			app.event.fire('pagerSelected', id);
+			app.event.fire('pagerSelected', {
+				'page': id,
+				'name': this.$name
+			});
 		}
 	}
-	exports.base = Pager;
+	exports.base = $.extend(true, {}, Pager);
 });

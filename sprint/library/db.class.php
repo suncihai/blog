@@ -447,9 +447,9 @@ class SQL
         }
         // 排序方式
         $_order = "ORDER BY comment_date $sort";
-        // 分页起点(暂时不分页查询)
+        // 分页起点
         $start = ( $page - 1 ) * $limit;
-        $resQueryList = $this->query("SELECT $_fields FROM wp_comments WHERE $_where $_order");
+        $resQueryList = $this->query("SELECT $_fields FROM wp_comments WHERE $_where $_order LIMIT $start, $limit");
         if ( $resQueryList['success'] )
         {
             $itemArray = array();
@@ -461,15 +461,17 @@ class SQL
                     'url'     => preg_replace('/(http:)/', "", $item['comment_author_url']),
                     'ip'      => $item['comment_author_IP'],
                     'date'    => $item['comment_date'],
-                    'content' => htmlspecialchars_decode( $item['comment_content'] ),
+                    'content' => htmlspecialchars_decode( postAutoP( $item['comment_content'] ) ),
                     'parent'  => intval( $item['comment_parent'] )
                 );
                 array_push( $itemArray, $itemFormat );
             }
             $resArray = array
             (
-                'items' => $itemArray,  // 选项数组
-                'total' => $total       // 总条数
+                'items' => $itemArray,               // 选项数组
+                'total' => $total,                   // 总条数
+                'pages' => ceil( $total / $limit ),  // 总页数
+                'page'  => intval( $page )           // 当前第几页
             );
             // 最终返回的结果
             $retArray = array

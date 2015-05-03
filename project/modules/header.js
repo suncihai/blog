@@ -11,6 +11,7 @@ define(function( require, exports ){
 	var Header = {
 		// 初始化方法
 		init: function( config, callback ) {
+			this.$ = {};
 			this.$config = config || {};
 			this.callback = callback;
 			this.build();
@@ -51,7 +52,7 @@ define(function( require, exports ){
 			this.buildTool();
 
 			// 缓存对象
-			this.$mods = {
+			this.$ = {
 				'nav': nav
 			}
 			head.appendTo( target.show() );
@@ -72,7 +73,7 @@ define(function( require, exports ){
 				}
 				var elm = target.addClass('head-fixed').get(0);
 				var headroom = new HeadRoom( elm, cfg );
-				this.$mods.headroom = headroom;
+				this.$.headroom = headroom;
 				headroom.init();
 			}
 
@@ -85,7 +86,7 @@ define(function( require, exports ){
 
 		// 获取header的子对象(模块)
 		getChild: function( childName ) {
-			var mods = this.$mods;
+			var mods = this.$;
 			return arguments.length === 1 ? mods[childName] : mods;
 		},
 
