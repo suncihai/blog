@@ -80,7 +80,6 @@ define(function( require, exports ){
 			var pages = param.pages; // 总页数
 			var page = param.page; // 当前页
 			var items = this.makePageArray( page, pages );
-			var hides = pages - this.$max; // 隐藏的页码数
 
 			// 构建总条数
 			doms.info.html('<span class="total lsp2">[共'+ pages +'页，'+ param.total +'条记录]</span>');
@@ -89,7 +88,7 @@ define(function( require, exports ){
 			util.each( items, function( num ) {
 				var item;
 				if ( num === '...' ) {
-					item = '<span class="M-pagerItem M-pagerOmit" title="已隐藏'+ hides +'条页码">···</span>';
+					item = '<span class="M-pagerItem M-pagerOmit" title="已隐藏部分页码">···</span>';
 				}
 				else {
 					item = '<input type="button" class="M-pagerItem" value="'+ num +'"/>';
@@ -138,7 +137,7 @@ define(function( require, exports ){
 		formatPage: function( page ) {
 			var max = this.$max; // 显示选项的最多个数
 			var pages = this.$param.pages; // 总页数
-			var fontArr = [1,2,'...']; // 前面的页码选项(保留第1,2页)
+			var fontArr = [1,'...']; // 前面的页码选项(保留第1页)
 			var backArr = ['...']; // 后面的页码选项
 			var retArr = null;
 			// 激活的页码小于max的不作处理
@@ -146,16 +145,19 @@ define(function( require, exports ){
 				return false;
 			}
 			// 激活页码大于等于max的做截断: 12...456...
+			// 非特殊情况截断：激活页前后有两页
 			var diff = pages - page; // 当前页与总页的差值
 			switch( diff ) {
+				// 最后一页
 				case 0:
-					backArr = [page - 4, page - 3 , page - 2, page - 1, page];
+					backArr = [page - 2, page - 1, page];
 				break;
+				// 倒数第一页
 				case 1:
-					backArr = [page - 3 , page - 2, page - 1, page, page + 1];
+					backArr = [page - 2, page - 1, page, page + 1];
 				break;
 				case 2:
-					backArr = [page - 2, page - 1, page, page + 1, page + 2]
+					backArr = [page - 2, page - 1, page, page + 1, page + 2];
 				break;
 				default:
 					backArr = [page - 2, page - 1, page, page + 1, page + 2].concat( backArr );

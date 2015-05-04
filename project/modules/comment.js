@@ -10,13 +10,13 @@ define(function( require, exports ){
 
 	var pager = require('@modules/pager').base;
 	var dailog = require('@modules/dailog').base;
+	// var header = require('@modules/header').base;
 	var loading = require('@modules/loading').chrysanthemum;
 
 	// 评论列表
 	var CommentList = {
 		init: function( config ) {
 			this.$ = {};
-			this.$dataReady = false;
 			this.$target = config.target;
 			this.$param = util.merge( c.commentParam, {
 				'artid': +config.artid
@@ -105,7 +105,6 @@ define(function( require, exports ){
 				newParam = util.merge( this.$param, {
 					'page': param.page
 				});
-				this.$dataReady = false;
 				this.load( newParam );
 			}
 			return false;
@@ -124,10 +123,8 @@ define(function( require, exports ){
 		// 拉取评论列表
 		load: function( param ) {
 			param = param || this.$param;
-			if ( !this.$dataReady ) {
-				this.hide().empty().showLoading();
-				app.data.get( dc.listcomment, param, this.onData, this );
-			}
+			this.hide().empty().showLoading();
+			app.data.get( dc.listcomment, param, this.onData, this );
 		},
 
 		// 数据返回
@@ -145,20 +142,19 @@ define(function( require, exports ){
 				return false;
 			}
 			res = res.result;
-			self.$dataReady = true;
-
-			// 更新头部标题
-			self.$doms.title.text(res.total +'条评论');
-
-			// 更新页码
-			pager.setParam({
-				'page': res.page,
-				'pages': res.pages,
-				'total': res.total
-			});
 
 			setTimeout(function() {
 				self.show().hideLoading();
+
+				// 更新头部标题
+				self.$doms.title.text(res.total +'条评论');
+
+				// 更新页码
+				pager.setParam({
+					'page': res.page,
+					'pages': res.pages,
+					'total': res.total
+				});
 			}, c.delay);
 
 			// 发通知消息

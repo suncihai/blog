@@ -84,6 +84,30 @@ define(function( require, exports ){
 			return this;
 		},
 
+		// 显示导航
+		show: function() {
+			this.$config.target.show();
+			return this;
+		},
+
+		// 隐藏导航
+		hide: function() {
+			this.$config.target.hide();
+			return this;
+		},
+
+		// 锁住headroom
+		lockHead: function( unShow ) {
+			this.$.headroom.destroy();
+			return this;
+		},
+
+		// 解开headroom,
+		unlockHead: function() {
+			this.$.headroom.init();
+			return this;
+		},
+
 		// 获取header的子对象(模块)
 		getChild: function( childName ) {
 			var mods = this.$;

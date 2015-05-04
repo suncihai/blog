@@ -17,6 +17,7 @@ define(function( require, exports ){
 		// 初始化
 		init: function( data ) {
 			this.$ = {};
+			this.$reach = false;
 			this.$data = data;
 			layout.hideFooter();
 			this.load();
@@ -136,17 +137,19 @@ define(function( require, exports ){
 		eventScrolling: function( evt, doc ) {
 			var top = $(doc).scrollTop();
 			var distance = this.$doms.content.height();
-			// console.log(top)
 			// 滚动条到达评论区域
 			// if ( top > distance ) {
 			if ( top > distance - 200 ) {
-				this.$.comment.showLoading().load();
+				if ( !this.$reach ) {
+					this.$reach = true;
+					this.$.comment.showLoading().load();
+				}
 			}
 		},
 
 		onCommentDataLoaded: function() {
 			app.event.unbind($(document), 'scroll.article');
-			// console.log('cancel bind scroll!!!');
+			return false;
 		},
 
 		// 代码高亮渲染
