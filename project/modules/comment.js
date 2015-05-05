@@ -226,6 +226,12 @@ define(function( require, exports ){
 			this.$imageUrl = dc.getthecode;
 			this.$clicks = 0;
 			this.$tip = '(验证码为打乱顺序的JS或CSS关键字)';
+			this.$friendTips = [
+				'(比如: switch, window, margin...)',
+				'(比如: block, inline, rotate...)',
+				'(比如: define, bold, scale...)',
+				'(比如: return, left, float...)'
+			];
 			this.$fuckTips = [
 				'这样一直点真的很好玩吗？？',
 				'你还没看出验证码是啥吗？？',
@@ -395,13 +401,13 @@ define(function( require, exports ){
 			this.$clicks += 1;
 			self.$doms.code.val('').focus();
 			switch( this.$clicks ) {
-				case 1:case 2:
+				case 1:case 2:case 3:
 					tip = this.$tip;
 				break;
-				case 3:case 4:case 5:case 6:case 7:case 8:case 9:
-					tip = '(比如: switch, window, margin...)';
+				case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:case 12:case 13:
+					tip = this.$friendTips[util.random(0, this.$friendTips.length - 1)];
 				break;
-				case 10:case 11:case 12:case 13:case 14:case 15:case 16:case 17:case 18:case 19:
+				case 14:case 15:case 16:case 17:case 18:case 19:case 20:case 21:case 22:case 23:
 					tip = this.$fuckTips[util.random(0, this.$fuckTips.length - 1)];
 				break;
 				default: {

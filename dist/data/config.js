@@ -47,7 +47,7 @@ define(function( require, exports ) {
 		commentParam: {
 			'artid' : 1, // 文章ID
 			'page'  : 1, // 请求第一页
-			'limit' : 3, // 每页显示个数
+			'limit' : 2, // 每页显示个数
 			'date'  : 1  // 时间升序, -1降序
 		},
 

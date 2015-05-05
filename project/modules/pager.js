@@ -12,7 +12,7 @@ define(function( require, exports ){
 		 * config配置参数：
 		 * name：分页器模块名称
 		 * target：分页器创建目标DOM
-		 * max：分页器最多显示按钮的个数
+		 * max：分页器初始选项最多显示个数
 		 * class：额外class(用于写不同样式的CSS)
 		 * showInfo：是否显示分页信息
 		 */
@@ -110,7 +110,7 @@ define(function( require, exports ){
 		// 生成页码数组[1,2,3,4,5,'...']
 		makePageArray: function( page, all ) {
 			var retArr = [], i;
-			var max = this.$max; // 显示选项的最多个数
+			var max = this.$max; // 初始选项显示个数
 			// 不需要隐藏选项
 			if ( all <= max ) {
 				for ( i = 1; i < all + 1; i++ ) {
@@ -135,9 +135,9 @@ define(function( require, exports ){
 
 		// 更新页码展现格式,增加省略号
 		formatPage: function( page ) {
-			var max = this.$max; // 显示选项的最多个数
+			var max = this.$max; // 初始选项显示个数
 			var pages = this.$param.pages; // 总页数
-			var fontArr = [1,'...']; // 前面的页码选项(保留第1页)
+			var fontArr = [1,2,'...']; // 前面的页码选项(保留第1页)
 			var backArr = ['...']; // 后面的页码选项
 			var retArr = null;
 			// 激活的页码小于max的不作处理
@@ -150,12 +150,13 @@ define(function( require, exports ){
 			switch( diff ) {
 				// 最后一页
 				case 0:
-					backArr = [page - 2, page - 1, page];
+					backArr = [page - 3, page - 2, page - 1, page];
 				break;
 				// 倒数第一页
 				case 1:
 					backArr = [page - 2, page - 1, page, page + 1];
 				break;
+				// 倒数第二页
 				case 2:
 					backArr = [page - 2, page - 1, page, page + 1, page + 2];
 				break;
