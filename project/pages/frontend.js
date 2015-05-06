@@ -108,7 +108,7 @@ define(function( require, exports ){
 			this.$.comment = comment.init({
 				'target': self.$doms.comment,
 				'artid': this.$data.param
-			});
+			}).hideAll();
 
 			// 设置banner内容
 			banner.setData({
@@ -121,7 +121,7 @@ define(function( require, exports ){
 			// .setCrumbs( c.archiveTitle[self.$data.name], self.$data.param );
 
 			// 绑定鼠标滚动事件
-			app.event.bind( $(document), 'scroll.article', this.eventScrolling, this );
+			app.event.bind( $(document), 'scroll.loadComment', this.eventScrolling, this );
 			// 监听评论列表数据加载完成消息
 			app.event.on('commentDataLoaded', this.onCommentDataLoaded, this);
 
@@ -129,6 +129,7 @@ define(function( require, exports ){
 			setTimeout(function() {
 				self.hideLoading();
 				layout.showFooter();
+				self.$.comment.showAll();
 			}, c.delay);
 
 		},
@@ -148,7 +149,7 @@ define(function( require, exports ){
 		},
 
 		onCommentDataLoaded: function() {
-			app.event.unbind($(document), 'scroll.article');
+			app.event.unbind($(document), 'scroll.loadComment');
 			return false;
 		},
 

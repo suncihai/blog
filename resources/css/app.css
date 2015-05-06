@@ -1272,6 +1272,77 @@ a:hover {
   line-height: 150%;
   font-family: Consolas, Arial, Tahoma;
 }
+.M-commentEmpty {
+  position: relative;
+  top: -1.5em;
+}
+.M-commentEmptyWrap {
+  position: relative;
+  margin: 0 auto;
+  width: 10em;
+  height: 8em;
+  -webkit-transform: scale(0.7);
+  transform: scale(0.7);
+}
+.M-commentEmptyWrap > div {
+  position: absolute;
+  background: #E4E4E4;
+}
+.M-commentEmptyTxt {
+  color: #B3B3B3;
+  text-align: center;
+}
+.M-commentEmptyLeftHand {
+  left: 1em;
+  top: 1.4em;
+  width: 15%;
+  height: 70%;
+  border-radius: 100% 20% 65% 100%;
+  -webkit-transform-origin: bottom;
+  transform-origin: bottom;
+  -webkit-transform: rotate(-8deg);
+  transform: rotate(-8deg);
+}
+.M-commentEmptyRightHand {
+  right: 1em;
+  top: 1.4em;
+  width: 15%;
+  height: 70%;
+  border-radius: 20% 100% 100% 65%;
+  -webkit-transform-origin: bottom;
+  transform-origin: bottom;
+  -webkit-transform: rotate(8deg);
+  transform: rotate(8deg);
+}
+.M-commentEmptyCushion {
+  left: 50%;
+  bottom: 1em;
+  bottom: .5em;
+  width: 76%;
+  height: 25%;
+  margin-left: -38%;
+  border-radius: 5% 5% 50% 50%;
+}
+.M-commentEmptyFootLeft {
+  left: 2.5em;
+  bottom: 0em;
+  width: 1em;
+  height: 1.5em;
+}
+.M-commentEmptyFootRight {
+  right: 2.5em;
+  bottom: 0em;
+  width: 1em;
+  height: 1.5em;
+}
+.M-commentEmptyFootBack {
+  left: 50%;
+  top: .4em;
+  width: 50%;
+  margin-left: -25%;
+  height: 60%;
+  border-radius: 10%;
+}
 .M-commentPager {
   min-height: 1em;
   padding-top: 1em;

@@ -25,14 +25,26 @@ define(function( require, exports ){
 			return this;
 		},
 
-		// 显示评论列表及分页器
+		// 隐藏整个评论模块
+		showAll: function() {
+			this.$doms.body.show();
+			return this;
+		},
+
+		// 显示评论模块
+		hideAll: function() {
+			this.$doms.body.hide();
+			return this;
+		},
+
+		// 显示评论列表及分页模块
 		show: function() {
 			this.$doms.list.show();
 			this.$doms.pager.show();
 			return this;
 		},
 
-		// 隐藏评论列表及分页器
+		// 隐藏列表及分页模块
 		hide: function() {
 			this.$doms.list.hide();
 			this.$doms.pager.hide();
@@ -41,12 +53,14 @@ define(function( require, exports ){
 
 		// 显示加载动画
 		showLoading: function() {
+			this.$doms.loading.show();
 			this.$.loading.show();
 			return this;
 		},
 
 		// 隐藏加载动画
 		hideLoading: function() {
+			this.$doms.loading.hide();
 			this.$.loading.hide();
 			return this;
 		},
@@ -63,15 +77,28 @@ define(function( require, exports ){
 					'<article class="M-commentList"/>',
 					'<div class="M-commentPager"/>',
 					'<div class="M-commentLoading"/>',
+					'<div class="M-commentEmpty">',
+						'<div class=M-commentEmptyWrap>',
+							'<div class="M-commentEmptyLeftHand"/>',
+							'<div class="M-commentEmptyRightHand"/>',
+							'<div class="M-commentEmptyCushion"/>',
+							'<div class="M-commentEmptyFootLeft"/>',
+							'<div class="M-commentEmptyFootRight"/>',
+							'<div class="M-commentEmptyFootBack"/>',
+						'</div>',
+						'<div class=M-commentEmptyTxt>有空沙发</div>',
+					'</div>',
 				'</div>'
 			].join('')).appendTo( this.$target );
 
 			this.$doms = {
+				'body'    : html,
 				'title'   : $('.M-commentHeadTitle', html),
 				'add'     : $('.M-commentHeadAdd', html),
 				'loading' : $('.M-commentLoading', html),
 				'list'    : $('.M-commentList', html).hide(),
-				'pager'   : $('.M-commentPager', html).hide()
+				'pager'   : $('.M-commentPager', html).hide(),
+				'empty'   : $('.M-commentEmpty', html).hide()
 			}
 
 			// 创建分页模块
@@ -148,6 +175,11 @@ define(function( require, exports ){
 
 				// 更新头部标题
 				self.$doms.title.text(res.total +'条评论');
+
+				if ( res.total === 0 ) {
+					self.hide();
+					self.$doms.empty.show();
+				}
 
 				// 更新页码
 				pager.setParam({
