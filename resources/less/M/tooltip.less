@@ -1,0 +1,72 @@
+.M-tooltip{
+	position: absolute;
+	left: 0;
+	top: 0;
+	&Content{
+		display: block;
+		padding: .8em;
+		font-size: 1.4rem;
+		color: #FF6100;
+		width: 200px;
+		border: 1px solid #FFE1C3;
+		border-radius: 2px;
+		background: #FFF9EC;
+		box-shadow: 2px 2px 6px #eee;
+	}
+	&ArrowDown{
+		display: none;
+		position: relative;
+		left: 15px;
+		height: 14px;
+	}
+	&ArrowUp{
+		display: none;
+		position: relative;
+		left: 15px;
+		height: 14px;
+	}
+
+	/*箭头向上*/
+	.arrow-up-border {
+		position: absolute;
+	    bottom: 0;
+		z-index: 1;
+	    width: 0;
+	    height: 0;
+	    border-left: 8px solid transparent;
+	    border-right: 8px solid transparent;
+	    border-bottom: 14px solid #FFE1C3;
+	}
+	.arrow-up-bg{
+		position: absolute;
+		bottom: -2px;
+		z-index: 2;
+		width: 0;
+		height: 0;
+		border-left: 8px solid transparent;
+		border-right: 8px solid transparent;
+		border-bottom: 14px solid #FFF9EC;
+	}
+
+	 /*箭头向下*/
+	.arrow-down-border {
+	    position: absolute;
+	    top: 0;
+		z-index: 1;
+		width: 0;
+		height: 0;
+		border-left: 8px solid transparent;
+		border-right: 8px solid transparent;
+		border-top: 14px solid #FFE1C3;
+	}
+	.arrow-down-bg{
+		position: absolute;
+		top: -2px;
+		z-index: 2;
+		width: 0;
+		height: 0;
+		border-left: 8px solid transparent;
+		border-right: 8px solid transparent;
+		border-top: 14px solid #FFF9EC;
+	}
+}

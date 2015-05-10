@@ -1,5 +1,5 @@
 /**
- * [头部模块(LOGO、导航、快捷菜单)]
+ * [头部模块(LOGO、导航、搜索框)]
  */
 define(function( require, exports ){
 	var app = require('app');

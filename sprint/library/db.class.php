@@ -42,7 +42,7 @@ class SQL
      * param  [String]  $sql     [SQL语句]
      * param  [Boolean] $private [内部使用]
      * param  [Boolean] $insert  [INSERT 语句]
-     * param  [Return]           [返回items->结果集合, total->结果总数]
+     * param  [Return]           [返回items->结果集合, total->结果总数, success->查询成功]
      */
     public function query( $sql, $private = true, $insert = false )
     {
@@ -422,6 +422,7 @@ class SQL
      */
     public function getCommentList( $artid, $page, $limit, $date )
     {
+        $adminName = '博主';
         // 查询字段
         $_fieldArr = array(
             'comment_ID',
@@ -432,10 +433,11 @@ class SQL
             'comment_author_IP',
             "comment_author_url",
             'comment_content',
-            'comment_parent'
+            'comment_parent',
+            'user_id'
         );
         $_fields = implode(", ", $_fieldArr);
-        // 限制条件(只返回已经批准的评论)
+        // 限制条件(只返回已批准的评论)
         $_where = "comment_approved=1 AND comment_post_ID=$artid";
         // 评论总数
         $resQueryAll = $this->query("SELECT comment_ID FROM wp_comments WHERE $_where");
@@ -455,14 +457,45 @@ class SQL
             $itemArray = array();
             foreach ( $resQueryList['items'] as $key => $item )
             {
+                // 查找该评论的父评论(如果有)
+                $pid = intval( $item['comment_parent'] );
+                if ( $pid )
+                {
+                    $resQueryParent = $this->query("SELECT $_fields FROM wp_comments WHERE comment_ID=$pid LIMIT 1");
+                    if ( $resQueryParent['success'] )
+                    {
+                        $parentItem = $resQueryParent['items'][0];
+                        $isAdmin = intval( $parentItem['user_id'] ) === 1;
+                        $parent = array(
+                            // 'id'       => intval( $parentItem['comment_ID'] ),
+                            'author'   => $isAdmin ? $adminName : $parentItem['comment_author'],
+                            'url'      => preg_replace('/(http:)/', "", $parentItem['comment_author_url']),
+                            // 'address'       => $parentItem['comment_author_IP'],
+                            // 'date'     => $parentItem['comment_date'],
+                            'content'  => htmlspecialchars_decode( postAutoP( $parentItem['comment_content'] ) )
+                        );
+                    }
+                    else {
+                        $parent = null;
+                    }
+                }
+                else {
+                    $parent = null;
+                }
+
+                // 是否是管理员回复
+                $isAdmin = intval( $item['user_id'] ) === 1;
+                // 字段转化
                 $itemFormat = array(
-                    'id'      => intval( $item['comment_ID'] ),
-                    'author'  => $item['comment_author'],
-                    'url'     => preg_replace('/(http:)/', "", $item['comment_author_url']),
-                    'ip'      => $item['comment_author_IP'],
-                    'date'    => $item['comment_date'],
-                    'content' => htmlspecialchars_decode( postAutoP( $item['comment_content'] ) ),
-                    'parent'  => intval( $item['comment_parent'] )
+                    'id'       => intval( $item['comment_ID'] ),
+                    'pid'      => $pid,
+                    'author'   => $isAdmin ? $adminName : $item['comment_author'],
+                    'url'      => preg_replace('/(http:)/', "", $item['comment_author_url']),
+                    'address'  => $isAdmin ? '' : getCityName( $item['comment_author_IP'] ),
+                    'date'     => $item['comment_date'],
+                    'content'  => htmlspecialchars_decode( postAutoP( $item['comment_content'] ) ),
+                    'parent'   => $parent,
+                    'admin'    => $isAdmin
                 );
                 array_push( $itemArray, $itemFormat );
             }
@@ -498,8 +531,9 @@ class SQL
      * param  [String] $content  [评论内容]
      * param  [String] $author   [作者/昵称]
      * param  [String] $link     [网址]
+     * param  [String] $id       [回复时原评论id]
      */
-    public function addComment( $postid, $content, $author, $link )
+    public function addComment( $postid, $content, $author, $link, $id )
     {
         // 评论内容
         $content = removeTag( $content );
@@ -508,9 +542,9 @@ class SQL
         // 存储的默认类型: 0待审核, 1通过, spam垃圾评论, trash回收站评论
         $approved = 1;
         // 当前时间
-        $date = date('y-m-d h:i:s', time());
+        $date = date('Y-m-d H:i:s', time());
         // 当前GMT时间
-        $gmtdate = gmdate('y-m-d h:i:s', time());
+        $gmtdate = gmdate('Y-m-d H:i:s', time());
         // 客户端IP地址
         $ip = getIP();
         // 客户端UA
@@ -525,7 +559,8 @@ class SQL
             "comment_date",
             "comment_date_gmt",
             "comment_author_IP",
-            "comment_agent"
+            "comment_agent",
+            "comment_parent"
         );
         // 对应的字段值
         $valueArr = array(
@@ -537,7 +572,8 @@ class SQL
             "'$date'",
             "'$gmtdate'",
             "'$ip'",
-            "'$useragent'"
+            "'$useragent'",
+            "'$id'"
         );
         $_sets = implode(",", $fieldArr);
         $_values = implode(",", $valueArr);
@@ -545,16 +581,34 @@ class SQL
         $resQuery = $this->query( $sql, $private = true, $insert = true );
         if ( $resQuery['success'] )
         {
-            $ret = array
-            (
-                'success' => true
-            );
+            // 更新文章comment_count字段
+            $where = "comment_approved=1 AND comment_post_ID=$postid";
+            $resQueryNum = $this->query("SELECT comment_ID FROM wp_comments WHERE $where");
+            $num = $resQueryNum['total'];
+            $sqlUpdate = "UPDATE wp_posts SET comment_count=$num WHERE ID=$postid";
+            $resQueryUpdate = $this->query( $sqlUpdate, $private = true, $insert = true );
+            if ( $resQueryUpdate['success'] )
+            {
+               $ret = array
+                (
+                    'success' => true
+                );
+            }
+            else
+            {
+                $ret = array
+                (
+                    'success' => false,
+                    'message' => 'Fail to update post comments count!'
+                );
+            }
         }
         else
         {
             $ret = array
             (
-                'success' => false
+                'success' => false,
+                'message' => 'Fail to insert!'
             );
         }
         return json_encode( $ret );
@@ -588,6 +642,47 @@ function fixStripHtmlTags( $text )
     $text = preg_replace( "/=\"\"/", "=", $text );
     $text = preg_replace( "/&quot;\"/", "\"", $text );
     return $text;
+}
+
+// 根据IP地址获取城市
+function getCityName( $ip )
+{
+    $remote = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=';
+    $reg_ip = '/^((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1 -9]?\d))))$/';
+    if ( !$ip || !preg_match( $reg_ip, $ip ) )
+    {
+        return $ip;
+    }
+    $infoJson = @ file_get_contents($remote.$ip);
+    $infoJson = iconv('GBK//IGNORE', 'UTF-8', $infoJson);
+    if ( $infoJson )
+    {
+        $params = json_decode( $infoJson, true );
+        if ( $params )
+        {
+            $country = $params['country'];
+            $province = $params['province'];
+            $city = $params['city'];
+            // 只能这样判断了？
+            if ( $country === '中国' || $country === '中华人民共和国' || $country === '中华' )
+            {
+                $address = $province.$city;
+            }
+            else
+            {
+                $address = $country.$province.$city;
+            }
+            return $address;
+        }
+        else
+        {
+            return $ip;
+        }
+    }
+    else
+    {
+        return $ip;
+    }
 }
 
 // 获取IP地址

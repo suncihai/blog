@@ -11,6 +11,7 @@ define(function( require, exports ){
 	var pager = require('@modules/pager').base;
 	var dailog = require('@modules/dailog').base;
 	// var header = require('@modules/header').base;
+	var tooltip = require('@modules/tooltip').tooltip.init();
 	var loading = require('@modules/loading').chrysanthemum;
 
 	// 评论列表
@@ -18,7 +19,7 @@ define(function( require, exports ){
 		init: function( config ) {
 			this.$ = {};
 			this.$target = config.target;
-			this.$param = util.merge( c.commentParam, {
+			this.$param = $.extend({}, c.commentParam, {
 				'artid': +config.artid
 			});
 			this.build();
@@ -125,18 +126,21 @@ define(function( require, exports ){
 			app.event.bind( this.$doms.add, 'click', this.eventClickAdd, this );
 		},
 
+		// 分页响应事件
 		onPagerSelected: function( ev ) {
 			var param = ev.param;
-			var newParam;
+			var page = param.page;
+			if ( page === this.$param.page ) {
+				return false;
+			}
 			if ( param.name === 'commentPager' ) {
-				newParam = util.merge( this.$param, {
-					'page': param.page
-				});
-				this.load( newParam );
+				this.$param.page = page;
+				this.load();
 			}
 			return false;
 		},
 
+		// 点击新增评论
 		eventClickAdd: function() {
 			popwin.init({'title': '添加评论：'}).setData({'postid': this.$param.artid});
 		},
@@ -149,6 +153,7 @@ define(function( require, exports ){
 
 		// 拉取评论列表
 		load: function( param ) {
+			this.$doms.title.text('评论努力加载中···');
 			param = param || this.$param;
 			this.hide().empty().showLoading();
 			app.data.get( dc.listcomment, param, this.onData, this );
@@ -158,6 +163,7 @@ define(function( require, exports ){
 		onData: function( err, res ) {
 			var self = this;
 			var dataError = '评论列表拉取失败~';
+			var title = '';
 			if ( err ) {
 				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
 				return false;
@@ -173,12 +179,21 @@ define(function( require, exports ){
 			setTimeout(function() {
 				self.show().hideLoading();
 
-				// 更新头部标题
-				self.$doms.title.text(res.total +'条评论');
-
-				if ( res.total === 0 ) {
-					self.hide();
-					self.$doms.empty.show();
+				switch( res.total ) {
+					case 0:
+						self.hide();
+						self.$doms.title.text('没有评论，快抢沙发~');
+						self.$doms.empty.show();
+					break;
+					case 1:case 2:
+						title = '共'+ res.total +'条评论';
+						self.$doms.title.text( title );
+					break;
+					default:
+						title = res.page === res.pages ?
+							'共'+ res.total +'条评论，已经最后一页了'
+							: '共'+ res.total +'条评论，第'+ res.page +'页';
+						self.$doms.title.text( title );
 				}
 
 				// 更新页码
@@ -187,7 +202,7 @@ define(function( require, exports ){
 					'pages': res.pages,
 					'total': res.total
 				});
-			}, c.delay);
+			}, 0);
 
 			// 发通知消息
 			app.event.fire('commentDataLoaded');
@@ -200,15 +215,46 @@ define(function( require, exports ){
 			var list = [];
 			this.$items = items;
 			util.each( items, function( item, idx ) {
-				var date = item.date.toString().slice( 0, 10 );
-				var nickName = '';
-				nickName = item.url ? '<a href="http://'+ item.url +'" target="_blank">'+ item.author +'</a>' : item.author;
+				// 评论昵称
+				var nickName = item.admin ?
+					'<span class="M-commentIssuseHeadNickAdmin">'+ item.author +'</span>'
+					: item.url ?
+					'<a href="http://'+ item.url +'" target="_blank">'+ item.author +'</a>'
+					: item.author;
+				// 评论时间
+				var date = item.date.toString().slice( 0, 16 );
+				// 评论内容(html)
+				var content = '';
+				// 评论者所在地
+				var address = item.address ? '['+ item.address +']' : '';
+				// 有父评论
+				if ( item.parent ) {
+					var pnick = item.parent.url ? '<a href="http://'+ item.parent.url +'" target="_blank">@'+ item.parent.author +'</a>' : '@' + item.parent.author;
+					var phtml = [
+						'<div class="M-commentIssuseContentParent">',
+							'<div class="M-commentIssuseContentParentHead">',
+								'<div class="M-commentIssuseContentParentHeadTitle">',
+									'回复' + '<span class="nick">' + pnick + '</span>' + '的评论：',
+								'</div>',
+							'</div>',
+							'<div class="M-commentIssuseContentParentContent">'+ item.parent.content +'</div>',
+						'</div>'
+					].join('');
+					content = phtml + '<div class="M-commentIssuseContentMain">'+ item.content +'</div>';
+				}
+				else {
+					content = item.content;
+				}
 				list.push([
 					'<section class="M-commentIssuse" data-id="'+ idx +'">',
 						'<header class="M-commentIssuseHead">',
 							'<b class="M-commentIssuseHeadFloor">#'+ (idx + 1) +'</b>',
 							'<b class="M-commentIssuseHeadNick">'+ nickName +'</b>',
-							'<span class="M-commentIssuseHeadTime">'+ '发表于 ' + date +'</span>',
+							'<span class="M-commentIssuseHeadAddress">'+ address +'</span>',
+							'<span class="M-commentIssuseHeadTime">',
+								// item.parent ? '回复于 ' : '评论于 ',
+								date,
+							'</span>',
 							'<div class="M-commentIssuseHeadOp">',
 								// '<span data-id="'+ item.id +'" class="op like">',
 								// 	'支持(<i class="likes">0</i>)',
@@ -219,7 +265,7 @@ define(function( require, exports ){
 								'<span data-id="'+ item.id +'" class="op reply">'+ '回复TA' +'</span>',
 							'</div>',
 						'</header>',
-						'<article class="M-commentIssuseContent">'+ item.content +'</article>',
+						'<article class="M-commentIssuseContent">'+ content +'</article>',
 					'</section>'
 				].join(''));
 			});
@@ -291,6 +337,7 @@ define(function( require, exports ){
 			var holderTxt = '';
 			if ( this.$data && this.$data.content ) {
 				var content = util.removeTags(this.$data.content);
+				content = content.trim();
 				var brief = content.length > 20 ? content.substr(0, 20) + '……' : content;
 				holderTxt = '[必填] 回复“'+ this.$data.author +'”的评论：“' + brief + '”';
 			}
@@ -355,7 +402,8 @@ define(function( require, exports ){
 				'author'  : this.$doms.nick.val().trim(),
 				'link'    : this.$doms.link.val().trim(),
 				'code'    : this.$doms.code.val().trim(),
-				'postid'  : this.$data && this.$data.postid
+				'postid'  : this.$data && this.$data.postid,
+				'id'      : this.$data.id
 			}
 		},
 
@@ -371,14 +419,38 @@ define(function( require, exports ){
 		// 表单验证
 		validate: function( data ) {
 			if ( data.content === '' ) {
+				tooltip.setTip({
+					'refer': this.$doms.text,
+					'arrow': {'position': 'top'},
+					'offset': {'left': 10, 'top': 25},
+					'content': '评论内容不能为空！',
+					'width': 130,
+					'name': 'content'
+				});
 				this.$doms.text.focus();
 				return false;
 			}
 			if ( data.author === '' ) {
+				tooltip.setTip({
+					'refer': this.$doms.nick,
+					'arrow': {'position': 'bottom'},
+					'offset': {'left': 0, 'top': -45},
+					'content': '昵称不能为空！',
+					'width': 130,
+					'name': 'nick'
+				});
 				this.$doms.nick.focus();
 				return false;
 			}
 			if ( data.code === '' ) {
+				tooltip.setTip({
+					'refer': this.$doms.code,
+					'arrow': {'position': 'bottom'},
+					'offset': {'left': 0, 'top': -45},
+					'content': '验证码不能为空！',
+					'width': 130,
+					'name': 'code'
+				});
 				this.$doms.code.focus();
 				return false;
 			}
@@ -386,8 +458,9 @@ define(function( require, exports ){
 		},
 
 		// 点击提交
-		eventClickSubmit: function() {
+		eventClickSubmit: function( evt ) {
 			var data = this.getData();
+			tooltip.setTimeStamp( evt.timeStamp );
 			if ( this.validate( data ) ) {
 				app.data.post( dc.addcomment, data, this.onData, this );
 			}
@@ -456,9 +529,9 @@ define(function( require, exports ){
 					$(elm),
 					[
 						'hinge',
-						'zoomOutDown',
-						'rotateOutDownLeft',
-						'rotateOutDownRight'
+						'zoomOutDown'
+						// 'rotateOutDownLeft',
+						// 'rotateOutDownRight'
 					],
 					function() {
 						$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);

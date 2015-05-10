@@ -36,9 +36,23 @@
 		$content = htmlspecialchars( $params['content'] );
 		$author = htmlspecialchars( $params['author'] );
 		$link = $OP->clearXss( $params['link'] );
+		$id = 0; // 0为默认不是回复
 
 		// $content = $OP->clearXss( $content, $low = true );
 		// $author = $OP->clearXss( $author, $low = true );
+
+		// 回复的评论(有评论id)
+		if ( isset( $params['id'] ) ) {
+			// 评论id必须数字
+			if ( is_numeric( $params['id'] ) ) {
+				$id = $params['id'];
+			}
+			else {
+				$retError['message'] = '评论id必须为数字~';
+				echo json_encode( $retError );
+				exit();
+			}
+		}
 
 		if ( !$content || !$author )
 		{
@@ -57,7 +71,7 @@
 
 		$Sql->open();
 
-		$result = $Sql->addComment( $postid, $content, $author, $link );
+		$result = $Sql->addComment( $postid, $content, $author, $link, $id );
 
 		echo( $result );
 

@@ -164,6 +164,13 @@ a:hover {
   border: 15px solid rgba(200, 200, 200, 0.7);
   z-index: 101;
 }
+#POPUP {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 999;
+}
 .center {
   margin: 0 auto;
 }
@@ -1167,7 +1174,7 @@ a:hover {
   left: 1.5em;
   padding: 0 .5em;
   display: inline-block;
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: normal;
   color: #a52a2a;
   z-index: 3;
@@ -1175,7 +1182,7 @@ a:hover {
 }
 .M-commentHeadAdd {
   float: right;
-  font-size: 4rem;
+  font-size: 3.5rem;
   position: relative;
   top: -0.25em;
   left: -1.15em;
@@ -1207,12 +1214,12 @@ a:hover {
   z-index: -1;
 }
 .M-commentIssuse {
-  margin-bottom: 1em;
-  border: 1px solid #E4E2E2;
+  margin-bottom: 1.5em;
   border-radius: 2px;
   background: #fff;
   color: #666;
   z-index: 1;
+  border: 1px solid #E4E2E2;
   transition: all 218ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 .M-commentIssuse:hover {
@@ -1226,15 +1233,23 @@ a:hover {
   border-bottom: 1px solid #efefef;
 }
 .M-commentIssuseHeadFloor {
-  margin-right: 1em;
+  margin-right: .8em;
   color: #aaa;
-  font-size: 2.0rem;
   font-weight: normal;
 }
 .M-commentIssuseHeadNick {
   margin-right: 1em;
   font-weight: normal;
   color: #a52a2a;
+}
+.M-commentIssuseHeadNickAdmin {
+  color: #FF8000;
+  font-weight: bold;
+}
+.M-commentIssuseHeadAddress {
+  margin-right: 1em;
+  color: #999;
+  font-size: 1.4rem;
 }
 .M-commentIssuseHeadTime {
   color: #938E8E;
@@ -1270,7 +1285,24 @@ a:hover {
 .M-commentIssuseContent {
   padding: .6em 1em;
   line-height: 150%;
-  font-family: Consolas, Arial, Tahoma;
+  font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑';
+}
+.M-commentIssuseContentParentHead {
+  padding-bottom: .5em;
+  color: #D0AC74;
+}
+.M-commentIssuseContentParentHead .nick {
+  margin: 0 .3em;
+  color: #0080c0;
+}
+.M-commentIssuseContentParentContent {
+  padding: .5em;
+  color: #999;
+  margin-bottom: .8em;
+  font-size: 1.5rem;
+  font-style: italic;
+  background: #F8F8F8;
+  border-left: 5px solid #DDD;
 }
 .M-commentEmpty {
   position: relative;
@@ -1447,6 +1479,78 @@ a:hover {
   color: #0D8454;
   line-height: 2.5;
   margin-left: 1em;
+}
+.M-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  /*箭头向上*/
+
+  /*箭头向下*/
+
+}
+.M-tooltipContent {
+  display: block;
+  padding: .8em;
+  font-size: 1.4rem;
+  color: #FF6100;
+  width: 200px;
+  border: 1px solid #FFE1C3;
+  border-radius: 2px;
+  background: #FFF9EC;
+  box-shadow: 2px 2px 6px #eee;
+}
+.M-tooltipArrowDown {
+  display: none;
+  position: relative;
+  left: 15px;
+  height: 14px;
+}
+.M-tooltipArrowUp {
+  display: none;
+  position: relative;
+  left: 15px;
+  height: 14px;
+}
+.M-tooltip .arrow-up-border {
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid #FFE1C3;
+}
+.M-tooltip .arrow-up-bg {
+  position: absolute;
+  bottom: -2px;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid #FFF9EC;
+}
+.M-tooltip .arrow-down-border {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 14px solid #FFE1C3;
+}
+.M-tooltip .arrow-down-bg {
+  position: absolute;
+  top: -2px;
+  z-index: 2;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 14px solid #FFF9EC;
 }
 .P-404 {
   width: 1000px;
@@ -1713,7 +1817,7 @@ a:hover {
 }
 .P-archives section article .abstract {
   display: inline-block;
-  font-family: Consolas, Arial, Tahoma;
+  font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑';
 }
 .P-archives section article .cover {
   display: inline-block;
@@ -1763,7 +1867,7 @@ a:hover {
 .P-search-list .section .brief {
   padding: 1rem 0;
   color: #666;
-  font-family: Consolas, Arial, Tahoma;
+  font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑';
 }
 .P-search-list .section .info {
   font-size: 1.4rem;
@@ -1778,7 +1882,7 @@ a:hover {
 .P-article .content article {
   font-size: 1.6rem;
   line-height: 150%;
-  font-family: Consolas, Arial, Tahoma;
+  font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑';
 }
 .P-article .content article a {
   text-decoration: underline;

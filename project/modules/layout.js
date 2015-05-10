@@ -33,7 +33,8 @@ define(function( require, exports ){
 			'</div>',
 		'</div>',
 		'<div id="MASK"/>',
-		'<div id="DAILOG"/>'
+		'<div id="DAILOG"/>',
+		'<div id="POPUP"/>'
 	].join('');
 
 	var body = $('body').append( layout );
@@ -42,6 +43,7 @@ define(function( require, exports ){
 		'MAIN'    : $('#MAIN'),
 		'MASK'    : $('#MASK'),
 		'DAILOG'  : $('#DAILOG'),
+		'POPUP'   : $('#POPUP'),
 		// 框架容器：
 		'frame'   : $('.G-frame', body),
 		'body'    : $('.G-frameBody', body),

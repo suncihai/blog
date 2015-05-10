@@ -131,7 +131,6 @@ define(function( require, exports ){
 				layout.showFooter();
 				self.$.comment.showAll();
 			}, c.delay);
-
 		},
 
 		// 监测滚动距离
@@ -143,7 +142,9 @@ define(function( require, exports ){
 			if ( top > distance - 200 ) {
 				if ( !this.$reach ) {
 					this.$reach = true;
-					this.$.comment.showLoading().load();
+					if ( this.$.comment ) {
+						this.$.comment.showLoading().load();
+					}
 				}
 			}
 		},
