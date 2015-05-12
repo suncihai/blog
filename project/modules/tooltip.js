@@ -55,7 +55,9 @@ define(function( require, exports ) {
 						'<div class="arrow-up-border"/>',
 						'<div class="arrow-up-bg"/>',
 					'</div>',
-					'<div class="M-tooltipContent"/>',
+					'<div class="M-tooltipContent">',
+						'<div class="M-tooltipContentText animated"/>',
+					'</div>',
 					'<div class="M-tooltipArrowDown arrow">',
 						'<div class="arrow-down-border"/>',
 						'<div class="arrow-down-bg"/>',
@@ -66,6 +68,7 @@ define(function( require, exports ) {
 			this.$doms = {
 				'body'      : tooltip,
 				'content'   : $('.M-tooltipContent', tooltip),
+				'text'      : $('.M-tooltipContentText', tooltip),
 				'arrowUp'   : $('.M-tooltipArrowUp', tooltip),
 				'arrowDown' : $('.M-tooltipArrowDown', tooltip)
 			}
@@ -94,7 +97,7 @@ define(function( require, exports ) {
 				return false;
 			}
 			// 设置提示文字
-			this.$doms.content.text( this.$content );
+			this.$doms.text.text( this.$content );
 
 			// 设置提示框宽高
 			if ( this.$width ) {
@@ -137,9 +140,10 @@ define(function( require, exports ) {
 				break;
 			}
 
-			// 点击任意或者滚动则隐藏
+			// 触发隐藏tooltip事件
 			app.event.bind( $(document), 'click.other', this.eventTriggerOther, this );
 			app.event.bind( $(document), 'scroll.other', this.eventTriggerOther, this );
+			app.event.bind( $(document), 'keydown.other', this.eventTriggerOther, this );
 
 			this.show();
 		},
@@ -149,8 +153,9 @@ define(function( require, exports ) {
 			var self = this;
 			// 显示弹层并设置状态
 			self.$status = 'show';
-			POPUP.show();
+			this.$doms.text.addClass('shake');
 			this.$doms.body.addClass('animated fast fadeIn');
+			POPUP.show();
 
 			// 自动隐藏
 			// setTimeout(function() {
@@ -180,6 +185,8 @@ define(function( require, exports ) {
 			self.$status = 'hide';
 			app.event.unbind($(document), 'click.other');
 			app.event.unbind($(document), 'scroll.other');
+			app.event.unbind($(document), 'keydown.other');
+			this.$doms.text.removeClass('shake');
 			app.animate.play( self.$doms.body.removeClass('fadeIn'), 'fadeOut', 1, function() {
 				POPUP.hide();
 			});

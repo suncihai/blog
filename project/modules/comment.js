@@ -9,7 +9,7 @@ define(function( require, exports ){
 	var dc = c.dataCenter;
 
 	var pager = require('@modules/pager').base;
-	var dailog = require('@modules/dailog').base;
+	var dialog = require('@modules/dialog').base;
 	// var header = require('@modules/header').base;
 	var tooltip = require('@modules/tooltip').tooltip.init();
 	var loading = require('@modules/loading').chrysanthemum;
@@ -316,7 +316,7 @@ define(function( require, exports ){
 				'靠！你是一心的吧？？',
 				'难道一个单词都不认得？'
 			];
-			this.$dailogBody = dailog
+			this.$dialogBody = dialog
 				.init({
 					'height': 24
 				})
@@ -329,7 +329,7 @@ define(function( require, exports ){
 		setData: function( data ) {
 			this.$data = data;
 			// TODO: 不要每次都清空
-			this.$dailogBody.empty();
+			this.$dialogBody.empty();
 			this.buildComment();
 		},
 
@@ -361,7 +361,7 @@ define(function( require, exports ){
 					'</div>',
 				'</div>'
 			].join(''));
-			dom.appendTo( this.$dailogBody );
+			dom.appendTo( this.$dialogBody );
 
 			this.$doms = {
 				'text'   : $('.M-commentFormText', dom),
@@ -383,11 +383,11 @@ define(function( require, exports ){
 			// 绑定更换验证码
 			app.event.bind( this.$doms.image, 'click.image', this.eventClickImage, this );
 			// 对话框关闭 解除绑定
-			app.event.on('dailogClosed', this.onDailogClosed, this);
+			app.event.on('dialogClosed', this.onDialogClosed, this);
 		},
 
 		// 对话框关闭事件
-		onDailogClosed: function() {
+		onDialogClosed: function() {
 			app.event.unbind(this.$doms.reset, 'click.reset');
 			app.event.unbind(this.$doms.submit, 'click.submit');
 			app.event.unbind(this.$doms.code, 'blur.code');

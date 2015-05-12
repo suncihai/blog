@@ -33,7 +33,7 @@ define(function( require, exports ){
 			'</div>',
 		'</div>',
 		'<div id="MASK"/>',
-		'<div id="DAILOG"/>',
+		'<div id="DIALOG"/>',
 		'<div id="POPUP"/>'
 	].join('');
 
@@ -42,7 +42,7 @@ define(function( require, exports ){
 		// 框架结构：
 		'MAIN'    : $('#MAIN'),
 		'MASK'    : $('#MASK'),
-		'DAILOG'  : $('#DAILOG'),
+		'DIALOG'  : $('#DIALOG'),
 		'POPUP'   : $('#POPUP'),
 		// 框架容器：
 		'frame'   : $('.G-frame', body),

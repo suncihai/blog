@@ -6,11 +6,11 @@ define(function( require, exports ){
 	var app = require('app');
 	var util = require('util');
 	var layout = require('@modules/layout').base;
-	var DAILOG = layout.getDOM('DAILOG');
+	var DIALOG = layout.getDOM('DIALOG');
 	var MASK = layout.getDOM('MASK');
 
 	// 弹出层对话框
-	var Dailog = {
+	var Dialog = {
 		init: function( config ) {
 			var frame = null;
 			if ( config ) {
@@ -22,6 +22,7 @@ define(function( require, exports ){
 			this.$isRandom = false;
 			// 动画集合(随机展示用)
 			this.$frames = [
+				['rollIn', 'rollOut'],
 				['bounceInLeft', 'bounceOutRight'],
 				['lightSpeedIn', 'lightSpeedOut'],
 				['fadeInUp', 'fadeOutDown'],
@@ -30,9 +31,9 @@ define(function( require, exports ){
 				['rotateIn', 'rotateOut']
 			];
 			frame = this.getPairFrame( this.$isRandom );
-			// DAILOG打开动画
+			// DIALOG打开动画
 			this.$inFrame = frame['in'];
-			// DAILOG关闭动画
+			// DIALOG关闭动画
 			this.$outFrame = frame['out'];
 			this.build();
 			return this;
@@ -50,13 +51,13 @@ define(function( require, exports ){
 				var w = config.width, h = config.height;
 				var ml = -(w / 2) + 'em', mt = -(h / 2 + 2) + 'em';
 				if ( w ) {
-					DAILOG.css({
+					DIALOG.css({
 						'width': w + 'em',
 						'margin-left': ml
 					});
 				}
 				if ( h ) {
-					DAILOG.css({
+					DIALOG.css({
 						'height': h + 'em',
 						'margin-top': mt
 					});
@@ -76,8 +77,8 @@ define(function( require, exports ){
 			self.$show = true;
 			MASK.show();
 			app.animate.play( MASK, 'maskIn', 1, function(){
-				DAILOG.show();
-				app.animate.play( DAILOG, self.$inFrame, function() {
+				DIALOG.show();
+				app.animate.play( DIALOG, self.$inFrame, function() {
 					MASK.show();
 				});
 			});
@@ -88,8 +89,8 @@ define(function( require, exports ){
 		hide: function() {
 			var self = this;
 			self.$show = false;
-			app.animate.play( DAILOG, self.$outFrame, function() {
-				DAILOG.hide();
+			app.animate.play( DIALOG, self.$outFrame, function() {
+				DIALOG.hide();
 				app.animate.play( MASK, 'maskOut', 1, function (){
 					MASK.hide();
 				});
@@ -104,33 +105,33 @@ define(function( require, exports ){
 				return this.getBody();
 			}
 			var dom = $([
-				'<div class="M-dailog">',
-					'<div class="M-dailogHead">',
-						'<h2 class="M-dailogHeadTitle"/>',
-						'<div class="M-dailogHeadClose">',
-							'<div class="M-dailogHeadCloseLine"/>',
-							'<div class="M-dailogHeadCloseLine"/>',
+				'<div class="M-dialog">',
+					'<div class="M-dialogHead">',
+						'<h2 class="M-dialogHeadTitle"/>',
+						'<div class="M-dialogHeadClose">',
+							'<div class="M-dialogHeadCloseLine"/>',
+							'<div class="M-dialogHeadCloseLine"/>',
 						'</div>',
 					'</div>',
-					'<div class="M-dailogBody"/>',
+					'<div class="M-dialogBody"/>',
 				'</div>'
 			].join(''));
 
-			dom.appendTo( DAILOG );
+			dom.appendTo( DIALOG );
 
 			this.$doms = {
-				'title': $('.M-dailogHeadTitle', dom),
-				'close': $('.M-dailogHeadClose', dom),
-				'body':  $('.M-dailogBody', dom)
+				'title': $('.M-dialogHeadTitle', dom),
+				'close': $('.M-dialogHeadClose', dom),
+				'body':  $('.M-dialogBody', dom)
 			}
 
 			this.$ready = true;
 
 			// 绑定关闭对话框事件
-			app.event.bind( this.$doms.close, 'click', this.eventCloseDailog, this );
+			app.event.bind( this.$doms.close, 'click', this.eventCloseDIAlog, this );
 			app.event.hover( this.$doms.close, this.eventCloseEnter, this.eventCloseOut, this );
 			// 监听自身对话框关闭消息
-			app.event.on('dailogClosed', this.onDailaogClosed, this);
+			app.event.on('dialogClosed', this.onDailaogClosed, this);
 		},
 
 		eventCloseEnter: function() {
@@ -147,11 +148,11 @@ define(function( require, exports ){
 		},
 
 		// 点击关闭对话框
-		eventCloseDailog: function() {
+		eventCloseDIAlog: function() {
 			var self = this;
 			self.hide();
 			self.$doms.close.removeClass('rotateCloseForward rotateCloseBack');
-			app.event.fire('dailogClosed');
+			app.event.fire('dialogClosed');
 			return false;
 		},
 
@@ -177,5 +178,5 @@ define(function( require, exports ){
 			return false;
 		}
 	}
-	exports.base = $.extend(true, {}, Dailog);
+	exports.base = $.extend(true, {}, Dialog);
 });

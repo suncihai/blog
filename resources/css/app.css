@@ -152,7 +152,7 @@ a:hover {
   -webkit-animation-name: maskIn;
   animation-name: maskIn;
 }
-#DAILOG {
+#DIALOG {
   display: none;
   position: fixed;
   width: 44em;
@@ -518,11 +518,11 @@ a:hover {
   background: #F76D53;
   color: #FFF;
 }
-.M-dailog {
+.M-dialog {
   height: 100%;
   background: #FFF;
 }
-.M-dailogHead {
+.M-dialogHead {
   position: relative;
   padding: 0 1em;
   height: 2.8em;
@@ -530,12 +530,12 @@ a:hover {
   background: rgba(247, 247, 247, 0.55);
   border-bottom: 1px solid #efefef;
 }
-.M-dailogHeadTitle {
+.M-dialogHeadTitle {
   font-size: 1.6rem;
   color: #a52a2a;
   font-weight: normal;
 }
-.M-dailogHeadClose {
+.M-dialogHeadClose {
   position: absolute;
   right: 0;
   top: 0;
@@ -547,7 +547,7 @@ a:hover {
   -webkit-transform: rotate(0deg) scale(0.5);
   transform: rotate(0deg) scale(0.5);
 }
-.M-dailogHeadCloseLine {
+.M-dialogHeadCloseLine {
   position: absolute;
   top: -5px;
   width: 3px;
@@ -556,12 +556,12 @@ a:hover {
   -webkit-transform-origin: 50% 50%;
   transform-origin: 50% 50%;
 }
-.M-dailogHeadCloseLine:nth-child(1) {
+.M-dialogHeadCloseLine:nth-child(1) {
   right: 1.4em;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-.M-dailogHeadCloseLine:nth-child(2) {
+.M-dialogHeadCloseLine:nth-child(2) {
   left: 1.4em;
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
