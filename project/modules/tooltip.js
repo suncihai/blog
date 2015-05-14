@@ -32,7 +32,6 @@ define(function( require, exports ) {
 		init: function( config ) {
 			this.$timeout = 3000; // 显示3秒自动隐藏
 			this.$ready = false;
-			this.$animated = false; // 是否有未停止的动画
 			this.$status = 'hide';
 			// 默认配置
 			this.$refer = null; // 参考元素
@@ -146,14 +145,14 @@ define(function( require, exports ) {
 		// 显示提示
 		show: function() {
 			var self = this;
-			if ( self.$animated ) {
-				return false;
-			}
 			// 显示弹层并设置状态
 			POPUP.show();
 			self.$status = 'show';
-			this.$doms.text.addClass('shake');
-			this.$doms.body.addClass('animated fast fadeIn');
+			app.animate.play(this.$doms.text, 'shake');
+			app.animate.play(this.$doms.body, 'fadeIn', 1);
+
+			// this.$doms.text.addClass('shake');
+			// this.$doms.body.addClass('animated fast fadeIn');
 
 			// 触发隐藏tooltip事件
 			app.event.bind( $(document), 'click.other', this.eventTriggerHide, this );
@@ -176,7 +175,7 @@ define(function( require, exports ) {
 		},
 
 		eventTriggerHide: function( evt ) {
-			if ( evt.timeStamp !== this.$timeStamp ) {
+			if ( this.$timeStamp && this.$timeStamp !== evt.timeStamp ) {
 				this.hide();
 			}
 			return false;
@@ -185,17 +184,11 @@ define(function( require, exports ) {
 		// 隐藏提示
 		hide: function() {
 			var self = this;
-			if ( self.$animated ) {
-				return false;
-			}
-			self.$status = 'hide';
 			app.event.unbind($(document), 'click.other');
 			app.event.unbind($(document), 'scroll.other');
 			app.event.unbind($(document), 'keydown.other');
-			this.$doms.text.removeClass('shake');
-			self.$animated = true;
-			app.animate.play( self.$doms.body.removeClass('fadeIn'), 'fadeOut', 1, function() {
-				self.$animated = false;
+			app.animate.play( self.$doms.body, 'fadeOut', 1, function() {
+				self.$status = 'hide';
 				POPUP.hide();
 			});
 		}

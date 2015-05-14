@@ -122,6 +122,9 @@ define(function( require, exports ){
 			// 监听页码选择事件
 			app.event.on('pagerSelected', this.onPagerSelected, this);
 
+			// 评论添加成功 重新拉取数据
+			app.event.on('commentAdded', this.load, this);
+
 			// 绑定添加评论事件
 			app.event.bind( this.$doms.add, 'click', this.eventClickAdd, this );
 		},
@@ -359,19 +362,24 @@ define(function( require, exports ){
 						'<button class="M-commentFormFooterSubmit">发表评论</button>',
 						'<button class="M-commentFormFooterReset">重置</button>',
 					'</div>',
+					'<div class="M-commentFormMask">',
+						'<div class="M-commentFormMaskText">评论正在提交中···</div>',
+					'</div>',
 				'</div>'
 			].join(''));
 			dom.appendTo( this.$dialogBody );
 
 			this.$doms = {
-				'text'   : $('.M-commentFormText', dom),
-				'nick'   : $('.M-commentFormNick', dom),
-				'link'   : $('.M-commentFormLink', dom),
-				'code'   : $('.M-commentFormFooterCode', dom),
-				'image'  : $('.M-commentFormFooterPic', dom),
-				'tips'   : $('.M-commentFormFooterTips', dom),
-				'reset'  : $('.M-commentFormFooterReset', dom),
-				'submit' : $('.M-commentFormFooterSubmit', dom)
+				'text'     : $('.M-commentFormText', dom),
+				'nick'     : $('.M-commentFormNick', dom),
+				'link'     : $('.M-commentFormLink', dom),
+				'code'     : $('.M-commentFormFooterCode', dom),
+				'image'    : $('.M-commentFormFooterPic', dom),
+				'tips'     : $('.M-commentFormFooterTips', dom),
+				'reset'    : $('.M-commentFormFooterReset', dom),
+				'submit'   : $('.M-commentFormFooterSubmit', dom),
+				'mask'     : $('.M-commentFormMask', dom),
+				'maskText' : $('.M-commentFormMaskText', dom)
 			}
 
 			// 绑定重置
@@ -423,8 +431,8 @@ define(function( require, exports ){
 					'refer': this.$doms.text,
 					'arrow': {'position': 'top'},
 					'offset': {'left': 10, 'top': 25},
-					'content': '评论内容不能为空！',
-					'width': 130,
+					'content': '评论内容不能为空:-)',
+					'width': 140,
 					'name': 'content'
 				});
 				this.$doms.text.focus();
@@ -435,8 +443,8 @@ define(function( require, exports ){
 					'refer': this.$doms.nick,
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
-					'content': '昵称不能为空！',
-					'width': 130,
+					'content': '昵称不能为空:-)',
+					'width': 120,
 					'name': 'nick'
 				});
 				this.$doms.nick.focus();
@@ -447,7 +455,7 @@ define(function( require, exports ){
 					'refer': this.$doms.code,
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
-					'content': '验证码不能为空！',
+					'content': '验证码不能为空:-)',
 					'width': 130,
 					'name': 'code'
 				});
@@ -462,14 +470,45 @@ define(function( require, exports ){
 			var data = this.getData();
 			tooltip.setTimeStamp( evt.timeStamp );
 			if ( this.validate( data ) ) {
+				this.$doms.mask.show()
+				app.animate.play(this.$doms.maskText, 'fadeIn');
 				app.data.post( dc.addcomment, data, this.onData, this );
 			}
 			return false;
 		},
 
 		// 评论提交结果
-		onData: function( err, data ) {
-			console.log( err, data );
+		onData: function( err, res ) {
+			var self = this;
+			var txt = '';
+			// 提交成功
+			if ( res && res.success ) {
+				app.animate.play(self.$doms.maskText.text('评论成功！'), 'fadeIn', function() {
+					setTimeout(function() {
+						dialog.hide();
+						app.event.fire('commentAdded');
+					}, 1000);
+				});
+				return false;
+			}
+			// 提交失败
+			else {
+				app.event.bind( $(document), 'click.hideMask', this.eventHideMask, this );
+				if ( err ) {
+					txt = [err.status, err.message].join(', ');
+					app.animate.play(self.$doms.maskText.addClass('warning').text( txt ), 'shake');
+				}
+				if ( !res.success ) {
+					txt = res.message + '点击任意处重试~';
+					app.animate.play(self.$doms.maskText.addClass('warning').text( txt ), 'shake');
+				}
+			}
+		},
+
+		// 隐藏评论表单的遮罩
+		eventHideMask: function() {
+			this.$doms.mask.hide();
+			app.event.unbind($(document), 'click.hideMask');
 		},
 
 		// 验证码失去焦点

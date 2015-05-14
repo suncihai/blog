@@ -45,18 +45,18 @@ define(function( require, exports ){
 		}
 		var animateType = typeMap[type] || typeMap[2];
 		var animateCls = animateType + ' ' + keframe;
-		$elm.addClass( animateCls ).one(
+		$elm.addClass( animateCls ).removeAttr('ended').one(
 			c.animationdEnd,
 			function() {
 				// 默认结束后移除class
 				if ( !remove ) {
-					jQuery(this).removeClass( animateCls );
+					jQuery(this).attr('ended', keframe).removeClass( keframe );
 				}
 				if ( callback ) {
 					if ( !context ) {
 						context = window;
 					}
-					callback.call( context, type, animateCls );
+					callback.call( context, type, keframe );
 				}
 			}
 		);

@@ -185,10 +185,10 @@ a:hover {
   overflow: hidden;
 }
 .warning {
-  color: #FF0000;
+  color: #FF5700 !important;
 }
 .ok {
-  color: #008000;
+  color: #008000 !important;
 }
 .tc {
   text-align: center !important;
@@ -1380,6 +1380,7 @@ a:hover {
   padding-top: 1em;
 }
 .M-commentForm {
+  position: relative;
   padding: 1.5em;
 }
 .M-commentForm input,
@@ -1479,6 +1480,19 @@ a:hover {
   color: #0D8454;
   line-height: 2.5;
   margin-left: 1em;
+}
+.M-commentFormMask {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 9;
+  font-size: 2.2rem;
+  color: #008000;
+  background: rgba(255, 255, 255, 0.55);
 }
 .M-tooltip {
   position: absolute;
