@@ -54,7 +54,7 @@ define(function( require, exports ){
 			});
 
 			// 监听页码选择事件
-			app.event.on('pagerSelected', this.onPagerSelected, this);
+			app.messager.on('pagerSelected', this.onPagerSelected, this);
 
 			// 数据加载之前显示loading
 			this.$.loading = loading.init({

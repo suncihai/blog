@@ -7,6 +7,9 @@ define(function( require, exports ) {
 		// 默认页面
 		defaultPage: 'index',
 
+		// 默认控制器目录
+		controllerPath: '@controller/';
+
 		// 控制器的调用方法
 		action: 'onRun',
 
@@ -65,7 +68,7 @@ define(function( require, exports ) {
 			'listcomment'  : '/blog/sprint/api/listcomment/query.php',
 			'addcomment'   : '/blog/sprint/api/addcomment/query.php',
 			'verifycode'   : '/blog/sprint/api/verifycode/query.php',
-			'getthecode'  : '/blog/sprint/api/getthecode/query.php',
+			'getthecode'   : '/blog/sprint/api/getthecode/query.php',
 			'showarticle'  : '/blog/sprint/api/showarticle/query.php',
 			'listarchives' : '/blog/sprint/api/listarchives/query.php'
 		},

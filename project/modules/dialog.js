@@ -86,13 +86,18 @@ define(function( require, exports ){
 		},
 
 		// 隐藏遮罩以及对话框
-		hide: function() {
+		// cb: 隐藏动画结束后的回调函数 ct: 执行上下文
+		hide: function( cb, ct ) {
 			var self = this;
 			self.$show = false;
 			app.animate.play( DIALOG, self.$outFrame, function() {
 				DIALOG.hide();
 				app.animate.play( MASK, 'maskOut', 1, function (){
 					MASK.hide();
+					// 执行回调
+					if ( util.isFunc( cb ) ) {
+						cb.call( ct || window );
+					}
 				});
 			});
 			return self;
@@ -131,7 +136,7 @@ define(function( require, exports ){
 			app.event.bind( this.$doms.close, 'click', this.eventCloseDIAlog, this );
 			app.event.hover( this.$doms.close, this.eventCloseEnter, this.eventCloseOut, this );
 			// 监听自身对话框关闭消息
-			app.event.on('dialogClosed', this.onDailaogClosed, this);
+			app.messager.on('dialogClosed', this.onDailaogClosed, this);
 		},
 
 		eventCloseEnter: function() {
@@ -152,7 +157,7 @@ define(function( require, exports ){
 			var self = this;
 			self.hide();
 			self.$doms.close.removeClass('rotateCloseForward rotateCloseBack');
-			app.event.fire('dialogClosed');
+			app.messager.fire('dialogClosed');
 			return false;
 		},
 

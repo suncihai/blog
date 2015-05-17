@@ -197,7 +197,7 @@ define(function( require, exports ){
 			if ( id <= 0 || id > pages ) {
 				return false;
 			}
-			app.event.fire('pagerSelected', {
+			app.messager.fire('pagerSelected', {
 				'page': id,
 				'name': this.$name
 			});
@@ -210,7 +210,7 @@ define(function( require, exports ){
 			if ( id <= 0 || id > pages ) {
 				return false;
 			}
-			app.event.fire('pagerSelected', {
+			app.messager.fire('pagerSelected', {
 				'page': id,
 				'name': this.$name
 			});
@@ -224,7 +224,7 @@ define(function( require, exports ){
 				return false;
 			}
 			$(elm).addClass('M-pagerAct').siblings('.M-pagerItem').removeClass('M-pagerAct');
-			app.event.fire('pagerSelected', {
+			app.messager.fire('pagerSelected', {
 				'page': id,
 				'name': this.$name
 			});

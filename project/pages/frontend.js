@@ -123,7 +123,7 @@ define(function( require, exports ){
 			// 绑定鼠标滚动事件
 			app.event.bind( $(document), 'scroll.loadComment', this.eventScrolling, this );
 			// 监听评论列表数据加载完成消息
-			app.event.on('commentDataLoaded', this.onCommentDataLoaded, this);
+			app.messager.on('commentDataLoaded', this.onCommentDataLoaded, this);
 
 			// 隐藏loading
 			setTimeout(function() {

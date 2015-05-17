@@ -81,7 +81,7 @@ define(function( require, exports ){
 		if ( search ) {
 			data.search = util.formatSearch( search, 1, true );
 		}
-		require.async( '@controller/' + name, afterRun );
+		require.async( c.controllerPath + name, afterRun );
 	}
 
 	/**
@@ -92,7 +92,7 @@ define(function( require, exports ){
 		// 404
 		if ( !module ) {
 			util.error('404 - 找不到该页面: ' + data.name);
-			require.async('@controller/404', afterRun);
+			require.async( c.controllerPath + '404', afterRun );
 			return false;
 		}
 		else {
@@ -100,7 +100,7 @@ define(function( require, exports ){
 				module[action]( data, view );
 			}
 			else {
-				util.error('Method "' + action + '" is not correct in controller/' + data.name + '.js');
+				util.error('路由控制文件' + c.controllerPath + data.name + '.js' + '的' + action + '方法调用错误！');
 			}
 		}
 

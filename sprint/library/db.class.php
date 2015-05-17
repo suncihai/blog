@@ -14,6 +14,7 @@ class SQL
 	public $pswd;
 	public $db;
 	public $conn;
+    public $ADMIN = '博主';
 
     /**
      * 打开数据库连接
@@ -40,11 +41,10 @@ class SQL
     /**
      * query 基本查询接口,返回查询的结果数组(原始字段)
      * param  [String]  $sql     [SQL语句]
-     * param  [Boolean] $private [内部使用]
      * param  [Boolean] $insert  [INSERT 语句]
      * param  [Return]           [返回items->结果集合, total->结果总数, success->查询成功]
      */
-    public function query( $sql, $private = true, $insert = false )
+    private function query( $sql, $insert = false )
     {
         $result = mysql_query( $sql, $this->conn );
         // 查询成功
@@ -69,21 +69,15 @@ class SQL
                     'total'   => $total,
                     'success' => true
                 );
-                // 返回结构
-                $retArray = array
-                (
-                    'success' => true,
-                    'result'  => $resultObject
-                );
             }
-            // INSERT语句只返回true或false
+            // INSERT语句只返回success和新增的auto_increment_id
             else
             {
                 $resultObject = array
                 (
-                    'success' => true
+                    'success' => true,
+                    'newid'   => mysql_insert_id()
                 );
-                $retArray = $resultObject;
             }
         }
         // 查询失败
@@ -99,34 +93,19 @@ class SQL
                     'total' => 0,
                     'success' => false
                 );
-                // 返回结构
-                $retArray = array
-                (
-                    'success' => false,
-                    'result'  => $resultObject
-                );
             }
             // INSERT语句
             else
             {
                 $resultObject = array
                 (
-                    'success' => false
+                    'success' => false,
+                    'id'      => 0
                 );
-                $retArray = $resultObject;
             }
+        }
 
-        }
-        // ******* 查询结果处理结束 *******
-        // 查询结果返回(内部调用只返回items和total)
-        if ( $private )
-        {
-            return $resultObject;
-        }
-        else
-        {
-            return json_encode( $retArray );
-        }
+        return $resultObject;
     }
 
     /**
@@ -422,7 +401,6 @@ class SQL
      */
     public function getCommentList( $artid, $page, $limit, $date )
     {
-        $adminName = '博主';
         // 查询字段
         $_fieldArr = array(
             'comment_ID',
@@ -459,29 +437,7 @@ class SQL
             {
                 // 查找该评论的父评论(如果有)
                 $pid = intval( $item['comment_parent'] );
-                if ( $pid )
-                {
-                    $resQueryParent = $this->query("SELECT $_fields FROM wp_comments WHERE comment_ID=$pid LIMIT 1");
-                    if ( $resQueryParent['success'] )
-                    {
-                        $parentItem = $resQueryParent['items'][0];
-                        $isAdmin = intval( $parentItem['user_id'] ) === 1;
-                        $parent = array(
-                            // 'id'       => intval( $parentItem['comment_ID'] ),
-                            'author'   => $isAdmin ? $adminName : $parentItem['comment_author'],
-                            'url'      => preg_replace('/(http:)/', "", $parentItem['comment_author_url']),
-                            // 'address'       => $parentItem['comment_author_IP'],
-                            // 'date'     => $parentItem['comment_date'],
-                            'content'  => htmlspecialchars_decode( postAutoP( $parentItem['comment_content'] ) )
-                        );
-                    }
-                    else {
-                        $parent = null;
-                    }
-                }
-                else {
-                    $parent = null;
-                }
+                $parent = $this->_getParentComment( $pid );
 
                 // 是否是管理员回复
                 $isAdmin = intval( $item['user_id'] ) === 1;
@@ -489,13 +445,14 @@ class SQL
                 $itemFormat = array(
                     'id'       => intval( $item['comment_ID'] ),
                     'pid'      => $pid,
-                    'author'   => $isAdmin ? $adminName : $item['comment_author'],
+                    'author'   => $isAdmin ? $this->ADMIN : $item['comment_author'],
                     'url'      => preg_replace('/(http:)/', "", $item['comment_author_url']),
                     'address'  => $isAdmin ? '' : getCityName( $item['comment_author_IP'] ),
                     'date'     => $item['comment_date'],
                     'content'  => htmlspecialchars_decode( postAutoP( $item['comment_content'] ) ),
                     'parent'   => $parent,
-                    'admin'    => $isAdmin
+                    'admin'    => $isAdmin,
+                    'passed'   => true
                 );
                 array_push( $itemArray, $itemFormat );
             }
@@ -523,6 +480,41 @@ class SQL
         }
 
         return json_encode( $retArray );
+    }
+
+    /**
+     * _getParentComment 获取父级评论内容
+     * param  [Number] $pid   [父评论ID]
+     */
+    private function _getParentComment( $pid )
+    {
+        if ( !$pid ) {
+            return null;
+        }
+        // 父评论需要字段
+        $_fieldArr = array(
+            'comment_author',
+            "comment_author_url",
+            'comment_content',
+            'user_id'
+        );
+        $_fields = implode(", ", $_fieldArr);
+        $resQueryParent = $this->query("SELECT $_fields FROM wp_comments WHERE comment_ID=$pid LIMIT 1");
+        if ( $resQueryParent['success'] )
+        {
+            $parentItem = $resQueryParent['items'][0];
+            $isAdmin = intval( $parentItem['user_id'] ) === 1;
+            $parent = array(
+                'author'   => $isAdmin ? $this->ADMIN : $parentItem['comment_author'],
+                'url'      => preg_replace('/(http:)/', "", $parentItem['comment_author_url']),
+                'content'  => htmlspecialchars_decode( postAutoP( $parentItem['comment_content'] ) )
+            );
+        }
+        else {
+            $parent = null;
+        }
+
+        return $parent;
     }
 
     /**
@@ -578,7 +570,7 @@ class SQL
         $_sets = implode(",", $fieldArr);
         $_values = implode(",", $valueArr);
         $sql = "INSERT INTO wp_comments ($_sets) VALUES ($_values)";
-        $resQuery = $this->query( $sql, $private = true, $insert = true );
+        $resQuery = $this->query( $sql, $insert = true );
         if ( $resQuery['success'] )
         {
             // 更新文章comment_count字段
@@ -586,12 +578,40 @@ class SQL
             $resQueryNum = $this->query("SELECT comment_ID FROM wp_comments WHERE $where");
             $num = $resQueryNum['total'];
             $sqlUpdate = "UPDATE wp_posts SET comment_count=$num WHERE ID=$postid";
-            $resQueryUpdate = $this->query( $sqlUpdate, $private = true, $insert = true );
+            $resQueryUpdate = $this->query( $sqlUpdate, $insert = true );
+
+            // 返回新增的评论数据
+            $newId = $resQuery['newid'];
+            $resQueryNewData = $this->query("SELECT $_sets FROM wp_comments WHERE comment_ID=$newId LIMIT 1");
+            if ( $resQueryNewData['success'] )
+            {
+                $newData = $resQueryNewData['items'][0];
+                $pid = intval( $newData['comment_parent'] );
+                $parent = $this->_getParentComment( $pid );
+                $resultArr = array(
+                    'id'       => $newId,
+                    'author'   => $newData['comment_author'],
+                    'url'      => preg_replace('/(http:)/', "", $newData['comment_author_url']),
+                    'address'  => getCityName( $newData['comment_author_IP'] ),
+                    'date'     => $newData['comment_date'],
+                    'content'  => htmlspecialchars_decode( postAutoP( $newData['comment_content'] ) ),
+                    'parent'   => $parent,
+                    'admin'    => false,
+                    'passed'   => false
+                );
+            }
+            else
+            {
+                $resultArr = null;
+            }
+
+            // 返回数据格式
             if ( $resQueryUpdate['success'] )
             {
                $ret = array
                 (
-                    'success' => true
+                    'success' => true,
+                    'result'  => $resultArr
                 );
             }
             else

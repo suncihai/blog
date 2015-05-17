@@ -89,6 +89,7 @@ define(function( require, exports ){
 						'</div>',
 						'<div class=M-commentEmptyTxt>有空沙发</div>',
 					'</div>',
+					'<div class="M-commentError"/>',
 				'</div>'
 			].join('')).appendTo( this.$target );
 
@@ -99,7 +100,8 @@ define(function( require, exports ){
 				'loading' : $('.M-commentLoading', html),
 				'list'    : $('.M-commentList', html).hide(),
 				'pager'   : $('.M-commentPager', html).hide(),
-				'empty'   : $('.M-commentEmpty', html).hide()
+				'empty'   : $('.M-commentEmpty', html).hide(),
+				'error'   : $('.M-commentError', html).hide()
 			}
 
 			// 创建分页模块
@@ -120,22 +122,26 @@ define(function( require, exports ){
 			});
 
 			// 监听页码选择事件
-			app.event.on('pagerSelected', this.onPagerSelected, this);
+			app.messager.on('pagerSelected', this.onPagerSelected, this);
 
-			// 评论添加成功 重新拉取数据
-			app.event.on('commentAdded', this.load, this);
+			// 监听添加评论成功消息
+			app.messager.on('commentAdded', this.onAddAComment, this);
 
 			// 绑定添加评论事件
 			app.event.bind( this.$doms.add, 'click', this.eventClickAdd, this );
+		},
+
+		// 添加一条评论
+		onAddAComment: function( ev ) {
+			var param = ev.param;
+			var newComment = this.createAComment( param );
+			this.$doms.list.prepend( $(newComment).addClass('animated flipInX') );
 		},
 
 		// 分页响应事件
 		onPagerSelected: function( ev ) {
 			var param = ev.param;
 			var page = param.page;
-			if ( page === this.$param.page ) {
-				return false;
-			}
 			if ( param.name === 'commentPager' ) {
 				this.$param.page = page;
 				this.load();
@@ -169,6 +175,11 @@ define(function( require, exports ){
 			var title = '';
 			if ( err ) {
 				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
+				if ( err.status === 'timeout' ) {
+					self.hideLoading();
+					self.$doms.title.text('服务器请求超时');
+					self.$doms.error.show().addClass('animated shake').text('(ˇˍˇ)评论列表请求超时，请稍后重试~');
+				}
 				return false;
 			}
 			if ( !res.success ) {
@@ -208,78 +219,94 @@ define(function( require, exports ){
 			}, 0);
 
 			// 发通知消息
-			app.event.fire('commentDataLoaded');
+			app.messager.fire('commentDataLoaded');
 			// 构建评论列表
 			self.buildList( res.items );
 		},
 
 		// 创建评论列表
 		buildList: function( items ) {
+			var self = this;
 			var list = [];
 			this.$items = items;
+
 			util.each( items, function( item, idx ) {
-				// 评论昵称
-				var nickName = item.admin ?
-					'<span class="M-commentIssuseHeadNickAdmin">'+ item.author +'</span>'
-					: item.url ?
-					'<a href="http://'+ item.url +'" target="_blank">'+ item.author +'</a>'
-					: item.author;
-				// 评论时间
-				var date = item.date.toString().slice( 0, 16 );
-				// 评论内容(html)
-				var content = '';
-				// 评论者所在地
-				var address = item.address ? '['+ item.address +']' : '';
-				// 有父评论
-				if ( item.parent ) {
-					var pnick = item.parent.url ? '<a href="http://'+ item.parent.url +'" target="_blank">@'+ item.parent.author +'</a>' : '@' + item.parent.author;
-					var phtml = [
-						'<div class="M-commentIssuseContentParent">',
-							'<div class="M-commentIssuseContentParentHead">',
-								'<div class="M-commentIssuseContentParentHeadTitle">',
-									'回复' + '<span class="nick">' + pnick + '</span>' + '的评论：',
-								'</div>',
-							'</div>',
-							'<div class="M-commentIssuseContentParentContent">'+ item.parent.content +'</div>',
-						'</div>'
-					].join('');
-					content = phtml + '<div class="M-commentIssuseContentMain">'+ item.content +'</div>';
-				}
-				else {
-					content = item.content;
-				}
-				list.push([
-					'<section class="M-commentIssuse" data-id="'+ idx +'">',
-						'<header class="M-commentIssuseHead">',
-							'<b class="M-commentIssuseHeadFloor">#'+ (idx + 1) +'</b>',
-							'<b class="M-commentIssuseHeadNick">'+ nickName +'</b>',
-							'<span class="M-commentIssuseHeadAddress">'+ address +'</span>',
-							'<span class="M-commentIssuseHeadTime">',
-								// item.parent ? '回复于 ' : '评论于 ',
-								date,
-							'</span>',
-							'<div class="M-commentIssuseHeadOp">',
-								// '<span data-id="'+ item.id +'" class="op like">',
-								// 	'支持(<i class="likes">0</i>)',
-								// '</span>',
-								// '<span data-id="'+ item.id +'" class="op dislike">',
-								// 	'反对(<i class="dislikes">0</i>)',
-								// '</span>',
-								'<span data-id="'+ item.id +'" class="op reply">'+ '回复TA' +'</span>',
-							'</div>',
-						'</header>',
-						'<article class="M-commentIssuseContent">'+ content +'</article>',
-					'</section>'
-				].join(''));
+				var comment = self.createAComment( item, idx );
+				list.push( comment );
 			});
 
 			$(list.join('')).appendTo( this.$doms.list );
 
+			// 评论操作
 			var op = $('.M-commentIssuseHeadOp', this.$doms.list);
-
 			app.event.proxy( op, 'click', 'span', this.eventClickOp, this );
 		},
 
+		// 创建一条评论
+		createAComment: function( info, idx ) {
+			// 序号
+			var floor = info.passed ? '#' + (idx + 1) : '-';
+			// 评论昵称
+			var nickName = info.admin ?
+				'<span class="M-commentIssuseHeadNickAdmin">'+ info.author +'</span>'
+				: info.url ?
+				'<a href="http://'+ info.url +'" target="_blank">'+ info.author +'</a>'
+				: info.author;
+			// 评论时间
+			var date = util.prettyDate( info.date );
+			// 评论内容(html)
+			var content = '';
+			// 评论者所在地
+			var address = info.address ? '['+ info.address +']' : '<span class="tdef">未知地区</span>';
+			// 有父评论
+			if ( info.parent ) {
+				var pnick = info.parent.url ? '<a href="http://'+ info.parent.url +'" target="_blank">@'+ info.parent.author +'</a>' : '@' + info.parent.author;
+				var phtml = [
+					'<div class="M-commentIssuseContentParent">',
+						'<div class="M-commentIssuseContentParentHead">',
+							'<div class="M-commentIssuseContentParentHeadTitle">',
+								'回复' + '<span class="nick">' + pnick + '</span>' + '的评论：',
+							'</div>',
+						'</div>',
+						'<div class="M-commentIssuseContentParentContent">'+ info.parent.content +'</div>',
+					'</div>'
+				].join('');
+				content = phtml + '<div class="M-commentIssuseContentMain">'+ info.content +'</div>';
+			}
+			else {
+				content = info.content;
+			}
+			// 新增的评论(未审核状态)标出提示
+			if ( !info.passed ) {
+				content = '<div class="warning ti pb5">提示：您的评论需要经过博主的审核才能公开显示，该评论当前只有您自己可见。</div>' + content;
+			}
+
+			return [
+				'<section class="M-commentIssuse" data-id="'+ (idx || -1) +'">',
+					'<header class="M-commentIssuseHead">',
+						'<b class="M-commentIssuseHeadFloor">'+ floor +'</b>',
+						'<b class="M-commentIssuseHeadNick">'+ nickName +'</b>',
+						'<span class="M-commentIssuseHeadAddress">'+ address +'</span>',
+						'<span class="M-commentIssuseHeadTime" title="'+ info.date +'">',
+							// info.parent ? '回复于 ' : '评论于 ',
+							date,
+						'</span>',
+						'<div class="M-commentIssuseHeadOp">',
+							// '<span data-id="'+ info.id +'" class="op like">',
+							// 	'支持(<i class="likes">0</i>)',
+							// '</span>',
+							// '<span data-id="'+ info.id +'" class="op dislike">',
+							// 	'反对(<i class="dislikes">0</i>)',
+							// '</span>',
+							info.passed ? '<span data-id="'+ info.id +'" class="op reply">'+ '回复TA' +'</span>' : '',
+						'</div>',
+					'</header>',
+					'<article class="M-commentIssuseContent">'+ content +'</article>',
+				'</section>'
+			].join('');
+		},
+
+		// 点击评论操作
 		eventClickOp: function( evt, elm ) {
 			var op = $(elm).attr('class').substr(3);
 			var id = +$(elm).attr('data-id');
@@ -391,7 +418,7 @@ define(function( require, exports ){
 			// 绑定更换验证码
 			app.event.bind( this.$doms.image, 'click.image', this.eventClickImage, this );
 			// 对话框关闭 解除绑定
-			app.event.on('dialogClosed', this.onDialogClosed, this);
+			app.messager.on('dialogClosed', this.onDialogClosed, this);
 		},
 
 		// 对话框关闭事件
@@ -483,10 +510,10 @@ define(function( require, exports ){
 			var txt = '';
 			// 提交成功
 			if ( res && res.success ) {
+				self.$res = res.result;
 				app.animate.play(self.$doms.maskText.text('评论成功！'), 'fadeIn', function() {
 					setTimeout(function() {
-						dialog.hide();
-						app.event.fire('commentAdded');
+						dialog.hide( self.afterDialogHide, self );
 					}, 1000);
 				});
 				return false;
@@ -503,6 +530,11 @@ define(function( require, exports ){
 					app.animate.play(self.$doms.maskText.addClass('warning').text( txt ), 'shake');
 				}
 			}
+		},
+
+		// 对话框隐藏, 将新增的评论发给评论列表
+		afterDialogHide: function() {
+			app.messager.fire('commentAdded', this.$res);
 		},
 
 		// 隐藏评论表单的遮罩

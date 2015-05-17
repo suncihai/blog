@@ -246,7 +246,7 @@ define(function( require, util ){
 		function esc_rp( m ) {
 			return tag[m];
 		}
-		return ( typeof( html ) != 'string' ) ? html : html.replace(/[&<>"]/g, esc_rp );
+		return ( typeof( html ) != 'string' ) ? html : html.replace(/[&<>']/g, esc_rp );
 	}
 
 	/**
@@ -306,14 +306,69 @@ define(function( require, util ){
 	util.getClientHeight = function() {
 		var docElem = document.documentElement;
 		var docBody = document.body;
-		return document.compatMode === "CSS1Compat" ? docElem.clientHeight : docBody.clientHeight;
+		return document.compatMode === 'CSS1Compat' ? docElem.clientHeight : docBody.clientHeight;
 	}
 
 	/**
 	 * removeTags 去掉Hhtml标签
 	 */
 	util.removeTags = function( html ) {
-		return html.toString().replace(/<[^>]+>/g, "");
+		return html.toString().replace(/<[^>]+>/g, '');
 	}
 
+	/*
+	 * 格式化某段时间, 返回与当前的时间差 2015-05-16 16:14:30
+	 */
+	util.prettyDate = function( dateStr ) {
+		if( !isString( dateStr ) ) {
+			return dateStr
+		}
+		var date = new Date();
+		// 分离年月日时分秒
+		var dateArr = dateStr.split( new RegExp('[:| |-]', 'ig') );
+		var year   = +dateArr[0],
+			month  = +dateArr[1] - 1,
+			day    = +dateArr[2],
+			hour   = +dateArr[3],
+			minute = +dateArr[4],
+			second = +dateArr[5];
+		// 计算秒数差值
+		var opDate = new Date( year, month, day , hour, minute, second );
+		var secondDiff = ( new Date().getTime() - opDate.getTime() ) / 1000;
+		var retStr = '';
+		if( secondDiff < 60 * 30 ) {
+			retStr = Math.ceil( secondDiff / 60 ) + '分钟前';
+		}
+		if( !retStr && secondDiff < 3600 ) {
+			retStr= '1小时前';
+		}
+		if( !retStr && secondDiff < 3600 * 2 ) {
+			retStr= '2小时前';
+		}
+		if( !retStr && secondDiff < 3600 * 3 ) {
+			retStr= '3小时前';
+		}
+		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() == day ) {
+			retStr = '今天' + hour + ':' + minute;
+		}
+		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 1 == day ) {
+			retStr = '昨天' + hour + ':' + minute;
+		}
+		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 2 == day ) {
+			retStr = '前天' + hour + ':' + minute;
+		}
+		if( !retStr && date.getFullYear() == year && date.getMonth() == month ) {
+			retStr = ( month + 1 ) + '月' + day + '日 ' + hour + ':' + minute;
+		}
+		if( !retStr && date.getFullYear() == year ) {
+			retStr = '今年' + ( month + 1 ) + '月' + day + '日 ' + hour + ':' + minute;
+		}
+		if( !retStr && date.getFullYear() - 1 == year ) {
+			retStr = '去年' + ( month + 1 ) + '月' + day + '日 ' + hour + ':' + minute;
+		}
+		if( !retStr && date.getFullYear() - year > 1 ) {
+			retStr = year + '年' + ( month + 1 ) + '月' + day + '日 ' + hour + ':' + minute;
+		}
+		return retStr;
+	}
 });
