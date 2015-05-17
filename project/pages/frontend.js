@@ -40,7 +40,7 @@ define(function( require, exports ){
 				'target': this.$data.dom,
 				'width':  this.$data.dom.width(),
 				'size': 25,
-				'class': 'center mt20'
+				'class': 'center mt2'
 			});
 
 			app.data.get( dc.showarticle, param, this.onData, this );
@@ -137,18 +137,17 @@ define(function( require, exports ){
 		eventScrolling: function( evt, doc ) {
 			var top = $(doc).scrollTop();
 			var distance = this.$doms.content.height();
+			console.log(top, distance);
 			// 滚动条到达评论区域
-			// if ( top > distance ) {
-			if ( top > distance - 200 ) {
-				if ( !this.$reach ) {
+			if ( top > distance ) {
+				if ( !this.$reach && this.$.comment ) {
 					this.$reach = true;
-					if ( this.$.comment ) {
-						this.$.comment.showLoading().load();
-					}
+					this.$.comment.showLoading().load();
 				}
 			}
 		},
 
+		// 评论数据拉取完毕解除scroll事件
 		onCommentDataLoaded: function() {
 			app.event.unbind($(document), 'scroll.loadComment');
 			return false;

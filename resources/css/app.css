@@ -1464,7 +1464,7 @@ a:hover {
   line-height: 9;
   font-size: 2.2rem;
   color: #008000;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.8);
 }
 .M-commentError {
   text-align: center;
@@ -1913,7 +1913,6 @@ a:hover {
   padding: 0;
 }
 .P-article pre {
-  display: none;
   box-sizing: border-box;
   width: 100%;
   padding: 1.5em;

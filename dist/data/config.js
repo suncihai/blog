@@ -8,7 +8,7 @@ define(function( require, exports ) {
 		defaultPage: 'index',
 
 		// 默认控制器目录
-		controllerPath: '@controller/';
+		controllerPath: '@controller/',
 
 		// 控制器的调用方法
 		action: 'onRun',

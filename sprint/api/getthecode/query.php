@@ -15,7 +15,7 @@
 	// 转成数组并随机抽取一个
 	$words = explode("|", $word);
 	$count = count( $words );
-	$num = rand( 0, $count - 1 );
+	$num = mt_rand( 0, $count - 1 );
 	$code = $words[$num];
 
 	// 打乱单词顺序
@@ -26,10 +26,9 @@
 	$height = 35;
 	$img = imagecreate( $width, $height );
 
-	// painting...
-	$gray = imagecolorallocate( $img, 240, 240, 240 );
 	// 填充色
-	imagefill( $img, 0, 0, $gray );
+	$fill = imagecolorallocate( $img, 255, 255, 255 );
+	imagefill( $img, 0, 0, $fill );
 	// 绘制字体
 	$fontColor = imagecolorallocate( $img, 34, 182, 171 );
 	$font = "../../../resources/fonts/consolaz.ttf";
@@ -40,6 +39,21 @@
 	$posY = 24; // top偏移量
 	$angle = 0; // 字体角度
 	imagettftext( $img, $fontSize, $angle, $posX, $posY, $fontColor, $font, $mixCode );
+
+	// 混淆的线
+	$randLineColor = imagecolorallocate( $img, rand(25, 225), rand(25, 225), rand(25, 225));
+	$randPixelColor = imagecolorallocate( $img, rand(100, 255), rand(100, 255), rand(100, 255));
+	for( $i = 0; $i < 3; $i++ ) {
+		$x = rand( 1, $width );
+		$y = rand( 1, $height );
+		$xx = rand( 1, $width );
+		$yy = rand( 1, $height );
+		imageline( $img, $x, $y, $xx, $yy, $randLineColor );
+	}
+	// 混淆的点
+	for ( $i = 0; $i < $width * 2; $i++ ) {
+		imagesetpixel( $img, rand( 1, $width - 1 ), rand( 1, $height - 1 ), $randPixelColor);
+	}
 
 	// 存入session
 	$_SESSION['img_code_word'] = $code;

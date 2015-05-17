@@ -61,7 +61,7 @@ define(function( require, exports ){
 				'target': dom,
 				'width':  dom.width(),
 				'size': 25,
-				'class': 'center mt20',
+				'class': 'center mt2',
 				'autoHide': true
 			});
 

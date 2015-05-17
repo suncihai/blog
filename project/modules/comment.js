@@ -18,6 +18,7 @@ define(function( require, exports ){
 	var CommentList = {
 		init: function( config ) {
 			this.$ = {};
+			this.$comments = 0;
 			this.$target = config.target;
 			this.$param = $.extend({}, c.commentParam, {
 				'artid': +config.artid
@@ -135,6 +136,11 @@ define(function( require, exports ){
 		onAddAComment: function( ev ) {
 			var param = ev.param;
 			var newComment = this.createAComment( param );
+			if ( !this.$comments ) {
+				this.$comments++;
+				this.$doms.title.text('评论');
+				this.show().$doms.empty.hide();
+			}
 			this.$doms.list.prepend( $(newComment).addClass('animated flipInX') );
 		},
 
@@ -192,7 +198,7 @@ define(function( require, exports ){
 
 			setTimeout(function() {
 				self.show().hideLoading();
-
+				this.$comments = res.total;
 				switch( res.total ) {
 					case 0:
 						self.hide();
@@ -298,7 +304,7 @@ define(function( require, exports ){
 							// '<span data-id="'+ info.id +'" class="op dislike">',
 							// 	'反对(<i class="dislikes">0</i>)',
 							// '</span>',
-							info.passed ? '<span data-id="'+ info.id +'" class="op reply">'+ '回复TA' +'</span>' : '',
+							// info.passed ? '<span data-id="'+ info.id +'" class="op reply">'+ '回复TA' +'</span>' : '',
 						'</div>',
 					'</header>',
 					'<article class="M-commentIssuseContent">'+ content +'</article>',
@@ -374,12 +380,12 @@ define(function( require, exports ){
 			else {
 				holderTxt = '[必填] 在这里输入评论内容~';
 			}
-			var holderNick = '[必填] 在这输入您的昵称，不能为纯数字，不能包含特殊字符，不能超过16个字符。';
-			var holderLink = '[选填] 这里可以输入您的网址(例:www.tangbc.com)，链接会加在您的昵称上。';
+			var holderNick = '[必填] 在这输入您的昵称，不超过16个字符。';
+			var holderLink = '[选填] 这里可以输入您的网址(如:www.tangbc.com)，链接会加在您的昵称上。';
 			var holderCode = '输入验证码';
 			var dom = $([
 				'<div class="M-commentForm">',
-					'<textarea class="M-commentFormText"  placeholder="'+ holderTxt +'"></textarea>',
+					'<textarea class="M-commentFormText" placeholder="'+ holderTxt +'"></textarea>',
 					'<input type="text" class="M-commentFormNick" placeholder="'+ holderNick +'"/>',
 					'<input type="text" class="M-commentFormLink" placeholder="'+ holderLink +'"/>',
 					'<div class="M-commentFormFooter">',
@@ -407,6 +413,16 @@ define(function( require, exports ){
 				'submit'   : $('.M-commentFormFooterSubmit', dom),
 				'mask'     : $('.M-commentFormMask', dom),
 				'maskText' : $('.M-commentFormMaskText', dom)
+			}
+
+			// 读取cookie值
+			var nickName = app.cookie.get('usernickname');
+			var link = app.cookie.get('userlink');
+			if ( nickName ) {
+				this.$doms.nick.val( nickName ).prop('disabled', true);
+			}
+			if ( link ) {
+				this.$doms.link.val( link );
 			}
 
 			// 绑定重置
@@ -444,11 +460,16 @@ define(function( require, exports ){
 
 		// 点击重置
 		eventClickReset: function() {
+			this.reset();
+			return false;
+		},
+
+		// 重置表单
+		reset: function() {
 			this.$doms.text.val('').focus();
 			this.$doms.nick.val('');
 			this.$doms.code.val('');
 			this.$doms.link.val('');
-			return false;
 		},
 
 		// 表单验证
@@ -458,7 +479,7 @@ define(function( require, exports ){
 					'refer': this.$doms.text,
 					'arrow': {'position': 'top'},
 					'offset': {'left': 10, 'top': 25},
-					'content': '评论内容不能为空:-)',
+					'content': '评论内容不能为空~',
 					'width': 140,
 					'name': 'content'
 				});
@@ -470,7 +491,7 @@ define(function( require, exports ){
 					'refer': this.$doms.nick,
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
-					'content': '昵称不能为空:-)',
+					'content': '昵称不能为空~',
 					'width': 120,
 					'name': 'nick'
 				});
@@ -482,7 +503,7 @@ define(function( require, exports ){
 					'refer': this.$doms.code,
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
-					'content': '验证码不能为空:-)',
+					'content': '验证码不能为空~',
 					'width': 130,
 					'name': 'code'
 				});
@@ -511,6 +532,13 @@ define(function( require, exports ){
 			// 提交成功
 			if ( res && res.success ) {
 				self.$res = res.result;
+				self.reset();
+				if ( !app.cookie.get('usernickname') ) {
+					app.cookie.set('usernickname', self.$res.author);
+				}
+				if ( !app.cookie.get('userlink') ) {
+					app.cookie.set('userlink', self.$res.url);
+				}
 				app.animate.play(self.$doms.maskText.text('评论成功！'), 'fadeIn', function() {
 					setTimeout(function() {
 						dialog.hide( self.afterDialogHide, self );
@@ -525,8 +553,8 @@ define(function( require, exports ){
 					txt = [err.status, err.message].join(', ');
 					app.animate.play(self.$doms.maskText.addClass('warning').text( txt ), 'shake');
 				}
-				if ( !res.success ) {
-					txt = res.message + '点击任意处重试~';
+				if ( res && !res.success ) {
+					txt = res.message || '提交失败请重试~';
 					app.animate.play(self.$doms.maskText.addClass('warning').text( txt ), 'shake');
 				}
 			}
@@ -539,8 +567,11 @@ define(function( require, exports ){
 
 		// 隐藏评论表单的遮罩
 		eventHideMask: function() {
-			this.$doms.mask.hide();
-			app.event.unbind($(document), 'click.hideMask');
+			var mask = this.$doms.mask;
+			app.animate.play( mask, 'fadeOut', 1, function() {
+				mask.hide();
+				app.event.unbind($(document), 'click.hideMask');
+			});
 		},
 
 		// 验证码失去焦点

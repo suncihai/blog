@@ -437,7 +437,7 @@ class SQL
             {
                 // 查找该评论的父评论(如果有)
                 $pid = intval( $item['comment_parent'] );
-                $parent = $this->_getParentComment( $pid );
+                $parent = $this->getParentComment( $pid );
 
                 // 是否是管理员回复
                 $isAdmin = intval( $item['user_id'] ) === 1;
@@ -483,10 +483,10 @@ class SQL
     }
 
     /**
-     * _getParentComment 获取父级评论内容
+     * getParentComment 获取父级评论内容
      * param  [Number] $pid   [父评论ID]
      */
-    private function _getParentComment( $pid )
+    private function getParentComment( $pid )
     {
         if ( !$pid ) {
             return null;
@@ -527,12 +527,15 @@ class SQL
      */
     public function addComment( $postid, $content, $author, $link, $id )
     {
+        $resQueryError = '';
+        $resQueryUpdateError = '';
+        $resQueryNewDataError = '';
         // 评论内容
         $content = removeTag( $content );
         // 评论昵称
         $author = removeTag( $author );
         // 存储的默认类型: 0待审核, 1通过, spam垃圾评论, trash回收站评论
-        $approved = 1;
+        $approved = 0;
         // 当前时间
         $date = date('Y-m-d H:i:s', time());
         // 当前GMT时间
@@ -587,7 +590,7 @@ class SQL
             {
                 $newData = $resQueryNewData['items'][0];
                 $pid = intval( $newData['comment_parent'] );
-                $parent = $this->_getParentComment( $pid );
+                $parent = $this->getParentComment( $pid );
                 $resultArr = array(
                     'id'       => $newId,
                     'author'   => $newData['comment_author'],
@@ -600,35 +603,31 @@ class SQL
                     'passed'   => false
                 );
             }
+            // 获取新增数据失败
             else
             {
                 $resultArr = null;
             }
+        }
+        // 数据插入失败
+        else
+        {
+            $resQueryError = '提交评论数据失败！';
+        }
 
-            // 返回数据格式
-            if ( $resQueryUpdate['success'] )
-            {
-               $ret = array
-                (
-                    'success' => true,
-                    'result'  => $resultArr
-                );
-            }
-            else
-            {
-                $ret = array
-                (
-                    'success' => false,
-                    'message' => 'Fail to update post comments count!'
-                );
-            }
+        // 有错误返回错误信息
+        if ( $resQueryError )
+        {
+            $ret = array(
+                'success' => false,
+                'message' => $resQueryError
+            );
         }
         else
         {
-            $ret = array
-            (
-                'success' => false,
-                'message' => 'Fail to insert!'
+            $ret = array(
+                'success' => true,
+                'result'  => $resultArr
             );
         }
         return json_encode( $ret );

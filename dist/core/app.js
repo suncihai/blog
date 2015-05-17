@@ -8,7 +8,8 @@ define(function( require, exports ) {
 		animate = require('@core/animate'),
 		eventHelper = require('@core/eventHelper'),
 		dataHelper = require('@core/dataHelper'),
-		messager = require('@core/messager');
+		messager = require('@core/messager'),
+		cookie = require('@core/cookie');
 
 	// 应用模块导出
 	exports.view = view;
@@ -16,6 +17,7 @@ define(function( require, exports ) {
 	exports.data = dataHelper;
 	exports.event = eventHelper;
 	exports.messager = messager;
+	exports.cookie = cookie;
 	exports.controller = router;
 
 	// 方法导出

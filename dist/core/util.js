@@ -336,8 +336,14 @@ define(function( require, util ){
 		var opDate = new Date( year, month, day , hour, minute, second );
 		var secondDiff = ( new Date().getTime() - opDate.getTime() ) / 1000;
 		var retStr = '';
-		if( secondDiff < 60 * 30 ) {
+		if( secondDiff < 60 ) {
+			retStr = '刚刚';
+		}
+		if( !retStr && secondDiff < 60 * 30 ) {
 			retStr = Math.ceil( secondDiff / 60 ) + '分钟前';
+		}
+		if( !retStr && secondDiff < 1800 ) {
+			retStr= '半小时前';
 		}
 		if( !retStr && secondDiff < 3600 ) {
 			retStr= '1小时前';

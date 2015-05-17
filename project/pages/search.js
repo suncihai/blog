@@ -43,7 +43,7 @@ define(function( require, exports ){
 			'target': this.$dom,
 			'width':  this.$dom.width(),
 				'size': 25,
-				'class': 'center mt20',
+				'class': 'center mt2',
 				'autoHide': true
 			});
 

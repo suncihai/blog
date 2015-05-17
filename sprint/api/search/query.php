@@ -11,7 +11,7 @@
 	(
 		'success' => false,
 		'result'  => null,
-		'message' => 'One of your request parameters is error!'
+		'message' => '关键词内容错误，请尝试去掉不必要的字符~'
 	);
 
 	// 请求参数过滤
