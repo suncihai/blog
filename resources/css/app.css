@@ -1279,6 +1279,7 @@ a:hover {
 .M-commentEmpty {
   position: relative;
   top: -1.5em;
+  cursor: pointer;
 }
 .M-commentEmptyWrap {
   position: relative;

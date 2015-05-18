@@ -130,6 +130,7 @@ define(function( require, exports ){
 
 			// 绑定添加评论事件
 			app.event.bind( this.$doms.add, 'click', this.eventClickAdd, this );
+			app.event.bind( this.$doms.empty, 'click', this.eventClickAdd, this );
 		},
 
 		// 添加一条评论
@@ -263,7 +264,8 @@ define(function( require, exports ){
 			// 评论内容(html)
 			var content = '';
 			// 评论者所在地
-			var address = info.address ? '['+ info.address +']' : '<span class="tdef">未知地区</span>';
+			var address = info.admin ?
+				'' : info.address ? '['+ info.address +']' : '<span class="tdef">未知地区</span>';
 			// 有父评论
 			if ( info.parent ) {
 				var pnick = info.parent.url ? '<a href="http://'+ info.parent.url +'" target="_blank">@'+ info.parent.author +'</a>' : '@' + info.parent.author;
@@ -284,7 +286,7 @@ define(function( require, exports ){
 			}
 			// 新增的评论(未审核状态)标出提示
 			if ( !info.passed ) {
-				content = '<div class="warning ti pb5">提示：您的评论需要经过博主的审核才能公开显示，该评论当前只有您自己可见。</div>' + content;
+				content = '<div class="warning ti pb5">提示：您的评论需要经过审核才能公开显示，该评论当前只有您自己可见。</div>' + content;
 			}
 
 			return [
@@ -467,9 +469,13 @@ define(function( require, exports ){
 		// 重置表单
 		reset: function() {
 			this.$doms.text.val('').focus();
-			this.$doms.nick.val('');
 			this.$doms.code.val('');
-			this.$doms.link.val('');
+			if ( !app.cookie.get('usernickname') ) {
+				this.$doms.nick.val('');
+			}
+			if ( !app.cookie.get('userlink') ) {
+				this.$doms.link.val('');
+			}
 		},
 
 		// 表单验证
