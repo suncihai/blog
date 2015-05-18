@@ -30,6 +30,10 @@ define(function( require, exports ){
 		return [p1, p2];
 	}
 
+	/**
+	 * formatHash 格式化hash, 分离出模块名、页面参数和url参数
+	 * @param  {String}  hash    [hash值]
+	 */
 	function formatHash( hash ) {
 		var name = '', param = null, search = null, ms, tmp;
 		var ix = hash.indexOf('/'), hx = ( ix !== -1 );
@@ -70,6 +74,26 @@ define(function( require, exports ){
 	}
 
 	/**
+	 * formatSearch 格式化url参数为JSON
+	 * @param  {String}  str    [字符]
+	 * @param  {Number}  limit  [参数限制个数]
+	 * @param  {Boolean} strict [进行转义]
+	 */
+	function formatSearch( str, limit, strict ) {
+		var arr = str.split('&'), retJSON = {};
+		util.each( arr, function( item, idx ) {
+			var ts = item.split('=');
+			if ( ts.length === 2 ) {
+				retJSON[ts[0]] = strict ? util.htmlEncode( ts[1] ) : ts[1];
+			}
+			if ( idx + 1 === limit ) {
+				return false;
+			}
+		});
+		return retJSON;
+	}
+
+	/**
 	 * run 启用模块
 	 * @param  {type} name   [模块名]
 	 * @param  {type} param  [页面参数]
@@ -79,7 +103,7 @@ define(function( require, exports ){
 		data.name = name;
 		data.param = isNaN( param ) ? util.htmlEncode( param ) : param;
 		if ( search ) {
-			data.search = util.formatSearch( search, 1, true );
+			data.search = formatSearch( search, 1, true );
 		}
 		require.async( c.controllerPath + name, afterRun );
 	}
@@ -103,7 +127,6 @@ define(function( require, exports ){
 				util.error('路由控制文件' + c.controllerPath + data.name + '.js' + '的' + action + '方法调用错误！');
 			}
 		}
-
 	}
 
 	exports.start = function() {

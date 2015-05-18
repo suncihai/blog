@@ -250,27 +250,6 @@ define(function( require, util ){
 	}
 
 	/**
-	 * formatSearch 格式化url参数为JSON
-	 * @param  {String}  str    [字符]
-	 * @param  {Number}  limit  [参数限制个数]
-	 * @param  {Boolean} strict [进行转义]
-	 */
-	util.formatSearch = function( str, limit, strict ) {
-		var arr = str.split('&'), retJSON = {};
-		var self = this;
-		this.each( arr, function( item, idx ) {
-			var ts = item.split('=');
-			if ( ts.length === 2 ) {
-				retJSON[ts[0]] = strict ? self.htmlEncode( ts[1] ) : ts[1];
-			}
-			if ( idx + 1 === limit ) {
-				return false;
-			}
-		});
-		return retJSON;
-	}
-
-	/**
 	 * find 根据字段和值查找数组中的元素
 	 * @param  {Array}   arr    [数组]
 	 * @param  {Mix}     value  [查询值]
@@ -310,7 +289,7 @@ define(function( require, util ){
 	}
 
 	/**
-	 * removeTags 去掉Hhtml标签
+	 * removeTags 去掉html标签
 	 */
 	util.removeTags = function( html ) {
 		return html.toString().replace(/<[^>]+>/g, '');

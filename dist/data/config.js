@@ -28,7 +28,8 @@ define(function( require, exports ) {
 		quotations: [
 			"Keep living, keep codeing ......",
 			"Do all you can to be a better man",
-			"To be or not to be, that is a question"
+			"To be or not to be, that is a question",
+			"Stay hungry Stay foolish"
 		],
 
 		// 栏目title

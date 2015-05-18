@@ -195,10 +195,10 @@ define(function( require, exports ){
 				return false;
 			}
 			res = res.result;
+			this.$comments = res.total;
 
 			setTimeout(function() {
 				self.show().hideLoading();
-				this.$comments = res.total;
 				switch( res.total ) {
 					case 0:
 						self.hide();

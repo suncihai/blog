@@ -1,7 +1,6 @@
 /**
  * [事件绑定模块,封装jQuery事件绑定]
  * 事件绑定用bind、proxy; 反操作为unbind、unproxy
- * 消息发布用fire, 消息订阅用on; 反操作为cancel
  */
 define(function( require, exports ){
 	var util = require('util');

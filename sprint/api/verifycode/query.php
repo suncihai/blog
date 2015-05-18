@@ -12,8 +12,7 @@
 
 	$ret = array
 	(
-		'success' => true,
-		'message' => ''
+		'success' => true
 	);
 
 	// 还未设置验证码

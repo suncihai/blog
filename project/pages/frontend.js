@@ -1,5 +1,5 @@
 /**
- * [前端那些事-文章页面]
+ * [文章页面]
  */
 define(function( require, exports ){
 	var app = require('app');
@@ -120,30 +120,39 @@ define(function( require, exports ){
 			})
 			// .setCrumbs( c.archiveTitle[self.$data.name], self.$data.param );
 
-			// 绑定鼠标滚动事件
-			app.event.bind( $(document), 'scroll.loadComment', this.eventScrolling, this );
 			// 监听评论列表数据加载完成消息
 			app.messager.on('commentDataLoaded', this.onCommentDataLoaded, this);
 
-			// 隐藏loading
+			// 数据加载完成的后续处理
 			setTimeout(function() {
 				self.hideLoading();
 				layout.showFooter();
 				self.$.comment.showAll();
-			}, c.delay);
-		},
-
-		// 监测滚动距离
-		eventScrolling: function( evt, doc ) {
-			var top = $(doc).scrollTop();
-			var distance = this.$doms.content.height();
-			console.log(top, distance);
-			// 滚动条到达评论区域
-			if ( top > distance ) {
-				if ( !this.$reach && this.$.comment ) {
+				// 判断页面是否出现滚动条
+				var doc = document;
+				var docHeight = $(doc).height();
+				var cHeight = util.getClientHeight();
+				if ( docHeight <= cHeight ) {
 					this.$reach = true;
 					this.$.comment.showLoading().load();
 				}
+				else {
+					// 绑定鼠标滚动事件
+					app.event.bind( $(doc), 'scroll.loadComment', self.eventScrolling, self );
+				}
+			}, c.delay);
+		},
+
+		// 监测滚动距离, 加载评论列表
+		eventScrolling: function( evt, doc ) {
+			var sTop = $(doc).scrollTop();
+			var oTop = this.$doms.comment.offset().top;
+			var cHeight = util.getClientHeight();
+			var dTop = Math.floor( ( oTop - sTop ) * 1.15 );
+			// 滚动条到达评论区域
+			if ( dTop < cHeight && !this.$reach && this.$.comment ) {
+				this.$reach = true;
+				this.$.comment.showLoading().load();
 			}
 		},
 

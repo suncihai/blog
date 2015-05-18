@@ -23,7 +23,7 @@ define(function( require, exports ) {
 		}
 
 		return (document.cookie = [
-			encode(key), '=', stringifyCookieValue(value),
+			encode( key ), '=', stringifyCookieValue( value ),
 			options.expires ? '; expires=' + options.expires.toUTCString() : '',
 			options.path    ? '; path=' + options.path : '',
 			options.domain  ? '; domain=' + options.domain : ''
@@ -55,7 +55,7 @@ define(function( require, exports ) {
 
 	// 删除cookie
 	exports.remove = function( key, options ) {
-		this.setCookie( key, '', jquery.extend({}, options, {'expires': -1}));
+		this.setCookie( key, jquery.extend({}, options, {'expires': -1}));
 		return !this.setCookie( key );
 	}
 
