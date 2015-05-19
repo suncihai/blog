@@ -14,7 +14,7 @@ class SQL
 	public $pswd;
 	public $db;
     public $conn;
-	public  $ADMIN = '博主';
+	public $ADMIN = '博主';
 
     /**
      * 打开数据库连接

@@ -17,7 +17,7 @@ define(function( require, exports ){
 			this.$ = {};
 			this.$data = data;
 			this.$title = c.archiveTitle[data.name];
-			this.$param = util.merge( c.archiveParam, {
+			this.$param = $.extend({}, c.archiveParam, {
 				'page': 1
 			});
 			layout.hideFooter();
@@ -101,7 +101,7 @@ define(function( require, exports ){
 		// 获取/更新请求参数<>
 		getParam: function() {
 			var data = this.$data;
-			var param = util.merge( this.$param, {
+			var param = $.extend({}, this.$param, {
 				'catid': c.cat[data.name]
 			});
 			return param;
@@ -220,7 +220,7 @@ define(function( require, exports ){
 			var param = ev.param;
 			var newParam;
 			if ( param.name === 'achivePager' ) {
-				newParam = util.merge( this.$param, {
+				newParam = $.extend({}, this.$param, {
 					'page': param.page
 				});
 				this.load( newParam );

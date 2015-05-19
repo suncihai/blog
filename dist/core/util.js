@@ -94,23 +94,6 @@ define(function( require, util ){
 	}
 
 	/**
-	 * merge AJAX请求参数的合并/更新/格式化
-	 * @param  {JSON} Jold [默认参数]
-	 * @param  {JSON} Jnew [指定参数]
-	 * @return {JSON}      [最新参数]
-	 */
-	util.merge = function( Jold, Jnew ) {
-		Jnew = arguments.length === 1 ? {} : Jnew;
-		if ( !isObject( Jold ) || !isObject( Jnew ) ) {
-			return false;
-		}
-		for ( var pro in Jold ) {
-			Jold[pro] = Jnew.hasOwnProperty( pro ) ? Jnew[pro] : Jold[pro];
-		}
-		return Jold;
-	}
-
-	/**
 	 * scrollTo 自定义滚动条位置(用于hash改变时纠正滚动条位置)
 	 * @param  {Number} x [横位置]
 	 * @param  {Number} y [纵位置]
@@ -227,7 +210,7 @@ define(function( require, util ){
 			ret = parseInt( Math.random() * ( end - begin + 1 ) + begin, 10 );
 		}
 		else {
-			ret = (new Date()).getTime();
+			ret = +new Date();
 		}
 		return ret;
 	}
@@ -343,16 +326,16 @@ define(function( require, util ){
 			retStr = '前天' + hour + ':' + minute;
 		}
 		if( !retStr && date.getFullYear() == year && date.getMonth() == month ) {
-			retStr = ( month + 1 ) + '月' + day + '日 ' + hour + ':' + minute;
+			retStr = ( month + 1 ) + '月' + day + '日 ';
 		}
 		if( !retStr && date.getFullYear() == year ) {
-			retStr = '今年' + ( month + 1 ) + '月' + day + '日 ' + hour + ':' + minute;
+			retStr = '今年' + ( month + 1 ) + '月' + day + '日 ';
 		}
 		if( !retStr && date.getFullYear() - 1 == year ) {
-			retStr = '去年' + ( month + 1 ) + '月' + day + '日 ' + hour + ':' + minute;
+			retStr = '去年' + ( month + 1 ) + '月' + day + '日 ';
 		}
 		if( !retStr && date.getFullYear() - year > 1 ) {
-			retStr = year + '年' + ( month + 1 ) + '月' + day + '日 ' + hour + ':' + minute;
+			retStr = year + '年' + ( month + 1 ) + '月' + day + '日 ';
 		}
 		return retStr;
 	}
