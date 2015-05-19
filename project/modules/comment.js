@@ -70,11 +70,11 @@ define(function( require, exports ){
 		// 创建评论列表
 		build: function() {
 			var html = $([
+				'<div class="M-commentLine"/>',
 				'<div class="M-comment">',
 					'<header class="M-commentHead">',
 						'<h2 class="M-commentHeadTitle">评论</h2>',
 						'<span class="M-commentHeadAdd" title="添加评论">+</span>',
-						'<div class="M-commentHeadLine"/>',
 					'</header>',
 					'<article class="M-commentList"/>',
 					'<div class="M-commentPager"/>',

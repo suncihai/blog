@@ -12,8 +12,8 @@ class SQL
 	public $host;
 	public $user;
 	public $pswd;
-	public $db;
-    public $conn;
+    public $db;
+	public $conn;
 	public $ADMIN = '博主';
 
     /**
@@ -685,7 +685,14 @@ function getCityName( $ip )
             // 只能这样判断了？
             if ( $country === '中国' || $country === '中华人民共和国' || $country === '中华' )
             {
-                $address = $province.$city;
+                if ( $province === $city )
+                {
+                    $address = $city;
+                }
+                else
+                {
+                   $address = $province.$city;
+                }
             }
             else
             {

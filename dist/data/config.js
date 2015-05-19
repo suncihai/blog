@@ -5,7 +5,7 @@ define(function( require, exports ) {
 	var CONFIG = {
 
 		// 默认页面
-		defaultPage: 'index',
+		defaultPage: 'frontends',
 
 		// 默认控制器目录
 		controllerPath: '@controller/',
@@ -18,7 +18,7 @@ define(function( require, exports ) {
 
 		// 导航
 		nav: [
-			{'name': '首页', 'link': ''},
+			{'name': '首页', 'link': '#index'},
 			{'name': '前端那些事', 'link': '#frontends'},
 			{'name': '心情日志', 'link': '#moods'}
 			// {'name': '2015旅游攻略', 'link': '#travelGuide'}

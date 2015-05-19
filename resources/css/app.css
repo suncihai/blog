@@ -1139,12 +1139,20 @@ a:hover {
   margin: 0 auto;
   margin-bottom: 3.5em;
 }
+.M-commentLine {
+  width: 100%;
+  position: relative;
+  height: 0;
+  border-bottom: 1px dotted #a52a2a;
+  top: 1em;
+  z-index: 2;
+}
 .M-commentHead {
   padding-bottom: 1em;
 }
 .M-commentHeadTitle {
   position: relative;
-  left: 1.5em;
+  left: -0.5em;
   padding: 0 .5em;
   display: inline-block;
   font-size: 2rem;
@@ -1158,19 +1166,12 @@ a:hover {
   font-size: 3.5rem;
   position: relative;
   top: -0.25em;
-  left: -1.15em;
+  left: 0.15em;
   color: #A52A2A;
   padding: 0 .2em;
   background: #fff;
   z-index: 3;
   cursor: pointer;
-}
-.M-commentHeadLine {
-  position: relative;
-  height: 0;
-  border-bottom: 1px dotted #a52a2a;
-  top: -0.8em;
-  z-index: 2;
 }
 .M-commentList {
   position: relative;

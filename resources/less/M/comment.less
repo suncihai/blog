@@ -3,12 +3,20 @@
 	position: relative;
 	.center;
 	margin-bottom: 3.5em;
+	&Line{
+		width: 100%;
+		position: relative;
+		height: 0;
+		border-bottom: 1px dotted #a52a2a;
+		top: 1em;
+		z-index: 2;
+	}
 	// 评论区域的头部“评论”二字
 	&Head{
 		padding-bottom: 1em;
 		&Title{
 			position: relative;
-			left: 1.5em;
+			left: -.5em;
 			padding: 0 .5em;
 			display: inline-block;
 			font-size: 2rem;
@@ -22,20 +30,20 @@
 			font-size: 3.5rem;
 			position: relative;
 			top: -.25em;
-			left: -1.15em;
+			left: 0.15em;
 			color: #A52A2A;
 			padding: 0 .2em;
 			background: #fff;
 			z-index: 3;
 			cursor: pointer;
 		}
-		&Line{
-			position: relative;
-			height: 0;
-			border-bottom: 1px dotted #a52a2a;
-			top: -.8em;
-			z-index: 2;
-		}
+		// &Line{
+		// 	position: relative;
+		// 	height: 0;
+		// 	border-bottom: 1px dotted #a52a2a;
+		// 	top: -.8em;
+		// 	z-index: 2;
+		// }
 	}
 
 	// 评论列表
