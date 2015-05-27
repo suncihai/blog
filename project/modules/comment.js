@@ -74,13 +74,13 @@ define(function( require, exports ){
 				'<div class="M-comment">',
 					'<header class="M-commentHead">',
 						'<h2 class="M-commentHeadTitle">评论</h2>',
-						'<span class="M-commentHeadAdd" title="添加评论">+</span>',
+						'<span class="M-commentHeadAdd" title="添加评论"/>',
 					'</header>',
 					'<article class="M-commentList"/>',
 					'<div class="M-commentPager"/>',
 					'<div class="M-commentLoading"/>',
 					'<div class="M-commentEmpty">',
-						'<div class=M-commentEmptyWrap>',
+						'<div class="M-commentEmptyWrap">',
 							'<div class="M-commentEmptyLeftHand"/>',
 							'<div class="M-commentEmptyRightHand"/>',
 							'<div class="M-commentEmptyCushion"/>',
@@ -130,7 +130,7 @@ define(function( require, exports ){
 
 			// 绑定添加评论事件
 			app.event.bind( this.$doms.add, 'click', this.eventClickAdd, this );
-			app.event.bind( this.$doms.empty, 'click', this.eventClickAdd, this );
+			app.event.bind( this.$doms.empty.find('.M-commentEmptyWrap'), 'click', this.eventClickAdd, this );
 		},
 
 		// 添加一条评论
@@ -244,9 +244,23 @@ define(function( require, exports ){
 
 			$(list.join('')).appendTo( this.$doms.list );
 
+			// 鼠标移入显示回复按钮
+			app.event.proxy('section.M-commentIssuse', 'mouseenter mouseleave', this.eventEnterLeave, this);
 			// 评论操作
 			var op = $('.M-commentIssuseHeadOp', this.$doms.list);
 			app.event.proxy( op, 'click', 'span', this.eventClickOp, this );
+		},
+
+		// 评论选项鼠标移入移出事件
+		eventEnterLeave: function( evt, elm ) {
+			switch( evt.type ) {
+				case 'mouseenter':
+					$(elm).find('.M-commentIssuseHeadOp').addClass('fadeIn animated').show();
+				break;
+				case 'mouseleave':
+					$(elm).find('.M-commentIssuseHeadOp').removeClass('fadeIn').hide();
+				break;
+			}
 		},
 
 		// 创建一条评论
@@ -306,7 +320,7 @@ define(function( require, exports ){
 							// '<span data-id="'+ info.id +'" class="op dislike">',
 							// 	'反对(<i class="dislikes">0</i>)',
 							// '</span>',
-							// info.passed ? '<span data-id="'+ info.id +'" class="op reply">'+ '回复TA' +'</span>' : '',
+							info.passed ? '<span data-id="'+ info.id +'" class="op reply" title="回复TA"/>' : '',
 						'</div>',
 					'</header>',
 					'<article class="M-commentIssuseContent">'+ content +'</article>',
@@ -633,18 +647,11 @@ define(function( require, exports ){
 				$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
 			}
 			else {
-				app.animate.play(
-					$(elm),
-					[
-						'hinge',
-						'zoomOutDown'
-						// 'rotateOutDownLeft',
-						// 'rotateOutDownRight'
-					],
-					function() {
-						$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
-					}
-				);
+				// TODO：有更好的办法么？
+				setTimeout(function() {
+					$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
+				}, 500);
+				app.animate.play( $(elm), 'zoomOutDown' );
 			}
 			return false;
 		}

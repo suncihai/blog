@@ -4,6 +4,7 @@
  */
 define(function( require, exports ){
 	var util = require('util');
+	var jquery = require('jquery');
 
 	/**
 	 * bind 绑定事件
@@ -15,9 +16,8 @@ define(function( require, exports ){
 	 */
 	exports.bind = function( $elm, type, data, calllback, context ) {
 		// 参数检测
-		if ( !$elm instanceof jQuery ) {
-			util.error('绑定的元素必须为jQuery对象');
-			return false;
+		if ( !($elm instanceof jQuery) ) {
+			$elm = jquery($elm);
 		}
 		// 不传data
 		if ( util.isFunc( data ) ) {
@@ -41,9 +41,8 @@ define(function( require, exports ){
 	 */
 	exports.unbind = function( $elm, type ) {
 		// 参数检测
-		if ( !$elm instanceof jQuery ) {
-			util.error('绑定的元素必须为jQuery对象');
-			return false;
+		if ( !($elm instanceof jQuery) ) {
+			$elm = jquery($elm);
 		}
 		$elm.unbind( type );
 	}
@@ -59,8 +58,8 @@ define(function( require, exports ){
 	exports.hover = function( $elm, handleIn, handleOut, data, context ) {
 		var argLen = arguments.length;
 		// 参数检测
-		if ( !$elm instanceof jQuery ) {
-			util.error('绑定的元素必须为jQuery对象');
+		if ( !($elm instanceof jQuery) ) {
+			$elm = jquery($elm);
 			return false;
 		}
 		if ( argLen === 4 ) {
@@ -109,9 +108,8 @@ define(function( require, exports ){
 	 */
 	exports.proxy = function( $elm, type, selector, data, calllback, context ) {
 		// 参数检测
-		if ( !$elm instanceof jQuery ) {
-			util.error('绑定的元素必须为jQuery对象');
-			return false;
+		if ( !($elm instanceof jQuery) ) {
+			$elm = jquery($elm);
 		}
 
 		// 不传selector
@@ -146,9 +144,8 @@ define(function( require, exports ){
 	 */
 	exports.unproxy = function( $elm, type, selector, calllback ) {
 		// 参数检测
-		if ( !$elm instanceof jQuery ) {
-			util.error('绑定的元素必须为jQuery对象');
-			return false;
+		if ( !($elm instanceof jQuery) ) {
+			$elm = jquery($elm);
 		}
 		switch( arguments.length ) {
 			case 1:
@@ -168,7 +165,6 @@ define(function( require, exports ){
 			break;
 
 			default: return false;
-
 		}
 	}
 });

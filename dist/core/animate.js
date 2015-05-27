@@ -36,7 +36,13 @@ define(function( require, exports ){
 			context = callback;
 			remove = false;
 		}
-		var keframe = util.isArray( keyframes ) ? keyframes[util.random( 0, keyframes.length -1 )] : keyframes;
+
+		// 是否为随机播放
+		var keframe = util.isArray( keyframes ) ?
+			keyframes.length === 1 ? keyframes[0] : keyframes[util.random( 0, keyframes.length -1 )]
+			: keyframes;
+
+		// TODO：改成字符串键值
 		var typeMap = {
 			0: 'animated infinite', // 无限循环动画
 			1: 'animated fast',     // 单次动画(快速)

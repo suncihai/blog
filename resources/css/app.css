@@ -1163,13 +1163,14 @@ a:hover {
 }
 .M-commentHeadAdd {
   float: right;
-  font-size: 3.5rem;
+  width: 18px;
+  height: 25px;
   position: relative;
-  top: -0.25em;
+  top: 0;
   left: 0.15em;
+  padding: 0 .5em;
   color: #A52A2A;
-  padding: 0 .2em;
-  background: #fff;
+  background: #ffffff url(../icons/icons.png) 6px 0 no-repeat;
   z-index: 3;
   cursor: pointer;
 }
@@ -1230,26 +1231,19 @@ a:hover {
 }
 .M-commentIssuseHeadOp {
   float: right;
+  display: none;
   font-size: 1.5rem;
   padding-right: 2em;
 }
 .M-commentIssuseHeadOp .op {
+  display: inline-block;
+  width: 24px;
+  height: 20px;
   margin-left: 1em;
   cursor: pointer;
-  opacity: .55;
-  transition: opacity 218ms cubic-bezier(0.42, 0, 0.58, 1);
-}
-.M-commentIssuseHeadOp .op:hover {
-  opacity: 1;
-}
-.M-commentIssuseHeadOp .like {
-  color: green;
-}
-.M-commentIssuseHeadOp .dislike {
-  color: red;
 }
 .M-commentIssuseHeadOp .reply {
-  color: blue;
+  background: url(../icons/icons.png) 0px -28px no-repeat;
 }
 .M-commentIssuseHeadOp .likes,
 .M-commentIssuseHeadOp .dislikes {
@@ -1280,13 +1274,13 @@ a:hover {
 .M-commentEmpty {
   position: relative;
   top: -1.5em;
-  cursor: pointer;
 }
 .M-commentEmptyWrap {
   position: relative;
   margin: 0 auto;
   width: 10em;
   height: 8em;
+  cursor: pointer;
   -webkit-transform: scale(0.7);
   transform: scale(0.7);
 }

@@ -43,15 +43,16 @@
 	// 混淆的线
 	$randLineColor = imagecolorallocate( $img, rand(25, 225), rand(25, 225), rand(25, 225));
 	$randPixelColor = imagecolorallocate( $img, rand(100, 255), rand(100, 255), rand(100, 255));
-	for( $i = 0; $i < 3; $i++ ) {
-		$x = rand( 1, $width );
-		$y = rand( 1, $height );
-		$xx = rand( 1, $width );
-		$yy = rand( 1, $height );
-		imageline( $img, $x, $y, $xx, $yy, $randLineColor );
-	}
+	// for( $i = 0; $i < 3; $i++ ) {
+	// 	$x = rand( 1, $width );
+	// 	$y = rand( 1, $height );
+	// 	$xx = rand( 1, $width );
+	// 	$yy = rand( 1, $height );
+	// 	imageline( $img, $x, $y, $xx, $yy, $randLineColor );
+	// }
 	// 混淆的点
-	for ( $i = 0; $i < $width * 2; $i++ ) {
+	for ( $i = 0; $i < $width * 2; $i++ )
+	{
 		imagesetpixel( $img, rand( 1, $width - 1 ), rand( 1, $height - 1 ), $randPixelColor);
 	}
 

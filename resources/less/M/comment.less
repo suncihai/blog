@@ -27,13 +27,14 @@
 		}
 		&Add{
 			float: right;
-			font-size: 3.5rem;
+			width: 18px;
+			height: 25px;
 			position: relative;
-			top: -.25em;
+			top: 0;
 			left: 0.15em;
+			padding: 0 .5em;
 			color: #A52A2A;
-			padding: 0 .2em;
-			background: #fff;
+			background: #fff url(../icons/icons.png) 6px 0 no-repeat;
 			z-index: 3;
 			cursor: pointer;
 		}
@@ -108,25 +109,27 @@
 			}
 			&Op{
 				float: right;
+				display: none;
 				font-size: 1.5rem;
 				padding-right: 2em;
 				.op{
+					display: inline-block;
+					width: 24px;
+					height: 20px;
 					margin-left: 1em;
 					cursor: pointer;
-					opacity: .55;
-					transition: opacity 218ms cubic-bezier(0.42,0,.58,1);
+					// -webkit-transform: scale(.9);
+					// transform: scale(.9);
+					// opacity: .55;
+					// transition: opacity 218ms cubic-bezier(0.42,0,.58,1);
 				}
-				.op:hover{
-					opacity: 1;
-				}
-				.like{
-					color: green;
-				}
-				.dislike{
-					color: red;
-				}
+				// .op:hover{
+				// 	opacity: 1;
+				// }
+				.like{}
+				.dislike{}
 				.reply{
-					color: blue;
+					background: url(../icons/icons.png) 0px -28px no-repeat
 				}
 				// 支持和反对的i标签
 				.likes, .dislikes{
@@ -168,12 +171,12 @@
 	&Empty{
 		position: relative;
 		top: -1.5em;
-		cursor: pointer;
 		&Wrap{
 			position: relative;
 			.center;
 			width: 10em;
 			height: 8em;
+			cursor: pointer;
 			-webkit-transform: scale(.7);
 			transform: scale(.7);
 		}
