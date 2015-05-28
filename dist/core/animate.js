@@ -4,6 +4,7 @@
 define(function( require, exports ){
 	var util = require('util');
 	var c = require('@data/config');
+	var jquery = require('jquery');
 
 	/**
 	 * play 应用CSS3 keyframe
@@ -49,10 +50,10 @@ define(function( require, exports ){
 		var animateCls = animateType + ' ' + keyframe;
 		$elm.addClass( animateCls ).removeAttr('ended').one(
 			c.animationdEnd,
-			function() {
+			function( evt ) {
 				// 默认结束后移除class
 				if ( !remove ) {
-					jQuery(this).attr('ended', keyframe).removeClass( keyframe );
+					$elm.attr('ended', keyframe).removeClass( animateCls );
 				}
 				if ( callback ) {
 					if ( !context ) {

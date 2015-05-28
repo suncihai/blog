@@ -78,9 +78,7 @@ define(function( require, exports ){
 			MASK.show();
 			app.animate.play( MASK, 'maskIn', 1, function(){
 				DIALOG.show();
-				app.animate.play( DIALOG, self.$inFrame, function() {
-					MASK.show();
-				});
+				app.animate.play( DIALOG, self.$inFrame );
 			});
 			return self;
 		},
@@ -92,7 +90,7 @@ define(function( require, exports ){
 			self.$show = false;
 			app.animate.play( DIALOG, self.$outFrame, function() {
 				DIALOG.hide();
-				app.animate.play( MASK, 'maskOut', 1, function (){
+				app.animate.play( MASK, 'maskOut', 1, function() {
 					MASK.hide();
 					// 执行回调
 					if ( util.isFunc( cb ) ) {
