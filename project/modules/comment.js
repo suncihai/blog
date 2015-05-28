@@ -261,6 +261,7 @@ define(function( require, exports ){
 					$(elm).find('.M-commentIssuseHeadOp').removeClass('fadeIn').hide();
 				break;
 			}
+			return false;
 		},
 
 		// 创建一条评论
@@ -651,7 +652,7 @@ define(function( require, exports ){
 				setTimeout(function() {
 					$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
 				}, 500);
-				app.animate.play( $(elm), 'zoomOutDown' );
+				app.animate.play($(elm), 'zoomOutDown');
 			}
 			return false;
 		}

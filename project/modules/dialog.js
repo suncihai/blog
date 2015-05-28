@@ -133,7 +133,7 @@ define(function( require, exports ){
 			this.$ready = true;
 
 			// 绑定关闭对话框事件
-			app.event.bind( this.$doms.close, 'click', this.eventCloseDIAlog, this );
+			app.event.bind( this.$doms.close, 'click', this.eventCloseDialog, this );
 			app.event.hover( this.$doms.close, this.eventCloseEnter, this.eventCloseOut, this );
 			// 监听自身对话框关闭消息
 			app.messager.on('dialogClosed', this.onDailaogClosed, this);
@@ -143,6 +143,7 @@ define(function( require, exports ){
 			if ( this.$show ) {
 				app.animate.play(this.$doms.close, 'rotateCloseForward');
 			}
+			return false;
 		},
 
 		eventCloseOut: function() {
@@ -150,10 +151,11 @@ define(function( require, exports ){
 			if ( this.$show ) {
 				app.animate.play(this.$doms.close, 'rotateCloseBack');
 			}
+			return false;
 		},
 
 		// 点击关闭对话框
-		eventCloseDIAlog: function() {
+		eventCloseDialog: function() {
 			var self = this;
 			self.hide();
 			self.$doms.close.removeClass('rotateCloseForward rotateCloseBack');

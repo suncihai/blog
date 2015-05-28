@@ -151,9 +151,6 @@ define(function( require, exports ) {
 			app.animate.play(this.$doms.text, 'shake');
 			app.animate.play(this.$doms.body, 'fadeIn', 1);
 
-			// this.$doms.text.addClass('shake');
-			// this.$doms.body.addClass('animated fast fadeIn');
-
 			// 触发隐藏tooltip事件
 			app.event.bind( $(document), 'click.other', this.eventTriggerHide, this );
 			app.event.bind( $(document), 'scroll.other', this.eventTriggerHide, this );
