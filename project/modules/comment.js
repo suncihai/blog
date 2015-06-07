@@ -8,7 +8,7 @@ define(function( require, exports ){
 	var c = app.getConfig();
 	var dc = c.dataCenter;
 
-	var pager = require('@modules/pager').base;
+	var pager = require('@modules/pager').pagerNoLink;
 	var dialog = require('@modules/dialog').base;
 	// var header = require('@modules/header').base;
 	var tooltip = require('@modules/tooltip').tooltip.init();

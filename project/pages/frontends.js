@@ -7,7 +7,7 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
 
-	var pager = require('@modules/pager').base;
+	var pager = require('@modules/pager').pagerHasLink;
 	var banner = require('@modules/banner').base;
 	var layout = require('@modules/layout').base;
 	var loading = require('@modules/loading').base;
@@ -18,7 +18,7 @@ define(function( require, exports ){
 			this.$data = data;
 			this.$title = c.archiveTitle[data.name];
 			this.$param = $.extend({}, c.archiveParam, {
-				'page': 1
+				'page': data.search && +data.search.page || 1
 			});
 			layout.hideFooter();
 			this.build();
@@ -52,9 +52,6 @@ define(function( require, exports ){
 				'showInfo': true,
 				'max': 7
 			});
-
-			// 监听页码选择事件
-			app.messager.on('pagerSelected', this.onPagerSelected, this);
 
 			// 数据加载之前显示loading
 			this.$.loading = loading.init({
@@ -127,14 +124,15 @@ define(function( require, exports ){
 				return;
 			}
 			var info = self.$info = res.result;
-			if ( util.isEmpty( info ) ) {
-				dom.html('<div class="noData animated bounce">无数据</div>');
-				return;
+			if ( util.isEmpty( info && info.items ) ) {
+				dom.html('<div class="noData animated bounce">该页无数据:-)</div>');
+				return false;
 			}
 			// 创建列表
 			self.buildArchives( info );
 			// 更新页码
 			pager.setParam({
+				'link': self.$data.name,
 				'page': info.page,
 				'pages': info.pages,
 				'total': info.total
@@ -153,16 +151,11 @@ define(function( require, exports ){
 			// 先清空之前的列表
 			this.$doms.listBox.empty();
 
-			if ( util.isEmpty( info.items ) ) {
-				this.$doms.listBox.html('<div class="pt20 pb20">该页无数据！</div>');
-			}
-			else {
-				// 循环创建列表
-				util.each( info.items, this.buildItems, this );
+			// 循环创建列表
+			util.each( info.items, this.buildItems, this );
 
-				// 创建完显示缩略图
-				this.showThumb();
-			}
+			// 创建完显示缩略图
+			this.showThumb();
 
 			// 设置标题
 			layout.setTitle( this.$title + ' - 第' + info.page + '页' );
@@ -213,19 +206,6 @@ define(function( require, exports ){
 					$(item).attr( 'src', $(item).attr('data-src') );
 				});
 			});
-		},
-
-		// 页码激活事件
-		onPagerSelected: function( ev ) {
-			var param = ev.param;
-			var newParam;
-			if ( param.name === 'achivePager' ) {
-				newParam = $.extend({}, this.$param, {
-					'page': param.page
-				});
-				this.load( newParam );
-			}
-			return false;
 		}
 	}
 	exports.base = Archives;

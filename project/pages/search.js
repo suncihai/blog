@@ -17,7 +17,7 @@ define(function( require, exports ){
 			this.$dom = data.dom;
 			this.$word = data.search && data.search.word;
 			this.$renderWord = this.$word || '';
-			layout.hideFooter();
+			layout.hideFooter().updateNav();
 			this.build();
 		},
 
@@ -26,7 +26,7 @@ define(function( require, exports ){
 			// 设置标题
 			layout.setTitle( (this.$word || '') + '_搜索结果' );
 
-			var bannerTxt = '正在搜索有关“' + this.$renderWord +'”的文章记录 ……';
+			var bannerTxt = '正在搜索有关「' + this.$renderWord +'」的文章记录 ……';
 			// banner设置
 			banner.setData({
 				'type': 'archive',
@@ -104,7 +104,7 @@ define(function( require, exports ){
 			// 创建列表
 			self.buildArchives( info );
 
-			var bannerTxt = "搜到与“"+ this.$renderWord +"”相关的结果共" + (info.total || 0) + "条：";
+			var bannerTxt = "搜到与「"+ this.$renderWord +"」相关的结果共" + (info.total || 0) + "条：";
 
 			// 隐藏loading
 			setTimeout(function() {

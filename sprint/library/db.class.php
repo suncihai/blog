@@ -346,6 +346,8 @@ class SQL
                         $isMatch = true;
                         // 取完整模式匹配到的片段
                         $brief = $matches[0];
+                        // 闭合标签检测
+                        $brief = fixStripHtmlTags( $brief );
                         // 高亮关键字
                         $brief = preg_replace( $pattern, '<b class="keyword">$1</b>', $brief );
                     }

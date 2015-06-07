@@ -1,7 +1,7 @@
 /**
  * [系统配置信息]
  */
-define(function( require, exports ) {
+define(function() {
 	var CONFIG = {
 
 		// 默认页面
@@ -20,8 +20,8 @@ define(function( require, exports ) {
 		nav: [
 			{'name': '首页', 'link': '#index'},
 			{'name': '前端那些事', 'link': '#frontends'},
-			{'name': '心情日志', 'link': '#moods'}
-			// {'name': '2015旅游攻略', 'link': '#travelGuide'}
+			{'name': '随便写写', 'link': '#moods'},
+			{'name': '给我留言', 'link': '#message'}
 		],
 
 		// 语录集合
@@ -36,7 +36,8 @@ define(function( require, exports ) {
 		archiveTitle: {
 			'index': '小前端 - tangbc.com',
 			'frontends': '前端那些事',
-			'moods': '心情日志'
+			'moods': '心情日志',
+			'message': '给我留言'
 		},
 
 		// 栏目默认请求参数
@@ -63,14 +64,21 @@ define(function( require, exports ) {
 
 		// 数据接口
 		dataCenter: {
-			// 处理文件目录
+			// 搜索
 			'search'       : '/blog/sprint/api/search/query.php',
+			// 获取标题列表
 			'listtitle'    : '/blog/sprint/api/listtitle/query.php',
+			// 获取评论列表
 			'listcomment'  : '/blog/sprint/api/listcomment/query.php',
+			// 添加一条评论
 			'addcomment'   : '/blog/sprint/api/addcomment/query.php',
+			// 验证码校验
 			'verifycode'   : '/blog/sprint/api/verifycode/query.php',
+			// 获取验证码
 			'getthecode'   : '/blog/sprint/api/getthecode/query.php',
+			// 获取一篇博客
 			'showarticle'  : '/blog/sprint/api/showarticle/query.php',
+			// 获取博客列表
 			'listarchives' : '/blog/sprint/api/listarchives/query.php'
 		},
 

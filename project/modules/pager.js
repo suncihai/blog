@@ -6,8 +6,8 @@ define(function( require, exports ){
 	var util = require('util');
 	var app = require('app');
 
-	// 传统的的分页方式
-	var Pager = {
+	// 无连接的分页方式(通过消息监听分页)
+	var PagerNoLink = {
 		/*
 		 * config配置参数：
 		 * name：分页器模块名称
@@ -24,6 +24,7 @@ define(function( require, exports ){
 			this.$showInfo = !!config.showInfo;
 			this.$class = config.class || '';
 			this.build();
+			return this;
 		},
 
 		setParam: function( param ) {
@@ -230,5 +231,104 @@ define(function( require, exports ){
 			});
 		}
 	}
-	exports.base = $.extend(true, {}, Pager);
+	exports.pagerNoLink = $.extend(true, {}, PagerNoLink);
+
+
+	// 有链接的分页方式(通过url参数分页)
+	var PagerHasLink = $.extend(true, PagerNoLink, {
+		// 创建分页器
+		build: function() {
+			var config = this.$config;
+			var dom = config.target;  // 分页器的添加位置
+
+			// 分页器HTML结构
+			var html = [
+				'<div class="M-pager '+ this.$class +'">',
+					'<input class="M-pagerPN M-pagerPrev" type="button" title="上一页"/>',
+					'<div class="M-pagerList"/>',
+					'<input class="M-pagerPN M-pagerNext" type="button" title="下一页"/>',
+					'<div class="M-pagerInfo"/>',
+				'</div>'
+			].join('');
+			$(html).appendTo( dom );
+
+			// dom缓存
+			var doms = this.$doms = {
+				'prev': $('.M-pagerPrev', dom),
+				'list': $('.M-pagerList', dom),
+				'next': $('.M-pagerNext', dom),
+				'info': $('.M-pagerInfo', dom)
+			}
+
+			if ( !this.$showInfo ) {
+				this.$doms.info.hide();
+			}
+
+			doms.prev.attr('value', '<');
+			doms.next.attr('value', '>');
+
+			// 翻页点击事件
+			app.event.bind( doms.prev, 'click', this.eventClickPreview, this );
+			app.event.bind( doms.next, 'click', this.eventClickNext, this );
+		},
+
+		// 创建页码选项
+		buildPager: function() {
+			var param = this.$param;
+			var doms = this.$doms;
+			var link = this.$param.link;
+
+			// 分页信息
+			var pages = param.pages; // 总页数
+			var page = param.page; // 当前页
+			var items = this.makePageArray( page, pages );
+
+			// 构建总条数
+			doms.info.html('<span class="total lsp2">[共'+ pages +'页，'+ param.total +'条记录]</span>');
+
+			// 构建页码
+			util.each( items, function( num ) {
+				var item, href;
+				if ( num === '...' ) {
+					item = '<span class="M-pagerItem M-pagerOmit" title="已隐藏部分页码">···</span>';
+				}
+				else {
+					href = page === num ? '' : 'href=#'+ link +'?page=' + num;
+					item = '<a '+ href +' class="M-pagerItem">'+ num +'</a>';
+				}
+				$(item).appendTo( doms.list );
+			});
+
+			// 激活当前页码
+			this.checkStatus( page, items );
+
+			if ( pages <= 1 ) {
+				doms.prev.hide();
+				doms.list.hide();
+				doms.next.hide();
+			}
+			return this;
+		},
+
+		// 点击下一页
+		eventClickNext: function( evt, elm ) {
+			var id = this.$param.page + 1;
+			var pages = this.$param.pages;
+			if ( id <= 0 || id > pages ) {
+				return false;
+			}
+			app.controller.go(this.$param.link + '?page=' + id);
+		},
+
+		// 点击上一页
+		eventClickPreview: function( evt, elm ) {
+			var id = this.$param.page - 1;
+			var pages = this.$param.pages;
+			if ( id <= 0 || id > pages ) {
+				return false;
+			}
+			app.controller.go(this.$param.link + '?page=' + id);
+		}
+	});
+	exports.pagerHasLink = $.extend(true, {}, PagerHasLink);
 });
