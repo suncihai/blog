@@ -84,7 +84,7 @@ define(function( require, exports ){
 				'<p class="handle">',
 					'<span>您可以返回：</span>',
 					'<a class="btn back">上一页</a>',
-					'<a href="/blog/" class="btn index">首页</a>',
+					'<a href="/blog/#index" class="btn index">首页</a>',
 					'<a href="/blog/#frontends" class="btn blog">博客</a>',
 				'</p>'
 			].join(''));

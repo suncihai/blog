@@ -13,9 +13,9 @@
 <head>
 	<meta charset="utf-8">
 	<title>应用加载中……</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/sea/sea.js"></script>
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/data/init.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<style>
 	noscript{
 		font-family: Arial, 'Microsoft Yahei'; display: block; width: 550px; height: 80px;
@@ -30,16 +30,5 @@
 </head>
 <body>
 	<noscript>请开启浏览器JavaScript哦~~~~</noscript>
-	<div id="painting">
-	<!--
-		 _________     _       ____  _____   ______  ______      ______
-		|  _   _  |   / \     |_   \|_   _|.' ___  ||_   _ \   .' ___  |
-		|_/ | | \_|  / _ \      |   \ | | / .'   \_|  | |_) | / .'   \_|
-		    | |     / ___ \     | |\ \| | | |   ____  |  __'. | |
-		   _| |_  _/ /   \ \_  _| |_\   |_\ `.___]  |_| |__) |\ `.___.'\
-		  |_____||____| |____||_____|\____|`._____.'|_______/  `.____ .'
-
-	 -->
-	</div>
 </body>
 </html>

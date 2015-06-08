@@ -24,10 +24,7 @@ define(function( require, exports ){
 	}
 
 	function string2parts( str, pos ) {
-		var p1, p2;
-		p1 = str.substr( 0, pos );
-		p2 = str.substr( pos + 1 );
-		return [p1, p2];
+		return [str.substr( 0, pos ), str.substr( pos + 1 )];
 	}
 
 	/**
@@ -102,9 +99,7 @@ define(function( require, exports ){
 	function run( name, param, search ) {
 		data.name = name;
 		data.param = isNaN( param ) ? util.htmlEncode( param ) : param;
-		if ( search ) {
-			data.search = formatSearch( search, 1, true );
-		}
+		data.search = search ? formatSearch( search, 1, true ) : null;
 		require.async( c.controllerPath + name, afterRun );
 	}
 

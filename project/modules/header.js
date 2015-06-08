@@ -67,8 +67,8 @@ define(function( require, exports ){
 					'offset': 200,
 					'classes': {
 					    'initial': 'animated',
-					    'pinned': 'flipInX',
-					    'unpinned': 'flipOutX'
+					    'pinned': 'slideInDown',
+					    'unpinned': 'slideOutUp'
 					}
 				}
 				var elm = target.addClass('head-fixed').get(0);
@@ -77,7 +77,7 @@ define(function( require, exports ){
 				headroom.init();
 			}
 
-			// 创建完成后回调
+			// 创建完成后回调(@todo: 去掉,这里没必要回调)
 			if ( util.isFunc( this.callback ) ) {
 				this.callback.call( this, true );
 			}
@@ -219,22 +219,27 @@ define(function( require, exports ){
 		},
 		// 导航的激活状态
 		updateNav: function( link ) {
-			var options = this.options;
 			var self = this;
+			var options = self.options;
+			// 激活link导航
 			if ( link ) {
 				link = '#' + link;
+				util.each( options, function( item, idx ) {
+					if ( item.link === link ) {
+						self.$dom
+							.find('a[data-id=' + idx + ']')
+							.addClass('act')
+							.parent()
+							.siblings()
+							.find('a')
+							.removeClass('act');
+					}
+				});
 			}
-			$.each( options, function( idx, item ) {
-				if ( item.link === link ) {
-					self.$dom
-						.find('a[data-id=' + idx + ']')
-						.addClass('act')
-						.parent()
-						.siblings()
-						.find('a')
-						.removeClass('act');
-				}
-			});
+			// 全部未激活
+			else {
+				self.$dom.find('a').removeClass('act');
+			}
 		},
 		putTo: function( target ) {
 			var navLayout = this.buildNavDOM();
