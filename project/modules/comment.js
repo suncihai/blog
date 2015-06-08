@@ -626,9 +626,10 @@ define(function( require, exports ){
 		// 点击更换验证码
 		eventClickImage: function( evt, elm ) {
 			var self = this;
-			var tip = '', stop;
-			this.$clicks += 1;
+			// var tip = '';
+			var stop;
 			self.$doms.code.val('').focus();
+			// this.$clicks += 1;
 			// switch( this.$clicks ) {
 			// 	case 1:case 2:case 3:
 			// 		tip = this.$tip;

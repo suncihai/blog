@@ -452,6 +452,7 @@ a:hover {
   padding-top: 70px;
   min-height: 180px;
   background: #22B6AB;
+  z-index: 9;
 }
 .G-frameBodyBlogArchive {
   width: 100%;
@@ -1966,6 +1967,40 @@ a:hover {
 .M-message {
   width: 75%;
   margin: 0 auto;
+}
+.M-message .tabHead {
+  height: 2.5em;
+  line-height: 2.5em;
+  border-bottom: 3px solid #DDD;
+  z-index: 0;
+}
+.M-message .tabHead li {
+  display: inline-block;
+  position: relative;
+  top: -0.2em;
+  margin-right: 1em;
+  padding: 0.2em .8em 0 .8em;
+  height: 100%;
+  line-height: 2.9em;
+  border-bottom: 3px solid #DDD;
+  cursor: pointer;
+  color: #aaa;
+  transition: all 220ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+.M-message .tabHead li:hover {
+  border-color: #26CABD;
+  color: #26CABD;
+}
+.M-message .tabHead li.act {
+  border-color: #22B6AB;
+  color: #22B6AB;
+  background: #f8f8f8;
+}
+.M-message .tabCont {
+  display: none;
+}
+.M-message .tabCont:nth-child(2) {
+  display: block;
 }
 .M-messageMain {
   display: inline-block;

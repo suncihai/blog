@@ -4,7 +4,6 @@
 define(function( require, exports ){
 	var util = require('util');
 	var c = require('@data/config');
-	var jquery = require('jquery');
 
 	/**
 	 * play 应用CSS3 keyframe

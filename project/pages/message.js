@@ -41,23 +41,52 @@ define(function( require, exports ){
 			// 右侧信息
 			var info = $('<div class="M-messageInfo"/>').appendTo( msgDom );
 
-			// 表单
-			var form = $('<div class="M-messageMainForm"/>').appendTo( main );
-			// 评论列表
-			var list = $('<div class="M-messageMainList"/>').appendTo( main );
-			// 分页器
-			var pager = $('<div class="M-messageMainPager"/>').appendTo( main );
+			// 选项卡
+			$([
+				'<ul class="tabHead">',
+					'<li>留言列表</li>',
+					'<li class="act">我要留言</li>',
+				'</ul>',
+				'<div class="tabBody">',
+					// 列表
+					'<div class="tabCont">',
+						'<div class="M-messageMainList"/>',
+						'<div class="M-messageMainPager"/>',
+					'</div>',
+					// 表单
+					'<div class="tabCont">',
+						'<div class="M-messageMainForm"/>',
+					'</div>',
+				'</div>'
+			].join('')).appendTo( main );
+
 			// DOM缓存
 			this.$doms = {
-				'form' : form,
-				'list' : list,
-				'pager': pager,
-				'info' : info
+				'info'   : info,
+				'form'   : main.find('.M-messageMainForm'),
+				'list'   : main.find('.M-messageMainList'),
+				'pager'  : main.find('.M-messageMainPager'),
+				'tabCont': main.find('.tabCont')
 			}
+
+			// 点击切换选项卡
+			app.event.proxy( main.find('.tabHead'), 'click', 'li', this.eventSwitchTab, this );
+
+			// 构建细节
 			this.buildForm().buildList().buildPager().buildInfo();
 		},
 
-		// 创建评论表单
+		// 切换选项卡
+		eventSwitchTab: function( evt, elm ) {
+			var index = $(elm).index();
+			if ( !$(elm).hasClass('act') ) {
+				$(elm).addClass('act').siblings('li').removeClass('act');
+				this.$doms.tabCont.eq( index ).show().siblings().hide();
+			}
+			return false;
+		},
+
+		// 创建留言表单
 		buildForm: function() {
 			var form = this.$doms.form;
 			$([
@@ -68,7 +97,7 @@ define(function( require, exports ){
 				'<div class="footer">',
 					'<input placeholder="'+ this.$holder.code +'" type="text" class="code"/>',
 					'<img class="image" title="点击更换验证码" src="'+ this.$imageUrl +'"/>',
-					'<button class="submit">发表评论</button>',
+					'<button class="submit">发表留言</button>',
 					'<button class="reset">重置</button>',
 				'</div>'
 			].join('')).appendTo( form );
@@ -129,12 +158,12 @@ define(function( require, exports ){
 
 		},
 
-		// 创建评论列表
+		// 创建留言列表
 		buildList: function() {
 			return this;
 		},
 
-		// 创建评论分页
+		// 创建留言分页
 		buildPager: function() {
 			return this;
 		},
