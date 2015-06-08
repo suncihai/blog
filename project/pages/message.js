@@ -14,6 +14,7 @@ define(function( require, exports ){
 	var Message = {
 		init: function( data ) {
 			this.$data = data;
+			this.$subDoms = {}; // 子dom对象缓存
 			this.$imageUrl = dc.getthecode;
 			this.$holder = {
 				'textarea': '[必填] 在这里输入留言的内容~',
@@ -58,6 +59,7 @@ define(function( require, exports ){
 
 		// 创建评论表单
 		buildForm: function() {
+			var form = this.$doms.form;
 			$([
 				'<textarea placeholder="'+ this.$holder.textarea +'" class="textarea"></textarea>',
 				'<input placeholder="'+ this.$holder.nick +'" type="text" class="nick"/>',
@@ -69,8 +71,62 @@ define(function( require, exports ){
 					'<button class="submit">发表评论</button>',
 					'<button class="reset">重置</button>',
 				'</div>'
-			].join('')).appendTo( this.$doms.form );
+			].join('')).appendTo( form );
+			// 表单DOM缓存
+			this.$subDoms.form = {
+				'textarea' : form.find('.textarea'),
+				'nick'     : form.find('.nick'),
+				'url'      : form.find('.url'),
+				'contact'  : form.find('.contact'),
+				'code'     : form.find('.code')
+			}
+
+			// 读取cookie值
+			var nickName = app.cookie.get('usernickname');
+			var link = app.cookie.get('userlink');
+			if ( nickName ) {
+				this.$subDoms.form.nick.val( nickName ).prop('disabled', true);
+			}
+			if ( link ) {
+				this.$subDoms.form.url.val( link );
+			}
+
+			// 点击更换验证码
+			app.event.bind( form.find('.image'), 'click', this.eventChangeCode, this );
+			// 点击重置
+			app.event.bind( form.find('.reset'), 'click', this.eventReset, this );
+			// 点击提交
+			app.event.bind( form.find('.submit'), 'click', this.eventSubmit, this );
 			return this;
+		},
+
+		// 点击更换验证码
+		eventChangeCode: function( evt, elm ) {
+			var self = this;
+			this.$subDoms.form.code.focus();
+			setTimeout(function() {
+				$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
+			}, 500);
+			app.animate.play($(elm), 'flipOutY');
+		},
+
+		// 点击重置
+		eventReset: function() {
+			this.$subDoms.form.textarea.val('');
+			this.$subDoms.form.code.val('');
+			this.$subDoms.form.contact.val('');
+			if ( !app.cookie.get('usernickname') ) {
+				this.$subDoms.form.nick.val('');
+			}
+			if ( !app.cookie.get('userlink') ) {
+				this.$subDoms.form.url.val('');
+			}
+			return false;
+		},
+
+		// 点击提交
+		eventSubmit: function() {
+
 		},
 
 		// 创建评论列表

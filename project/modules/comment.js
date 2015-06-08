@@ -356,7 +356,8 @@ define(function( require, exports ){
 			this.$data = null;
 			this.$imageUrl = dc.getthecode;
 			this.$clicks = 0;
-			this.$tip = '(验证码为打乱顺序的JS或CSS关键字)';
+			this.$tip = '';
+			// this.$tip = '(验证码为打乱顺序的JS或CSS关键字)';
 			this.$friendTips = [
 				'(比如: switch, window, margin...)',
 				'(比如: block, inline, rotate...)',
@@ -628,22 +629,22 @@ define(function( require, exports ){
 			var tip = '', stop;
 			this.$clicks += 1;
 			self.$doms.code.val('').focus();
-			switch( this.$clicks ) {
-				case 1:case 2:case 3:
-					tip = this.$tip;
-				break;
-				case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:case 12:case 13:
-					tip = this.$friendTips[util.random(0, this.$friendTips.length - 1)];
-				break;
-				case 14:case 15:case 16:case 17:case 18:case 19:case 20:case 21:case 22:case 23:
-					tip = this.$fuckTips[util.random(0, this.$fuckTips.length - 1)];
-				break;
-				default: {
-					tip = '好了，不能再这么任性下去了……';
-					stop = true;
-				}
-			}
-			self.$doms.tips.html( tip );
+			// switch( this.$clicks ) {
+			// 	case 1:case 2:case 3:
+			// 		tip = this.$tip;
+			// 	break;
+			// 	case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:case 12:case 13:
+			// 		tip = this.$friendTips[util.random(0, this.$friendTips.length - 1)];
+			// 	break;
+			// 	case 14:case 15:case 16:case 17:case 18:case 19:case 20:case 21:case 22:case 23:
+			// 		tip = this.$fuckTips[util.random(0, this.$fuckTips.length - 1)];
+			// 	break;
+			// 	default: {
+			// 		tip = '好了，不能再这么任性下去了……';
+			// 		stop = true;
+			// 	}
+			// }
+			// self.$doms.tips.html( tip );
 			if ( stop ) {
 				$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
 			}
@@ -652,7 +653,7 @@ define(function( require, exports ){
 				setTimeout(function() {
 					$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
 				}, 500);
-				app.animate.play($(elm), 'zoomOutDown');
+				app.animate.play($(elm), 'flipOutY');
 			}
 			return false;
 		}
