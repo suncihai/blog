@@ -93,7 +93,7 @@
 		}
 
 		// 验证码不通过
-		if ( $_SESSION['img_code_word'] !== $postCode )
+		if ( $_SESSION['img_code_word'] !== strtolower($postCode) )
 		{
 			$retError['message'] = '验证码错误！';
 			echo json_encode( $retError );

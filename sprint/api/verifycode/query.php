@@ -8,7 +8,7 @@
 	// 参数对象
 	$params = json_decode( $postData, true );
 	// 传入的验证码
-	$code = $params['code'];
+	$code = strtolower($params['code']);
 
 	$ret = array
 	(

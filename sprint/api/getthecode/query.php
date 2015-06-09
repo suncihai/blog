@@ -10,16 +10,28 @@
 	}
 
 	// 单词库
-	$word = "break|case|else|false|null|return|switch|this|true|typeof|define|join|slice|sort|shift|join|push|length|concat|trim|substr|while|window|width|height|color|left|border|float|bottom|clear|margin|cursor|block|none|fixed|auto|hidden|center|italic|both|inline|bold|normal|rgba|solid|scale|rotate";
+	// $word = "break|case|else|false|null|return|switch|this|true|typeof|define|join|slice|sort|shift|join|push|length|concat|trim|substr|while|window|width|height|color|left|border|float|bottom|clear|margin|cursor|block|none|fixed|auto|hidden|center|italic|both|inline|bold|normal|rgba|solid|scale|rotate";
 
-	// 转成数组并随机抽取一个
+	// 字母
+	$word = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|0|1|2|3|4|5|6|7|8|9";
+
+	// 转成数组并随机抽取4个
 	$words = explode("|", $word);
 	$count = count( $words );
-	$num = mt_rand( 0, $count - 1 );
-	$code = $words[$num];
+	$mixCodes = array();
+	for ( $i = 0; $i < 4; $i++ ) {
+		$num = mt_rand( 0, $count - 1 );
+		$code = $words[$num];
+		array_push($mixCodes, $code);
+	}
+	$mixCode = implode('', $mixCodes);
 
+	// $words = explode("|", $word);
+	// $count = count( $words );
+	// $num = mt_rand( 0, $count - 1 );
+	// $code = $words[$num];
 	// 打乱单词顺序
-	$mixCode = disturbString( $code );
+	// $mixCode = disturbString( $code );
 
 	// 图形定义
 	$width = 90;
@@ -43,13 +55,13 @@
 	// 混淆的线
 	$randLineColor = imagecolorallocate( $img, rand(25, 225), rand(25, 225), rand(25, 225));
 	$randPixelColor = imagecolorallocate( $img, rand(100, 255), rand(100, 255), rand(100, 255));
-	// for( $i = 0; $i < 3; $i++ ) {
-	// 	$x = rand( 1, $width );
-	// 	$y = rand( 1, $height );
-	// 	$xx = rand( 1, $width );
-	// 	$yy = rand( 1, $height );
-	// 	imageline( $img, $x, $y, $xx, $yy, $randLineColor );
-	// }
+	for( $i = 0; $i < 3; $i++ ) {
+		$x = rand( 1, $width );
+		$y = rand( 1, $height );
+		$xx = rand( 1, $width );
+		$yy = rand( 1, $height );
+		imageline( $img, $x, $y, $xx, $yy, $randLineColor );
+	}
 	// 混淆的点
 	for ( $i = 0; $i < $width * 2; $i++ )
 	{
@@ -57,7 +69,7 @@
 	}
 
 	// 存入session
-	$_SESSION['img_code_word'] = $code;
+	$_SESSION['img_code_word'] = strtolower($mixCode);
 	imagepng( $img );
 	imagedestroy( $img );
 
