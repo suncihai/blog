@@ -3,7 +3,7 @@
  */
 define(function( require, exports ){
 	var util = require('util');
-	var c = require('@data/config');
+	var c = require('@boot/config');
 
 	/**
 	 * play 应用CSS3 keyframe

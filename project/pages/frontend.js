@@ -7,7 +7,7 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
 
-	var layout = require('@modules/layout').base;
+	var layout = require('layout').base;
 	var banner = require('@modules/banner').base;
 	var loading = require('@modules/loading').base;
 	var prism = require('@plugins/prism/prism').base;

@@ -6,7 +6,7 @@ define(function( require, exports ){
 	var $ = require('jquery');
 	var util = require('util');
 	var c = app.getConfig();
-	var layout = require('@modules/layout').base;
+	var layout = require('layout').base;
 
 	var Index = {
 		init: function( data ) {

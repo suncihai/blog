@@ -72,6 +72,8 @@ define(function() {
 			'listcomment'  : '/blog/sprint/api/listcomment/query.php',
 			// 添加一条评论
 			'addcomment'   : '/blog/sprint/api/addcomment/query.php',
+			// 添加一条留言
+			'addmessage'   : '/blog/sprint/api/addmessage/query.php',
 			// 验证码校验
 			'verifycode'   : '/blog/sprint/api/verifycode/query.php',
 			// 获取验证码

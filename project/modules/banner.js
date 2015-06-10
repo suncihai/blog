@@ -4,7 +4,7 @@
 define(function( require, exports ) {
 	var $ = require('jquery');
 	var util = require('util');
-	var layout = require('@modules/layout').base;
+	var layout = require('layout').base;
 
 	var Banner = {
 		// 创建DOM结构

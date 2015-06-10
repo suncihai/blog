@@ -4,7 +4,7 @@
 define(function( require, exports ){
 	var $ = require('jquery');
 	var app = require('app');
-	var layout = require('@modules/layout').base;
+	var layout = require('layout').base;
 
 	var NotFound = {
 		init: function( data ) {

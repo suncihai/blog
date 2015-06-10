@@ -3,20 +3,23 @@
 	var config = {
 		'base': '/blog/',
 		'paths': {
-			// 核心模块
+			// 核心目录
+			'@boot'       : 'boot',
+			'@view'       : 'view',
 			'@dist'       : 'dist',
 			'@core'       : 'dist/core',
-			'@data'       : 'dist/data',
 			'@plugins'    : 'dist/plugins',
-			// 控制器模块
+			// 控制器目录
 			'@controller' :	'controller',
-			// 项目模块
+			// 项目目录
 			'@project'    : 'project',
 			'@modules'    : 'project/modules',
 			'@pages'      : 'project/pages'
 		},
 		'alias': {
 			'app'    : '@core/app.js',
+			'view'   : '@view/view.js',
+			'layout' : '@view/layout.js',
 			'util'   : '@core/util.js',
 			'jquery' : '@dist/jquery/jquery-1.8.3.min.js'
 		},
@@ -47,7 +50,7 @@
 		function() {
 			// 应用SeaJS配置
 			sea.config( config );
-			sea.use('@modules/layout', appInit);
+			sea.use('layout', appInit);
 		},
 		// 初始化布局
 		function( layout ) {

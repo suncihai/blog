@@ -5,9 +5,10 @@ define(function( require, exports ){
 	var WIN = window;
 	var LOC = WIN.location;
 	var util = require('util');
-	var view = require('@core/view').base;
-	var c = require('@data/config');
+	var view = require('view').base;
+	var c = require('@boot/config');
 	var action = c.action;
+	var controller = c.controllerPath || '@controller';
 	var data = {
 		dom    : null, // 容器对象
 		name   : null, // 模块名称
@@ -100,7 +101,7 @@ define(function( require, exports ){
 		data.name = name;
 		data.param = isNaN( param ) ? util.htmlEncode( param ) : param;
 		data.search = search ? formatSearch( search, 1, true ) : null;
-		require.async( c.controllerPath + name, afterRun );
+		require.async( controller + name, afterRun );
 	}
 
 	/**
@@ -111,7 +112,7 @@ define(function( require, exports ){
 		// 404
 		if ( !module ) {
 			util.error('404 - 找不到该页面: ' + data.name);
-			require.async( c.controllerPath + '404', afterRun );
+			require.async( controller + '404', afterRun );
 			return false;
 		}
 		else {
@@ -119,7 +120,7 @@ define(function( require, exports ){
 				module[action]( data, view );
 			}
 			else {
-				util.error('路由控制文件' + c.controllerPath + data.name + '.js' + '的' + action + '方法调用错误！');
+				util.error('路由控制文件' + controller + data.name + '.js' + '的' + action + '方法调用错误！');
 			}
 		}
 	}

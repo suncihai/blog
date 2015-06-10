@@ -8,7 +8,7 @@ define(function( require, exports ){
 	var util = require('util');
 
 	var banner = require('@modules/banner').base;
-	var layout = require('@modules/layout').base;
+	var layout = require('layout').base;
 	var loading = require('@modules/loading').base;
 
 	var SearchResult = {

@@ -5,10 +5,12 @@ define(function( require, exports ){
 	var app = require('app');
 	var c = app.getConfig();
 	var dc = c.dataCenter;
+	var util = require('util');
 	var $ = require('jquery');
 
-	var layout = require('@modules/layout').base;
+	var layout = require('layout').base;
 	var banner = require('@modules/banner').base;
+	var tooltip = require('@modules/tooltip').tooltip.init();
 	var banTxt = '可以随意发表：无聊的、建议的、拍砖的、批评的……';
 
 	var Message = {
@@ -153,9 +155,69 @@ define(function( require, exports ){
 			return false;
 		},
 
-		// 点击提交
-		eventSubmit: function() {
+		// 获取表单数据
+		getData: function() {
+			return {
+				'content' : util.htmlEncode( this.$subDoms.form.textarea.val() ),
+				'author'  : this.$subDoms.form.nick.val().trim(),
+				'link'    : this.$subDoms.form.url.val().trim(),
+				'contact' : this.$subDoms.form.contact.val().trim(),
+				'code'    : this.$subDoms.form.code.val().trim()
+			}
+		},
 
+		// 表单验证
+		validate: function( data ) {
+			if ( data.content === '' ) {
+				tooltip.setTip({
+					'refer': this.$subDoms.form.textarea,
+					'arrow': {'position': 'top'},
+					'offset': {'left': 10, 'top': 25},
+					'content': '请填写留言内容~',
+					'width': 140,
+					'name': 'content'
+				});
+				this.$subDoms.form.textarea.focus();
+				return false;
+			}
+			if ( data.author === '' ) {
+				tooltip.setTip({
+					'refer': this.$subDoms.form.nick,
+					'arrow': {'position': 'bottom'},
+					'offset': {'left': 0, 'top': -45},
+					'content': '起个称呼吧~',
+					'width': 120,
+					'name': 'nick'
+				});
+				this.$subDoms.form.nick.focus();
+				return false;
+			}
+			if ( data.code === '' ) {
+				tooltip.setTip({
+					'refer': this.$subDoms.form.code,
+					'arrow': {'position': 'bottom'},
+					'offset': {'left': 0, 'top': -45},
+					'content': '验证码不能为空~',
+					'width': 130,
+					'name': 'code'
+				});
+				this.$subDoms.form.code.focus();
+				return false;
+			}
+			return true;
+		},
+
+		// 点击提交
+		eventSubmit: function( evt ) {
+			var data = this.getData();
+			tooltip.setTimeStamp( evt.timeStamp );
+			if ( this.validate( data ) ) {
+				app.data.post( dc.addmessage, data, this.onData, this );
+			}
+		},
+
+		onData: function( err, data ) {
+			console.log(data);
 		},
 
 		// 创建留言列表

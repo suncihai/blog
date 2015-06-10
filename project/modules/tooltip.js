@@ -4,7 +4,7 @@
 define(function( require, exports ) {
 	var $ = require('jquery');
 	var app = require('app');
-	var layout = require('@modules/layout').base;
+	var layout = require('layout').base;
 	var POPUP = layout.getDOM('POPUP');
 
 	// 基本的矩形提示框

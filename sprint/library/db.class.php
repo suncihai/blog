@@ -520,7 +520,7 @@ class SQL
     }
 
     /**
-     * getCommentList 获取指定文章的评论列表
+     * addComment 添加一条评论
      * param  [Number] $postid   [被评论的文章ID]
      * param  [String] $content  [评论内容]
      * param  [String] $author   [作者/昵称]
@@ -633,6 +633,18 @@ class SQL
             );
         }
         return json_encode( $ret );
+    }
+
+    /**
+     * addMessage 添加一条留言
+     * param  [String] $content  [留言内容内容]
+     * param  [String] $author   [作者/昵称]
+     * param  [String] $link     [网址]
+     * param  [String] $email    [留言者的联系信息]
+     */
+    public function addMessage( $content, $author, $link, $email )
+    {
+        //
     }
 }
 

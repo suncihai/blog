@@ -9,7 +9,7 @@ define(function( require, exports ){
 
 	var pager = require('@modules/pager').pagerHasLink;
 	var banner = require('@modules/banner').base;
-	var layout = require('@modules/layout').base;
+	var layout = require('layout').base;
 	var loading = require('@modules/loading').base;
 
 	var Archives = {

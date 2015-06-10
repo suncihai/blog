@@ -2,9 +2,8 @@
  * [应用模块(通用模块集合)]
  */
 define(function( require, exports ) {
-	var view = require('@core/view').base,
-		router = require('@core/router'),
-		config = require('@data/config'),
+	var router = require('@core/router'),
+		config = require('@boot/config'),
 		animate = require('@core/animate'),
 		eventHelper = require('@core/eventHelper'),
 		dataHelper = require('@core/dataHelper'),
@@ -12,7 +11,6 @@ define(function( require, exports ) {
 		cookie = require('@core/cookie');
 
 	// 应用模块导出
-	exports.view = view;
 	exports.animate = animate;
 	exports.data = dataHelper;
 	exports.event = eventHelper;
