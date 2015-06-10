@@ -47,12 +47,16 @@ define(function( require, exports ){
 		}
 		var animateType = typeMap[type] || typeMap[2];
 		var animateCls = animateType + ' ' + keyframe;
-		$elm.addClass( animateCls ).removeAttr('ended').one(
+
+		$elm.addClass( animateCls ).one(
 			c.animationdEnd,
 			function( evt ) {
+				if ( evt.srcElement != $elm.get(0) ) {
+					return false;
+				}
 				// 默认结束后移除class
 				if ( !remove ) {
-					$elm.attr('ended', keyframe).removeClass( animateCls );
+					$elm.removeClass( animateCls );
 				}
 				if ( callback ) {
 					if ( !context ) {
