@@ -76,7 +76,7 @@ define(function( require, exports ){
 			var self = this;
 			self.$show = true;
 			MASK.show();
-			app.animate.play( MASK, 'maskIn', 1, function(){
+			app.animate.play( MASK, 'maskIn', 'fast', function(){
 				DIALOG.show();
 				app.animate.play( DIALOG, self.$inFrame );
 			});
@@ -90,7 +90,7 @@ define(function( require, exports ){
 			self.$show = false;
 			app.animate.play( DIALOG, self.$outFrame, function() {
 				DIALOG.hide();
-				app.animate.play( MASK, 'maskOut', 1, function() {
+				app.animate.play( MASK, 'maskOut', 'fast', function() {
 					MASK.hide();
 					// 执行回调
 					if ( util.isFunc( cb ) ) {

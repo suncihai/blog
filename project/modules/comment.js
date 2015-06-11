@@ -590,7 +590,7 @@ define(function( require, exports ){
 		// 隐藏评论表单的遮罩
 		eventHideMask: function() {
 			var mask = this.$doms.mask;
-			app.animate.play( mask, 'fadeOut', 1, function() {
+			app.animate.play( mask, 'fadeOut', 'fast', function() {
 				mask.hide();
 				app.event.unbind($(document), 'click.hideMask');
 			});

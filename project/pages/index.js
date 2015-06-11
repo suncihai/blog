@@ -39,7 +39,7 @@ define(function( require, exports ){
 				'zoomInRight'
 			];
 			var animateCls = animateds[util.random( 0, animateds.length - 1 )];
-			app.animate.play( $('.myBlog', html), animateCls, 3 );
+			app.animate.play( $('.myBlog', html), animateCls, 'slow' );
 		}
 	}
 	exports.base = Index;

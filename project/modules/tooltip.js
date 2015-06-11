@@ -149,7 +149,7 @@ define(function( require, exports ) {
 			POPUP.show();
 			self.$status = 'show';
 			app.animate.play(this.$doms.text, 'shake');
-			app.animate.play(this.$doms.body, 'fadeIn', 1);
+			app.animate.play(this.$doms.body, 'fadeIn', 'fast');
 
 			// 触发隐藏tooltip事件
 			app.event.bind( $(document), 'click.other', this.eventTriggerHide, this );
@@ -184,7 +184,7 @@ define(function( require, exports ) {
 			app.event.unbind($(document), 'click.other');
 			app.event.unbind($(document), 'scroll.other');
 			app.event.unbind($(document), 'keydown.other');
-			app.animate.play( self.$doms.body, 'fadeOut', 1, function() {
+			app.animate.play( self.$doms.body, 'fadeOut', 'fast', function() {
 				self.$status = 'hide';
 				POPUP.hide();
 			});
