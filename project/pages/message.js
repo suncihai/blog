@@ -116,7 +116,7 @@ define(function( require, exports ){
 			var nickName = app.cookie.get('usernickname');
 			var link = app.cookie.get('userlink');
 			if ( nickName ) {
-				this.$subDoms.form.nick.val( nickName ).prop('disabled', true);
+				this.$subDoms.form.nick.val( nickName );
 			}
 			if ( link ) {
 				this.$subDoms.form.url.val( link );
@@ -216,8 +216,8 @@ define(function( require, exports ){
 			}
 		},
 
-		onData: function( err, data ) {
-			console.log(data);
+		onData: function( err, res ) {
+			//
 		},
 
 		// 创建留言列表

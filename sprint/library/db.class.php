@@ -530,8 +530,6 @@ class SQL
     public function addComment( $postid, $content, $author, $link, $id )
     {
         $resQueryError = '';
-        $resQueryUpdateError = '';
-        $resQueryNewDataError = '';
         // 评论内容
         $content = removeTag( $content );
         // 评论昵称
@@ -643,8 +641,99 @@ class SQL
      * param  [String] $email    [留言者的联系信息]
      */
     public function addMessage( $content, $author, $link, $email )
-    {
-        //
+     {
+        $resQueryError = '';
+        // 留言内容
+        $content = removeTag( $content );
+        // 留言昵称
+        $author = removeTag( $author );
+        // 存储的默认类型: 0待审核, 1通过, spam垃圾留言, trash回收站留言
+        $approved = 0;
+        // 当前时间
+        $date = date('Y-m-d H:i:s', time());
+        // 当前GMT时间
+        $gmtdate = gmdate('Y-m-d H:i:s', time());
+        // 客户端IP地址
+        $ip = getIP();
+        // 客户端UA
+        $useragent = $_SERVER['HTTP_USER_AGENT'];
+        // 设置的字段
+        $fieldArr = array(
+            "comment_post_ID",
+            "comment_author",
+            "comment_author_url",
+            "comment_author_email",
+            "comment_content",
+            "comment_approved",
+            "comment_date",
+            "comment_date_gmt",
+            "comment_author_IP",
+            "comment_agent"
+        );
+        // 对应的字段值
+        $valueArr = array(
+            0, // 留言的post_id设为0
+            "'$author'",
+            "'$link'",
+            "'$email'",
+            "'$content'",
+            "$approved",
+            "'$date'",
+            "'$gmtdate'",
+            "'$ip'",
+            "'$useragent'"
+        );
+        $_sets = implode(",", $fieldArr);
+        $_values = implode(",", $valueArr);
+        $sql = "INSERT INTO wp_comments ($_sets) VALUES ($_values)";
+        $resQuery = $this->query( $sql, $insert = true );
+        if ( $resQuery['success'] )
+        {
+            // 返回新增的留言数据
+            $newId = $resQuery['newid'];
+            $resQueryNewData = $this->query("SELECT $_sets FROM wp_comments WHERE comment_ID=$newId LIMIT 1");
+            if ( $resQueryNewData['success'] )
+            {
+                $newData = $resQueryNewData['items'][0];
+                $resultArr = array(
+                    'id'       => $newId,
+                    'author'   => $newData['comment_author'],
+                    'url'      => preg_replace('/(http:)/', "", $newData['comment_author_url']),
+                    'address'  => getCityName( $newData['comment_author_IP'] ),
+                    'date'     => $newData['comment_date'],
+                    'content'  => htmlspecialchars_decode( postAutoP( $newData['comment_content'] ) ),
+                    'admin'    => false,
+                    'passed'   => false
+                );
+            }
+            // 获取新增数据失败
+            else
+            {
+                $resultArr = null;
+            }
+        }
+        // 数据插入失败
+        else
+        {
+            $resQueryError = '提交留言数据失败！';
+        }
+
+        // 有错误返回错误信息
+        if ( $resQueryError )
+        {
+            $ret = array(
+                'success' => false,
+                'message' => $resQueryError
+            );
+        }
+        else
+        {
+            $ret = array(
+                'success' => true,
+                'result'  => $resultArr
+            );
+        }
+        return json_encode( $ret );
     }
 }
 

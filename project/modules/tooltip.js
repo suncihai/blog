@@ -7,10 +7,6 @@ define(function( require, exports ) {
 	var layout = require('layout').base;
 	var POPUP = layout.getDOM('POPUP');
 
-	// 基本的矩形提示框
-	var Base = {}
-	exports.base = Base;
-
 	// 带三角的提示框
 	var Tooltip = {
 		/**
@@ -31,7 +27,6 @@ define(function( require, exports ) {
 		 */
 		init: function( config ) {
 			this.$timeout = 3000; // 显示3秒自动隐藏
-			this.$ready = false;
 			this.$status = 'hide';
 			// 默认配置
 			this.$refer = null; // 参考元素
@@ -46,7 +41,7 @@ define(function( require, exports ) {
 		},
 
 		build: function() {
-			if ( this.$ready ) {
+			if ( POPUP.has('.M-tooltip').length ) {
 				return false;
 			}
 			var tooltip = $([
@@ -63,7 +58,7 @@ define(function( require, exports ) {
 						'<div class="arrow-down-bg"/>',
 					'</div>',
 				'</div>'
-			].join('')).appendTo( POPUP.empty() );
+			].join('')).appendTo( POPUP );
 
 			this.$doms = {
 				'body'      : tooltip,
@@ -72,7 +67,6 @@ define(function( require, exports ) {
 				'arrowUp'   : $('.M-tooltipArrowUp', tooltip),
 				'arrowDown' : $('.M-tooltipArrowDown', tooltip)
 			}
-			this.$ready = true;
 		},
 
 		setParam: function( param ) {
@@ -191,5 +185,4 @@ define(function( require, exports ) {
 		}
 	}
 	exports.tooltip = Tooltip;
-
 });

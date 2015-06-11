@@ -437,7 +437,7 @@ define(function( require, exports ){
 			var nickName = app.cookie.get('usernickname');
 			var link = app.cookie.get('userlink');
 			if ( nickName ) {
-				this.$doms.nick.val( nickName ).prop('disabled', true);
+				this.$doms.nick.val( nickName );
 			}
 			if ( link ) {
 				this.$doms.link.val( link );
@@ -551,14 +551,16 @@ define(function( require, exports ){
 		onData: function( err, res ) {
 			var self = this;
 			var txt = '';
+			var cname = app.cookie.get('usernickname');
+			var clink = app.cookie.get('userlink');
 			// 提交成功
 			if ( res && res.success ) {
 				self.$res = res.result;
 				self.reset();
-				if ( !app.cookie.get('usernickname') ) {
+				if ( !cname || cname !== self.$res.author ) {
 					app.cookie.set('usernickname', self.$res.author);
 				}
-				if ( !app.cookie.get('userlink') ) {
+				if ( !clink || clink !== self.$res.url ) {
 					app.cookie.set('userlink', self.$res.url);
 				}
 				app.animate.play(self.$doms.maskText.text('评论成功！'), 'fadeIn', function() {
