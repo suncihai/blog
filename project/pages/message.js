@@ -11,25 +11,34 @@ define(function( require, exports ){
 	var layout = require('layout').base;
 	var banner = require('@modules/banner').base;
 	var tooltip = require('@modules/tooltip').tooltip.init();
-	var banTxt = '可以随意发表：无聊的、建议的、拍砖的、批评的……';
 
 	var Message = {
 		init: function( data ) {
+			this.$ = {};
+			this.$tip = '';
 			this.$data = data;
 			this.$subDoms = {}; // 子dom对象缓存
 			this.$imageUrl = dc.getthecode;
+			this.$pushing = false;
+			this.$param = $.extend({}, c.commentParam);
+			this.$submitTxt = {
+				'init'   : '发表留言',
+				'pushing': '正在提交……',
+				'success': '提交成功！',
+				'error'  : '提交失败请重试'
+			};
 			this.$holder = {
 				'textarea': '[必填] 在这里输入留言的内容~',
-				'nick': '[必填] 在这里输入昵称',
-				'url': '[选填] 昵称链接网址(比如博客/微博/知乎主页url)',
-				'contact': '[选填] 联系方式(比如Email,QQ,微信, 仅博主可见, 不会公开显示)',
-				'code': '输入验证码'
+				'nick'    : '[必填] 在这里输入昵称',
+				'url'     : '[选填] 网址(比如博客/微博/知乎主页url)',
+				'contact' : '[选填] 联系方式(比如Email,QQ,微信)',
+				'code'    : '输入验证码'
 			}
 			layout.hideFooter().setTitle( c.archiveTitle[data.name] );
 			// banner设置
 			banner.setData({
 				'type': 'archive',
-				'content': '<h1 class="bannerTxt animated fadeIn fts28 pt5">'+ banTxt +'</h1>'
+				'content': '<h1 class="bannerTxt animated fadeIn fts28 pt5">可以随意发表：无聊的、建议的、拍砖的、批评的……</h1>'
 			});
 			this.build();
 			return this;
@@ -46,7 +55,7 @@ define(function( require, exports ){
 			// 选项卡
 			$([
 				'<ul class="tabHead">',
-					'<li>留言列表</li>',
+					// '<li>留言列表</li>',
 					'<li class="act">我要留言</li>',
 				'</ul>',
 				'<div class="tabBody">',
@@ -75,7 +84,7 @@ define(function( require, exports ){
 			app.event.proxy( main.find('.tabHead'), 'click', 'li', this.eventSwitchTab, this );
 
 			// 构建细节
-			this.buildForm().buildList().buildPager().buildInfo();
+			this.buildForm().buildInfo();
 		},
 
 		// 切换选项卡
@@ -88,7 +97,9 @@ define(function( require, exports ){
 			return false;
 		},
 
-		// 创建留言表单
+		/*
+		 * 创建留言表单
+		 */
 		buildForm: function() {
 			var form = this.$doms.form;
 			$([
@@ -99,17 +110,21 @@ define(function( require, exports ){
 				'<div class="footer">',
 					'<input placeholder="'+ this.$holder.code +'" type="text" class="code"/>',
 					'<img class="image" title="点击更换验证码" src="'+ this.$imageUrl +'"/>',
-					'<button class="submit">发表留言</button>',
+					'<span class="tips">'+ this.$tip +'</span>',
+					'<button class="submit">'+ this.$submitTxt.init +'</button>',
 					'<button class="reset">重置</button>',
 				'</div>'
 			].join('')).appendTo( form );
+
 			// 表单DOM缓存
 			this.$subDoms.form = {
 				'textarea' : form.find('.textarea'),
 				'nick'     : form.find('.nick'),
 				'url'      : form.find('.url'),
 				'contact'  : form.find('.contact'),
-				'code'     : form.find('.code')
+				'code'     : form.find('.code'),
+				'tips'     : form.find('.tips'),
+				'submit'   : form.find('.submit')
 			}
 
 			// 读取cookie值
@@ -127,7 +142,7 @@ define(function( require, exports ){
 			// 点击重置
 			app.event.bind( form.find('.reset'), 'click', this.eventReset, this );
 			// 点击提交
-			app.event.bind( form.find('.submit'), 'click', this.eventSubmit, this );
+			app.event.bind( this.$subDoms.form.submit, 'click', this.eventSubmit, this );
 			return this;
 		},
 
@@ -174,8 +189,7 @@ define(function( require, exports ){
 					'arrow': {'position': 'top'},
 					'offset': {'left': 10, 'top': 25},
 					'content': '请填写留言内容~',
-					'width': 140,
-					'name': 'content'
+					'width': 140
 				});
 				this.$subDoms.form.textarea.focus();
 				return false;
@@ -186,8 +200,7 @@ define(function( require, exports ){
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
 					'content': '起个称呼吧~',
-					'width': 120,
-					'name': 'nick'
+					'width': 120
 				});
 				this.$subDoms.form.nick.focus();
 				return false;
@@ -198,8 +211,7 @@ define(function( require, exports ){
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
 					'content': '验证码不能为空~',
-					'width': 130,
-					'name': 'code'
+					'width': 130
 				});
 				this.$subDoms.form.code.focus();
 				return false;
@@ -211,27 +223,64 @@ define(function( require, exports ){
 		eventSubmit: function( evt ) {
 			var data = this.getData();
 			tooltip.setTimeStamp( evt.timeStamp );
+			if ( this.$pushing ) {
+				return false;
+			}
 			if ( this.validate( data ) ) {
+				this.$pushing = true;
+				this.$subDoms.form.submit.addClass('pushing').text( this.$submitTxt.pushing );
 				app.data.post( dc.addmessage, data, this.onData, this );
 			}
 		},
 
 		onData: function( err, res ) {
-			//
-		},
-
-		// 创建留言列表
-		buildList: function() {
-			return this;
-		},
-
-		// 创建留言分页
-		buildPager: function() {
-			return this;
+			var txt = '';
+			var cname = app.cookie.get('usernickname');
+			var clink = app.cookie.get('userlink');
+			// 提交成功
+			if ( res && res.success ) {
+				txt = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>提交成功！感谢你的留言 ^_^</span>';
+				this.$subDoms.form.submit.removeClass('pushing error').addClass('success').text( this.$submitTxt.success );
+				this.eventReset();
+				if ( !cname || cname !== res.result.author ) {
+					app.cookie.set('usernickname', res.result.author);
+				}
+				if ( !clink || clink !== res.result.url ) {
+					app.cookie.set('userlink', res.result.url);
+				}
+			}
+			// 提交失败
+			else {
+				this.$pushing = false;
+				this.$subDoms.form.submit.removeClass('success pushing').addClass('error').text( this.$submitTxt.error );
+				if ( err ) {
+					txt = [
+						'<span class="warning animated fadeIn">',
+							'<i class="M-iconWarning">×</i>',
+							[err.status, err.message].join(', '),
+						'</span>'
+					].join('');
+				}
+				if ( res && !res.success ) {
+					txt = [
+						'<span class="warning animated fadeIn">',
+							'<i class="M-iconWarning">×</i>',
+							res.message,
+						'</span>'
+					].join('');
+				}
+			}
+			this.$subDoms.form.tips.html( txt );
 		},
 
 		// 创建右侧信息
 		buildInfo: function() {
+			var info = this.$doms.info;
+			$([
+				'<div class="infoBox">',
+					'<div class=""></div>',
+				'</div>'
+			].join('')).appendTo( info );
 			return this;
 		}
 	}

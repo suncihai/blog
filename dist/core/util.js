@@ -5,6 +5,8 @@ define(function( require, util ){
 	var WIN = window;
 	var OP = Object.prototype;
 	var AP = Array.prototype;
+	var docBody = document.body;
+	var docElem = document.documentElement;
 
 	/**
 	 * isObject 是否是对象自变量, {}或new Object()的形式
@@ -56,12 +58,7 @@ define(function( require, util ){
 	 */
 	function inArray( ele, arr ) {
 		if ( isArray( arr ) ) {
-			var leng = arr.length, i = 0;
-			for ( ; i < leng; i++ ) {
-				if ( arr[i] === ele ) {
-					return i;
-				}
-			}
+			return arr.indexOf( ele );
 		}
 		return -1;
 	}
@@ -239,7 +236,7 @@ define(function( require, util ){
 	 * @param  {String}  field  [对应的字段名]
 	 */
 	util.find = function( arr, value, field ) {
-		var ret;
+		var ret = null;
 		this.each( arr, function( item ) {
 			if ( item[field] === value ) {
 				ret = item;
@@ -266,9 +263,24 @@ define(function( require, util ){
 	 * getClientHeight 获取页面可视区高度
 	 */
 	util.getClientHeight = function() {
-		var docElem = document.documentElement;
-		var docBody = document.body;
 		return document.compatMode === 'CSS1Compat' ? docElem.clientHeight : docBody.clientHeight;
+	}
+
+	/**
+	 * getClientWidth 获取页面可视区宽度
+	 */
+	util.getClientWidth = function() {
+		return document.compatMode === 'CSS1Compat' ? docElem.clientWidth : docBody.clientWidth;
+	}
+
+	/**
+	 * getClient 获取页面可视区信息
+	 */
+	util.getClient = function() {
+		return {
+			'width': this.getClientWidth(),
+			'height': this.getClientHeight()
+		}
 	}
 
 	/**

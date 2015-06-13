@@ -4,27 +4,31 @@
 define(function( require, exports ) {
 	var $ = require('jquery');
 	var app = require('app');
+	var util = require('util');
 	var layout = require('layout').base;
 	var POPUP = layout.getDOM('POPUP');
 
 	// 带三角的提示框
-	var Tooltip = {
 		/**
-		 {
-			$('div'),
-			{
-				'position': 'bottom',
-				'offset': 20
-			},
-			{
-				'left': 2,
-				'top': 5
-			}
-			'这是提示信息',
-			150,
-			50
-		 }
+		 tooltip.setTip({
+			'refer': jqueryDom,
+			'arrow': {'position': 'bottom'},
+			'offset': {'left': 0, 'top': -45},
+			'content': 'some text here',
+			'width': 100
+		});
 		 */
+	// 剧中于页面的矩形提示框
+		/**
+		 tooltip.setTip({
+			'refer': null,
+			'arrow': false,
+			'offset': null,
+			'content': 'some text here',
+			'width': 100
+		});
+		 */
+	var Tooltip = {
 		init: function( config ) {
 			this.$timeout = 3000; // 显示3秒自动隐藏
 			this.$status = 'hide';
@@ -35,7 +39,6 @@ define(function( require, exports ) {
 			this.$content = ''; // 提示文字
 			this.$width = 0; // 自定义宽度
 			this.$height = 0; // 自定义高度
-			this.$name = ''; // 提示层名称(防止重复弹出)
 			this.build();
 			return this;
 		},
@@ -69,18 +72,14 @@ define(function( require, exports ) {
 			}
 		},
 
+		// 设置参数
 		setParam: function( param ) {
-			this.$refer = param.refer;
-			if ( param.arrow ) {
-				this.$arrow = param.arrow;
-			}
-			if ( param.offset ) {
-				this.$offset = param.offset;
-			}
-			this.$content = param.content;
-			this.$width = param.width;
-			this.$height = param.height;
-			this.$name = param.name;
+			this.$refer = param.refer || null;
+			this.$arrow = param.arrow || null;
+			this.$offset = param.offset || null;
+			this.$content = param.content || '提示文字';
+			this.$width = param.width || 0;
+			this.$height = param.height || 0;
 			return this;
 		},
 
@@ -101,62 +100,87 @@ define(function( require, exports ) {
 				this.$doms.content.height( this.$height );
 			}
 
-			// 根据参照物this.$refer提示框的位置
-			var toolHeight = this.$doms.body.outerHeight();
-			var posElm = this.$refer.offset();
-			this.$doms.body.css({
-				'left': posElm.left + this.$offset.left,
-				'top': posElm.top - toolHeight + this.$offset.top
-			});
+			// 带箭头的tooltip
+			if ( this.$arrow ) {
+				// 确定提示框位置
+				var toolHeight = this.$doms.body.outerHeight();
+				var posElm = this.$refer.offset();
+				this.$doms.body.css({
+					'left': posElm.left + this.$offset.left,
+					'top': posElm.top - toolHeight + this.$offset.top
+				});
 
-			// 箭头方向和位置
-			var arrow = this.$arrow;
-			switch( arrow.position ) {
-				// 向上的箭头offset只能配置left
-				case 'top':
-					this.$doms.arrowUp.show().siblings('.arrow').hide();
-					if ( arrow.offset ) {
-						this.$doms.arrowUp.css('left', arrow.offset);
-					}
-				break;
-				// 向下的箭头offset只能配置left
-				case 'bottom':
-					this.$doms.arrowDown.show().siblings('.arrow').hide();
-					if ( arrow.offset ) {
-						this.$doms.arrowDown.css('left', arrow.offset);
-					}
-				break;
-				// 向左的箭头offset只能配置top
-				case 'left':
-				break;
-				// 向右的箭头offset只能配置top
-				case 'right':
-				break;
+				// 确定箭头位置
+				var arrow = this.$arrow;
+				switch( arrow.position ) {
+					// 向上的箭头offset只能配置left
+					case 'top':
+						this.$doms.arrowUp.show().siblings('.arrow').hide();
+						if ( arrow.offset ) {
+							this.$doms.arrowUp.css('left', arrow.offset);
+						}
+					break;
+					// 向下的箭头offset只能配置left
+					case 'bottom':
+						this.$doms.arrowDown.show().siblings('.arrow').hide();
+						if ( arrow.offset ) {
+							this.$doms.arrowDown.css('left', arrow.offset);
+						}
+					break;
+					// 向左的箭头offset只能配置top
+					case 'left':
+					break;
+					// 向右的箭头offset只能配置top
+					case 'right':
+					break;
+				}
 			}
+			// 居中页面的tooltip
+			else {
+				var client = util.getClient();
+				this.$doms.body.css({
+					'left': client.width/2,
+					'top': client.height/2,
+					'margin-left': -this.$doms.content.outerWidth()/2,
+					'margin-top': -this.$doms.content.outerHeight()/2
+				});
+			}
+
 			this.show();
 		},
 
 		// 显示提示
 		show: function() {
 			var self = this;
-			// 显示弹层并设置状态
 			POPUP.show();
 			self.$status = 'show';
-			app.animate.play(this.$doms.text, 'shake');
-			app.animate.play(this.$doms.body, 'fadeIn', 'fast');
+			app.animate.play(self.$doms.body, 'fadeIn', 'fast');
 
 			// 触发隐藏tooltip事件
-			app.event.bind( $(document), 'click.other', this.eventTriggerHide, this );
-			app.event.bind( $(document), 'scroll.other', this.eventTriggerHide, this );
-			app.event.bind( $(document), 'keydown.other', this.eventTriggerHide, this );
+			app.event.bind( $(document), 'click.other', self.eventTriggerHide, self );
+			app.event.bind( $(document), 'scroll.other', self.eventTriggerHide, self );
+			app.event.bind( $(document), 'keydown.other', self.eventTriggerHide, self );
 
 			// 自动隐藏
-			// setTimeout(function() {
-			// 	// 异步之后有可能已经被隐藏了
-			// 	if ( self.$status === 'show' ) {
-			// 		self.hide();
-			// 	}
-			// }, self.$timeout);
+			self.$timer = setTimeout(function() {
+				// 异步之后有可能已经是隐藏状态了
+				if ( self.$status === 'show' ) {
+					self.hide();
+				}
+			}, self.$timeout);
+		},
+
+		// 隐藏提示
+		hide: function() {
+			var self = this;
+			clearTimeout( this.$timer );
+			app.event.unbind($(document), 'click.other');
+			app.event.unbind($(document), 'scroll.other');
+			app.event.unbind($(document), 'keydown.other');
+			app.animate.play( self.$doms.body, 'fadeOut', 'fast', function() {
+				self.$status = 'hide';
+				POPUP.hide();
+			});
 		},
 
 		// 设置timeStamp
@@ -165,23 +189,12 @@ define(function( require, exports ) {
 			return this;
 		},
 
+		// 触发隐藏tooltip所有事件
 		eventTriggerHide: function( evt ) {
 			if ( this.$timeStamp && this.$timeStamp !== evt.timeStamp ) {
 				this.hide();
 			}
 			return false;
-		},
-
-		// 隐藏提示
-		hide: function() {
-			var self = this;
-			app.event.unbind($(document), 'click.other');
-			app.event.unbind($(document), 'scroll.other');
-			app.event.unbind($(document), 'keydown.other');
-			app.animate.play( self.$doms.body, 'fadeOut', 'fast', function() {
-				self.$status = 'hide';
-				POPUP.hide();
-			});
 		}
 	}
 	exports.tooltip = Tooltip;

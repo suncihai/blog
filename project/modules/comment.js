@@ -10,7 +10,6 @@ define(function( require, exports ){
 
 	var pager = require('@modules/pager').pagerNoLink;
 	var dialog = require('@modules/dialog').base;
-	// var header = require('@modules/header').base;
 	var tooltip = require('@modules/tooltip').tooltip.init();
 	var loading = require('@modules/loading').chrysanthemum;
 
@@ -131,6 +130,9 @@ define(function( require, exports ){
 			// 绑定添加评论事件
 			app.event.bind( this.$doms.add, 'click', this.eventClickAdd, this );
 			app.event.bind( this.$doms.empty.find('.M-commentEmptyWrap'), 'click', this.eventClickAdd, this );
+
+			// 加载超时点击重试
+			app.event.bind( this.$doms.error, 'click', this.eventClickReload, this );
 		},
 
 		// 添加一条评论
@@ -167,6 +169,13 @@ define(function( require, exports ){
 			return this;
 		},
 
+		// 点击重试
+		eventClickReload: function() {
+			this.$doms.error.hide().removeClass('animated shake');
+			this.load();
+			return false;
+		},
+
 		// 拉取评论列表
 		load: function( param ) {
 			this.$doms.title.text('评论努力加载中···');
@@ -185,7 +194,7 @@ define(function( require, exports ){
 				if ( err.status === 'timeout' ) {
 					self.hideLoading();
 					self.$doms.title.text('服务器请求超时');
-					self.$doms.error.show().addClass('animated shake').text('(ˇˍˇ)评论列表请求超时，请稍后重试~');
+					self.$doms.error.show().addClass('animated shake').text('(ˇˍˇ)评论列表请求超时，点击这里重试~');
 				}
 				return false;
 			}
@@ -355,21 +364,14 @@ define(function( require, exports ){
 		init: function( config ) {
 			this.$data = null;
 			this.$imageUrl = dc.getthecode;
-			this.$clicks = 0;
+			this.$pushing = false; // 评论是否正在提交
+			this.$submitTxt = {
+				'init'   : '发表评论',
+				'pushing': '正在提交……',
+				'success': '评论成功！',
+				'error'  : '评论失败请重试'
+			};
 			this.$tip = '';
-			// this.$tip = '(验证码为打乱顺序的JS或CSS关键字)';
-			this.$friendTips = [
-				'(比如: switch, window, margin...)',
-				'(比如: block, inline, rotate...)',
-				'(比如: define, bold, scale...)',
-				'(比如: return, left, float...)'
-			];
-			this.$fuckTips = [
-				'这样一直点真的很好玩吗？？',
-				'你还没看出验证码是啥吗？？',
-				'靠！你是一心的吧？？',
-				'难道一个单词都不认得？'
-			];
 			this.$dialogBody = dialog
 				.init({
 					'height': 24
@@ -410,11 +412,8 @@ define(function( require, exports ){
 						'<input class="M-commentFormFooterCode"  placeholder="'+ holderCode +'">',
 						'<img class="M-commentFormFooterPic" title="点击更换验证码" src="'+ this.$imageUrl +'"/>',
 						'<span class="M-commentFormFooterTips">'+ this.$tip +'</span>',
-						'<button class="M-commentFormFooterSubmit">发表评论</button>',
+						'<button class="M-commentFormFooterSubmit">'+ this.$submitTxt.init +'</button>',
 						'<button class="M-commentFormFooterReset">重置</button>',
-					'</div>',
-					'<div class="M-commentFormMask">',
-						'<div class="M-commentFormMaskText">评论正在提交中···</div>',
 					'</div>',
 				'</div>'
 			].join(''));
@@ -428,9 +427,7 @@ define(function( require, exports ){
 				'image'    : $('.M-commentFormFooterPic', dom),
 				'tips'     : $('.M-commentFormFooterTips', dom),
 				'reset'    : $('.M-commentFormFooterReset', dom),
-				'submit'   : $('.M-commentFormFooterSubmit', dom),
-				'mask'     : $('.M-commentFormMask', dom),
-				'maskText' : $('.M-commentFormMaskText', dom)
+				'submit'   : $('.M-commentFormFooterSubmit', dom)
 			}
 
 			// 读取cookie值
@@ -448,7 +445,7 @@ define(function( require, exports ){
 			// 绑定提交
 			app.event.bind( this.$doms.submit, 'click.submit', this.eventClickSubmit, this );
 			// 绑定验证码输入框失去焦点
-			app.event.bind( this.$doms.code, 'blur.code', this.eventBlurCode, this );
+			// app.event.bind( this.$doms.code, 'blur.code', this.eventBlurCode, this );
 			// 绑定更换验证码
 			app.event.bind( this.$doms.image, 'click.image', this.eventClickImage, this );
 			// 对话框关闭 解除绑定
@@ -459,7 +456,7 @@ define(function( require, exports ){
 		onDialogClosed: function() {
 			app.event.unbind(this.$doms.reset, 'click.reset');
 			app.event.unbind(this.$doms.submit, 'click.submit');
-			app.event.unbind(this.$doms.code, 'blur.code');
+			// app.event.unbind(this.$doms.code, 'blur.code');
 			app.event.unbind(this.$doms.image, 'click.image');
 			return false;
 		},
@@ -502,8 +499,7 @@ define(function( require, exports ){
 					'arrow': {'position': 'top'},
 					'offset': {'left': 10, 'top': 25},
 					'content': '评论内容不能为空~',
-					'width': 140,
-					'name': 'content'
+					'width': 140
 				});
 				this.$doms.text.focus();
 				return false;
@@ -514,8 +510,7 @@ define(function( require, exports ){
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
 					'content': '昵称不能为空~',
-					'width': 120,
-					'name': 'nick'
+					'width': 120
 				});
 				this.$doms.nick.focus();
 				return false;
@@ -526,8 +521,7 @@ define(function( require, exports ){
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
 					'content': '验证码不能为空~',
-					'width': 130,
-					'name': 'code'
+					'width': 130
 				});
 				this.$doms.code.focus();
 				return false;
@@ -539,9 +533,12 @@ define(function( require, exports ){
 		eventClickSubmit: function( evt ) {
 			var data = this.getData();
 			tooltip.setTimeStamp( evt.timeStamp );
+			if ( this.$pushing ) {
+				return false;
+			}
 			if ( this.validate( data ) ) {
-				this.$doms.mask.show()
-				app.animate.play(this.$doms.maskText, 'fadeIn');
+				this.$pushing = true;
+				this.$doms.submit.addClass('pushing').text( this.$submitTxt.pushing );
 				app.data.post( dc.addcomment, data, this.onData, this );
 			}
 			return false;
@@ -553,8 +550,11 @@ define(function( require, exports ){
 			var txt = '';
 			var cname = app.cookie.get('usernickname');
 			var clink = app.cookie.get('userlink');
+
 			// 提交成功
 			if ( res && res.success ) {
+				txt = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>提交成功！审核后即可在留言列表显示。</span>';
+				self.$doms.submit.removeClass('pushing error').addClass('success').text( self.$submitTxt.success );
 				self.$res = res.result;
 				self.reset();
 				if ( !cname || cname !== self.$res.author ) {
@@ -563,39 +563,39 @@ define(function( require, exports ){
 				if ( !clink || clink !== self.$res.url ) {
 					app.cookie.set('userlink', self.$res.url);
 				}
-				app.animate.play(self.$doms.maskText.text('评论成功！'), 'fadeIn', function() {
-					setTimeout(function() {
-						dialog.hide( self.afterDialogHide, self );
-					}, 1000);
-				});
+				// 自动隐藏dialog
+				setTimeout(function() {
+					dialog.hide( self.afterDialogHide, self );
+				}, 1000);
 				return false;
 			}
 			// 提交失败
 			else {
-				app.event.bind( $(document), 'click.hideMask', this.eventHideMask, this );
+				this.$pushing = false;
+				self.$doms.submit.removeClass('pushing success').addClass('error').text( self.$submitTxt.error );
 				if ( err ) {
-					txt = [err.status, err.message].join(', ');
-					app.animate.play(self.$doms.maskText.addClass('warning').text( txt ), 'shake');
+					txt = [
+						'<span class="warning animated fadeIn">',
+							'<i class="M-iconWarning">×</i>',
+							[err.status, err.message].join(', '),
+						'</span>'
+					].join('');
 				}
 				if ( res && !res.success ) {
-					txt = res.message || '提交失败请重试~';
-					app.animate.play(self.$doms.maskText.addClass('warning').text( txt ), 'shake');
+					txt = [
+						'<span class="warning animated fadeIn">',
+							'<i class="M-iconWarning">×</i>',
+							res.message,
+						'</span>'
+					].join('');
 				}
 			}
+			this.$doms.tips.html( txt );
 		},
 
 		// 对话框隐藏, 将新增的评论发给评论列表
 		afterDialogHide: function() {
 			app.messager.fire('commentAdded', this.$res);
-		},
-
-		// 隐藏评论表单的遮罩
-		eventHideMask: function() {
-			var mask = this.$doms.mask;
-			app.animate.play( mask, 'fadeOut', 'fast', function() {
-				mask.hide();
-				app.event.unbind($(document), 'click.hideMask');
-			});
 		},
 
 		// 验证码失去焦点
@@ -628,36 +628,12 @@ define(function( require, exports ){
 		// 点击更换验证码
 		eventClickImage: function( evt, elm ) {
 			var self = this;
-			// var tip = '';
-			var stop;
 			self.$doms.code.val('').focus();
-			// this.$clicks += 1;
-			// switch( this.$clicks ) {
-			// 	case 1:case 2:case 3:
-			// 		tip = this.$tip;
-			// 	break;
-			// 	case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:case 12:case 13:
-			// 		tip = this.$friendTips[util.random(0, this.$friendTips.length - 1)];
-			// 	break;
-			// 	case 14:case 15:case 16:case 17:case 18:case 19:case 20:case 21:case 22:case 23:
-			// 		tip = this.$fuckTips[util.random(0, this.$fuckTips.length - 1)];
-			// 	break;
-			// 	default: {
-			// 		tip = '好了，不能再这么任性下去了……';
-			// 		stop = true;
-			// 	}
-			// }
-			// self.$doms.tips.html( tip );
-			if ( stop ) {
+			// TODO：有更好的办法么？
+			setTimeout(function() {
 				$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
-			}
-			else {
-				// TODO：有更好的办法么？
-				setTimeout(function() {
-					$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
-				}, 500);
-				app.animate.play($(elm), 'flipOutY');
-			}
+			}, 500);
+			app.animate.play($(elm), 'flipOutY');
 			return false;
 		}
 	}

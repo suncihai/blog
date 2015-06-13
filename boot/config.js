@@ -50,7 +50,7 @@ define(function() {
 
 		// 评论列表默认请求参数
 		commentParam: {
-			'artid' : 1, // 文章ID
+			// 'artid' : 1, // 文章ID
 			'page'  : 1, // 请求第一页
 			'limit' : 6, // 每页显示个数
 			'date'  : 1  // 时间升序, -1降序
@@ -72,6 +72,8 @@ define(function() {
 			'listcomment'  : '/blog/sprint/api/listcomment/query.php',
 			// 添加一条评论
 			'addcomment'   : '/blog/sprint/api/addcomment/query.php',
+			// 获取留言列表
+			'listmessage'  : '/blog/sprint/api/listmessage/query.php',
 			// 添加一条留言
 			'addmessage'   : '/blog/sprint/api/addmessage/query.php',
 			// 验证码校验

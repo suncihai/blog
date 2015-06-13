@@ -51,7 +51,7 @@ define(function( require, exports ){
 		$elm.addClass( animateCls ).one(
 			c.animationdEnd,
 			function( evt ) {
-				if ( evt.srcElement !== $elm.get(0) ) {
+				if ( evt.target !== $elm.get(0) ) {
 					return false;
 				}
 				// 默认结束后移除class
