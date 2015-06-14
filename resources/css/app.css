@@ -945,6 +945,10 @@ a:hover {
   color: #8FE8E2;
   font-size: 2.6rem;
   font-weight: bold;
+}
+.G-frameBodyBlogHead .logoAnchor i {
+  font-style: normal;
+  color: #51B6C2;
   text-shadow: -1px 0px 5px #1ea096;
 }
 .G-frameBodyBlogHead ul {
@@ -2002,8 +2006,8 @@ a:hover {
 .M-messageMain {
   display: inline-block;
   box-sizing: border-box;
-  width: 70%;
-  height: 500px;
+  width: 65%;
+  padding-bottom: 4em;
 }
 .M-messageMainForm .compent {
   display: block;
@@ -2113,11 +2117,30 @@ a:hover {
   box-sizing: border-box;
   vertical-align: top;
   padding: 2.4em 0 0 2em;
-  width: 30%;
+  width: 35%;
   height: 100px;
 }
 .M-messageInfo .infoBox {
   width: 100%;
-  height: 200px;
+  border: 1px solid #f3f3f3;
   background: #f8f8f8;
+  padding-bottom: 1.5em;
+}
+.M-messageInfo .infoBox .title {
+  padding: 1em 0 .5em 1em;
+  font-weight: normal;
+  font-size: 1.8rem;
+  color: #22B6AB;
+}
+.M-messageInfo .infoBox ul {
+  padding-left: 1.5em;
+  list-style-type: circle;
+  list-style-position: inside;
+}
+.M-messageInfo .infoBox ul li {
+  padding: .2em 0;
+}
+.M-messageInfo .infoBox .sayother {
+  padding: 1em 1.5em 0 1.2em;
+  color: #22B6AB;
 }

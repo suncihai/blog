@@ -36,7 +36,7 @@ define(function() {
 		archiveTitle: {
 			'index': '小前端 - tangbc.com',
 			'frontends': '前端那些事',
-			'moods': '心情日志',
+			'moods': '随便写写',
 			'message': '给我留言'
 		},
 

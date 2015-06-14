@@ -34,7 +34,7 @@ define(function( require, exports ){
 				'contact' : '[选填] 联系方式(比如Email,QQ,微信)',
 				'code'    : '输入验证码'
 			}
-			layout.hideFooter().setTitle( c.archiveTitle[data.name] );
+			layout.showFooter().setTitle( c.archiveTitle[data.name] );
 			// banner设置
 			banner.setData({
 				'type': 'archive',
@@ -278,7 +278,18 @@ define(function( require, exports ){
 			var info = this.$doms.info;
 			$([
 				'<div class="infoBox">',
-					'<div class=""></div>',
+					'<h2 class="title">博主信息</h2>',
+					'<ul>',
+						'<li>',
+							'<label>所在地：</label>',
+							'<span>广东广州</span>',
+						'</li>',
+						'<li>',
+							'<label>联系方式：</label>',
+							'<span>went2077@gmail.com</span>',
+						'</li>',
+					'</ul>',
+					'<p class="sayother">欢迎给我提各种改进建议或者博客框架目前存在的BUGs，谢谢！</p>',
 				'</div>'
 			].join('')).appendTo( info );
 			return this;

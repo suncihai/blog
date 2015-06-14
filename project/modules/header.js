@@ -25,7 +25,7 @@ define(function( require, exports ){
 				'<div class="M-head">',
 					'<div class="M-headLogo">',
 						'<a href="/blog/" class="logoAnchor">',
-							'&lt;TANGBC/&gt;',
+							'<i>&lt;</i>TANGBC<i>/&gt;</i>',
 						'</a>',
 					'</div>',
 					'<div class="M-headNav"/>',
