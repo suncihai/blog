@@ -28,7 +28,7 @@
 
 		$Sql->open();
 
-		$result = $Sql->getCommentList( 0, $page, $limit, $date );
+		$result = $Sql->getCommentList( 2, $page, $limit, $date );
 
 		echo( $result );
 

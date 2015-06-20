@@ -13,14 +13,30 @@ define(function( require, exports ){
 	var tooltip = require('@modules/tooltip').tooltip.init();
 	var loading = require('@modules/loading').chrysanthemum;
 
-	// 评论列表
+	/*
+	 * 评论列表 参数config：
+	 * {
+	 *	'target': DOM,
+	 *	'artid': Number,
+	 *	'geturl': String,
+	 *	'hasHead': Boolean,
+	 *	'cls': String,
+	 *	'hasOp': Boolean
+	 *	'pageSize': Number
+	 * }
+	 */
 	var CommentList = {
 		init: function( config ) {
 			this.$ = {};
-			this.$comments = 0;
+			this.$geturl = config.geturl || dc.listcomment, // 评论请求接口
+			this.$comments = 0; // 评论总数
 			this.$target = config.target;
+			this.$hasHead = config.hasHead, // 是否显示头部
+			this.$cls = config.cls || '', // 额外样式
+			this.$hasOp = config.hasOp, // 是否有回复操作
 			this.$param = $.extend({}, c.commentParam, {
-				'artid': +config.artid
+				'artid': config.artid || 0,
+				'limit': config.pageSize
 			});
 			this.build();
 			return this;
@@ -69,7 +85,7 @@ define(function( require, exports ){
 		// 创建评论列表
 		build: function() {
 			var html = $([
-				'<div class="M-commentLine"/>',
+				// '<div class="M-commentLine"/>',
 				'<div class="M-comment">',
 					'<header class="M-commentHead">',
 						'<h2 class="M-commentHeadTitle">评论</h2>',
@@ -102,6 +118,16 @@ define(function( require, exports ){
 				'pager'   : $('.M-commentPager', html).hide(),
 				'empty'   : $('.M-commentEmpty', html).hide(),
 				'error'   : $('.M-commentError', html).hide()
+			}
+
+			// 增加额外样式
+			if ( this.$cls ) {
+				html.addClass( this.$cls );
+			}
+
+			// 隐藏头部
+			if ( !this.$hasHead ) {
+				$('.M-commentHead', html).hide();
 			}
 
 			// 创建分页模块
@@ -160,7 +186,10 @@ define(function( require, exports ){
 
 		// 点击新增评论
 		eventClickAdd: function() {
-			popwin.init({'title': '添加评论：'}).setData({'postid': this.$param.artid});
+			var param = {
+				'postid': this.$param.artid
+			}
+			popwin.init({'title': '添加评论：'}).setData( param );
 		},
 
 		// 清空评论列表
@@ -181,7 +210,7 @@ define(function( require, exports ){
 			this.$doms.title.text('评论努力加载中···');
 			param = param || this.$param;
 			this.hide().empty().showLoading();
-			app.data.get( dc.listcomment, param, this.onData, this );
+			app.data.get( this.$geturl, param, this.onData, this );
 		},
 
 		// 数据返回
@@ -297,7 +326,7 @@ define(function( require, exports ){
 					'<div class="M-commentIssuseContentParent">',
 						'<div class="M-commentIssuseContentParentHead">',
 							'<div class="M-commentIssuseContentParentHeadTitle">',
-								'回复' + '<span class="nick">' + pnick + '</span>' + '的评论：',
+								'回复' + '<span class="nick">' + pnick + '</span>' + '：',
 							'</div>',
 						'</div>',
 						'<div class="M-commentIssuseContentParentContent">'+ info.parent.content +'</div>',
@@ -330,7 +359,7 @@ define(function( require, exports ){
 							// '<span data-id="'+ info.id +'" class="op dislike">',
 							// 	'反对(<i class="dislikes">0</i>)',
 							// '</span>',
-							info.passed ? '<span data-id="'+ info.id +'" class="op reply" title="回复TA"/>' : '',
+							(this.$hasOp && info.passed) ? '<span data-id="'+ info.id +'" class="op reply" title="回复TA"/>' : '',
 						'</div>',
 					'</header>',
 					'<article class="M-commentIssuseContent">'+ content +'</article>',
@@ -356,73 +385,76 @@ define(function( require, exports ){
 			return false;
 		}
 	}
-	exports.base = CommentList;
+	exports.list = $.extend( false, {}, CommentList );
 
-	// 评论弹出层
-	var popwin = {
-		// config配置参数：{title: 对话框标题}
+	/*
+	 * 评论表单 参数config：
+	 * {
+	 *	'target': DOM,
+	 *	'submitTxt': Object,
+	 *	'data': Object,
+	 *	'posturl': String
+	 *	'hasContact': Boolean
+	 *	'silence': Boolean
+	 * }
+	 */
+	var CommentForm = {
 		init: function( config ) {
-			this.$data = null;
+			this.$target = config.target;
+			this.$data = config.data; // 回复评论时的数据
+			this.$posturl = config.posturl || dc.addcomment,
 			this.$imageUrl = dc.getthecode;
+			this.$hasContact = config.hasContact,
 			this.$pushing = false; // 评论是否正在提交
+			this.$silence = config.silence, // 评论成功后是否发通知
 			this.$submitTxt = {
-				'init'   : '发表评论',
-				'pushing': '正在提交……',
-				'success': '评论成功！',
-				'error'  : '评论失败请重试'
+				'init'   : config.submitTxt && config.submitTxt.init || '发表评论',
+				'pushing': config.submitTxt && config.submitTxt.pushing || '正在提交……',
+				'success': config.submitTxt && config.submitTxt.success || '评论成功！',
+				'error'  : config.submitTxt && config.submitTxt.error || '评论失败请重试'
 			};
-			this.$tip = '';
-			this.$dialogBody = dialog
-				.init({
-					'height': 24
-				})
-				.setTitle( config.title )
-				.show()
-				.getBody();
+			this.$holderTxt = {
+				'content': config.holderTxt && config.holderTxt.content || '[必填] 在这里输入评论内容~',
+				'nick'   : config.holderTxt && config.holderTxt.nick || '[必填] 在这输入您的昵称，不超过16个字符。',
+				'link'   : config.holderTxt && config.holderTxt.link || '[选填] 这里可以输入您的网址(如:www.tangbc.com)，链接会加在您的昵称上。',
+				'contact': config.holderTxt && config.holderTxt.contact || '[选填] 联系方式(比如Email,QQ,微信)',
+				'code'   : config.holderTxt && config.holderTxt.code || '输入验证码'
+			}
+			this.build();
 			return this;
 		},
 
-		setData: function( data ) {
-			this.$data = data;
-			// TODO: 不要每次都清空
-			this.$dialogBody.empty();
-			this.buildComment();
-		},
-
-		buildComment: function() {
-			var holderTxt = '';
+		// 创建表单
+		build: function() {
+			var holderTxt = this.$holderTxt;
 			if ( this.$data && this.$data.content ) {
-				var content = util.removeTags(this.$data.content);
+				var content = util.removeTags( this.$data.content );
 				content = content.trim();
 				var brief = content.length > 20 ? content.substr(0, 20) + '……' : content;
-				holderTxt = '[必填] 回复“'+ this.$data.author +'”的评论：“' + brief + '”';
+				holderTxt.content = '[必填] 回复“'+ this.$data.author +'”的评论：“' + brief + '”';
 			}
-			else {
-				holderTxt = '[必填] 在这里输入评论内容~';
-			}
-			var holderNick = '[必填] 在这输入您的昵称，不超过16个字符。';
-			var holderLink = '[选填] 这里可以输入您的网址(如:www.tangbc.com)，链接会加在您的昵称上。';
-			var holderCode = '输入验证码';
 			var dom = $([
 				'<div class="M-commentForm">',
-					'<textarea class="M-commentFormText" placeholder="'+ holderTxt +'"></textarea>',
-					'<input type="text" class="M-commentFormNick" placeholder="'+ holderNick +'"/>',
-					'<input type="text" class="M-commentFormLink" placeholder="'+ holderLink +'"/>',
+					'<textarea class="M-commentFormText" placeholder="'+ holderTxt.content +'"></textarea>',
+					'<input type="text" class="M-commentFormNick" placeholder="'+ holderTxt.nick +'"/>',
+					'<input type="text" class="M-commentFormLink" placeholder="'+ holderTxt.link +'"/>',
+					this.$hasContact ? '<input type="text" class="M-commentFormContact" placeholder="'+ holderTxt.contact +'"/>' : '',
 					'<div class="M-commentFormFooter">',
-						'<input class="M-commentFormFooterCode"  placeholder="'+ holderCode +'">',
+						'<input class="M-commentFormFooterCode"  placeholder="'+ holderTxt.code +'">',
 						'<img class="M-commentFormFooterPic" title="点击更换验证码" src="'+ this.$imageUrl +'"/>',
-						'<span class="M-commentFormFooterTips">'+ this.$tip +'</span>',
+						'<span class="M-commentFormFooterTips"/>',
 						'<button class="M-commentFormFooterSubmit">'+ this.$submitTxt.init +'</button>',
 						'<button class="M-commentFormFooterReset">重置</button>',
 					'</div>',
 				'</div>'
 			].join(''));
-			dom.appendTo( this.$dialogBody );
+			dom.appendTo( this.$target );
 
 			this.$doms = {
 				'text'     : $('.M-commentFormText', dom),
 				'nick'     : $('.M-commentFormNick', dom),
 				'link'     : $('.M-commentFormLink', dom),
+				'contact'  : $('.M-commentFormContact', dom),
 				'code'     : $('.M-commentFormFooterCode', dom),
 				'image'    : $('.M-commentFormFooterPic', dom),
 				'tips'     : $('.M-commentFormFooterTips', dom),
@@ -448,17 +480,6 @@ define(function( require, exports ){
 			// app.event.bind( this.$doms.code, 'blur.code', this.eventBlurCode, this );
 			// 绑定更换验证码
 			app.event.bind( this.$doms.image, 'click.image', this.eventClickImage, this );
-			// 对话框关闭 解除绑定
-			app.messager.on('dialogClosed', this.onDialogClosed, this);
-		},
-
-		// 对话框关闭事件
-		onDialogClosed: function() {
-			app.event.unbind(this.$doms.reset, 'click.reset');
-			app.event.unbind(this.$doms.submit, 'click.submit');
-			// app.event.unbind(this.$doms.code, 'blur.code');
-			app.event.unbind(this.$doms.image, 'click.image');
-			return false;
 		},
 
 		// 获取提交数据
@@ -468,8 +489,9 @@ define(function( require, exports ){
 				'author'  : this.$doms.nick.val().trim(),
 				'link'    : this.$doms.link.val().trim(),
 				'code'    : this.$doms.code.val().trim(),
-				'postid'  : this.$data && this.$data.postid,
-				'id'      : this.$data.id
+				'contact' : this.$hasContact ? this.$doms.contact.val().trim() : '',
+				'postid'  : this.$data && this.$data.postid, // 所属文章id
+				'id'      : this.$data && this.$data.id // 原评论id
 			}
 		},
 
@@ -480,15 +502,27 @@ define(function( require, exports ){
 		},
 
 		// 重置表单
-		reset: function() {
+		reset: function(error) {
 			this.$doms.text.val('').focus();
 			this.$doms.code.val('');
+			if ( this.hasContact ) {
+				this.$doms.contact.val('');
+			}
 			if ( !app.cookie.get('usernickname') ) {
 				this.$doms.nick.val('');
 			}
 			if ( !app.cookie.get('userlink') ) {
 				this.$doms.link.val('');
 			}
+		},
+
+		// 移除模块内对事件的绑定
+		resetEvent: function() {
+			app.event.unbind(this.$doms.reset, 'click.reset');
+			app.event.unbind(this.$doms.submit, 'click.submit');
+			// app.event.unbind(this.$doms.code, 'blur.code');
+			app.event.unbind(this.$doms.image, 'click.image');
+			return this;
 		},
 
 		// 表单验证
@@ -539,7 +573,7 @@ define(function( require, exports ){
 			if ( this.validate( data ) ) {
 				this.$pushing = true;
 				this.$doms.submit.addClass('pushing').text( this.$submitTxt.pushing );
-				app.data.post( dc.addcomment, data, this.onData, this );
+				app.data.post( this.$posturl, data, this.onData, this );
 			}
 			return false;
 		},
@@ -557,16 +591,21 @@ define(function( require, exports ){
 				self.$doms.submit.removeClass('pushing error').addClass('success').text( self.$submitTxt.success );
 				self.$res = res.result;
 				self.reset();
+
 				if ( !cname || cname !== self.$res.author ) {
 					app.cookie.set('usernickname', self.$res.author);
 				}
 				if ( !clink || clink !== self.$res.url ) {
 					app.cookie.set('userlink', self.$res.url);
 				}
-				// 自动隐藏dialog
-				setTimeout(function() {
-					dialog.hide( self.afterDialogHide, self );
-				}, 1000);
+
+				// 发通知给dialog自动隐藏
+				if ( this.$silence ) {
+					setTimeout(function() {
+						dialog.hide( self.afterDialogHide, self );
+					}, 1000);
+				}
+
 				return false;
 			}
 			// 提交失败
@@ -634,6 +673,48 @@ define(function( require, exports ){
 				$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
 			}, 500);
 			app.animate.play($(elm), 'flipOutY');
+			return false;
+		}
+	}
+	exports.form = $.extend( false, {}, CommentForm );
+
+	/*
+	 * 评论弹窗 参数config：
+	 * {
+	 *	'title': String
+	 * }
+	 */
+	var popwin = {
+		// config配置参数：{title: 对话框标题}
+		init: function( config ) {
+			this.$dialogBody = dialog
+				.init({
+					'height': 24
+				})
+				.setTitle( config.title )
+				.show()
+				.getBody();
+			return this;
+		},
+
+		// 设置表单数据
+		setData: function( data ) {
+			// 创建评论表单
+			this.$form = $.extend( false, {}, CommentForm );
+			this.$dialogBody.empty();
+			this.$form.init({
+				'target': this.$dialogBody,
+				'data': data,
+				'silence': true
+			});
+
+			// 对话框关闭 解除绑定
+			app.messager.on('dialogClosed', this.onDialogClosed, this);
+		},
+
+		// 对话框关闭事件
+		onDialogClosed: function() {
+			this.$form.resetEvent();
 			return false;
 		}
 	}

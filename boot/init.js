@@ -27,8 +27,8 @@
 			[/^(.*\.(?:css|js))(.*)$/i, '$1?v=1.2']
 		],
 		'preload': [
-			// 'resources/css/app.css',
-			'resources/css/app.min.css',
+			'resources/css/app.css',
+			// 'resources/css/app.min.css',
 			'@dist/plugins/prism/prism.min.css',
 			'@dist/plugins/animate/animate.min.css'
 		],

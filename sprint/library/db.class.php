@@ -672,7 +672,7 @@ class SQL
         );
         // 对应的字段值
         $valueArr = array(
-            0, // 留言的post_id设为0
+            2, // 留言的post_id设为2
             "'$author'",
             "'$link'",
             "'$email'",

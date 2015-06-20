@@ -148,6 +148,9 @@
 				&Head{
 					padding-bottom: .5em;
 					color: #D0AC74;
+					&Title{
+						text-decoration: underline;
+					}
 					.nick{
 						margin: 0 .3em;
 						color: @defaultAnchor;
@@ -250,7 +253,6 @@
 	// 弹窗 评论表单
 	&Form{
 		position: relative;
-		padding: 1.5em;
 		input,textarea{
 			border: 1px solid #DDD;
 			border-radius: 2px;
@@ -276,13 +278,7 @@
 			padding: .5em;
 			resize: none;
 		}
-		&Nick{
-			.compent;
-			margin: 1.6em auto;
-			height: 40px;
-			padding: .8em;
-		}
-		&Link{
+		&Nick, &Link, &Contact{
 			.compent;
 			margin: 1.6em auto;
 			height: 40px;

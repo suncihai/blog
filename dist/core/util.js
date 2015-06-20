@@ -290,6 +290,21 @@ define(function( require, util ){
 		return html.toString().replace(/<[^>]+>/g, '');
 	}
 
+	/**
+	 * fixZero 自动补0, (9 , 1) -> 09; (9 , 3) -> 0009
+	 * num: 原始数值 ; zeros: 补0个数
+	 */
+	util.fixZero = function( num, zeros ) {
+		var b, v, x = 10, y, ns = num.toString().length;
+		if ( !this.isNumber( zeros ) || !this.isNumber( zeros ) ) {
+			return num;
+		}
+		y = ns + zeros;
+		b = Math.pow( x, y );
+		v = b + num;
+		return v.toString().substr(1);
+	}
+
 	/*
 	 * 格式化某段时间, 返回与当前的时间差 2015-05-16 16:14:30
 	 */
@@ -306,6 +321,9 @@ define(function( require, util ){
 			hour   = +dateArr[3],
 			minute = +dateArr[4],
 			second = +dateArr[5];
+		// 时分补0
+		hour = hour < 10 ? this.fixZero( hour, 1 ) : hour;
+		minute = minute < 10 ? this.fixZero( minute, 1 ) : minute;
 		// 计算秒数差值
 		var opDate = new Date( year, month, day , hour, minute, second );
 		var secondDiff = ( new Date().getTime() - opDate.getTime() ) / 1000;

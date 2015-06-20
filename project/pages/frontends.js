@@ -41,8 +41,8 @@ define(function( require, exports ){
 			// .setCrumbs( this.$title, '' );
 
 			this.$doms = {
-				listBox: $('<div class="P-archive-list"/>').appendTo( dom ).hide(),
-				pagerBox: $('<div class="P-archive-pager"/>').appendTo( dom ).hide()
+				listBox: $('<div class="P-archiveList"/>').appendTo( dom ).hide(),
+				pagerBox: $('<div class="P-archivePager"/>').appendTo( dom ).hide()
 			}
 
 			// 创建分页模块
@@ -174,8 +174,8 @@ define(function( require, exports ){
 			var anchor = data.name + '/' + item.id; // 超链接地址
 			var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
 			sections.push([
-				'<section list-id="'+ idx +'">',
-					'<div class="P-archive-list-title">',
+				'<section class="sectionItem" list-id="'+ idx +'">',
+					'<div class="P-archiveListTitle">',
 						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">▪ '+ item.title +'</a></h2>',
 					'</div>',
 					// '<a href="#'+ anchor +'" class="abstract">',
@@ -184,7 +184,7 @@ define(function( require, exports ){
 							cover,
 						'</article>',
 					// '</a>',
-					'<div class="P-archive-list-info">',
+					'<div class="P-archiveListInfo">',
 						'<span class="tag">分类：'+ this.$title || data.name +'</span>',
 						' | ',
 						'<span class="tag">评论：'+ item.comments +'</span>',

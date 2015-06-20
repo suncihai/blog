@@ -11,7 +11,7 @@ define(function( require, exports ){
 	var banner = require('@modules/banner').base;
 	var loading = require('@modules/loading').base;
 	var prism = require('@plugins/prism/prism').base;
-	var comment = require('@modules/comment').base;
+	var comment = require('@modules/comment').list;
 
 	var Article = {
 		// 初始化
@@ -107,7 +107,9 @@ define(function( require, exports ){
 			// 创建评论模块
 			this.$.comment = comment.init({
 				'target': self.$doms.comment,
-				'artid': this.$data.param
+				'artid': this.$data.param,
+				'hasHead': true,
+				'hasOp': true
 			}).hideAll();
 
 			// 设置banner内容

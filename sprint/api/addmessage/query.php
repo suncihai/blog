@@ -31,8 +31,12 @@
 		$postCode = $OP->clearXss( $params['code'] );
 		$content = htmlspecialchars( $params['content'] );
 		$author = htmlspecialchars( $params['author'] );
-		$link = $OP->clearXss( $params['link'] );
-		$email = $OP->clearXss( $params['contact'] );
+
+		// 过滤链接
+		$link = isset( $params['link'] ) ? $OP->clearXss( $params['link'] ) : '';
+
+		// 过滤联系方式
+		$email = isset( $params['contact'] ) ? $OP->clearXss( $params['contact'] ) : '';
 
 		$content = $OP->clearXss( $content );
 		$author = $OP->clearXss( $author );

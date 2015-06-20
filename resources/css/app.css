@@ -551,6 +551,9 @@ a:hover {
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
+.M-dialogBody {
+  padding: 1.5em;
+}
 .rotateCloseForward {
   -webkit-animation-name: rotateCloseForward;
   animation-name: rotateCloseForward;
@@ -1272,6 +1275,9 @@ a:hover {
   padding-bottom: .5em;
   color: #D0AC74;
 }
+.M-commentIssuseContentParentHeadTitle {
+  text-decoration: underline;
+}
 .M-commentIssuseContentParentHead .nick {
   margin: 0 .3em;
   color: #0080c0;
@@ -1363,7 +1369,6 @@ a:hover {
 }
 .M-commentForm {
   position: relative;
-  padding: 1.5em;
 }
 .M-commentForm input,
 .M-commentForm textarea {
@@ -1394,15 +1399,9 @@ a:hover {
   padding: .5em;
   resize: none;
 }
-.M-commentFormNick {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 1.6em auto;
-  height: 40px;
-  padding: .8em;
-}
-.M-commentFormLink {
+.M-commentFormNick,
+.M-commentFormLink,
+.M-commentFormContact {
   display: block;
   width: 100%;
   box-sizing: border-box;
@@ -1779,24 +1778,45 @@ a:hover {
   transform-origin: top;
   transform: rotate(-10deg);
 }
-.P-archives .P-archive-list {
+.P-archives .P-archiveList {
   width: 75%;
   min-height: 200px;
   margin: 0 auto;
 }
-.P-archives section {
+.P-archives .P-archiveListTitle .title {
+  display: inline-block;
+  font-size: 2.4rem;
+  font-weight: normal;
+  color: #1EA096;
+  transition: color 218ms cubic-bezier(0.42, 0, 0.58, 1);
+}
+.P-archives .P-archiveListTitle .title:hover {
+  color: #F27900;
+}
+.P-archives .P-archiveListInfo {
+  padding-left: 10px;
+  padding-bottom: 10px;
+  color: #666;
+  font-style: italic;
+  font-size: 1.4rem;
+}
+.P-archives .P-archiveListPager {
+  border-top: 3px solid #EDEDED;
+  background: #F5F5F4;
+}
+.P-archives .sectionItem {
   padding: 1.5em 0;
   box-sizing: border-box;
   border-radius: 2px;
   border-bottom: 1px dashed #999;
 }
-.P-archives section h2 {
+.P-archives .sectionItem h2 {
   padding: 6px 0;
   font-weight: normal;
   font-size: 2.2rem;
   padding-left: 10px;
 }
-.P-archives section article {
+.P-archives .sectionItem article {
   margin: 1em 2em;
   padding: 1em 1.5em;
   color: #444;
@@ -1804,38 +1824,17 @@ a:hover {
   background: #FAF9F9;
   border-left: 8px solid #DDD;
 }
-.P-archives section article .abstract {
+.P-archives .sectionItem article .abstract {
   display: inline-block;
   font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑';
 }
-.P-archives section article .cover {
+.P-archives .sectionItem article .cover {
   display: inline-block;
   margin-top: 15px;
   border: 1px solid #DDD;
 }
-.P-archives section:last-child {
+.P-archives .sectionItem:last-child {
   border-bottom: none;
-}
-.P-archive-list-title .title {
-  display: inline-block;
-  font-size: 2.4rem;
-  font-weight: normal;
-  color: #1EA096;
-  transition: color 218ms cubic-bezier(0.42, 0, 0.58, 1);
-}
-.P-archive-list-title .title:hover {
-  color: #F27900;
-}
-.P-archive-list-info {
-  padding-left: 10px;
-  padding-bottom: 10px;
-  color: #666;
-  font-style: italic;
-  font-size: 1.4rem;
-}
-.P-archive-pager {
-  border-top: 3px solid #EDEDED;
-  background: #F5F5F4;
 }
 .P-search-list {
   width: 75%;
@@ -2008,6 +2007,15 @@ a:hover {
   box-sizing: border-box;
   width: 65%;
   padding-bottom: 4em;
+}
+.M-messageMainList {
+  padding-top: 1.5em;
+}
+.M-messageMainListWidth {
+  width: 100%;
+}
+.M-messageMainForm {
+  padding-top: 1.5em;
 }
 .M-messageMainForm .compent {
   display: block;

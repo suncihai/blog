@@ -25,7 +25,7 @@ define(function( require, exports ){
 				'<div class="M-head">',
 					'<div class="M-headLogo">',
 						'<a href="/blog/" class="logoAnchor">',
-							'<i>&lt;</i>TANGBC<i>/&gt;</i>',
+							'&lt;TANGBC/&gt;',
 						'</a>',
 					'</div>',
 					'<div class="M-headNav"/>',
@@ -61,8 +61,8 @@ define(function( require, exports ){
 			if ( config.headroom ) {
 				var cfg = {
 					'tolerance': {
-						'up': 5,
-						'down': 5
+						'up': 0,
+						'down': 0
 					},
 					'offset': 200,
 					'classes': {
