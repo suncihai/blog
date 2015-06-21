@@ -8,6 +8,7 @@ define(function( require, exports ){
 	var c = app.getConfig();
 	var dc = c.dataCenter;
 
+	var layout = require('layout').base;
 	var pager = require('@modules/pager').pagerNoLink;
 	var dialog = require('@modules/dialog').base;
 	var tooltip = require('@modules/tooltip').tooltip.init();
@@ -59,6 +60,7 @@ define(function( require, exports ){
 		show: function() {
 			this.$doms.list.show();
 			this.$doms.pager.show();
+			layout.showFooter();
 			return this;
 		},
 
@@ -66,6 +68,7 @@ define(function( require, exports ){
 		hide: function() {
 			this.$doms.list.hide();
 			this.$doms.pager.hide();
+			layout.hideFooter();
 			return this;
 		},
 

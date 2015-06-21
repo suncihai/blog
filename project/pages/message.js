@@ -107,7 +107,7 @@ define(function( require, exports ){
 					'nick'   : '[必填] 在这里输入昵称',
 					'link'   : '[选填] 网址(比如博客/微博/知乎主页url)'
 				},
-				'successTxt': '提交成功！审核后即可在留言列表显示。'
+				'successTxt': '提交成功！等待审核……'
 			});
 			return this;
 		},
