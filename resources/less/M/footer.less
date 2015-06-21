@@ -1,7 +1,76 @@
+// 页脚容器flex定义
+.flexWraper() {
+	display: -webkit-box;
+	display: -moz-box;
+	display: box;
+
+	-webkit-box-orient: inline-axis;
+	-moz-box-orient: inline-axis;
+	box-orient: inline-axis;
+
+	-webkit-box-pack: start;
+	-moz-box-pack: start;
+	box-pack: start;
+
+	-webkit-box-direction: normal;
+	-moz-box-direction: normal;
+	box-direction: normal;
+
+	-webkit-box-align: center;
+	-moz-box-align: center;
+	box-align: center;
+}
+// flex定义
+.flexNumbers( @num ) {
+	-webkit-box-ordinal-group: 1;
+	-moz-box-ordinal-group: 1;
+	box-ordinal-group: 1;
+
+	-webkit-box-flex: @num;
+	-moz-box-flex: @num;
+	box-flex: @num;
+}
+
 .M-footer{
 	width: @blogWidth;
+	.flexWraper;
 	.center;
 	color: #FFF;
 	font-size: 1.8rem;
 	line-height: 8.0rem;
+
+	// copyright
+	&Copy{
+		.flexNumbers(3);
+	}
+	// 其他信息
+	&Info{
+		.flexNumbers(2);
+	}
+	// 多语言切换
+	&Lang{
+		.flexNumbers(1);
+		text-align: right;
+		font-size: 1.4rem;
+		li{
+			display: block;
+			margin: .5em 0;
+			width: 55px;
+			height: 16px;
+			line-height: 16px;
+			vertical-align: middle;
+			cursor: pointer;
+			background: url(../icons/icons.png) no-repeat;
+			// border: 1px solid #ddd;
+			&.cn{
+				background-position: 0px -101px;
+			}
+			&.hk{
+				background-position: 0px -117px;
+			}
+			&.us{
+				background-position: 0px -133px;
+			}
+		}
+	}
 }

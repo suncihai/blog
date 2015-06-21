@@ -109,7 +109,8 @@ define(function( require, exports ){
 				'target': self.$doms.comment,
 				'artid': this.$data.param,
 				'hasHead': true,
-				'hasOp': true
+				'hasOp': true,
+				'hasFloor': true
 			}).hideAll();
 
 			// 设置banner内容

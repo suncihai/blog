@@ -79,7 +79,7 @@ define(function( require, exports ){
 
 			// 创建完成后回调(@todo: 去掉,这里没必要回调)
 			if ( util.isFunc( this.callback ) ) {
-				this.callback.call( this, true );
+				this.callback();
 			}
 			return this;
 		},

@@ -92,6 +92,7 @@ define(function( require, exports ){
 				DIALOG.hide();
 				app.animate.play( MASK, 'maskOut', 'fast', function() {
 					MASK.hide();
+					app.messager.fire('dialogClosed');
 					// 执行回调
 					if ( util.isFunc( cb ) ) {
 						cb.call( ct || window );
@@ -157,7 +158,6 @@ define(function( require, exports ){
 			var self = this;
 			self.hide();
 			self.$doms.close.removeClass('rotateCloseForward rotateCloseBack');
-			app.messager.fire('dialogClosed');
 			return false;
 		},
 

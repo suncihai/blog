@@ -48,23 +48,42 @@ define(function( require, exports ){
 		var animateType = typeMap[type] || typeMap['middle'];
 		var animateCls = animateType + ' ' + keyframe;
 
-		$elm.addClass( animateCls ).one(
-			c.animationdEnd,
-			function( evt ) {
-				if ( evt.target !== $elm.get(0) ) {
-					return false;
-				}
-				// 默认结束后移除class
-				if ( !remove ) {
-					$elm.removeClass( animateCls );
-				}
-				if ( callback ) {
-					if ( !context ) {
-						context = window;
-					}
-					callback.call( context, type, keyframe );
-				}
+		// 动画结束后的回调
+		function cbAnimateEnd() {
+			// 默认结束后移除class
+			if ( !remove ) {
+				$elm.removeClass( animateCls );
 			}
-		);
+			// 结束后执行回调
+			if ( callback ) {
+				if ( !context ) {
+					context = window;
+				}
+				callback.call( context, type, keyframe );
+			}
+		}
+
+		// 处理动画结束事件
+		function handleAnimateEndEvent() {
+			$elm.addClass( animateCls ).one(
+				c.animationdEnd,
+				function( evt ) {
+					if ( evt.target === $elm.get(0) ) {
+						cbAnimateEnd();
+						return false;
+					}
+					else {
+						/*
+						 * 处理冒泡
+						 * 因为子节点动画事件可能先于$elm触发
+						 * 所以不能用evt.stopPropagation();
+						 */
+						handleAnimateEndEvent();
+					}
+				}
+			);
+		}
+
+		handleAnimateEndEvent();
 	}
 });

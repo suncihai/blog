@@ -34,6 +34,7 @@ define(function( require, exports ){
 			this.$hasHead = config.hasHead, // 是否显示头部
 			this.$cls = config.cls || '', // 额外样式
 			this.$hasOp = config.hasOp, // 是否有回复操作
+			this.$hasFloor = config.hasFloor, // 是否有序号
 			this.$param = $.extend({}, c.commentParam, {
 				'artid': config.artid || 0,
 				'limit': config.pageSize
@@ -345,7 +346,7 @@ define(function( require, exports ){
 			return [
 				'<section class="M-commentIssuse" data-id="'+ (idx || -1) +'">',
 					'<header class="M-commentIssuseHead">',
-						'<b class="M-commentIssuseHeadFloor">'+ floor +'</b>',
+						this.$hasFloor ? '<b class="M-commentIssuseHeadFloor">'+ floor +'</b>' : '',
 						'<b class="M-commentIssuseHeadNick">'+ nickName +'</b>',
 						'<span class="M-commentIssuseHeadAddress">'+ address +'</span>',
 						'<span class="M-commentIssuseHeadTime" title="'+ info.date +'">',
@@ -396,6 +397,7 @@ define(function( require, exports ){
 	 *	'posturl': String
 	 *	'hasContact': Boolean
 	 *	'silence': Boolean
+	 *	'successTxt': String
 	 * }
 	 */
 	var CommentForm = {
@@ -419,7 +421,8 @@ define(function( require, exports ){
 				'link'   : config.holderTxt && config.holderTxt.link || '[选填] 这里可以输入您的网址(如:www.tangbc.com)，链接会加在您的昵称上。',
 				'contact': config.holderTxt && config.holderTxt.contact || '[选填] 联系方式(比如Email,QQ,微信)',
 				'code'   : config.holderTxt && config.holderTxt.code || '输入验证码'
-			}
+			};
+			this.$successTxt = config.successTxt || '提交成功！';
 			this.build();
 			return this;
 		},
@@ -502,7 +505,13 @@ define(function( require, exports ){
 		},
 
 		// 重置表单
-		reset: function(error) {
+		reset: function( status ) {
+			// reset状态信息
+			if ( !status ) {
+				this.$pushing = false;
+				this.$doms.tips.html('');
+				this.$doms.submit.removeClass('pushing error success').text( this.$submitTxt.init );
+			}
 			this.$doms.text.val('').focus();
 			this.$doms.code.val('');
 			if ( this.hasContact ) {
@@ -587,10 +596,10 @@ define(function( require, exports ){
 
 			// 提交成功
 			if ( res && res.success ) {
-				txt = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>提交成功！审核后即可在留言列表显示。</span>';
+				txt = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>'+ self.$successTxt +'</span>';
 				self.$doms.submit.removeClass('pushing error').addClass('success').text( self.$submitTxt.success );
 				self.$res = res.result;
-				self.reset();
+				self.reset(true);
 
 				if ( !cname || cname !== self.$res.author ) {
 					app.cookie.set('usernickname', self.$res.author);
@@ -600,17 +609,16 @@ define(function( require, exports ){
 				}
 
 				// 发通知给dialog自动隐藏
-				if ( this.$silence ) {
+				if ( self.$silence ) {
 					setTimeout(function() {
 						dialog.hide( self.afterDialogHide, self );
 					}, 1000);
 				}
-
-				return false;
 			}
 			// 提交失败
 			else {
-				this.$pushing = false;
+				self.changeImageCode();
+				self.$pushing = false;
 				self.$doms.submit.removeClass('pushing success').addClass('error').text( self.$submitTxt.error );
 				if ( err ) {
 					txt = [
@@ -629,12 +637,14 @@ define(function( require, exports ){
 					].join('');
 				}
 			}
-			this.$doms.tips.html( txt );
+			self.$doms.tips.html( txt );
 		},
 
 		// 对话框隐藏, 将新增的评论发给评论列表
 		afterDialogHide: function() {
-			app.messager.fire('commentAdded', this.$res);
+			if ( this.$silence ) {
+				app.messager.fire('commentAdded', this.$res);
+			}
 		},
 
 		// 验证码失去焦点
@@ -664,19 +674,26 @@ define(function( require, exports ){
 			this.$doms.tips.html( msg );
 		},
 
-		// 点击更换验证码
+		// 点击验证码
 		eventClickImage: function( evt, elm ) {
 			var self = this;
 			self.$doms.code.val('').focus();
+			this.changeImageCode( evt.timeStamp );
+			return false;
+		},
+
+		// 更换验证码
+		changeImageCode: function( timeStamp ) {
+			var self = this;
+			timeStamp = timeStamp || util.random();
 			// TODO：有更好的办法么？
 			setTimeout(function() {
-				$(elm).attr('src', self.$imageUrl + '?ts=' + evt.timeStamp);
+				self.$doms.image.attr('src', self.$imageUrl + '?ts=' + timeStamp);
 			}, 500);
-			app.animate.play($(elm), 'flipOutY');
-			return false;
+			app.animate.play(self.$doms.image, 'flipOutY');
 		}
 	}
-	exports.form = $.extend( false, {}, CommentForm );
+	exports.form = $.extend( true, {}, CommentForm );
 
 	/*
 	 * 评论弹窗 参数config：
@@ -700,7 +717,7 @@ define(function( require, exports ){
 		// 设置表单数据
 		setData: function( data ) {
 			// 创建评论表单
-			this.$form = $.extend( false, {}, CommentForm );
+			this.$form = $.extend( true, {}, CommentForm );
 			this.$dialogBody.empty();
 			this.$form.init({
 				'target': this.$dialogBody,

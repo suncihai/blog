@@ -158,10 +158,8 @@ define(function( require, exports ){
 			var types = self._getTick('headerType');
 			var exist = util.inArray( type, types );
 			if ( exist === -1 ) {
-				header.init( config , function( completed ) {
-					if ( completed ) {
-						self._setTick( 'headerType', type );
-					}
+				header.init( config , function() {
+					self._setTick( 'headerType', type );
 				});
 			}
 			return self;
@@ -189,10 +187,8 @@ define(function( require, exports ){
 			var types = self._getTick('footerType');
 			var exist = util.inArray( type, types );
 			if ( exist === -1 ) {
-				footer.init( config , function( completed ) {
-					if ( completed ) {
-						self._setTick( 'footerType', type );
-					}
+				footer.init( config , function() {
+					self._setTick( 'footerType', type );
 				});
 			}
 			return self;

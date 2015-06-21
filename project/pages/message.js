@@ -106,7 +106,8 @@ define(function( require, exports ){
 					'content': '[必填] 在这里输入留言的内容~',
 					'nick'   : '[必填] 在这里输入昵称',
 					'link'   : '[选填] 网址(比如博客/微博/知乎主页url)'
-				}
+				},
+				'successTxt': '提交成功！审核后即可在留言列表显示。'
 			});
 			return this;
 		},
@@ -122,6 +123,8 @@ define(function( require, exports ){
 				'hasHead': false,
 				'hasOp': false,
 				'pageSize': 10, // 每页显示留言条数
+				'hasFloor': false,
+				'silence': false,
 				'cls': 'M-messageMainListWidth'
 			});
 			return this;

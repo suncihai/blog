@@ -91,6 +91,9 @@
 
 		$result = $Sql->addMessage( $content, $author, $link, $email );
 
+		// 使验证码失效
+		$_SESSION['img_code_word'] = rand();
+
 		echo( $result );
 
 		$Sql->close();

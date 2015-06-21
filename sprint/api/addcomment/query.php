@@ -104,6 +104,9 @@
 
 		$result = $Sql->addComment( $postid, $content, $author, $link, $id );
 
+		// 使验证码失效
+		$_SESSION['img_code_word'] = rand();
+
 		echo( $result );
 
 		$Sql->close();
