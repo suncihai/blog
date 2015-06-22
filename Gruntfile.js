@@ -1,6 +1,16 @@
 // Grunt 配置
 module.exports = function( grunt ) {
 	'use strict';
+	// 语法检测的js文件
+	var jsFiles = [
+		'boot/*.js',
+		'controller/*.js',
+		'dist/core/*.js',
+		'project/modules/*.js',
+		'project/pages/*.js',
+		'view/*.js'
+	]
+
 	// 配置项目：
 	grunt.initConfig({
 		// 配置任务
@@ -14,22 +24,22 @@ module.exports = function( grunt ) {
 		},
 		cssmin: {
 			app: {
-                src : 'resources/css/app.css',
-                dest: 'resources/css/app.min.css'
+				src : 'resources/css/app.css',
+				dest: 'resources/css/app.min.css'
             },
-            prism: {
-                src: 'dist/plugins/prism/prism.css',
-                dest: 'dist/plugins/prism/prism.min.css'
-            },
-            animate: {
+			prism: {
+				src: 'dist/plugins/prism/prism.css',
+				dest: 'dist/plugins/prism/prism.min.css'
+			},
+			animate: {
                 src: 'dist/plugins/animate/animate.debug.css',
                 dest: 'dist/plugins/animate/animate.min.css'
-            }
-        },
+			}
+		},
 		jshint: {
 			config: ['Gruntfile.js'],
-            client: ['dist/core/*.js', 'project/modules/*.js', 'project/pages/*.js'],
-            options: {
+			client: jsFiles,
+			options: {
 				asi: true,
 				curly: true,
 				latedef: true,
@@ -63,7 +73,7 @@ module.exports = function( grunt ) {
 				tasks: ['less:compile']
 			},
 			client: {
-				files: ['dist/core/*.js', 'project/modules/*.js', 'project/pages/*.js'],
+				files: jsFiles,
 				tasks: ['jshint:client']
 			}
 		}
