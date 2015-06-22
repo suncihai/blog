@@ -13,6 +13,13 @@ define(function() {
 		// 控制器的调用方法
 		action: 'onRun',
 
+		// 默认cookie
+		appCookie: {
+			'lang'        : 'zhCN',
+			'usernickname': '',
+			'userlink'    : ''
+		},
+
 		// 页脚文字
 		copyright: 'Copyright ©2012-2015 TANGBC.COM',
 

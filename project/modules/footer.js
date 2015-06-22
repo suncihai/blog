@@ -2,6 +2,8 @@
  * [页脚模块]
  */
 define(function( require, exports ){
+	var app = require('app');
+	// var c = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
 
@@ -20,15 +22,17 @@ define(function( require, exports ){
 
 			// DOM结构
 			var foot = $([
-				'<div class="M-footer">',
-					'<div class="M-footerCopy">'+ config.content +'</div>',
-					'<div class="M-footerInfo"></div>',
-					'<div class="M-footerLang">',
-						'<ul class="fr ulLang">',
-							// '<li class="cn" data-type="zhCN">简体</li>',
-							// '<li class="hk" data-type="zhHK">繁体</li>',
-							// '<li class="us" data-type="enUS">英文</li>',
-						'</ul>',
+				'<div class="blogWidth center">',
+					'<div class="M-footer">',
+						'<div class="M-footerCopy">'+ config.content +'</div>',
+						'<div class="M-footerInfo"></div>',
+						'<div class="M-footerLang">',
+							'<ul class="fr ulLang">',
+								'<li class="cn" data-type="zhCN" title="简体"></li>',
+								'<li class="hk" data-type="zhHK" title="繁体"></li>',
+								'<li class="us" data-type="enUS" title="英文"></li>',
+							'</ul>',
+						'</div>',
 					'</div>',
 				'</div>'
 			].join(''));
@@ -37,6 +41,9 @@ define(function( require, exports ){
 			this.$doms = {
 				'lang': foot.find('.ulLang')
 			}
+
+			// 设置语言的默认状态
+			this.setLangStatus();
 
 			var cssStyle = config.css;
 			if ( cssStyle ) {
@@ -47,6 +54,28 @@ define(function( require, exports ){
 			if ( util.isFunc( this.callback ) ) {
 				this.callback();
 			}
+		},
+
+		// 设置语言的默认状态
+		setLangStatus: function() {
+			var clang = app.cookie.get('lang');
+			var dom = this.$doms.lang;
+			dom.find('li[data-type="'+ clang +'"]').show().siblings('li').hide();
+			// 绑定事件
+			app.event.proxy( dom, 'click', 'li', this.eventSwitchLang, this );
+		},
+
+		eventSwitchLang: function( evt, elm ) {
+			var lang = $(elm).attr('data-type');
+			if ( lang === app.cookie.get('lang') ) {
+				this.$doms.lang.find('li').fadeIn();
+				return false;
+			}
+			else {
+				app.cookie.set('lang', lang);
+				window.location.reload();
+			}
+			return false;
 		},
 
 		show: function() {
