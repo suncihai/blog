@@ -133,6 +133,7 @@ define(function( require, exports ){
 			].join(''));
 			html.appendTo( this.$doms.tool );
 			this.$doms.tool.input = $('.searchIpt', html);
+			this.$doms.tool.btn = $('.searchBtn', html);
 
 			app.event.proxy( html, 'click.search', this.eventClickSearch, this );
 		},
@@ -141,6 +142,7 @@ define(function( require, exports ){
 		eventClickSearch: function( evt, elm ) {
 			var input = this.$doms.tool.input;
 			var val = input.val();
+			this.$doms.tool.btn.addClass('act');
 			this.$timeStamp = evt.timeStamp;
 			// 点击空白处收起INPUT
 			app.event.bind( $(document), 'click.blank', this.eventClickBlank, this );
@@ -185,6 +187,7 @@ define(function( require, exports ){
 		// 隐藏搜索框+解除事件的绑定
 		hideSearchInput: function() {
 			var self = this;
+			this.$doms.tool.btn.removeClass('act');
 			self.$doms.tool.input
 				.val('')
 				.addClass('inputInit')

@@ -123,7 +123,7 @@ define(function( require, exports ){
 			this.$doms.listBox.empty();
 
 			if ( util.isEmpty( info.items ) ) {
-				this.$doms.listBox.html('<div class="pt20 pb20">抱歉没有搜到相关内容！</div>');
+				this.$doms.listBox.html('<div class="fts20 pt2 pb2 animated fadeIn">(╯_╰)抱歉没有搜到相关内容！</div>');
 			}
 			else {
 				util.each( info.items, this.buildItems, this );
@@ -133,12 +133,12 @@ define(function( require, exports ){
 		// 循环生成列表
 		buildItems: function( item, idx ) {
 			var sections = [];
-			var str = item.date.slice( 0, 10 );
-			var arr = str.split('-');
-			var year = arr[0];
-			var mouth = +arr[1];
-			var day = +arr[2];
-			var date = year + '年' + mouth + '月' + day + '日';
+			// var str = item.date.slice( 0, 10 );
+			// var arr = str.split('-');
+			// var year = arr[0];
+			// var mouth = +arr[1];
+			// var day = +arr[2];
+			var date = util.prettyDate( item.date );
 			var catName = util.getKeyName( item.catId, c.cat );
 			var anchor = catName + '/' + item.id; // 超链接地址
 			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">请进入内页查看</a>' : item.brief + ' ……';
@@ -148,10 +148,10 @@ define(function( require, exports ){
 					'<p class="brief">'+ brief + '</p>',
 					'<div class="info">',
 						'<span class="tag">分类：'+ c.archiveTitle[catName] || '未知分类' +'</span>',
-						' | ',
-						'<span class="tag">评论：'+ item.comments +'</span>',
-						' | ',
-						'<span class="tag">日期：'+ date +'</span>',
+						' / ',
+						'<span class="tag">评论数：'+ item.comments +'</span>',
+						' / ',
+						'<span class="tag">发布时间：'+ date +'</span>',
 					'</div>',
 				'</section>'
 			].join(''));

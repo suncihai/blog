@@ -635,9 +635,9 @@ a:hover {
   height: 2em;
   line-height: 2em;
   text-align: center;
-  border: 1px solid #DDD;
+  border: 1px solid #A8DFDB;
   background: #FAFAFA;
-  color: #B6AEAE;
+  color: #22B6AB;
   cursor: pointer;
   font-size: 2rem;
   vertical-align: middle;
@@ -645,7 +645,7 @@ a:hover {
 }
 .M-pager .M-pagerItem:hover,
 .M-pager .M-pagerPN:hover {
-  background: #4D4D4D;
+  background: #A8DFDB;
   color: #FFF;
 }
 .M-pager .M-pagerAct,
@@ -653,8 +653,7 @@ a:hover {
   margin: 0px;
   border: none;
   background: none;
-  color: #B6AEAE;
-  font-style: italic;
+  color: #22B6AB;
   cursor: default;
 }
 .M-pager .M-pagerOmit,
@@ -813,7 +812,7 @@ a:hover {
   font-weight: normal;
 }
 .M-bannerArticle .info {
-  color: #E8E7E8;
+  color: rgba(255, 255, 255, 0.7);
 }
 .M-bannerMoods {
   background: rgba(220, 77, 229, 0.5);
@@ -1093,7 +1092,9 @@ a:hover {
   transform: rotate(50deg);
 }
 .M-headToolSearch .searchBtn:hover .circle,
-.M-headToolSearch .searchBtn:hover .line {
+.M-headToolSearch .searchBtn.act .circle,
+.M-headToolSearch .searchBtn:hover .line,
+.M-headToolSearch .searchBtn.act .line {
   border-color: #FFF;
 }
 .M-headToolSearch .searchIpt {
@@ -1836,15 +1837,18 @@ a:hover {
   color: #F27900;
 }
 .P-archives .P-archiveListInfo {
-  padding-left: 10px;
-  padding-bottom: 10px;
+  padding: 0 0 1em 1em;
   color: #666;
-  font-style: italic;
   font-size: 1.4rem;
+  text-decoration: underline;
 }
 .P-archives .P-archiveListPager {
   border-top: 3px solid #EDEDED;
   background: #F5F5F4;
+}
+.P-archives .P-archivePager {
+  border-top: 1px solid #E6EAEA;
+  background: #f5f5f5;
 }
 .P-archives .sectionItem {
   padding: 1.5em 0;
@@ -1859,18 +1863,19 @@ a:hover {
   padding-left: 10px;
 }
 .P-archives .sectionItem article {
-  margin: 1em 2em;
-  padding: 1em 1.5em;
+  margin: 1em;
+  padding: 1em;
   color: #444;
   line-height: 150%;
   background: #FAF9F9;
-  border-left: 8px solid #DDD;
+  border-left: 8px solid rgba(34, 182, 171, 0.38);
 }
 .P-archives .sectionItem article .abstract {
   display: inline-block;
   font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑';
 }
 .P-archives .sectionItem article .cover {
+  max-width: 30%;
   display: inline-block;
   margin-top: 15px;
   border: 1px solid #DDD;
@@ -1890,19 +1895,21 @@ a:hover {
 }
 .P-search-list .section {
   border: none;
+  padding-bottom: 2.5em;
 }
 .P-search-list .section .title {
   font-size: 2.0rem;
 }
 .P-search-list .section .brief {
-  padding: 1rem 0;
+  padding: 1em;
+  margin: 1em 0;
   color: #666;
-  font-family: Consolas, Arial, 'Microsoft Yahei', '微软雅黑';
+  background: #faf9f9;
 }
 .P-search-list .section .info {
   font-size: 1.4rem;
-  font-style: italic;
   color: #999;
+  text-decoration: underline;
 }
 .P-article .content {
   width: 75%;
