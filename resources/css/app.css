@@ -1965,11 +1965,10 @@ a:hover {
   padding: 1.5em;
   margin-top: 0.3em;
   overflow: auto;
-  border: 8px solid #DDD;
-  border-radius: .5em;
+  border-left: 8px solid rgba(34, 182, 171, 0.5);
   position: relative;
   font-size: 1.5rem;
-  background: #272822;
+  background: url(../icons/code-bg.png) repeat !important;
 }
 .noData {
   width: 75%;
