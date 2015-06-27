@@ -117,7 +117,7 @@ define(function( require, exports ){
 			banner.setData({
 				'type': 'article',
 				'title': info.title,
-				'time': '时间：'+ info.date.toString().slice( 0, 10 ) + ' | ',
+				'time': '发布时间：'+ info.date.toString().slice( 0, 10 ) + ' | ',
 				// 'tag': '标签：' + (info.tag || '无')  + ' | ',
 				'comments': '评论数：'+ info.comments
 			})

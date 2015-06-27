@@ -165,18 +165,19 @@ define(function( require, exports ){
 		buildItems: function( item, idx ) {
 			var data = this.$data;
 			var sections = [];
-			var str = item.date.slice( 0, 10 );
-			var arr = str.split('-');
-			var year = arr[0];
-			var mouth = +arr[1];
-			var day = +arr[2];
-			var date = year + '年' + mouth + '月' + day + '日';
+			// var str = item.date.slice( 0, 10 );
+			// var arr = str.split('-');
+			// var year = arr[0];
+			// var mouth = +arr[1];
+			// var day = +arr[2];
+			// var date = year + '年' + mouth + '月' + day + '日';
+			var date = util.prettyDate( item.date );
 			var anchor = data.name + '/' + item.id; // 超链接地址
 			var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
 			sections.push([
 				'<section class="sectionItem" list-id="'+ idx +'">',
 					'<div class="P-archiveListTitle">',
-						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">▪ '+ item.title +'</a></h2>',
+						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">'+ item.title +'</a></h2>',
 					'</div>',
 					// '<a href="#'+ anchor +'" class="abstract">',
 						'<article>',
@@ -185,11 +186,11 @@ define(function( require, exports ){
 						'</article>',
 					// '</a>',
 					'<div class="P-archiveListInfo">',
-						'<span class="tag">分类：'+ this.$title || data.name +'</span>',
-						' | ',
-						'<span class="tag">评论：'+ item.comments +'</span>',
-						' | ',
-						'<span class="tag">日期：'+ date +'</span>',
+						// '<span class="tag">分类：'+ this.$title || data.name +'</span>',
+						// ' | ',
+						'<span class="tag">评论数：'+ item.comments +'</span>',
+						' / ',
+						'<span class="tag">发布时间：'+ date +'</span>',
 					'</div>',
 				'</section>'
 			].join(''));

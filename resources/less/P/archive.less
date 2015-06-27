@@ -18,19 +18,22 @@
 				}
 			}
 			&Info{
-				padding-left: 10px;
-				padding-bottom: 10px;
+				padding: 0 0 1em 1em;
 				color: #666;
-				font-style: italic;
+				// font-style: italic;
 				font-size: 1.4rem;
+				text-decoration: underline;
 			}
 			&Pager{
 				border-top: 3px solid #EDEDED;
 				background: #F5F5F4;
 			}
 		}
+		&Pager{
+			border-top: 1px solid #E6EAEA;
+			background: rgb(245,245,245);
+		}
 	}
-	// padding-top: 1em;
 	.sectionItem{
 		padding: 1.5em 0;
 		box-sizing: border-box;
@@ -44,12 +47,12 @@
 			padding-left: 10px;
 		}
 		article{
-			margin: 1em 2em;
-			padding: 1em 1.5em;
+			margin: 1em;
+			padding: 1em;
 			color: #444;
 			line-height: 150%;
 			background: #FAF9F9;
-			border-left: 8px solid #DDD;
+			border-left: 8px solid rgba(34,182,171,.38);
 			.abstract{
 				display: inline-block;
 				font-family: @zhFontFamily;
@@ -58,6 +61,7 @@
 			// 	color: #000;
 			// }
 			.cover{
+				max-width: 30%;
 				display: inline-block;
 				margin-top: 15px;
 				border: 1px solid #DDD;
