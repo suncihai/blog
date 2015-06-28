@@ -49,11 +49,11 @@ define(function( require, exports ){
 		// 请求回调
 		onData: function( err, res ) {
 			var dom = this.$data.dom;
-			var dataError = '拉取数据似乎出了点问题~';
+			var dataError = T('拉取数据似乎出了点问题~');
 			if ( err ) {
-				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
+				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if ( err.status === 'timeout' ) {
-					dom.html('<div class="noData animated bounce">请求超时，请按F5刷新重试~</div>');
+					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
@@ -66,15 +66,15 @@ define(function( require, exports ){
 			}
 			var info = this.$info = res.result;
 			if ( res.total === 0 ) {
-				var noText = '数据库无该文章记录：' + this.$data.param;
+				var noText = T('数据库无该文章记录：') + this.$data.param;
 				dom.html('<div class="noData animated bounce">'+ noText +'</div>');
 				layout.setTitle( noText );
 				banner.setData({
 					'type': 'article',
 					'title': '******************',
-					'time': '时间：0000-00-00 | ',
+					'time': T('时间：') +'0000-00-00 | ',
 					// 'tag': '标签：* | ',
-					'comments': '评论数：0'
+					'comments': T('评论数：') + '0'
 				})
 				// .setCrumbs( c.archiveTitle[this.$data.name], this.$data.param );
 				return;
@@ -117,9 +117,9 @@ define(function( require, exports ){
 			banner.setData({
 				'type': 'article',
 				'title': info.title,
-				'time': '发布时间：'+ info.date.toString().slice( 0, 10 ) + ' | ',
-				// 'tag': '标签：' + (info.tag || '无')  + ' | ',
-				'comments': '评论数：'+ info.comments
+				'time': T('发布时间：') + info.date.toString().slice( 0, 10 ) + ' | ',
+				// 'tag': T('标签：') + (info.tag || T('无'))  + ' | ',
+				'comments': T('评论数：') + info.comments
 			})
 			// .setCrumbs( c.archiveTitle[self.$data.name], self.$data.param );
 

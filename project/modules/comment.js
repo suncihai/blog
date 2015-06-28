@@ -89,8 +89,8 @@ define(function( require, exports ){
 				// '<div class="M-commentLine"/>',
 				'<div class="M-comment">',
 					'<header class="M-commentHead">',
-						'<h2 class="M-commentHeadTitle">评论</h2>',
-						'<span class="M-commentHeadAdd" title="添加评论"/>',
+						'<h2 class="M-commentHeadTitle">'+ T('评论') +'</h2>',
+						'<span class="M-commentHeadAdd" title="'+ T('添加评论') +'"/>',
 					'</header>',
 					'<article class="M-commentList"/>',
 					'<div class="M-commentPager"/>',
@@ -104,7 +104,7 @@ define(function( require, exports ){
 							'<div class="M-commentEmptyFootRight"/>',
 							'<div class="M-commentEmptyFootBack"/>',
 						'</div>',
-						'<div class=M-commentEmptyTxt>有空沙发</div>',
+						'<div class=M-commentEmptyTxt>'+ T('有空沙发') +'</div>',
 					'</div>',
 					'<div class="M-commentError"/>',
 				'</div>'
@@ -168,7 +168,7 @@ define(function( require, exports ){
 			var newComment = this.createAComment( param );
 			if ( !this.$comments ) {
 				this.$comments++;
-				this.$doms.title.text('评论');
+				this.$doms.title.text( T('评论') );
 				this.show().$doms.empty.hide();
 			}
 			this.$doms.list.prepend( $(newComment).addClass('animated flipInX') );
@@ -190,7 +190,7 @@ define(function( require, exports ){
 			var param = {
 				'postid': this.$param.artid
 			}
-			popwin.init({'title': '添加评论：'}).setData( param );
+			popwin.init({'title': T('添加评论：')}).setData( param );
 		},
 
 		// 清空评论列表
@@ -208,7 +208,7 @@ define(function( require, exports ){
 
 		// 拉取评论列表
 		load: function( param ) {
-			this.$doms.title.text('评论努力加载中···');
+			this.$doms.title.text( T('评论努力加载中···') );
 			param = param || this.$param;
 			this.hide().empty().showLoading();
 			app.data.get( this.$geturl, param, this.onData, this );
@@ -217,14 +217,14 @@ define(function( require, exports ){
 		// 数据返回
 		onData: function( err, res ) {
 			var self = this;
-			var dataError = '评论列表拉取失败~';
+			var dataError = T('评论列表拉取失败~');
 			var title = '';
 			if ( err ) {
-				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
+				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if ( err.status === 'timeout' ) {
 					self.hideLoading();
-					self.$doms.title.text('服务器请求超时');
-					self.$doms.error.show().addClass('animated shake').text('(ˇˍˇ)评论列表请求超时，点击这里重试~');
+					self.$doms.title.text( T('服务器请求超时') );
+					self.$doms.error.show().addClass('animated shake').text('(ˇˍˇ)' + T('评论列表请求超时，点击这里重试~'));
 				}
 				return false;
 			}
@@ -242,17 +242,17 @@ define(function( require, exports ){
 				switch( res.total ) {
 					case 0:
 						self.hide();
-						self.$doms.title.text('没有评论，快抢沙发~');
+						self.$doms.title.text( T('没有评论，快抢沙发~') );
 						self.$doms.empty.show();
 					break;
 					case 1:case 2:
-						title = '共'+ res.total +'条评论';
+						title = T('共{1}条评论', res.total);
 						self.$doms.title.text( title );
 					break;
 					default:
 						title = res.page === res.pages ?
-							'共'+ res.total +'条评论，已经最后一页了'
-							: '共'+ res.total +'条评论，第'+ res.page +'页';
+							T('共{1}条评论，已经最后一页了', res.total)
+							: T('共{1}条评论，第{2}页', res.total, res.page);
 						self.$doms.title.text( title );
 				}
 
@@ -319,7 +319,7 @@ define(function( require, exports ){
 			var content = '';
 			// 评论者所在地
 			var address = info.admin ?
-				'' : info.address ? '['+ info.address +']' : '<span class="tdef">未知地区</span>';
+				'' : info.address ? '['+ info.address +']' : '<span class="tdef">'+ T('未知地区') +'</span>';
 			// 有父评论
 			if ( info.parent ) {
 				var pnick = info.parent.url ? '<a href="http://'+ info.parent.url +'" target="_blank">@'+ info.parent.author +'</a>' : '@' + info.parent.author;
@@ -340,7 +340,7 @@ define(function( require, exports ){
 			}
 			// 新增的评论(未审核状态)标出提示
 			if ( !info.passed ) {
-				content = '<div class="warning ti pb5">提示：您的评论需要经过审核才能公开显示，该评论当前只有您自己可见。</div>' + content;
+				content = '<div class="warning ti pb5">'+ T('提示：您的评论需要经过审核才能公开显示，该评论当前只有您自己可见。') +'</div>' + content;
 			}
 
 			return [
@@ -350,17 +350,17 @@ define(function( require, exports ){
 						'<b class="M-commentIssuseHeadNick">'+ nickName +'</b>',
 						'<span class="M-commentIssuseHeadAddress">'+ address +'</span>',
 						'<span class="M-commentIssuseHeadTime" title="'+ info.date +'">',
-							// info.parent ? '回复于 ' : '评论于 ',
+							// info.parent ? T('回复于 ') : T('评论于 '),
 							date,
 						'</span>',
 						'<div class="M-commentIssuseHeadOp">',
 							// '<span data-id="'+ info.id +'" class="op like">',
-							// 	'支持(<i class="likes">0</i>)',
+							// 	T('支持') + '(<i class="likes">0</i>)',
 							// '</span>',
 							// '<span data-id="'+ info.id +'" class="op dislike">',
-							// 	'反对(<i class="dislikes">0</i>)',
+							// 	T('反对) + '(<i class="dislikes">0</i>)',
 							// '</span>',
-							(this.$hasOp && info.passed) ? '<span data-id="'+ info.id +'" class="op reply" title="回复TA"/>' : '',
+							(this.$hasOp && info.passed) ? '<span data-id="'+ info.id +'" class="op reply" title="'+ T('回复TA') +'"/>' : '',
 						'</div>',
 					'</header>',
 					'<article class="M-commentIssuseContent">'+ content +'</article>',
@@ -380,7 +380,7 @@ define(function( require, exports ){
 				case 'dislike':
 				break;
 				case 'reply':
-					popwin.init({'title': '回复评论：'}).setData( data );
+					popwin.init({'title': T('回复评论：')}).setData( data );
 				break;
 			}
 			return false;
@@ -410,19 +410,19 @@ define(function( require, exports ){
 			this.$pushing = false; // 评论是否正在提交
 			this.$silence = config.silence, // 评论成功后是否发通知
 			this.$submitTxt = {
-				'init'   : config.submitTxt && config.submitTxt.init || '发表评论',
-				'pushing': config.submitTxt && config.submitTxt.pushing || '正在提交……',
-				'success': config.submitTxt && config.submitTxt.success || '评论成功！',
-				'error'  : config.submitTxt && config.submitTxt.error || '评论失败请重试'
+				'init'   : config.submitTxt && config.submitTxt.init || T('发表评论'),
+				'pushing': config.submitTxt && config.submitTxt.pushing || T('正在提交……'),
+				'success': config.submitTxt && config.submitTxt.success || T('评论成功！'),
+				'error'  : config.submitTxt && config.submitTxt.error || T('评论失败请重试')
 			};
 			this.$holderTxt = {
-				'content': config.holderTxt && config.holderTxt.content || '[必填] 在这里输入评论内容~',
-				'nick'   : config.holderTxt && config.holderTxt.nick || '[必填] 在这输入您的昵称，不超过16个字符。',
-				'link'   : config.holderTxt && config.holderTxt.link || '[选填] 这里可以输入您的网址(如:www.tangbc.com)，链接会加在您的昵称上。',
-				'contact': config.holderTxt && config.holderTxt.contact || '[选填] 联系方式(比如Email,QQ,微信)',
-				'code'   : config.holderTxt && config.holderTxt.code || '输入验证码'
+				'content': config.holderTxt && config.holderTxt.content || T('[必填] 在这里输入评论内容~'),
+				'nick'   : config.holderTxt && config.holderTxt.nick || T('[必填] 在这输入您的昵称，不超过16个字符。'),
+				'link'   : config.holderTxt && config.holderTxt.link || T('[选填] 这里可以输入您的网址(如:www.tangbc.com)，链接会加在您的昵称上。'),
+				'contact': config.holderTxt && config.holderTxt.contact || T('[选填] 联系方式(比如Email,QQ,微信)'),
+				'code'   : config.holderTxt && config.holderTxt.code || T('输入验证码')
 			};
-			this.$successTxt = config.successTxt || '提交成功！';
+			this.$successTxt = config.successTxt || T('提交成功！');
 			this.build();
 			return this;
 		},
@@ -434,7 +434,7 @@ define(function( require, exports ){
 				var content = util.removeTags( this.$data.content );
 				content = content.trim();
 				var brief = content.length > 20 ? content.substr(0, 20) + '……' : content;
-				holderTxt.content = '[必填] 回复“'+ this.$data.author +'”的评论：“' + brief + '”';
+				holderTxt.content = T('[必填] 回复{1}的评论：{2}', this.$data.author, brief);
 			}
 			var dom = $([
 				'<div class="M-commentForm">',
@@ -444,10 +444,10 @@ define(function( require, exports ){
 					this.$hasContact ? '<input type="text" class="M-commentFormContact" placeholder="'+ holderTxt.contact +'"/>' : '',
 					'<div class="M-commentFormFooter">',
 						'<input class="M-commentFormFooterCode"  placeholder="'+ holderTxt.code +'">',
-						'<img class="M-commentFormFooterPic" title="点击更换验证码" src="'+ this.$imageUrl +'"/>',
+						'<img class="M-commentFormFooterPic" title="'+ T('点击更换验证码') +'" src="'+ this.$imageUrl +'"/>',
 						'<span class="M-commentFormFooterTips"/>',
 						'<button class="M-commentFormFooterSubmit">'+ this.$submitTxt.init +'</button>',
-						'<button class="M-commentFormFooterReset">重置</button>',
+						'<button class="M-commentFormFooterReset">'+ T('重置') +'</button>',
 					'</div>',
 				'</div>'
 			].join(''));
@@ -541,7 +541,7 @@ define(function( require, exports ){
 					'refer': this.$doms.text,
 					'arrow': {'position': 'top'},
 					'offset': {'left': 10, 'top': 25},
-					'content': '评论内容不能为空~',
+					'content': T('评论内容不能为空~'),
 					'width': 140
 				});
 				this.$doms.text.focus();
@@ -552,7 +552,7 @@ define(function( require, exports ){
 					'refer': this.$doms.nick,
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
-					'content': '昵称不能为空~',
+					'content': T('昵称不能为空~'),
 					'width': 120
 				});
 				this.$doms.nick.focus();
@@ -563,7 +563,7 @@ define(function( require, exports ){
 					'refer': this.$doms.code,
 					'arrow': {'position': 'bottom'},
 					'offset': {'left': 0, 'top': -45},
-					'content': '验证码不能为空~',
+					'content': T('验证码不能为空~'),
 					'width': 130
 				});
 				this.$doms.code.focus();
@@ -663,13 +663,13 @@ define(function( require, exports ){
 			var msg = '';
 			if ( err ) {
 				util.error( err );
-				msg = '<span class="warning animated fadeIn">服务器出了点问题~<span>';
+				msg = '<span class="warning animated fadeIn">'+ T('服务器出了点问题~') +'<span>';
 			}
 			if ( !data.success ) {
 				msg = '<span class="warning animated fadeIn"><i class="M-iconWarning">×</i>' + data.message + '</span>';
 			}
 			else {
-				msg = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>验证码正确！<span>';
+				msg = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>'+ T('验证码正确！') +'<span>';
 			}
 			this.$doms.tips.html( msg );
 		},

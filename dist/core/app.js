@@ -2,8 +2,9 @@
  * [应用模块(通用模块集合)]
  */
 define(function( require, app ) {
-	var router = require('@core/router');
+	var language = require('@core/language');
 	var config = require('@boot/config');
+	var router = require('@core/router');
 	var animate = require('@core/animate');
 	var eventHelper = require('@core/eventHelper');
 	var dataHelper = require('@core/dataHelper');
@@ -11,6 +12,7 @@ define(function( require, app ) {
 	var cookie = require('@core/cookie');
 
 	// 应用模块导出
+	app.lang = language;
 	app.animate = animate;
 	app.data = dataHelper;
 	app.event = eventHelper;

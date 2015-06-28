@@ -41,9 +41,9 @@ define(function( require, exports ){
 			// 分页器HTML结构
 			var html = [
 				'<div class="M-pager '+ this.$class +'">',
-					'<input class="M-pagerPN M-pagerPrev" type="button" title="上一页"/>',
+					'<input class="M-pagerPN M-pagerPrev" type="button" title="'+ T('上一页') +'"/>',
 					'<div class="M-pagerList"/>',
-					'<input class="M-pagerPN M-pagerNext" type="button" title="下一页"/>',
+					'<input class="M-pagerPN M-pagerNext" type="button" title="'+ T('下一页') +'"/>',
 					'<div class="M-pagerInfo"/>',
 				'</div>'
 			].join('');
@@ -83,13 +83,13 @@ define(function( require, exports ){
 			var items = this.makePageArray( page, pages );
 
 			// 构建总条数
-			doms.info.html('<span class="total lsp2">[共'+ pages +'页，'+ param.total +'条记录]</span>');
+			doms.info.html('<span class="total lsp2">['+ T('共{1}页，{2}条记录', pages, param.total) +']</span>');
 
 			// 构建页码
 			util.each( items, function( num ) {
 				var item;
 				if ( num === '...' ) {
-					item = '<span class="M-pagerItem M-pagerOmit" title="已隐藏部分页码">···</span>';
+					item = '<span class="M-pagerItem M-pagerOmit" title="'+ T('已隐藏部分页码') +'">···</span>';
 				}
 				else {
 					item = '<input type="button" class="M-pagerItem" value="'+ num +'"/>';
@@ -244,9 +244,9 @@ define(function( require, exports ){
 			// 分页器HTML结构
 			var html = [
 				'<div class="M-pager '+ this.$class +'">',
-					'<input class="M-pagerPN M-pagerPrev" type="button" title="上一页"/>',
+					'<input class="M-pagerPN M-pagerPrev" type="button" title="'+ T('上一页') +'"/>',
 					'<div class="M-pagerList"/>',
-					'<input class="M-pagerPN M-pagerNext" type="button" title="下一页"/>',
+					'<input class="M-pagerPN M-pagerNext" type="button" title="'+ T('下一页') +'"/>',
 					'<div class="M-pagerInfo"/>',
 				'</div>'
 			].join('');
@@ -284,13 +284,14 @@ define(function( require, exports ){
 			var items = this.makePageArray( page, pages );
 
 			// 构建总条数
-			doms.info.html('<span class="total lsp2">[共'+ pages +'页，'+ param.total +'条记录]</span>');
+			doms.info.html('<span class="total lsp2">['+ T('共{1}页，{2}条记录', pages, param.total) +']</span>');
+
 
 			// 构建页码
 			util.each( items, function( num ) {
 				var item, href;
 				if ( num === '...' ) {
-					item = '<span class="M-pagerItem M-pagerOmit" title="已隐藏部分页码">···</span>';
+					item = '<span class="M-pagerItem M-pagerOmit" title="'+ T('已隐藏部分页码') +'">···</span>';
 				}
 				else {
 					href = page === num ? '' : 'href=#'+ link +'?page=' + num;

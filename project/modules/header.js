@@ -117,8 +117,8 @@ define(function( require, exports ){
 		buildTool: function() {
 			var html = $([
 				'<div class="M-headToolSearch">',
-					'<input type="text" class="searchIpt animated" placeholder="请输入关键字">',
-					'<div class="searchBtn" title="搜索文章">',
+					'<input type="text" class="searchIpt animated" placeholder="'+ T('请输入关键字') +'">',
+					'<div class="searchBtn" title="'+ T('搜索文章') +'">',
 						'<div class="circle"/>',
 						'<div class="line"/>',
 					'</div>',
@@ -213,7 +213,7 @@ define(function( require, exports ){
 			util.each( options, function( item, idx ) {
 				navs.push([
 					'<li>',
-						'<a href="' + item.link + '" data-id="' + idx + '">' + item.name + '</a>',
+						'<a href="' + item.link + '" data-id="' + idx + '">' + T(item.name) + '</a>',
 					'</li>'
 				].join(''));
 			});

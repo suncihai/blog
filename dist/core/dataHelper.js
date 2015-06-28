@@ -19,12 +19,12 @@ define(function( require, exports ){
 	function send( type, url, data, callback, context ) {
 		// 参数检测
 		if ( !util.isString( url ) ) {
-			util.error('错误的请求URL');
+			util.error(T('错误的请求URL'));
 			return false;
 		}
 
 		if ( !util.isFunc( callback ) ) {
-			util.error('错误的回调函数');
+			util.error(T('错误的回调函数'));
 			return false;
 		}
 
@@ -36,6 +36,17 @@ define(function( require, exports ){
 		function _fnSuccess( res ) {
 			if ( !context ) {
 				context = win;
+			}
+			// 处理返回数据的多语言情况
+			try {
+				/*
+				 * 不直接返回text数据是因为text需要转换Unicode中文编码
+				 * JSON.stringify会自动转换中文编码，效率要比自己写正则转换要好?
+				 */
+				res = JSON.parse(T(JSON.stringify(res)));
+			}
+			catch (e) {
+				util.error(e);
 			}
 			callback.call( context, false, res );
 		}
@@ -53,7 +64,7 @@ define(function( require, exports ){
 					xhr.abort();
 					msg = {
 						'status': status,
-						'message': '请求超时'
+						'message': T('请求超时')
 					}
 					callback.call( context, msg, null );
 				break;
@@ -61,12 +72,12 @@ define(function( require, exports ){
 				case 'parsererror':
 					msg = {
 						'status': status,
-						'message': 'JSON解析失败'
+						'message': T('JSON解析失败')
 					}
 					callback.call( context, msg, null );
 				break;
 				// 其他直接log错误信息
-				default: util.error('请求失败', 'status: ' + status + ', error: ' + error );
+				default: util.error(T('请求失败, status: {1}, error: {2}', status, error));
 			}
 		}
 

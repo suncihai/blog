@@ -3,6 +3,7 @@
  */
 define(function( require, util ){
 	var WIN = window;
+	var UDF;
 	var OP = Object.prototype;
 	var AP = Array.prototype;
 	var docBody = document.body;
@@ -329,44 +330,64 @@ define(function( require, util ){
 		var secondDiff = ( new Date().getTime() - opDate.getTime() ) / 1000;
 		var retStr = '';
 		if( secondDiff < 60 ) {
-			retStr = '刚刚';
+			retStr = T('刚刚');
 		}
 		if( !retStr && secondDiff < 60 * 30 ) {
-			retStr = Math.ceil( secondDiff / 60 ) + '分钟前';
+			retStr = T('{1}分钟前', Math.ceil( secondDiff / 60 ));
 		}
 		if( !retStr && secondDiff < 1800 ) {
-			retStr= '半小时前';
+			retStr= T('半小时前');
 		}
 		if( !retStr && secondDiff < 3600 ) {
-			retStr= '1小时前';
+			retStr= T('1小时前');
 		}
 		if( !retStr && secondDiff < 3600 * 2 ) {
-			retStr= '2小时前';
+			retStr= T('2小时前');
 		}
 		if( !retStr && secondDiff < 3600 * 3 ) {
-			retStr= '3小时前';
+			retStr= T('3小时前');
 		}
 		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() == day ) {
-			retStr = '今天' + hour + ':' + minute;
+			retStr = T('今天') + hour + ':' + minute;
 		}
 		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 1 == day ) {
-			retStr = '昨天' + hour + ':' + minute;
+			retStr = T('昨天') + hour + ':' + minute;
 		}
 		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 2 == day ) {
-			retStr = '前天' + hour + ':' + minute;
+			retStr = T('前天') + hour + ':' + minute;
 		}
 		if( !retStr && date.getFullYear() == year && date.getMonth() == month ) {
-			retStr = ( month + 1 ) + '月' + day + '日 ';
+			retStr = T('{1}月{2}日', month + 1, day);
 		}
 		if( !retStr && date.getFullYear() == year ) {
-			retStr = '今年' + ( month + 1 ) + '月' + day + '日 ';
+			retStr = T('今年{1}月{2}日', month + 1, day);
 		}
 		if( !retStr && date.getFullYear() - 1 == year ) {
-			retStr = '去年' + ( month + 1 ) + '月' + day + '日 ';
+			retStr = T('去年{1}月{2}日', month + 1, day);
 		}
 		if( !retStr && date.getFullYear() - year > 1 ) {
-			retStr = year + '年' + ( month + 1 ) + '月' + day + '日 ';
+			retStr = T('{1}年{2}月{3}日', year, month + 1, day);
 		}
 		return retStr;
+	}
+
+	/*
+	 * 模板替换
+	 * eg. util.templateReplace('<a href="{1}">{2}</a>', 'http://www.tangbc.com', '小前端')
+	 * =>  '<a href="http://www.tangbc.com">小前端</a>')
+	 */
+	var templateReplaceList;
+	var templateReplaceRegx = /\%(\d+)|\{\d+\}/g;
+	function _templateReplace( match ) {
+		if ( match[1] > 0 && templateReplaceList[match[1]] !== UDF ) {
+			return templateReplaceList[match[1]];
+		}
+		else {
+			return match[0];
+		}
+	}
+	util.templateReplace = function( template /*, replaceN ... */ ) {
+		templateReplaceList = arguments;
+		return template.replace( templateReplaceRegx, _templateReplace );
 	}
 });

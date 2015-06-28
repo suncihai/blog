@@ -77,7 +77,7 @@ define(function( require, exports ) {
 			this.$refer = param.refer || null;
 			this.$arrow = param.arrow || null;
 			this.$offset = param.offset || null;
-			this.$content = param.content || '提示文字';
+			this.$content = param.content || T('提示文字');
 			this.$width = param.width || 0;
 			this.$height = param.height || 0;
 			return this;

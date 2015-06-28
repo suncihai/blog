@@ -24,9 +24,9 @@ define(function( require, exports ){
 		build: function() {
 
 			// 设置标题
-			layout.setTitle( (this.$word || '') + '_搜索结果' );
+			layout.setTitle(T('{1}_搜索结果', (this.$word || '')));
 
-			var bannerTxt = '正在搜索有关「' + this.$renderWord +'」的文章记录 ……';
+			var bannerTxt = T('正在搜索有关「{1}」的文章记录', this.$renderWord) + ' ……';
 			// banner设置
 			banner.setData({
 				'type': 'archive',
@@ -81,11 +81,11 @@ define(function( require, exports ){
 		onData: function( err, res ) {
 			var self = this;
 			var dom = self.$data.dom;
-			var dataError = '拉取数据似乎出了点问题~';
+			var dataError = T('拉取数据似乎出了点问题~');
 			if ( err ) {
-				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
+				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if ( err.status === 'timeout' ) {
-					dom.html('<div class="noData animated bounce">请求超时，请按F5刷新重试~</div>');
+					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
@@ -98,13 +98,13 @@ define(function( require, exports ){
 			}
 			var info = self.$info = res.result;
 			if ( util.isEmpty( info ) ) {
-				dom.html('<div class="noData animated bounce">无数据</div>');
+				dom.html('<div class="noData animated bounce">'+ T('无数据') +'</div>');
 				return;
 			}
 			// 创建列表
 			self.buildArchives( info );
 
-			var bannerTxt = "搜到与「"+ this.$renderWord +"」相关的结果共" + (info.total || 0) + "条：";
+			var bannerTxt = T("搜到与「{1}」相关的结果共{2}条：", this.$renderWord, (info.total || 0));
 
 			// 隐藏loading
 			setTimeout(function() {
@@ -123,7 +123,7 @@ define(function( require, exports ){
 			this.$doms.listBox.empty();
 
 			if ( util.isEmpty( info.items ) ) {
-				this.$doms.listBox.html('<div class="fts20 pt2 pb2 animated fadeIn">(╯_╰)抱歉没有搜到相关内容！</div>');
+				this.$doms.listBox.html('<div class="fts20 pt2 pb2 animated fadeIn">(╯_╰)'+ T('抱歉没有搜到相关内容！') +'</div>');
 			}
 			else {
 				util.each( info.items, this.buildItems, this );
@@ -141,17 +141,17 @@ define(function( require, exports ){
 			var date = util.prettyDate( item.date );
 			var catName = util.getKeyName( item.catId, c.cat );
 			var anchor = catName + '/' + item.id; // 超链接地址
-			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">请进入内页查看</a>' : item.brief + ' ……';
+			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">'+ T('请进入内页查看') +'</a>' : item.brief + ' ……';
 			sections.push([
 				'<section class="section">',
 					'<a href="#'+ anchor +'" title="'+ item.tips +'" class="title">'+ item.title +'</a>',
 					'<p class="brief">'+ brief + '</p>',
 					'<div class="info">',
-						'<span class="tag">分类：'+ c.archiveTitle[catName] || '未知分类' +'</span>',
+						'<span class="tag">' + T('分类：') + c.archiveTitle[catName] || T('未知分类') + '</span>',
 						' / ',
-						'<span class="tag">评论数：'+ item.comments +'</span>',
+						'<span class="tag">' + T('评论数：') + item.comments +'</span>',
 						' / ',
-						'<span class="tag">发布时间：'+ date +'</span>',
+						'<span class="tag">' + T('发布时间：') + date +'</span>',
 					'</div>',
 				'</section>'
 			].join(''));

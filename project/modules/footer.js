@@ -28,9 +28,9 @@ define(function( require, exports ){
 						'<div class="M-footerInfo"></div>',
 						'<div class="M-footerLang">',
 							'<ul class="fr ulLang">',
-								'<li class="cn" data-type="zhCN" title="简体"></li>',
-								'<li class="hk" data-type="zhHK" title="繁体"></li>',
-								'<li class="us" data-type="enUS" title="英文"></li>',
+								'<li class="cn" data-type="zhCN" title="'+ T('简体') +'"></li>',
+								'<li class="hk" data-type="zhHK" title="'+ T('繁体') +'"></li>',
+								'<li class="us" data-type="enUS" title="'+ T('英文') +'"></li>',
 							'</ul>',
 						'</div>',
 					'</div>',
@@ -73,6 +73,7 @@ define(function( require, exports ){
 			}
 			else {
 				app.cookie.set('lang', lang);
+				app.lang.load( lang );
 				window.location.reload();
 			}
 			return false;

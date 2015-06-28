@@ -27,8 +27,8 @@
 			[/^(.*\.(?:css|js))(.*)$/i, '$1?v=1.2.2']
 		],
 		'preload': [
-			// 'resources/css/app.css',
-			'resources/css/app.min.css',
+			'resources/css/app.css',
+			// 'resources/css/app.min.css',
 			'@dist/plugins/prism/prism.min.css',
 			'@dist/plugins/animate/animate.min.css'
 		],
@@ -46,19 +46,22 @@
 		}
 	};
 	var stepFunc = [
-		// 加载基础文件
+		// 配置文件以及语言包
 		function() {
-			// 应用SeaJS配置
 			sea.config( config );
-			sea.use('layout', appInit);
+			sea.use('@core/language', appInit);
 		},
-		// 初始化布局
-		function( layout ) {
-			layout.base.init();
-			sea.use('@core/router', appInit);
+		// 语言包回调
+		function( language ) {
+			language.load( appInit );
+		},
+		// 加载布局和路由模块
+		function() {
+			sea.use(['layout', '@core/router'], appInit);
 		},
 		// 启动路由
-		function( router ) {
+		function( layout, router ) {
+			layout.base.init();
 			router.start();
 		}
 	];

@@ -9,7 +9,7 @@ define(function( require, exports ){
 	var NotFound = {
 		init: function( data ) {
 			this.$dom = data.dom;
-			layout.setTitle('页面都去哪儿了？');
+			layout.setTitle( T('页面都去哪儿了？') );
 			this.build();
 		},
 
@@ -77,15 +77,15 @@ define(function( require, exports ){
 			obscener.appendTo( this.$doms.left );
 
 			var rightPart = $([
-				'<h2 class="title">很抱歉，您要访问的页面不存在！</h2>',
-				'<p class="handle">有可能是：</p>',
-				'<p class="reason">· 请求的url有错<span>请检查地址是否完整或存在多余字符<span></p>',
-				'<p class="reason">· 页面失效<span>可能页面模块已删除，或者下线等<span></p>',
+				'<h2 class="title">'+ T('很抱歉，您要访问的页面不存在！') + '</h2>',
+				'<p class="handle">'+ T('有可能是：') + '</p>',
+				'<p class="reason">· '+ T('请求的url有错<span>请检查地址是否完整或存在多余字符') + '</span></p>',
+				'<p class="reason">· '+ T('页面失效') + '<span>' + T('可能页面模块已删除，或者下线等') + '</span></p>',
 				'<p class="handle">',
-					'<span>您可以返回：</span>',
-					'<a class="btn back">上一页</a>',
-					'<a href="/blog/#index" class="btn index">首页</a>',
-					'<a href="/blog/#frontends" class="btn blog">博客</a>',
+					'<span>'+ T('您可以返回：') + '</span>',
+					'<a class="btn back">'+ T('上一页') + '</a>',
+					'<a href="/blog/#index" class="btn index">'+ T('首页') + '</a>',
+					'<a href="/blog/#frontends" class="btn blog">'+ T('博客') + '</a>',
 				'</p>'
 			].join(''));
 			rightPart.appendTo( this.$doms.right );

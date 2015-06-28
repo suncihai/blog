@@ -21,7 +21,7 @@ define(function( require, exports ){
 			// banner设置
 			banner.setData({
 				'type': 'archive',
-				'content': '<h1 class="bannerTxt animated fadeIn fts28 pt5">可以随意发表：无聊的、建议的、拍砖的、批评的……</h1>'
+				'content': '<h1 class="bannerTxt animated fadeIn fts28 pt5">'+ T('可以随意发表：无聊的、建议的、拍砖的、批评的……') +'</h1>'
 			});
 			this.build();
 			return this;
@@ -38,8 +38,8 @@ define(function( require, exports ){
 			// 选项卡
 			$([
 				'<ul class="tabHead">',
-					'<li op-type="list">留言列表</li>',
-					'<li op-type="form" class="act">我要留言</li>',
+					'<li op-type="list">'+ T('留言列表') +'</li>',
+					'<li op-type="form" class="act">'+ T('我要留言') +'</li>',
 				'</ul>',
 				'<div class="tabBody">',
 					// 列表
@@ -97,17 +97,17 @@ define(function( require, exports ){
 				'posturl': dc.addmessage,
 				'hasContact': true,
 				'submitTxt': {
-					'init'   : '发表留言',
-					'pushing': '正在提交……',
-					'success': '留言成功！',
-					'error'  : '留言失败请重试'
+					'init'   : T('发表留言'),
+					'pushing': T('正在提交……'),
+					'success': T('留言成功！'),
+					'error'  : T('留言失败请重试')
 				},
 				'holderTxt': {
-					'content': '[必填] 在这里输入留言的内容~',
-					'nick'   : '[必填] 在这里输入昵称',
-					'link'   : '[选填] 网址(比如博客/微博/知乎主页url)'
+					'content': T('[必填] 在这里输入留言的内容~'),
+					'nick'   : T('[必填] 在这里输入昵称'),
+					'link'   : T('[选填] 网址(比如博客/微博/知乎主页url)')
 				},
-				'successTxt': '提交成功！等待审核……'
+				'successTxt': T('提交成功！等待审核……')
 			});
 			return this;
 		},
@@ -137,18 +137,18 @@ define(function( require, exports ){
 			var info = this.$doms.info;
 			$([
 				'<div class="infoBox">',
-					'<h2 class="title">博主信息</h2>',
+					'<h2 class="title">'+ T('博主信息') + '</h2>',
 					'<ul>',
 						'<li>',
-							'<label>所在地：</label>',
-							'<span>广东广州</span>',
+							'<label>'+ T('所在地：') + '</label>',
+							'<span>'+ T('广东广州') + '</span>',
 						'</li>',
 						'<li>',
-							'<label>联系方式：</label>',
+							'<label>'+ T('联系方式：') + '</label>',
 							'<span>went2077@gmail.com</span>',
 						'</li>',
 					'</ul>',
-					'<p class="sayother">欢迎给我提各种改进建议或者博客框架目前存在的BUGs，谢谢！</p>',
+					'<p class="sayother">'+ T('欢迎给我提各种改进建议或者博客框架目前存在的BUGs，谢谢！') +'</p>',
 				'</div>'
 			].join('')).appendTo( info );
 			return this;

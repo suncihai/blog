@@ -1,0 +1,7 @@
+{
+	"success": true,
+	"result": {
+		"_translate_module_path_": "@plugins/zh-hant/zh-hant",
+		"_translate_module_func_": "toTraditionalized"
+	}
+}

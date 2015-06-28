@@ -55,6 +55,7 @@ module.exports = function( grunt ) {
 				devel: true,
 				smarttabs: true,
 				predef: [
+					'T',
 					'module',
 					'require',
 					'define',

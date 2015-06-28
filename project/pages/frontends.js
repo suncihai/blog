@@ -108,11 +108,11 @@ define(function( require, exports ){
 		onData: function( err, res ) {
 			var self = this;
 			var dom = self.$data.dom;
-			var dataError = '拉取数据似乎出了点问题~';
+			var dataError = T('拉取数据似乎出了点问题~');
 			if ( err ) {
-				util.error('拉取数据失败！状态: ' + err.status + ', 错误信息: ' + err.message);
+				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if ( err.status === 'timeout' ) {
-					dom.html('<div class="noData animated bounce">请求超时，请按F5刷新重试~</div>');
+					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
@@ -125,7 +125,7 @@ define(function( require, exports ){
 			}
 			var info = self.$info = res.result;
 			if ( util.isEmpty( info && info.items ) ) {
-				dom.html('<div class="noData animated bounce">该页无数据:-)</div>');
+				dom.html('<div class="noData animated bounce">'+ T('该页无数据') +':-)</div>');
 				return false;
 			}
 			// 创建列表
@@ -152,13 +152,13 @@ define(function( require, exports ){
 			this.$doms.listBox.empty();
 
 			// 循环创建列表
-			util.each( info.items, this.buildItems, this );
+			util.each(info.items, this.buildItems, this);
 
 			// 创建完显示缩略图
 			this.showThumb();
 
 			// 设置标题
-			layout.setTitle( this.$title + ' - 第' + info.page + '页' );
+			layout.setTitle(T('{1} - 第{2}页', this.$title, info.page));
 		},
 
 		// * buildItems 循环生成列表. idx->序号, item->选项对象
@@ -188,9 +188,9 @@ define(function( require, exports ){
 					'<div class="P-archiveListInfo">',
 						// '<span class="tag">分类：'+ this.$title || data.name +'</span>',
 						// ' | ',
-						'<span class="tag">评论数：'+ item.comments +'</span>',
+						'<span class="tag">'+ T('评论数：') + item.comments +'</span>',
 						' / ',
-						'<span class="tag">发布时间：'+ date +'</span>',
+						'<span class="tag">'+ T('发布时间：')+ date +'</span>',
 					'</div>',
 				'</section>'
 			].join(''));
