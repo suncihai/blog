@@ -27,17 +27,21 @@ define(function( require, exports ){
 						'<div class="M-footerCopy">'+ config.content +'</div>',
 						'<div class="M-footerInfo"></div>',
 						'<div class="M-footerLang">',
-							'<ul class="fr ulLang">',
-								'<li class="cn" data-type="zhCN" title="'+ T('简体') +'"></li>',
-								'<li class="hk" data-type="zhHK" title="'+ T('繁体') +'"></li>',
-								'<li class="us" data-type="enUS" title="'+ T('英文') +'"></li>',
-							'</ul>',
+							'<ul class="fr ulLang"/>',
 						'</div>',
 					'</div>',
 				'</div>'
 			].join(''));
 			foot.appendTo( target.hide() );
 
+			// 切换列表
+			this.$lang = {
+				'zhCN': '<li class="cn" data-type="zhCN" title="'+ T('简体') +'"></li>',
+				'zhHK': '<li class="hk" data-type="zhHK" title="'+ T('繁体') +'"></li>',
+				'enUS': '<li class="us" data-type="enUS" title="'+ T('英文') +'"></li>'
+			};
+
+			// DOM缓存
 			this.$doms = {
 				'lang': foot.find('.ulLang')
 			}
@@ -60,13 +64,40 @@ define(function( require, exports ){
 		setLangStatus: function() {
 			var clang = app.cookie.get('lang');
 			var dom = this.$doms.lang;
-			dom.find('li[data-type="'+ clang +'"]').show().siblings('li').hide();
+			// 语言数组
+			var langs = [this.$lang[clang]];
+			// 排列语言顺序,选中的在中间
+			for ( var la in this.$lang ) {
+				var tlang = this.$lang[la];
+				if ( la !== clang ) {
+					switch ( langs.length ) {
+						case 1:
+							langs.unshift( tlang );
+						break;
+						case 2:
+							langs.push( tlang );
+						break;
+					}
+				}
+			}
+
+			dom.append( langs.join('') )
+				.find('li[data-type="'+ clang +'"]')
+				.show()
+				.siblings('li')
+				.hide();
+
 			// 绑定事件
 			app.event.proxy( dom, 'click', 'li', this.eventSwitchLang, this );
 		},
 
 		eventSwitchLang: function( evt, elm ) {
 			var lang = $(elm).attr('data-type');
+			this.$timeStamp = evt.timeStamp;
+
+			// 点击空白处收起语言选择
+			app.event.bind( $(document), 'click.blank', this.eventClickBlank, this );
+
 			if ( lang === app.cookie.get('lang') ) {
 				this.$doms.lang.find('li').fadeIn();
 				return false;
@@ -75,6 +106,18 @@ define(function( require, exports ){
 				app.cookie.set('lang', lang);
 				app.lang.load( lang );
 				window.location.reload();
+			}
+			return false;
+		},
+
+		eventClickBlank: function( evt ) {
+			var clang = app.cookie.get('lang');
+			var dom = this.$doms.lang;
+
+			if ( evt.timeStamp !== this.$timeStamp ) {
+				dom.find('li[data-type="'+ clang +'"]').show().siblings('li').fadeOut();
+				// 解除绑定
+				app.event.unbind( $(document), 'click.blank' );
 			}
 			return false;
 		},
