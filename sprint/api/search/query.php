@@ -15,7 +15,7 @@
 	);
 
 	// 请求参数过滤
-	if ( isset( $_GET['word'] ) && $_GET['word'] != '' )
+	if (isset($_GET['word']) && $_GET['word'] != '')
 	{
 		$Sql = new SQL();
 
@@ -23,24 +23,24 @@
 
 		$Sql->open();
 
-		$word = $OP->clearXss( $_GET['word'] );
+		$word = $OP->clearXss($_GET['word']);
 
-		if ( $word )
+		if ($word)
 		{
-			$result = $Sql->filterWord( $word );
+			$result = $Sql->filterWord($word);
 
-			echo( $result );
+			echo($result);
 		}
 		else
 		{
-			echo json_encode( $retError );
+			echo json_encode($retError);
 		}
 
 		$Sql->close();
 	}
 	else
 	{
-		echo json_encode( $retError );
+		echo json_encode($retError);
 	}
 
 ?>

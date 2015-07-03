@@ -1,7 +1,7 @@
 /**
  * [文章页面]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var app = require('app');
 	var c = app.getConfig();
 	var $ = require('jquery');
@@ -15,7 +15,7 @@ define(function( require, exports ){
 
 	var Article = {
 		// 初始化
-		init: function( data ) {
+		init: function(data) {
 			this.$ = {};
 			this.$reach = false;
 			this.$data = data;
@@ -30,7 +30,7 @@ define(function( require, exports ){
 		},
 
 		// 拉取数据
-		load: function( id ) {
+		load: function(id) {
 			var dc = c.dataCenter;
 			var param = {
 				'artid': id || this.$data.param
@@ -43,32 +43,32 @@ define(function( require, exports ){
 				'class': 'center mt2'
 			});
 
-			app.data.get( dc.showarticle, param, this.onData, this );
+			app.data.get(dc.showarticle, param, this.onData, this);
 		},
 
 		// 请求回调
-		onData: function( err, res ) {
+		onData: function(err, res) {
 			var dom = this.$data.dom;
 			var dataError = T('拉取数据似乎出了点问题~');
-			if ( err ) {
+			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
-				if ( err.status === 'timeout' ) {
+				if (err.status === 'timeout') {
 					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
-			if ( !res.success ) {
-				if ( res.message ) {
+			if (!res.success) {
+				if (res.message) {
 					dataError = res.message;
 				}
 				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
 				return;
 			}
 			var info = this.$info = res.result;
-			if ( res.total === 0 ) {
+			if (res.total === 0) {
 				var noText = T('数据库无该文章记录：') + this.$data.param;
 				dom.html('<div class="noData animated bounce">'+ noText +'</div>');
-				layout.setTitle( noText );
+				layout.setTitle(noText);
 				banner.setData({
 					'type': 'article',
 					'title': '******************',
@@ -76,33 +76,33 @@ define(function( require, exports ){
 					// 'tag': '标签：* | ',
 					'comments': T('评论数：') + '0'
 				})
-				// .setCrumbs( c.archiveTitle[this.$data.name], this.$data.param );
+				// .setCrumbs(c.archiveTitle[this.$data.name], this.$data.param);
 				return;
 			}
-			this.build( info );
+			this.build(info);
 		},
 
 		// 创建
-		build: function( info ) {
+		build: function(info) {
 			var self = this;
 			var dom = self.$data.dom;
 			var cont = $([
 				'<div class="content">',
 					'<article class="article">'+ info.content +'</article>',
 				'</div>'
-			].join('')).appendTo( dom ).hide();
+			].join('')).appendTo(dom).hide();
 
 			self.$doms = {
 				'content' : cont,
 				'article' : $('.article', cont),
-				'comment' : $('<div class="comments"/>').appendTo( dom )
+				'comment' : $('<div class="comments"/>').appendTo(dom)
 			}
 
 			// 代码高亮渲染
 			self.renderHighLighter();
 
 			// 标题
-			layout.setTitle( self.$data.name, info.title );
+			layout.setTitle(self.$data.name, info.title);
 
 			// 创建评论模块
 			this.$.comment = comment.init({
@@ -117,11 +117,11 @@ define(function( require, exports ){
 			banner.setData({
 				'type': 'article',
 				'title': info.title,
-				'time': T('发布时间：') + info.date.toString().slice( 0, 10 ) + ' | ',
+				'time': T('发布时间：') + info.date.toString().slice(0, 10) + ' | ',
 				// 'tag': T('标签：') + (info.tag || T('无'))  + ' | ',
 				'comments': T('评论数：') + info.comments
 			})
-			// .setCrumbs( c.archiveTitle[self.$data.name], self.$data.param );
+			// .setCrumbs(c.archiveTitle[self.$data.name], self.$data.param);
 
 			// 监听评论列表数据加载完成消息
 			app.messager.on('commentDataLoaded', this.onCommentDataLoaded, this);
@@ -135,25 +135,25 @@ define(function( require, exports ){
 				var doc = document;
 				var docHeight = $(doc).height();
 				var cHeight = util.getClientHeight();
-				if ( docHeight <= cHeight ) {
+				if (docHeight <= cHeight) {
 					this.$reach = true;
 					this.$.comment.showLoading().load();
 				}
 				else {
 					// 绑定鼠标滚动事件
-					app.event.bind( $(doc), 'scroll.loadComment', self.eventScrolling, self );
+					app.event.bind($(doc), 'scroll.loadComment', self.eventScrolling, self);
 				}
 			}, c.delay);
 		},
 
 		// 监测滚动距离, 加载评论列表
-		eventScrolling: function( evt, doc ) {
+		eventScrolling: function(evt, doc) {
 			var sTop = $(doc).scrollTop();
 			var oTop = this.$doms.comment.offset().top;
 			var cHeight = util.getClientHeight();
-			var dTop = Math.floor( ( oTop - sTop ) * 1.15 );
+			var dTop = Math.floor((oTop - sTop) * 1.15);
 			// 滚动条到达评论区域
-			if ( dTop < cHeight && !this.$reach && this.$.comment ) {
+			if (dTop < cHeight && !this.$reach && this.$.comment) {
 				this.$reach = true;
 				this.$.comment.showLoading().load();
 			}
@@ -171,12 +171,12 @@ define(function( require, exports ){
 			var preDOM = self.$doms.article.find('pre');
 			var num = preDOM.size(), i = 0;
 			var pre, cls, b, e, type, tmp;
-			for ( ; i < num; i++ ) {
+			for (; i < num; i++) {
 				pre = preDOM.eq(i);
 				cls = pre.attr('class');
 				b = cls.indexOf(':') + 1;
 				e = cls.indexOf(';');
-				type = cls.slice( b, e ).trim();
+				type = cls.slice(b, e).trim();
 				tmp = pre.html();
 				pre.empty().html('<code class="language-'+ type +'">' + tmp + '</code>');
 			}

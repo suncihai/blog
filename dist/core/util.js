@@ -1,7 +1,7 @@
 /**
  * [工具方法模块]
  */
-define(function( require, util ){
+define(function(require, util) {
 	var WIN = window;
 	var UDF;
 	var OP = Object.prototype;
@@ -12,43 +12,43 @@ define(function( require, util ){
 	/**
 	 * isObject 是否是对象自变量, {}或new Object()的形式
 	 */
-	function isObject( obj ) {
-		return OP.toString.call( obj ) === '[object Object]';
+	function isObject(obj) {
+		return OP.toString.call(obj) === '[object Object]';
 	}
 
 	/**
 	 * isArray 是否是真数组, []或new Array()的形式
 	 */
-	function isArray( obj ) {
-		return OP.toString.call( obj ) === '[object Array]';
+	function isArray(obj) {
+		return OP.toString.call(obj) === '[object Array]';
 	}
 
 	/**
 	 * isFunc 是否是函数
 	 */
-	function isFunc( fn ) {
-		return ( fn instanceof Function );
+	function isFunc(fn) {
+		return (fn instanceof Function);
 	}
 
 	/**
 	 * isString 是否是字符串
 	 */
-	function isString( str ) {
-		return ( typeof( str ) === 'string' );
+	function isString(str) {
+		return (typeof(str) === 'string');
 	}
 
 	/**
 	 * isBoolean 是否是布尔值
 	 */
-	function isBoolean( bool ) {
-		return ( typeof( bool ) === 'boolean' );
+	function isBoolean(bool) {
+		return (typeof(bool) === 'boolean');
 	}
 
 	/**
 	 * isNumber 是否是数字
 	 */
-	function isNumber( num ) {
-		return ( typeof( num ) === 'number' && !isNaN( num ) );
+	function isNumber(num) {
+		return (typeof(num) === 'number' && !isNaN(num));
 	}
 
 	/**
@@ -57,9 +57,9 @@ define(function( require, util ){
 	 * @param  {Array} arr [查询数组]
 	 * @return {Number}    [数组下标]
 	 */
-	function inArray( ele, arr ) {
-		if ( isArray( arr ) ) {
-			return arr.indexOf( ele );
+	function inArray(ele, arr) {
+		if (isArray(arr)) {
+			return arr.indexOf(ele);
 		}
 		return -1;
 	}
@@ -80,14 +80,14 @@ define(function( require, util ){
 	 */
 	var cons = WIN.console || {};
 	util.log = function() {
-		cons.log.apply( cons, arguments );
+		cons.log.apply(cons, arguments);
 	}
 	util.error = function() {
-		if ( cons.error.apply ) {
-			cons.error.apply( cons, arguments );
+		if (cons.error.apply) {
+			cons.error.apply(cons, arguments);
 		}
 		else {
-			cons.error( arguments[0] );
+			cons.error(arguments[0]);
 		}
 	}
 
@@ -96,10 +96,10 @@ define(function( require, util ){
 	 * @param  {Number} x [横位置]
 	 * @param  {Number} y [纵位置]
 	 */
-	util.scrollTo = function( x, y ) {
+	util.scrollTo = function(x, y) {
 		var _x = x || 0;
 		var _y = y || 0;
-		window.scrollTo( _x, _y );
+		window.scrollTo(_x, _y);
 	}
 
 	/**
@@ -107,9 +107,9 @@ define(function( require, util ){
 	 * @param  {Object} args [参数]
 	 * @return {Array}       [数组]
 	 */
-	util.argumentsToArray = function( args ) {
-		if  ( args instanceof arguments.constructor ) {
-			return AP.slice.call( args );
+	util.argumentsToArray = function(args) {
+		if  (args instanceof arguments.constructor) {
+			return AP.slice.call(args);
 		}
 		else {
 			return args;
@@ -122,13 +122,13 @@ define(function( require, util ){
 	 * @param  {Object} obj  [值所在的对象]
 	 * @return {String}      [键值名称]
 	 */
-	util.getKeyName = function( val, obj ) {
+	util.getKeyName = function(val, obj) {
 		var key = '';
-		if ( ( !val || !obj ) && !isObject( obj ) ) {
+		if ((!val || !obj) && !isObject(obj)) {
 			return false;
 		}
-		for ( key in obj ) {
-			if ( obj[key] == val ) {
+		for (key in obj) {
+			if (obj[key] == val) {
 				return key;
 			}
 		}
@@ -140,17 +140,17 @@ define(function( require, util ){
 	 * @param  {String} val  [值]
 	 * @return {Boolean}     [空为真,非空为假]
 	 */
-	util.isEmpty = function( val ) {
-		if ( isObject( val ) ) {
-			for ( var property in val ) {
-				if ( val.hasOwnProperty( property ) ) {
+	util.isEmpty = function(val) {
+		if (isObject(val)) {
+			for (var property in val) {
+				if (val.hasOwnProperty(property)) {
 					return false;
 				}
 				return true;
 			}
 		}
-		else if ( isArray( val ) ) {
-			return ( val.length === 0 );
+		else if (isArray(val)) {
+			return (val.length === 0);
 		}
 	}
 
@@ -160,23 +160,23 @@ define(function( require, util ){
 	 * @param  {Fuction}   callback  [回调函数]
 	 * @param  {Object}    context   [作用域]
 	 */
-	util.each = function( items, callback, context ) {
-		if ( !isArray( items ) || !isFunc( callback ) ) {
+	util.each = function(items, callback, context) {
+		if (!isArray(items) || !isFunc(callback)) {
 			return false;
 		}
-		if ( !context ) {
+		if (!context) {
 			context = WIN;
 		}
 		var ret;
-		for ( var i = 0; i < items.length; i++ ) {
-			ret = callback.call( context, items[i], i );
+		for (var i = 0; i < items.length; i++) {
+			ret = callback.call(context, items[i], i);
 			// 回调返回false退出循环
-			if ( ret === false ) {
+			if (ret === false) {
 				break;
 			}
 			// 回调返回null删除当前选项
-			if ( ret === null ) {
-				items.splice( i, 1 );
+			if (ret === null) {
+				items.splice(i, 1);
 				i--;
 			}
 		}
@@ -188,9 +188,9 @@ define(function( require, util ){
 	 * @return {Mix} 返回唯一的ID号
 	 */
 	var _guid = 1;
-	util.guid = function( fix ) {
-		if ( fix ) {
-			return '' + fix + ( _guid++ );
+	util.guid = function(fix) {
+		if (fix) {
+			return '' + fix + (_guid++);
 		}
 		else {
 			return _guid++;
@@ -202,10 +202,10 @@ define(function( require, util ){
 	 * @param  {Number} begin  [开始]
 	 * @param  {Number} end    [结束]
 	 */
-	util.random = function( begin, end ) {
+	util.random = function(begin, end) {
 		var ret;
-		if ( arguments.length === 2 ) {
-			ret = parseInt( Math.random() * ( end - begin + 1 ) + begin, 10 );
+		if (arguments.length === 2) {
+			ret = parseInt(Math.random() * (end - begin + 1) + begin, 10);
 		}
 		else {
 			ret = +new Date();
@@ -217,17 +217,17 @@ define(function( require, util ){
 	 * htmlEncode 将html标签转义
 	 * @param  {String} html  [字符]
 	 */
-	util.htmlEncode = function( html ) {
+	util.htmlEncode = function(html) {
 		var tag = {
 			'&': '&amp;',
 			'<': '&lt;',
 			'>': '&gt;',
 			'"': '&quot;'
 		}
-		function esc_rp( m ) {
+		function esc_rp(m) {
 			return tag[m];
 		}
-		return ( typeof( html ) != 'string' ) ? html : html.replace(/[&<>']/g, esc_rp );
+		return (typeof(html) != 'string') ? html : html.replace(/[&<>']/g, esc_rp);
 	}
 
 	/**
@@ -236,10 +236,10 @@ define(function( require, util ){
 	 * @param  {Mix}     value  [查询值]
 	 * @param  {String}  field  [对应的字段名]
 	 */
-	util.find = function( arr, value, field ) {
+	util.find = function(arr, value, field) {
 		var ret = null;
-		this.each( arr, function( item ) {
-			if ( item[field] === value ) {
+		this.each(arr, function(item) {
+			if (item[field] === value) {
 				ret = item;
 				return false;
 			}
@@ -252,10 +252,10 @@ define(function( require, util ){
 	 * @param   {Object}  param  [参数JSON]
 	 * @return  {String}         [解析的字符创]
 	 */
-	util.parse = function( param ) {
+	util.parse = function(param) {
 		var arr = [];
-		for ( var pro in param ) {
-			arr.push( pro + '=' + param[pro] );
+		for (var pro in param) {
+			arr.push(pro + '=' + param[pro]);
 		}
 		return '?' + arr.join('&');
 	},
@@ -287,7 +287,7 @@ define(function( require, util ){
 	/**
 	 * removeTags 去掉html标签
 	 */
-	util.removeTags = function( html ) {
+	util.removeTags = function(html) {
 		return html.toString().replace(/<[^>]+>/g, '');
 	}
 
@@ -295,13 +295,13 @@ define(function( require, util ){
 	 * fixZero 自动补0, (9 , 1) -> 09; (9 , 3) -> 0009
 	 * num: 原始数值 ; zeros: 补0个数
 	 */
-	util.fixZero = function( num, zeros ) {
+	util.fixZero = function(num, zeros) {
 		var b, v, x = 10, y, ns = num.toString().length;
-		if ( !this.isNumber( zeros ) || !this.isNumber( zeros ) ) {
+		if (!this.isNumber(zeros) || !this.isNumber(zeros)) {
 			return num;
 		}
 		y = ns + zeros;
-		b = Math.pow( x, y );
+		b = Math.pow(x, y);
 		v = b + num;
 		return v.toString().substr(1);
 	}
@@ -309,13 +309,13 @@ define(function( require, util ){
 	/*
 	 * 格式化某段时间, 返回与当前的时间差 2015-05-16 16:14:30
 	 */
-	util.prettyDate = function( dateStr ) {
-		if( !isString( dateStr ) ) {
+	util.prettyDate = function(dateStr) {
+		if(!isString(dateStr)) {
 			return dateStr
 		}
 		var date = new Date();
 		// 分离年月日时分秒
-		var dateArr = dateStr.split( new RegExp('[:| |-]', 'ig') );
+		var dateArr = dateStr.split(new RegExp('[:| |-]', 'ig'));
 		var year   = +dateArr[0],
 			month  = +dateArr[1] - 1,
 			day    = +dateArr[2],
@@ -323,49 +323,49 @@ define(function( require, util ){
 			minute = +dateArr[4],
 			second = +dateArr[5];
 		// 时分补0
-		hour = hour < 10 ? this.fixZero( hour, 1 ) : hour;
-		minute = minute < 10 ? this.fixZero( minute, 1 ) : minute;
+		hour = hour < 10 ? this.fixZero(hour, 1) : hour;
+		minute = minute < 10 ? this.fixZero(minute, 1) : minute;
 		// 计算秒数差值
-		var opDate = new Date( year, month, day , hour, minute, second );
-		var secondDiff = ( new Date().getTime() - opDate.getTime() ) / 1000;
+		var opDate = new Date(year, month, day , hour, minute, second);
+		var secondDiff = (new Date().getTime() - opDate.getTime()) / 1000;
 		var retStr = '';
-		if( secondDiff < 60 ) {
+		if(secondDiff < 60) {
 			retStr = T('刚刚');
 		}
-		if( !retStr && secondDiff < 60 * 30 ) {
-			retStr = T('{1}分钟前', Math.ceil( secondDiff / 60 ));
+		if(!retStr && secondDiff < 60 * 30) {
+			retStr = T('{1}分钟前', Math.ceil(secondDiff / 60));
 		}
-		if( !retStr && secondDiff < 1800 ) {
+		if(!retStr && secondDiff < 1800) {
 			retStr= T('半小时前');
 		}
-		if( !retStr && secondDiff < 3600 ) {
+		if(!retStr && secondDiff < 3600) {
 			retStr= T('1小时前');
 		}
-		if( !retStr && secondDiff < 3600 * 2 ) {
+		if(!retStr && secondDiff < 3600 * 2) {
 			retStr= T('2小时前');
 		}
-		if( !retStr && secondDiff < 3600 * 3 ) {
+		if(!retStr && secondDiff < 3600 * 3) {
 			retStr= T('3小时前');
 		}
-		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() == day ) {
+		if(!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() == day) {
 			retStr = T('今天') + hour + ':' + minute;
 		}
-		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 1 == day ) {
+		if(!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 1 == day) {
 			retStr = T('昨天') + hour + ':' + minute;
 		}
-		if( !retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 2 == day ) {
+		if(!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 2 == day) {
 			retStr = T('前天') + hour + ':' + minute;
 		}
-		if( !retStr && date.getFullYear() == year && date.getMonth() == month ) {
+		if(!retStr && date.getFullYear() == year && date.getMonth() == month) {
 			retStr = T('{1}月{2}日', month + 1, day);
 		}
-		if( !retStr && date.getFullYear() == year ) {
+		if(!retStr && date.getFullYear() == year) {
 			retStr = T('今年{1}月{2}日', month + 1, day);
 		}
-		if( !retStr && date.getFullYear() - 1 == year ) {
+		if(!retStr && date.getFullYear() - 1 == year) {
 			retStr = T('去年{1}月{2}日', month + 1, day);
 		}
-		if( !retStr && date.getFullYear() - year > 1 ) {
+		if(!retStr && date.getFullYear() - year > 1) {
 			retStr = T('{1}年{2}月{3}日', year, month + 1, day);
 		}
 		return retStr;
@@ -378,16 +378,16 @@ define(function( require, util ){
 	 */
 	var templateReplaceList;
 	var templateReplaceRegx = /\%(\d+)|\{\d+\}/g;
-	function _templateReplace( match ) {
-		if ( match[1] > 0 && templateReplaceList[match[1]] !== UDF ) {
+	function _templateReplace(match) {
+		if (match[1] > 0 && templateReplaceList[match[1]] !== UDF) {
 			return templateReplaceList[match[1]];
 		}
 		else {
 			return match[0];
 		}
 	}
-	util.templateReplace = function( template /*, replaceN ... */ ) {
+	util.templateReplace = function(template /*, replaceN ... */) {
 		templateReplaceList = arguments;
-		return template.replace( templateReplaceRegx, _templateReplace );
+		return template.replace(templateReplaceRegx, _templateReplace);
 	}
 });

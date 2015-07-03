@@ -8,16 +8,16 @@
 
 	// 请求参数过滤
 	$paramFormat =
-		isset( $_GET['artid'] )
-			&& is_numeric( $_GET['artid'] )
-		&& isset( $_GET['page'] )
-			&& is_numeric( $_GET['page'] )
-		&& isset( $_GET['limit'] )
-			&& is_numeric( $_GET['limit'] )
-		&& isset( $_GET['date'] )
-			&& is_numeric( $_GET['date'] );
+		isset($_GET['artid'])
+			&& is_numeric($_GET['artid'])
+		&& isset($_GET['page'])
+			&& is_numeric($_GET['page'])
+		&& isset($_GET['limit'])
+			&& is_numeric($_GET['limit'])
+		&& isset($_GET['date'])
+			&& is_numeric($_GET['date']);
 
-	if ( $paramFormat )
+	if ($paramFormat)
 	{
 		// 文章ID
 		$artid =  $_GET['artid'];
@@ -32,9 +32,9 @@
 
 		$Sql->open();
 
-		$result = $Sql->getCommentList( $artid, $page, $limit, $date );
+		$result = $Sql->getCommentList($artid, $page, $limit, $date);
 
-		echo( $result );
+		echo($result);
 
 		$Sql->close();
 	}
@@ -46,6 +46,6 @@
 			'result'  => null,
 			'message' => 'One of your request parameters is error!'
 		);
-		echo json_encode( $retError );
+		echo json_encode($retError);
 	}
 ?>

@@ -1,7 +1,7 @@
 /**
  * [Animate CSS3动画处理模块]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var util = require('util');
 	var c = require('@boot/config');
 
@@ -14,28 +14,28 @@ define(function( require, exports ){
 	 * @param  {Function} callback<可选>  [结束后的回调函数,返回type和keyframe名]
 	 * @param  {Mix}      context<可选>   [回调上下文]
 	 */
-	exports.play = function( $elm, keyframes, type, remove, callback, context ) {
+	exports.play = function($elm, keyframes, type, remove, callback, context) {
 		// 参数检测
-		if ( util.isFunc( type ) ) {
+		if (util.isFunc(type)) {
 			callback = type;
 			context = remove;
 			type = null;
 			remove = false;
 		}
-		if ( util.isBoolean( type ) ) {
+		if (util.isBoolean(type)) {
 			callback = remove;
 			context = callback;
 			remove = type;
 		}
-		if ( util.isString( type ) && util.isFunc( remove ) ) {
+		if (util.isString(type) && util.isFunc(remove)) {
 			callback = remove;
 			context = callback;
 			remove = false;
 		}
 
 		// 是否为随机播放
-		var keyframe = util.isArray( keyframes ) ?
-			keyframes.length === 1 ? keyframes[0] : keyframes[util.random( 0, keyframes.length -1 )]
+		var keyframe = util.isArray(keyframes) ?
+			keyframes.length === 1 ? keyframes[0] : keyframes[util.random(0, keyframes.length -1)]
 			: keyframes;
 
 		// 动画类型
@@ -51,24 +51,24 @@ define(function( require, exports ){
 		// 动画结束后的回调
 		function cbAnimateEnd() {
 			// 默认结束后移除class
-			if ( !remove ) {
-				$elm.removeClass( animateCls );
+			if (!remove) {
+				$elm.removeClass(animateCls);
 			}
 			// 结束后执行回调
-			if ( callback ) {
-				if ( !context ) {
+			if (callback) {
+				if (!context) {
 					context = window;
 				}
-				callback.call( context, type, keyframe );
+				callback.call(context, type, keyframe);
 			}
 		}
 
 		// 处理动画结束事件
 		function handleAnimateEndEvent() {
-			$elm.addClass( animateCls ).one(
+			$elm.addClass(animateCls).one(
 				c.animationdEnd,
-				function( evt ) {
-					if ( evt.target === $elm.get(0) ) {
+				function(evt) {
+					if (evt.target === $elm.get(0)) {
 						cbAnimateEnd();
 						return false;
 					}

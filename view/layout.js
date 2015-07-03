@@ -1,7 +1,7 @@
 /**
  * [布局模块]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var $ = require('jquery');
 	var util = require('util');
 	var c = require('app').getConfig();
@@ -37,7 +37,7 @@ define(function( require, exports ){
 		'<div id="POPUP"/>'
 	].join('');
 
-	var body = $('body').append( layout );
+	var body = $('body').append(layout);
 	var doms = {
 		// 框架结构：
 		'MAIN'    : $('#MAIN'),
@@ -92,7 +92,7 @@ define(function( require, exports ){
 		 * @param  {String} domName [需要获取的DOM对象,格式为blog/head, 暂时支持两层]
 		 * @return {Object} [DOM]
 		 */
-		getDOM: function( domName ) {
+		getDOM: function(domName) {
 			var domArr = domName.toString().split('/');
 			return domArr.length === 2 ? doms[domArr[0]][domArr[1]] : doms[domArr[0]];
 		},
@@ -101,17 +101,17 @@ define(function( require, exports ){
 		 * switchContainer 切换显示/清空视图容器<blog容器隐藏,其他清空>
 		 * @param  {String} contName [正在hash中的容器]
 		 */
-		switchContainer: function( contName ) {
+		switchContainer: function(contName) {
 			var index = this.getDOM('index/body');
 			var blog = this.getDOM('blog/body');
 			var blank = this.getDOM('blank');
 			var indexContent = this.getDOM('index/content');
-			switch( contName ) {
+			switch(contName) {
 				// 主页
 				case 'index':
 					blog.hide();
 					index.show();
-					if ( this.hasLayout( blank ) ) {
+					if (this.hasLayout(blank)) {
 						blank.hide().empty();
 					}
 				break;
@@ -119,10 +119,10 @@ define(function( require, exports ){
 				case 'blog':
 					index.hide();
 					blog.show();
-					if ( this.hasLayout( indexContent ) ) {
+					if (this.hasLayout(indexContent)) {
 						indexContent.empty();
 					}
-					if ( this.hasLayout( blank ) ) {
+					if (this.hasLayout(blank)) {
 						blank.hide().empty();
 					}
 				break;
@@ -131,7 +131,7 @@ define(function( require, exports ){
 					blog.hide();
 					index.hide();
 					blank.show();
-					if ( this.hasLayout( indexContent ) ) {
+					if (this.hasLayout(indexContent)) {
 						indexContent.empty();
 					}
 				break;
@@ -143,7 +143,7 @@ define(function( require, exports ){
 		 * @param  {Object}  $elm [DOM对象]
 		 * @return {Boolean} [有->true, 无->false]
 		 */
-		hasLayout: function( $elm ) {
+		hasLayout: function($elm) {
 			return $elm.length && $elm.html() !== '';
 		},
 
@@ -152,14 +152,14 @@ define(function( require, exports ){
 		 * @param  {Object} config [配置,应包含创建头部的目标DOM]
 		 * @return {type} [layout]
 		 */
-		buildHeader: function( config ) {
+		buildHeader: function(config) {
 			var self = this;
 			var type = config['type']; // 头部类型, index,blog
 			var types = self._getTick('headerType');
-			var exist = util.inArray( type, types );
-			if ( exist === -1 ) {
-				header.init( config , function() {
-					self._setTick( 'headerType', type );
+			var exist = util.inArray(type, types);
+			if (exist === -1) {
+				header.init(config , function() {
+					self._setTick('headerType', type);
 				});
 			}
 			return self;
@@ -170,9 +170,9 @@ define(function( require, exports ){
 		 * @param  {String} link [导航hash值]
 		 * @return {type}        [layout]
 		 */
-		updateNav: function( link ) {
+		updateNav: function(link) {
 			var nav = header.getChild('nav');
-			nav.updateNav( link );
+			nav.updateNav(link);
 			return this;
 		},
 
@@ -181,14 +181,14 @@ define(function( require, exports ){
 		 * @param  {Object} config [配置,应包含创建头部的目标DOM,和content]
 		 * @return {type} [layout]
 		 */
-		buildFooter: function( config ) {
+		buildFooter: function(config) {
 			var self = this;
 			var type = config['type']; // 页脚类型, index,blog
 			var types = self._getTick('footerType');
-			var exist = util.inArray( type, types );
-			if ( exist === -1 ) {
-				footer.init( config , function() {
-					self._setTick( 'footerType', type );
+			var exist = util.inArray(type, types);
+			if (exist === -1) {
+				footer.init(config , function() {
+					self._setTick('footerType', type);
 				});
 			}
 			return self;
@@ -215,9 +215,9 @@ define(function( require, exports ){
 		 * @param {type} name  [栏目名称]
 		 * @param {type} title [文章名称]
 		 */
-		setTitle: function( name, title ) {
+		setTitle: function(name, title) {
 			var str = '', art, arc;
-			if ( util.isString( name ) && arguments.length == 1 ) {
+			if (util.isString(name) && arguments.length == 1) {
 				str = name;
 			}
 			else {
@@ -234,15 +234,15 @@ define(function( require, exports ){
 		 * @param {String} name [缓存的字段,eg: field, field/subfield]
 		 * @param {Mixed}  val [缓存值]
 		 */
-		_setTick: function( name, val ) {
+		_setTick: function(name, val) {
 			var tick = this.$tick[name];
 			// 字符串
-			if ( util.isString( tick ) ) {
+			if (util.isString(tick)) {
 				this.$tick[name] = val.toString();
 			}
 			// 数组
-			else if ( util.isArray( tick ) ) {
-				this.$tick[name].push( val );
+			else if (util.isArray(tick)) {
+				this.$tick[name].push(val);
 			}
 			// 对象及其他
 			else {
@@ -255,7 +255,7 @@ define(function( require, exports ){
 		 * _getTick 获取tick(内部调用)
 		 * @param {String} field [需要获取的tick字段]
 		 */
-		_getTick: function( field ) {
+		_getTick: function(field) {
 			return this.$tick[field];
 		}
 	}

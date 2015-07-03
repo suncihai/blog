@@ -1,7 +1,7 @@
 /**
  * [主页]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var app = require('app');
 	var $ = require('jquery');
 	var util = require('util');
@@ -9,9 +9,9 @@ define(function( require, exports ){
 	var layout = require('layout').base;
 
 	var Index = {
-		init: function( data ) {
+		init: function(data) {
 			this.$data = data;
-			layout.setTitle( c.archiveTitle[this.$data.name] );
+			layout.setTitle(c.archiveTitle[this.$data.name]);
 			this.build();
 		},
 
@@ -30,7 +30,7 @@ define(function( require, exports ){
 					'</div>',
 				'</div>'
 			].join(''));
-			dom.append( html );
+			dom.append(html);
 
 			var animateds = [
 				'zoomInUp',
@@ -38,8 +38,8 @@ define(function( require, exports ){
 				'zoomInLeft',
 				'zoomInRight'
 			];
-			var animateCls = animateds[util.random( 0, animateds.length - 1 )];
-			app.animate.play( $('.myBlog', html), animateCls, 'slow' );
+			var animateCls = animateds[util.random(0, animateds.length - 1)];
+			app.animate.play($('.myBlog', html), animateCls, 'slow');
 		}
 	}
 	exports.base = Index;

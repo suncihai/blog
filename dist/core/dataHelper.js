@@ -1,10 +1,10 @@
 /**
  * [Ajax数据处理模块]
  */
-define(function( require, exports ){
+define(function(require, exports) {
+	var win = window;
 	var jquery = require('jquery');
 	var util = require('util');
-	var win = window;
 
 
 	/**
@@ -16,25 +16,25 @@ define(function( require, exports ){
 	 * @param  {Object}    context   [作用域]
 	 * @return {NULL}                [无返回值]
 	 */
-	function send( type, url, data, callback, context ) {
+	function send(type, url, data, callback, context) {
 		// 参数检测
-		if ( !util.isString( url ) ) {
+		if (!util.isString(url)) {
 			util.error(T('错误的请求URL'));
 			return false;
 		}
 
-		if ( !util.isFunc( callback ) ) {
+		if (!util.isFunc(callback)) {
 			util.error(T('错误的回调函数'));
 			return false;
 		}
 
-		if ( type === 'POST' && data ) {
-			data = JSON.stringify( data );
+		if (type === 'POST' && data) {
+			data = JSON.stringify(data);
 		}
 
 		// 请求成功
-		function _fnSuccess( res ) {
-			if ( !context ) {
+		function _fnSuccess(res) {
+			if (!context) {
 				context = win;
 			}
 			// 处理返回数据的多语言情况
@@ -48,17 +48,17 @@ define(function( require, exports ){
 			catch (e) {
 				util.error(e);
 			}
-			callback.call( context, false, res );
+			callback.call(context, false, res);
 		}
 
 		// 请求失败, 错误信息回调对象: {status: 状态, message: 信息}
 		// status可能值为：timeout, error, notmodified 和 parsererror
-		function _fnError( xhr, status, error ) {
+		function _fnError(xhr, status, error) {
 			var msg;
-			if ( !context ) {
+			if (!context) {
 				context = win;
 			}
-			switch( status ) {
+			switch(status) {
 				// 超时需要返回错误信息
 				case 'timeout':
 					xhr.abort();
@@ -66,7 +66,7 @@ define(function( require, exports ){
 						'status': status,
 						'message': T('请求超时')
 					}
-					callback.call( context, msg, null );
+					callback.call(context, msg, null);
 				break;
 				// 服务器返回不严格的JSON数据
 				case 'parsererror':
@@ -74,7 +74,7 @@ define(function( require, exports ){
 						'status': status,
 						'message': T('JSON解析失败')
 					}
-					callback.call( context, msg, null );
+					callback.call(context, msg, null);
 				break;
 				// 其他直接log错误信息
 				default: util.error(T('请求失败, status: {1}, error: {2}', status, error));
@@ -95,12 +95,12 @@ define(function( require, exports ){
 	}
 
 	// GET方式
-	exports.get = function( url, param, callback, context ) {
-		send( 'GET', url + util.parse( param ), null, callback, context );
+	exports.get = function(url, param, callback, context) {
+		send('GET', url + util.parse(param), null, callback, context);
 	}
 
 	// POST方式
-	exports.post = function( url, data, callback, context ) {
-		send( 'POST', url, data, callback, context );
+	exports.post = function(url, data, callback, context) {
+		send('POST', url, data, callback, context);
 	}
 });

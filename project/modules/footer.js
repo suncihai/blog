@@ -1,7 +1,7 @@
 /**
  * [页脚模块]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var app = require('app');
 	// var c = app.getConfig();
 	var $ = require('jquery');
@@ -9,7 +9,7 @@ define(function( require, exports ){
 
 	var Footer = {
 		// 初始化方法
-		init: function( config, callback ) {
+		init: function(config, callback) {
 			this.$config = config || {};
 			this.callback = callback;
 			this.build();
@@ -32,7 +32,7 @@ define(function( require, exports ){
 					'</div>',
 				'</div>'
 			].join(''));
-			foot.appendTo( target.hide() );
+			foot.appendTo(target.hide());
 
 			// 切换列表
 			this.$lang = {
@@ -50,12 +50,12 @@ define(function( require, exports ){
 			this.setLangStatus();
 
 			var cssStyle = config.css;
-			if ( cssStyle ) {
-				foot.css( cssStyle );
+			if (cssStyle) {
+				foot.css(cssStyle);
 			}
 
 			// 创建完成后回调
-			if ( util.isFunc( this.callback ) ) {
+			if (util.isFunc(this.callback)) {
 				this.callback();
 			}
 		},
@@ -67,57 +67,57 @@ define(function( require, exports ){
 			// 语言数组
 			var langs = [this.$lang[clang]];
 			// 排列语言顺序,选中的在中间
-			for ( var la in this.$lang ) {
+			for (var la in this.$lang) {
 				var tlang = this.$lang[la];
-				if ( la !== clang ) {
-					switch ( langs.length ) {
+				if (la !== clang) {
+					switch (langs.length) {
 						case 1:
-							langs.unshift( tlang );
+							langs.unshift(tlang);
 						break;
 						case 2:
-							langs.push( tlang );
+							langs.push(tlang);
 						break;
 					}
 				}
 			}
 
-			dom.append( langs.join('') )
+			dom.append(langs.join(''))
 				.find('li[data-type="'+ clang +'"]')
 				.show()
 				.siblings('li')
 				.hide();
 
 			// 绑定事件
-			app.event.proxy( dom, 'click', 'li', this.eventSwitchLang, this );
+			app.event.proxy(dom, 'click', 'li', this.eventSwitchLang, this);
 		},
 
-		eventSwitchLang: function( evt, elm ) {
+		eventSwitchLang: function(evt, elm) {
 			var lang = $(elm).attr('data-type');
 			this.$timeStamp = evt.timeStamp;
 
 			// 点击空白处收起语言选择
-			app.event.bind( $(document), 'click.blank', this.eventClickBlank, this );
+			app.event.bind($(document), 'click.blank', this.eventClickBlank, this);
 
-			if ( lang === app.cookie.get('lang') ) {
+			if (lang === app.cookie.get('lang')) {
 				this.$doms.lang.find('li').fadeIn();
 				return false;
 			}
 			else {
 				app.cookie.set('lang', lang);
-				app.lang.load( lang );
+				app.lang.load(lang);
 				window.location.reload();
 			}
 			return false;
 		},
 
-		eventClickBlank: function( evt ) {
+		eventClickBlank: function(evt) {
 			var clang = app.cookie.get('lang');
 			var dom = this.$doms.lang;
 
-			if ( evt.timeStamp !== this.$timeStamp ) {
+			if (evt.timeStamp !== this.$timeStamp) {
 				dom.find('li[data-type="'+ clang +'"]').show().siblings('li').fadeOut();
 				// 解除绑定
-				app.event.unbind( $(document), 'click.blank' );
+				app.event.unbind($(document), 'click.blank');
 			}
 			return false;
 		},

@@ -1,7 +1,7 @@
 /**
  * [视图控制模块]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var $ = require('jquery');
 	var c = require('@boot/config');
 	var LAYOUT_PATH = '@view/layout';
@@ -12,12 +12,12 @@ define(function( require, exports ){
 		 * @param  {JSON} config   [配置参数]
 		 * @return {Object}        [容器对象]
 		 */
-		createIndex: function( config ) {
-			if ( $.type( config ) !== 'object' ) {
+		createIndex: function(config) {
+			if ($.type(config) !== 'object') {
 				return false;
 			}
 			var content = null;
-			require.async( LAYOUT_PATH, function( mod ) {
+			require.async(LAYOUT_PATH, function(mod) {
 				var layout = mod.base;
 				content = layout.getDOM('index/content');
 
@@ -35,11 +35,11 @@ define(function( require, exports ){
 		 * createBlog 创建博客容器<archive or article>
 		 * @param  {JSON} config   [配置参数]
 		 */
-		createBlog: function( config ) {
+		createBlog: function(config) {
 			var self = this;
 			var retDOM = null;
 
-			require.async( LAYOUT_PATH, function( mod ) {
+			require.async(LAYOUT_PATH, function(mod) {
 				var layout = mod.base;
 				var blogDOM = layout.getDOM('blog');
 				var head = blogDOM['head'];
@@ -51,7 +51,6 @@ define(function( require, exports ){
 				// 隐藏兄弟容器
 				layout.switchContainer('blog');
 
-
 				// 创建博客头部/激活导航状态
 				layout.buildHeader({
 					'target': head,
@@ -60,7 +59,7 @@ define(function( require, exports ){
 					'css': {
 						'width': c.blogWidth
 					}
-				}).updateNav( config.container );
+				}).updateNav(config.container);
 
 				// 创建博客页脚
 				layout.buildFooter({
@@ -73,12 +72,12 @@ define(function( require, exports ){
 				});
 
 				// 存在pageid为文章页
-				if ( config.pageid ) {
-					retDOM = self._createArticle( layout, config );
+				if (config.pageid) {
+					retDOM = self._createArticle(layout, config);
 				}
 				// 不存在则为列表页
 				else {
-					retDOM = self._createArchive( layout, config );
+					retDOM = self._createArchive(layout, config);
 				}
 			});
 			return retDOM;
@@ -89,8 +88,8 @@ define(function( require, exports ){
 		 * @param  {JSON} config   [配置参数]
 		 * @return {Object}        [容器对象]
 		 */
-		_createArchive: function( layout, config ) {
-			if ( $.type( config ) !== 'object' ) {
+		_createArchive: function(layout, config) {
+			if ($.type(config) !== 'object') {
 				return false;
 			}
 			var tag = 'div';
@@ -110,7 +109,7 @@ define(function( require, exports ){
 				'archive-name': contName
 			});
 
-			archiveDom.append( cont );
+			archiveDom.append(cont);
 
 			return cont;
 		},
@@ -120,8 +119,8 @@ define(function( require, exports ){
 		 * @param  {JSON} config   [配置参数]
 		 * @return {Object}        [容器对象]
 		 */
-		_createArticle: function( layout, config ) {
-			if ( $.type( config ) !== 'object' ) {
+		_createArticle: function(layout, config) {
+			if ($.type(config) !== 'object') {
 				return false;
 			}
 			var tag = 'div';
@@ -142,7 +141,7 @@ define(function( require, exports ){
 				'article-name': marker
 			});
 
-			articleDom.append( cont );
+			articleDom.append(cont);
 
 			return cont;
 		},
@@ -154,7 +153,7 @@ define(function( require, exports ){
 		 */
 		createBlank: function() {
 			var blank = null;
-			require.async( LAYOUT_PATH, function( mod ) {
+			require.async(LAYOUT_PATH, function(mod) {
 				var layout = mod.base;
 				blank = layout.getDOM('blank');
 				layout.switchContainer('blank');

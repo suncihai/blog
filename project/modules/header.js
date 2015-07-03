@@ -1,7 +1,7 @@
 /**
  * [头部模块(LOGO、导航、搜索框)]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var app = require('app');
 	var $ = require('jquery');
 	var c = app.getConfig();
@@ -10,7 +10,7 @@ define(function( require, exports ){
 
 	var Header = {
 		// 初始化方法
-		init: function( config, callback ) {
+		init: function(config, callback) {
 			this.$ = {};
 			this.$config = config || {};
 			this.callback = callback;
@@ -34,8 +34,8 @@ define(function( require, exports ){
 			].join(''));
 
 			var cssStyle = config.css;
-			if ( cssStyle ) {
-				head.css( cssStyle );
+			if (cssStyle) {
+				head.css(cssStyle);
 			}
 
 			var doms = this.$doms = {
@@ -45,8 +45,8 @@ define(function( require, exports ){
 			}
 
 			// 创建导航对象
-			var nav = new Navigator( c.nav );
-			nav.putTo( doms.nav );
+			var nav = new Navigator(c.nav);
+			nav.putTo(doms.nav);
 
 			// 创建工具
 			this.buildTool();
@@ -55,10 +55,10 @@ define(function( require, exports ){
 			this.$ = {
 				'nav': nav
 			}
-			head.appendTo( target.show() );
+			head.appendTo(target.show());
 
 			// 启用headroom插件
-			if ( config.headroom ) {
+			if (config.headroom) {
 				var cfg = {
 					'tolerance': {
 						'up': 0,
@@ -72,13 +72,13 @@ define(function( require, exports ){
 					}
 				}
 				var elm = target.addClass('head-fixed').get(0);
-				var headroom = new HeadRoom( elm, cfg );
+				var headroom = new HeadRoom(elm, cfg);
 				this.$.headroom = headroom;
 				headroom.init();
 			}
 
 			// 创建完成后回调(@todo: 去掉,这里没必要回调)
-			if ( util.isFunc( this.callback ) ) {
+			if (util.isFunc(this.callback)) {
 				this.callback();
 			}
 			return this;
@@ -97,7 +97,7 @@ define(function( require, exports ){
 		},
 
 		// 锁住headroom
-		lockHead: function( unShow ) {
+		lockHead: function(unShow) {
 			this.$.headroom.destroy();
 			return this;
 		},
@@ -109,7 +109,7 @@ define(function( require, exports ){
 		},
 
 		// 获取header的子对象(模块)
-		getChild: function( childName ) {
+		getChild: function(childName) {
 			var mods = this.$;
 			return arguments.length === 1 ? mods[childName] : mods;
 		},
@@ -131,54 +131,54 @@ define(function( require, exports ){
 				// 	'</div>',
 				// '</div>'
 			].join(''));
-			html.appendTo( this.$doms.tool );
+			html.appendTo(this.$doms.tool);
 			this.$doms.tool.input = $('.searchIpt', html);
 			this.$doms.tool.btn = $('.searchBtn', html);
 
-			app.event.proxy( html, 'click.search', this.eventClickSearch, this );
+			app.event.proxy(html, 'click.search', this.eventClickSearch, this);
 		},
 
 		// 点击搜索框
-		eventClickSearch: function( evt, elm ) {
+		eventClickSearch: function(evt, elm) {
 			var input = this.$doms.tool.input;
 			var val = input.val();
 			this.$doms.tool.btn.addClass('act');
 			this.$timeStamp = evt.timeStamp;
 			// 点击空白处收起INPUT
-			app.event.bind( $(document), 'click.blank', this.eventClickBlank, this );
+			app.event.bind($(document), 'click.blank', this.eventClickBlank, this);
 			// 按下回车键响应搜索操作
-			app.event.bind( $(document), 'keydown.search', this.eventKeydownSearch, this );
+			app.event.bind($(document), 'keydown.search', this.eventKeydownSearch, this);
 			input.show().removeClass('inputInit').addClass('inputReady');
-			if ( !val ) {
+			if (!val) {
 				input.focus();
 			}
 			else {
-				if ( evt.target.tagName !== 'INPUT' ) {
-					this.searching( val );
+				if (evt.target.tagName !== 'INPUT') {
+					this.searching(val);
 				}
 			}
 			return false;
 		},
 
 		// 跳转到搜索页面
-		searching: function( val ) {
+		searching: function(val) {
 			app.controller.go('search?word=' + val);
 		},
 
 		// 响应回车键搜索
-		eventKeydownSearch: function( evt ) {
-			if ( evt.keyCode === 13 ) {
+		eventKeydownSearch: function(evt) {
+			if (evt.keyCode === 13) {
 				var val = this.$doms.tool.input.val();
-				if ( val ) {
-					this.searching( val );
+				if (val) {
+					this.searching(val);
 				}
 			}
 			return false;
 		},
 
 		// 点击空白处隐藏INPUT
-		eventClickBlank: function( evt ) {
-			if ( this.$timeStamp !== evt.timeStamp ) {
+		eventClickBlank: function(evt) {
+			if (this.$timeStamp !== evt.timeStamp) {
 				this.hideSearchInput();
 			}
 			return false;
@@ -193,14 +193,14 @@ define(function( require, exports ){
 				.addClass('inputInit')
 				.removeClass('inputReady');
 			// 解除绑定
-			app.event.unbind( $(document), 'click.blank' );
-			app.event.unbind( $(document), 'keydown.search' );
+			app.event.unbind($(document), 'click.blank');
+			app.event.unbind($(document), 'keydown.search');
 		}
 	}
 	exports.base = Header;
 
 	// Navigator 导航
-	function Navigator( options ) {
+	function Navigator(options) {
 		this.options = options || {};
 	}
 	Navigator.prototype = {
@@ -210,25 +210,25 @@ define(function( require, exports ){
 			var options = this.options;
 			var dom = this.$dom = $('<div class="M-nav"/>');
 			var navs = [];
-			util.each( options, function( item, idx ) {
+			util.each(options, function(item, idx) {
 				navs.push([
 					'<li>',
 						'<a href="' + item.link + '" data-id="' + idx + '">' + T(item.name) + '</a>',
 					'</li>'
 				].join(''));
 			});
-			dom.append( '<ul>' + navs.join('') + '</ul>' );
+			dom.append('<ul>' + navs.join('') + '</ul>');
 			return dom;
 		},
 		// 导航的激活状态
-		updateNav: function( link ) {
+		updateNav: function(link) {
 			var self = this;
 			var options = self.options;
 			// 激活link导航
-			if ( link ) {
+			if (link) {
 				link = '#' + link;
-				util.each( options, function( item, idx ) {
-					if ( item.link === link ) {
+				util.each(options, function(item, idx) {
+					if (item.link === link) {
 						self.$dom
 							.find('a[data-id=' + idx + ']')
 							.addClass('act')
@@ -244,9 +244,9 @@ define(function( require, exports ){
 				self.$dom.find('a').removeClass('act');
 			}
 		},
-		putTo: function( target ) {
+		putTo: function(target) {
 			var navLayout = this.buildNavDOM();
-			navLayout.appendTo( target );
+			navLayout.appendTo(target);
 			return this;
 		}
 	}

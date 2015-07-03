@@ -9,7 +9,7 @@ class OP
      * param  [String]  $val  [需要过滤的字符串]
      * param  [Return]        [过滤后的字符串]
      */
-    public function clearXss( $val ) {
+    public function clearXss($val) {
         // remove all non-printable characters. CR(0a) and LF(0b) and TAB(9) are allowed
         // this prevents some character re-spacing such as <java\0script>
         // note that you have to handle splits with \n, \r, and \t later since they *are* allowed in some inputs

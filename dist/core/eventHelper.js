@@ -2,7 +2,7 @@
  * [事件绑定模块,封装jQuery事件绑定]
  * 事件绑定用bind、proxy; 反操作为unbind、unproxy
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var util = require('util');
 	var jquery = require('jquery');
 
@@ -14,23 +14,23 @@ define(function( require, exports ){
 	 * @param  {Function} calllback[事件函数]
 	 * @param  {Object}   context  [作用域]
 	 */
-	exports.bind = function( $elm, type, data, calllback, context ) {
+	exports.bind = function($elm, type, data, calllback, context) {
 		// 参数检测
-		if ( !($elm instanceof jQuery) ) {
+		if (!($elm instanceof jQuery)) {
 			$elm = jquery($elm);
 		}
 		// 不传data
-		if ( util.isFunc( data ) ) {
+		if (util.isFunc(data)) {
 			context = calllback;
 			calllback = data;
 			data = null;
 		}
 
-		$elm.bind( type, function( ev ) {
-			if ( !context ) {
+		$elm.bind(type, function(ev) {
+			if (!context) {
 				context = this;
 			}
-			calllback.call( context, ev, this, data );
+			calllback.call(context, ev, this, data);
 		});
 	}
 
@@ -39,12 +39,12 @@ define(function( require, exports ){
 	 * @param  {Object}  $elm    [jquery对象]
 	 * @param  {String}  type    [事件类型]
 	 */
-	exports.unbind = function( $elm, type ) {
+	exports.unbind = function($elm, type) {
 		// 参数检测
-		if ( !($elm instanceof jQuery) ) {
+		if (!($elm instanceof jQuery)) {
 			$elm = jquery($elm);
 		}
-		$elm.unbind( type );
+		$elm.unbind(type);
 	}
 
 	/**
@@ -55,46 +55,46 @@ define(function( require, exports ){
 	 * @param  {Function}  data<可选>       [回调中传递数据]
 	 * @param  {Object}    context<可选>    [作用域]
 	 */
-	exports.hover = function( $elm, handleIn, handleOut, data, context ) {
+	exports.hover = function($elm, handleIn, handleOut, data, context) {
 		var argLen = arguments.length;
 		// 参数检测
-		if ( !($elm instanceof jQuery) ) {
+		if (!($elm instanceof jQuery)) {
 			$elm = jquery($elm);
 			return false;
 		}
-		if ( argLen === 4 ) {
+		if (argLen === 4) {
 			context = data;
 			data = null;
 		}
-		if ( !util.isFunc( handleOut ) ) {
-			if ( argLen === 4 ) {
+		if (!util.isFunc(handleOut)) {
+			if (argLen === 4) {
 				context = data;
 				data = handleOut;
 				handleOut = null;
 			}
-			if ( argLen === 3 ) {
+			if (argLen === 3) {
 				context = handleOut;
 				handleOut = null;
 				data = null;
 			}
 		}
-		function _mouseEnter( ev ) {
-			if ( !context ) {
+		function _mouseEnter(ev) {
+			if (!context) {
 				context = this;
 			}
-			if ( handleIn ) {
-				handleIn.call( context, ev, this, data );
+			if (handleIn) {
+				handleIn.call(context, ev, this, data);
 			}
 		}
-		function _mouseLeave( ev ) {
-			if ( !context ) {
+		function _mouseLeave(ev) {
+			if (!context) {
 				context = this;
 			}
-			if ( handleOut ) {
-				handleOut.call( context, ev, this, data );
+			if (handleOut) {
+				handleOut.call(context, ev, this, data);
 			}
 		}
-		$elm.hover( _mouseEnter, _mouseLeave );
+		$elm.hover(_mouseEnter, _mouseLeave);
 	}
 
 	/**
@@ -106,14 +106,14 @@ define(function( require, exports ){
 	 * @param  {Function}calllback [事件函数]
 	 * @param  {Object}  context   [作用域]
 	 */
-	exports.proxy = function( $elm, type, selector, data, calllback, context ) {
+	exports.proxy = function($elm, type, selector, data, calllback, context) {
 		// 参数检测
-		if ( !($elm instanceof jQuery) ) {
+		if (!($elm instanceof jQuery)) {
 			$elm = jquery($elm);
 		}
 
 		// 不传selector
-		if ( util.isFunc( selector ) ) {
+		if (util.isFunc(selector)) {
 			calllback = selector;
 			context = data;
 			selector = null;
@@ -121,17 +121,17 @@ define(function( require, exports ){
 		}
 
 		// 不传data
-		if ( util.isFunc( data ) ) {
+		if (util.isFunc(data)) {
 			context = calllback;
 			calllback = data;
 			data = null;
 		}
 
-		$elm.on( type, selector, function( ev ) {
-			if ( !context ) {
+		$elm.on(type, selector, function(ev) {
+			if (!context) {
 				context = this;
 			}
-			calllback.call( context, ev, this, data );
+			calllback.call(context, ev, this, data);
 		});
 	}
 
@@ -142,26 +142,26 @@ define(function( require, exports ){
 	 * @param  {Mix}      selector  [选择器,可为单个元素或者元素数组]
 	 * @param  {Function} calllback [事件函数]
 	 */
-	exports.unproxy = function( $elm, type, selector, calllback ) {
+	exports.unproxy = function($elm, type, selector, calllback) {
 		// 参数检测
-		if ( !($elm instanceof jQuery) ) {
+		if (!($elm instanceof jQuery)) {
 			$elm = jquery($elm);
 		}
-		switch( arguments.length ) {
+		switch(arguments.length) {
 			case 1:
 				$elm.off(); // 取消所有事件(不管是不是通过on添加的)
 			break;
 
 			case 2:
-				$elm.off( type ); // 取消指定类型的事件
+				$elm.off(type); // 取消指定类型的事件
 			break;
 
 			case 3:
-				$elm.off( type, selector ); // 取消selector上的所有代理事件
+				$elm.off(type, selector); // 取消selector上的所有代理事件
 			break;
 
 			case 4:
-				$elm.off( type, selector, calllback ); // 取消selector上的callback事件
+				$elm.off(type, selector, calllback); // 取消selector上的callback事件
 			break;
 
 			default: return false;

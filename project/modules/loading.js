@@ -1,7 +1,7 @@
 /**
  * [CSS3 loading模块]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var $ = require('jquery');
 
 	// 三个圆圈并排Loading
@@ -15,7 +15,7 @@ define(function( require, exports ){
 			'class': // 额外的class
 		 }
 		 */
-		init: function( config ) {
+		init: function(config) {
 			this.$config = config;
 			this.$status = 'uncompleted';
 			this.build();
@@ -32,30 +32,30 @@ define(function( require, exports ){
 					'<div class="M-threeRingsItem ring2"/>',
 					'<div class="M-threeRingsItem ring3"/>',
 				'</div>'
-			].join('')).appendTo( target );
+			].join('')).appendTo(target);
 
 			this.$status = 'show';
 
-			if ( c.width ) {
-				dom.width( c.width );
+			if (c.width) {
+				dom.width(c.width);
 			}
 
-			if ( c.height ) {
-				dom.height( c.height );
+			if (c.height) {
+				dom.height(c.height);
 			}
 
-			if ( c.size ) {
+			if (c.size) {
 				dom.find('.M-threeRingsItem').css({
 					'width': c.size,
 					'height': c.size
 				});
 			}
 
-			if ( c.class ) {
-				dom.addClass( c.class );
+			if (c.class) {
+				dom.addClass(c.class);
 			}
 
-			if ( c.autoHide ) {
+			if (c.autoHide) {
 				this.hide();
 				this.$status = 'hide';
 			}
@@ -84,7 +84,7 @@ define(function( require, exports ){
 			'class': // 额外的class
 		 }
 		 */
-		init: function( config ) {
+		init: function(config) {
 			this.$config = config;
 			this.$status = 'uncompleted';
 			this.build();
@@ -116,20 +116,20 @@ define(function( require, exports ){
 						'<div class="circle4"/>',
 					'</div>',
 				'</div>'
-			].join('')).appendTo( target );
+			].join('')).appendTo(target);
 
 			this.$status = 'show';
 
-			if ( c.width ) {
-				dom.width( c.width );
+			if (c.width) {
+				dom.width(c.width);
 			}
 
-			if ( c.height ) {
-				dom.height( c.height );
+			if (c.height) {
+				dom.height(c.height);
 			}
 
 			// 设置整个loading图标的尺寸
-			if ( c.scale ) {
+			if (c.scale) {
 				dom.find('.spinner-container').css({
 					'width': c.scale,
 					'height': c.scale
@@ -137,18 +137,18 @@ define(function( require, exports ){
 			}
 
 			// 设置每个小圆圈的尺寸
-			if ( c.size ) {
+			if (c.size) {
 				dom.find('.spinner-container > div').css({
 					'width': c.size,
 					'height': c.size
 				});
 			}
 
-			if ( c.class ) {
-				dom.addClass( c.class );
+			if (c.class) {
+				dom.addClass(c.class);
 			}
 
-			if ( c.autoHide ) {
+			if (c.autoHide) {
 				this.hide();
 				this.$status = 'hide';
 			}

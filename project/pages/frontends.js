@@ -1,7 +1,7 @@
 /**
  * [前端那些事-栏目页面]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var app = require('app');
 	var c = app.getConfig();
 	var $ = require('jquery');
@@ -13,7 +13,7 @@ define(function( require, exports ){
 	var loading = require('@modules/loading').base;
 
 	var Archives = {
-		init: function( data ) {
+		init: function(data) {
 			this.$ = {};
 			this.$data = data;
 			this.$title = c.archiveTitle[data.name];
@@ -31,18 +31,18 @@ define(function( require, exports ){
 			var num = quotations.length - 1;
 
 			// 设置标题
-			layout.setTitle( this.$title );
+			layout.setTitle(this.$title);
 
 			// banner设置
 			banner.setData({
 				'type': 'archive',
 				'content': '<h1 class="bannerTxt animated fadeIn">'+ quotations[util.random(0, num)] +'</h1>'
 			})
-			// .setCrumbs( this.$title, '' );
+			// .setCrumbs(this.$title, '');
 
 			this.$doms = {
-				listBox: $('<div class="P-archiveList"/>').appendTo( dom ).hide(),
-				pagerBox: $('<div class="P-archivePager"/>').appendTo( dom ).hide()
+				listBox: $('<div class="P-archiveList"/>').appendTo(dom).hide(),
+				pagerBox: $('<div class="P-archivePager"/>').appendTo(dom).hide()
 			}
 
 			// 创建分页模块
@@ -87,12 +87,12 @@ define(function( require, exports ){
 		},
 
 		// 拉取数据
-		load: function( param ) {
+		load: function(param) {
 			var dc = c.dataCenter;
 			param = param || this.getParam();
 			layout.hideFooter();
 			this.showLoading();
-			app.data.get( dc.listarchives, param, this.onData, this );
+			app.data.get(dc.listarchives, param, this.onData, this);
 		},
 
 		// 获取/更新请求参数<>
@@ -105,31 +105,31 @@ define(function( require, exports ){
 		},
 
 		// 拉取数据回调
-		onData: function( err, res ) {
+		onData: function(err, res) {
 			var self = this;
 			var dom = self.$data.dom;
 			var dataError = T('拉取数据似乎出了点问题~');
-			if ( err ) {
+			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
-				if ( err.status === 'timeout' ) {
+				if (err.status === 'timeout') {
 					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
-			if ( !res.success ) {
-				if ( res.message ) {
+			if (!res.success) {
+				if (res.message) {
 					dataError = res.message;
 				}
 				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
 				return;
 			}
 			var info = self.$info = res.result;
-			if ( util.isEmpty( info && info.items ) ) {
+			if (util.isEmpty(info && info.items)) {
 				dom.html('<div class="noData animated bounce">'+ T('该页无数据') +':-)</div>');
 				return false;
 			}
 			// 创建列表
-			self.buildArchives( info );
+			self.buildArchives(info);
 			// 更新页码
 			pager.setParam({
 				'link': self.$data.name,
@@ -147,7 +147,7 @@ define(function( require, exports ){
 		},
 
 		// 创建
-		buildArchives: function( info ) {
+		buildArchives: function(info) {
 			// 先清空之前的列表
 			this.$doms.listBox.empty();
 
@@ -162,16 +162,16 @@ define(function( require, exports ){
 		},
 
 		// * buildItems 循环生成列表. idx->序号, item->选项对象
-		buildItems: function( item, idx ) {
+		buildItems: function(item, idx) {
 			var data = this.$data;
 			var sections = [];
-			// var str = item.date.slice( 0, 10 );
+			// var str = item.date.slice(0, 10);
 			// var arr = str.split('-');
 			// var year = arr[0];
 			// var mouth = +arr[1];
 			// var day = +arr[2];
 			// var date = year + '年' + mouth + '月' + day + '日';
-			var date = util.prettyDate( item.date );
+			var date = util.prettyDate(item.date);
 			var anchor = data.name + '/' + item.id; // 超链接地址
 			var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
 			sections.push([
@@ -194,7 +194,7 @@ define(function( require, exports ){
 					'</div>',
 				'</section>'
 			].join(''));
-			this.$doms.listBox.append( sections.join('') );
+			this.$doms.listBox.append(sections.join(''));
 		},
 
 		// 显示缩略图
@@ -203,8 +203,8 @@ define(function( require, exports ){
 			var oImgs = null;
 			$(document).ready(function() {
 				oImgs = listBox.find('img.cover');
-				$.each( oImgs, function( i, item ) {
-					$(item).attr( 'src', $(item).attr('data-src') );
+				$.each(oImgs, function(i, item) {
+					$(item).attr('src', $(item).attr('data-src'));
 				});
 			});
 		}

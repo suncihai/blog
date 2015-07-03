@@ -1,7 +1,7 @@
 /**
  * [弹窗模块]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var $ = require('jquery');
 	var app = require('app');
 	var util = require('util');
@@ -11,10 +11,10 @@ define(function( require, exports ){
 
 	// 弹出层对话框
 	var Dialog = {
-		init: function( config ) {
+		init: function(config) {
 			var frame = null;
-			if ( config ) {
-				this.update( config );
+			if (config) {
+				this.update(config);
 			}
 			// 显示状态
 			this.$show = false;
@@ -30,7 +30,7 @@ define(function( require, exports ){
 				['rotateInDownLeft', 'rotateOutUpRight'],
 				['rotateIn', 'rotateOut']
 			];
-			frame = this.getPairFrame( this.$isRandom );
+			frame = this.getPairFrame(this.$isRandom);
 			// DIALOG打开动画
 			this.$inFrame = frame['in'];
 			// DIALOG关闭动画
@@ -46,17 +46,17 @@ define(function( require, exports ){
 
 		// 根据配置的宽高，更新弹窗的位置
 		// config配置：{width: xx, height: yy}, 单位em
-		update: function( config ) {
-			if ( util.isObject( config ) ) {
+		update: function(config) {
+			if (util.isObject(config)) {
 				var w = config.width, h = config.height;
 				var ml = -(w / 2) + 'em', mt = -(h / 2 + 2) + 'em';
-				if ( w ) {
+				if (w) {
 					DIALOG.css({
 						'width': w + 'em',
 						'margin-left': ml
 					});
 				}
-				if ( h ) {
+				if (h) {
 					DIALOG.css({
 						'height': h + 'em',
 						'margin-top': mt
@@ -66,8 +66,8 @@ define(function( require, exports ){
 		},
 
 		// 设置对话框的标题
-		setTitle: function( txt ) {
-			this.$doms.title.text( txt || '' );
+		setTitle: function(txt) {
+			this.$doms.title.text(txt || '');
 			return this;
 		},
 
@@ -76,26 +76,26 @@ define(function( require, exports ){
 			var self = this;
 			self.$show = true;
 			MASK.show();
-			app.animate.play( MASK, 'maskIn', 'fast', function(){
+			app.animate.play(MASK, 'maskIn', 'fast', function(){
 				DIALOG.show();
-				app.animate.play( DIALOG, self.$inFrame );
+				app.animate.play(DIALOG, self.$inFrame);
 			});
 			return self;
 		},
 
 		// 隐藏遮罩以及对话框
 		// cb: 隐藏动画结束后的回调函数 ct: 执行上下文
-		hide: function( cb, ct ) {
+		hide: function(cb, ct) {
 			var self = this;
 			self.$show = false;
-			app.animate.play( DIALOG, self.$outFrame, function() {
+			app.animate.play(DIALOG, self.$outFrame, function() {
 				DIALOG.hide();
-				app.animate.play( MASK, 'maskOut', 'fast', function() {
+				app.animate.play(MASK, 'maskOut', 'fast', function() {
 					MASK.hide();
 					app.messager.fire('dialogClosed');
 					// 执行回调
-					if ( util.isFunc( cb ) ) {
-						cb.call( ct || window );
+					if (util.isFunc(cb)) {
+						cb.call(ct || window);
 					}
 				});
 			});
@@ -104,7 +104,7 @@ define(function( require, exports ){
 
 		// 创建对话框
 		build: function() {
-			if ( this.$ready ) {
+			if (this.$ready) {
 				this.show();
 				return this.getBody();
 			}
@@ -121,7 +121,7 @@ define(function( require, exports ){
 				'</div>'
 			].join(''));
 
-			dom.appendTo( DIALOG );
+			dom.appendTo(DIALOG);
 
 			this.$doms = {
 				'title': $('.M-dialogHeadTitle', dom),
@@ -132,14 +132,14 @@ define(function( require, exports ){
 			this.$ready = true;
 
 			// 绑定关闭对话框事件
-			app.event.bind( this.$doms.close, 'click', this.eventCloseDialog, this );
-			app.event.hover( this.$doms.close, this.eventCloseEnter, this.eventCloseOut, this );
+			app.event.bind(this.$doms.close, 'click', this.eventCloseDialog, this);
+			app.event.hover(this.$doms.close, this.eventCloseEnter, this.eventCloseOut, this);
 			// 监听自身对话框关闭消息
 			app.messager.on('dialogClosed', this.onDailaogClosed, this);
 		},
 
 		eventCloseEnter: function() {
-			if ( this.$show ) {
+			if (this.$show) {
 				app.animate.play(this.$doms.close, 'rotateCloseForward');
 			}
 			return false;
@@ -147,7 +147,7 @@ define(function( require, exports ){
 
 		eventCloseOut: function() {
 			// 对话框未关闭的状态下
-			if ( this.$show ) {
+			if (this.$show) {
 				app.animate.play(this.$doms.close, 'rotateCloseBack');
 			}
 			return false;
@@ -162,7 +162,7 @@ define(function( require, exports ){
 		},
 
 		// 获取一对打开/关闭对话框的动画
-		getPairFrame: function( isRandom ) {
+		getPairFrame: function(isRandom) {
 			var frames = this.$frames;
 			var len = frames.length;
 			var resArr = isRandom ? frames[util.random(0, len - 1)] : frames[0];
@@ -175,7 +175,7 @@ define(function( require, exports ){
 		// 对话框关闭消息
 		onDailaogClosed: function() {
 			var frame = null;
-			if ( this.$isRandom ) {
+			if (this.$isRandom) {
 				frame = this.getPairFrame(true);
 				this.$inFrame = frame['in'];
 				this.$outFrame = frame['out'];

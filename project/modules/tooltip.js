@@ -1,7 +1,7 @@
 /**
  * [悬浮提示框模块]
  */
-define(function( require, exports ) {
+define(function(require, exports) {
 	var $ = require('jquery');
 	var app = require('app');
 	var util = require('util');
@@ -29,7 +29,7 @@ define(function( require, exports ) {
 		});
 		 */
 	var Tooltip = {
-		init: function( config ) {
+		init: function(config) {
 			this.$timeout = 3000; // 显示3秒自动隐藏
 			this.$status = 'hide';
 			// 默认配置
@@ -44,7 +44,7 @@ define(function( require, exports ) {
 		},
 
 		build: function() {
-			if ( POPUP.has('.M-tooltip').length ) {
+			if (POPUP.has('.M-tooltip').length) {
 				return false;
 			}
 			var tooltip = $([
@@ -61,7 +61,7 @@ define(function( require, exports ) {
 						'<div class="arrow-down-bg"/>',
 					'</div>',
 				'</div>'
-			].join('')).appendTo( POPUP );
+			].join('')).appendTo(POPUP);
 
 			this.$doms = {
 				'body'      : tooltip,
@@ -73,7 +73,7 @@ define(function( require, exports ) {
 		},
 
 		// 设置参数
-		setParam: function( param ) {
+		setParam: function(param) {
 			this.$refer = param.refer || null;
 			this.$arrow = param.arrow || null;
 			this.$offset = param.offset || null;
@@ -84,24 +84,24 @@ define(function( require, exports ) {
 		},
 
 		// 设置提示层参数
-		setTip: function( param ) {
-			this.setParam( param );
-			if ( this.$status === 'show' ) {
+		setTip: function(param) {
+			this.setParam(param);
+			if (this.$status === 'show') {
 				return false;
 			}
 			// 设置提示文字
-			this.$doms.text.text( this.$content );
+			this.$doms.text.text(this.$content);
 
 			// 设置提示框宽高
-			if ( this.$width ) {
-				this.$doms.content.width( this.$width );
+			if (this.$width) {
+				this.$doms.content.width(this.$width);
 			}
-			if ( this.$height ) {
-				this.$doms.content.height( this.$height );
+			if (this.$height) {
+				this.$doms.content.height(this.$height);
 			}
 
 			// 带箭头的tooltip
-			if ( this.$arrow ) {
+			if (this.$arrow) {
 				// 确定提示框位置
 				var toolHeight = this.$doms.body.outerHeight();
 				var posElm = this.$refer.offset();
@@ -112,18 +112,18 @@ define(function( require, exports ) {
 
 				// 确定箭头位置
 				var arrow = this.$arrow;
-				switch( arrow.position ) {
+				switch(arrow.position) {
 					// 向上的箭头offset只能配置left
 					case 'top':
 						this.$doms.arrowUp.show().siblings('.arrow').hide();
-						if ( arrow.offset ) {
+						if (arrow.offset) {
 							this.$doms.arrowUp.css('left', arrow.offset);
 						}
 					break;
 					// 向下的箭头offset只能配置left
 					case 'bottom':
 						this.$doms.arrowDown.show().siblings('.arrow').hide();
-						if ( arrow.offset ) {
+						if (arrow.offset) {
 							this.$doms.arrowDown.css('left', arrow.offset);
 						}
 					break;
@@ -157,14 +157,14 @@ define(function( require, exports ) {
 			app.animate.play(self.$doms.body, 'fadeIn', 'fast');
 
 			// 触发隐藏tooltip事件
-			app.event.bind( $(document), 'click.other', self.eventTriggerHide, self );
-			app.event.bind( $(document), 'scroll.other', self.eventTriggerHide, self );
-			app.event.bind( $(document), 'keydown.other', self.eventTriggerHide, self );
+			app.event.bind($(document), 'click.other', self.eventTriggerHide, self);
+			app.event.bind($(document), 'scroll.other', self.eventTriggerHide, self);
+			app.event.bind($(document), 'keydown.other', self.eventTriggerHide, self);
 
 			// 自动隐藏
 			self.$timer = setTimeout(function() {
 				// 异步之后有可能已经是隐藏状态了
-				if ( self.$status === 'show' ) {
+				if (self.$status === 'show') {
 					self.hide();
 				}
 			}, self.$timeout);
@@ -173,25 +173,25 @@ define(function( require, exports ) {
 		// 隐藏提示
 		hide: function() {
 			var self = this;
-			clearTimeout( this.$timer );
+			clearTimeout(this.$timer);
 			app.event.unbind($(document), 'click.other');
 			app.event.unbind($(document), 'scroll.other');
 			app.event.unbind($(document), 'keydown.other');
-			app.animate.play( self.$doms.body, 'fadeOut', 'fast', function() {
+			app.animate.play(self.$doms.body, 'fadeOut', 'fast', function() {
 				self.$status = 'hide';
 				POPUP.hide();
 			});
 		},
 
 		// 设置timeStamp
-		setTimeStamp: function( timeStamp ) {
+		setTimeStamp: function(timeStamp) {
 			this.$timeStamp = timeStamp;
 			return this;
 		},
 
 		// 触发隐藏tooltip所有事件
-		eventTriggerHide: function( evt ) {
-			if ( this.$timeStamp && this.$timeStamp !== evt.timeStamp ) {
+		eventTriggerHide: function(evt) {
+			if (this.$timeStamp && this.$timeStamp !== evt.timeStamp) {
 				this.hide();
 			}
 			return false;

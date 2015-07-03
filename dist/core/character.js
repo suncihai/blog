@@ -1,7 +1,7 @@
 /*
 	浏览器特性判断模块
  */
-define(function( require, exports ) {
+define(function(require, exports) {
 	var win = window;
 	var doc = document;
 	var loc = win.location;
@@ -13,14 +13,14 @@ define(function( require, exports ) {
 		browsers = 'O-Moz-Webkit'.split('-'),
 		len = browsers.length,
 		prop = "Perspective";
-		if ( prop in oDiv.style ) {
+		if (prop in oDiv.style) {
 			return true;
 		}
-		if ( '-ms-' + prop in oDiv.style ) {
+		if ('-ms-' + prop in oDiv.style) {
 			return true;
 		}
-		while( len-- ) {
-			if ( browsers[len] + prop in oDiv.style ) {
+		while(len--) {
+			if (browsers[len] + prop in oDiv.style) {
 				return true;
 			}
 		}
@@ -34,7 +34,7 @@ define(function( require, exports ) {
 		arr = hash.split('/');
 		len = arr.length;
 
-		switch( len ) {
+		switch(len) {
 			case 1: aid = null; break;
 			case 2: aid = arr[1]; break;
 			default: aid = arr[2] === '' ? arr[1] : null;
@@ -42,13 +42,13 @@ define(function( require, exports ) {
 
 		archive = arr[0];
 
-		if ( archive === '' || archive === 'index' ) {
+		if (archive === '' || archive === 'index') {
 			path = ''
 		}
-		if ( archive && archive !== 'index' && !aid ) {
+		if (archive && archive !== 'index' && !aid) {
 			path = '/p/' + archive
 		}
-		if ( archive && aid ) {
+		if (archive && aid) {
 			path = '/' + aid + '.html'
 		}
 
@@ -58,7 +58,7 @@ define(function( require, exports ) {
 	// 检查是否需要跳转, 需要->true, 不需要->false
 	exports.j = function() {
 		// 页面跳转
-		if ( !isSupportCSS3() || doc.documentMode == 10 ) {
+		if (!isSupportCSS3() || doc.documentMode == 10) {
 			var path = getJumpPath();
 			win.location.href = 'http://' + host + path;
 			return true;

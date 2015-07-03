@@ -1,7 +1,7 @@
 /*
 	cookie相关操作模块
  */
-define(function( require, exports ) {
+define(function(require, exports) {
 	var util = require('util');
 	var jquery = require('jquery');
 	// cookie默认配置
@@ -14,16 +14,16 @@ define(function( require, exports ) {
 	}
 
 	// 写入cookie
-	exports.set = function( key, value, options ) {
-		options = jquery.extend( {}, defaults, options );
-		if ( util.isNumber( options.expires ) ) {
+	exports.set = function(key, value, options) {
+		options = jquery.extend({}, defaults, options);
+		if (util.isNumber(options.expires)) {
 			var days = options.expires;
 			var t = options.expires = new Date();
-			t.setMilliseconds( t.getMilliseconds() + days * 864e+5 );
+			t.setMilliseconds(t.getMilliseconds() + days * 864e+5);
 		}
 
 		return (document.cookie = [
-			encode( key ), '=', stringifyCookieValue( value ),
+			encode(key), '=', stringifyCookieValue(value),
 			options.expires ? '; expires=' + options.expires.toUTCString() : '',
 			options.path    ? '; path=' + options.path : '',
 			options.domain  ? '; domain=' + options.domain : ''
@@ -31,22 +31,22 @@ define(function( require, exports ) {
 	}
 
 	// 读取cookie
-	exports.get = function( key ) {
+	exports.get = function(key) {
 		var result = key ? undefined : {};
 		var cookies = document.cookie ? document.cookie.split('; ') : [];
 
-		util.each( cookies, function( item ) {
+		util.each(cookies, function(item) {
 			var parts = item.split('=');
 			var name = decode(parts.shift());
 			var cookie = parts.join('=');
 
 			// 返回全部
-			if ( !key && cookie === read( cookie ) ) {
+			if (!key && cookie === read(cookie)) {
 				result[name] = cookie;
 			}
 			// 返回单个
-			if ( key && key === name ) {
-				result = read( cookie );
+			if (key && key === name) {
+				result = read(cookie);
 				return false;
 			}
 		});
@@ -54,9 +54,9 @@ define(function( require, exports ) {
 	}
 
 	// 删除cookie
-	exports.remove = function( key, options ) {
-		this.setCookie( key, jquery.extend({}, options, {'expires': -1}));
-		return !this.setCookie( key );
+	exports.remove = function(key, options) {
+		this.setCookie(key, jquery.extend({}, options, {'expires': -1}));
+		return !this.setCookie(key);
 	}
 
 	function encode(s) {
@@ -67,25 +67,25 @@ define(function( require, exports ) {
 		return defaults.raw ? s : decodeURIComponent(s);
 	}
 
-	function stringifyCookieValue( value ) {
-		return encode( defaults.json ? JSON.stringify( value ) : String( value ) );
+	function stringifyCookieValue(value) {
+		return encode(defaults.json ? JSON.stringify(value) : String(value));
 	}
 
-	function parseCookieValue( s ) {
-		if ( s.indexOf('"') === 0 ) {
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
 			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
 		}
 
 		try {
-			s = decodeURIComponent( s.replace(/\+/g, ' ') );
+			s = decodeURIComponent(s.replace(/\+/g, ' '));
 			return defaults.json ? JSON.parse(s) : s;
 		}
-		catch ( e ) {
-			util.error( e );
+		catch (e) {
+			util.error(e);
 		}
 	}
 
-	function read( key ) {
+	function read(key) {
 		var value = defaults.raw ? key : parseCookieValue(key);
 		return value;
 	}

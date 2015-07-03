@@ -1,7 +1,7 @@
 /**
  * [博客Banner模块]
  */
-define(function( require, exports ) {
+define(function(require, exports) {
 	var $ = require('jquery');
 	var util = require('util');
 	var layout = require('layout').base;
@@ -29,7 +29,7 @@ define(function( require, exports ) {
 						'</div>',
 					'</div>',
 				'</div>'
-			].join('')).appendTo( target );
+			].join('')).appendTo(target);
 
 			// dom缓存
 			this.$doms = {
@@ -54,49 +54,49 @@ define(function( require, exports ) {
 		},
 
 		// 设置数据
-		setData: function( data ) {
-			if ( !this.$domReady ) {
+		setData: function(data) {
+			if (!this.$domReady) {
 				this.build();
 			}
-			if ( !this.$show ) {
+			if (!this.$show) {
 				this.show();
 			}
 			var type = data['type'];
-			switch( type ) {
+			switch(type) {
 				case 'article':
-					this.setArticleInfo( data );
+					this.setArticleInfo(data);
 				break;
 				case 'archive':
-					this.setArchiveInfo( data );
+					this.setArchiveInfo(data);
 				break;
 			}
 			return this;
 		},
 
 		// 文章页
-		setArticleInfo: function( info ) {
+		setArticleInfo: function(info) {
 			var dom = this.$doms.articles;
 			this.$doms.article.addClass('fadeIn');
 			this.$doms.article.show().siblings('.M-bannerArchive').hide();
-			dom.title.text( info['title'] );
-			dom.time.text( info['time'] );
-			dom.tag.text( info['tag'] );
-			dom.comments.text( info['comments'] );
+			dom.title.text(info['title']);
+			dom.time.text(info['time']);
+			dom.tag.text(info['tag']);
+			dom.comments.text(info['comments']);
 		},
 
 		// 列表页
-		setArchiveInfo: function( info ) {
+		setArchiveInfo: function(info) {
 			var dom = this.$doms.archives;
 			this.$doms.article.removeClass('fadeIn');
 			this.$doms.archive.show().siblings('.M-bannerArticle').hide();
-			dom.content.html( info['content'] || "" );
+			dom.content.html(info['content'] || "");
 		},
 
 		// 设置公共面包屑
 		setCrumbs: function() {
-			var args = util.argumentsToArray( arguments );
+			var args = util.argumentsToArray(arguments);
 			var html = args.join('<span class="M-bannerCrumbsArrow">&gt;</span>');
-			this.$doms.crumbs.html( html );
+			this.$doms.crumbs.html(html);
 		},
 
 		show: function() {

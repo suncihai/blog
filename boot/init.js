@@ -1,4 +1,4 @@
-﻿(function( sea, win ){
+﻿(function(sea, win) {
 
 	var config = {
 		'base': '/blog/',
@@ -41,38 +41,38 @@
 	var i = 0;
 	var appInit = function() {
 		var cb = stepFunc[i++];
-		if ( cb ) {
-			cb.apply( win, arguments );
+		if (cb) {
+			cb.apply(win, arguments);
 		}
 	};
 	var stepFunc = [
 		// 配置文件以及语言包
 		function() {
-			sea.config( config );
+			sea.config(config);
 			sea.use('@core/language', appInit);
 		},
 		// 语言包回调
-		function( language ) {
-			language.load( appInit );
+		function(language) {
+			language.load(appInit);
 		},
 		// 加载布局和路由模块
 		function() {
 			sea.use(['layout', '@core/router'], appInit);
 		},
 		// 启动路由
-		function( layout, router ) {
+		function(layout, router) {
 			layout.base.init();
 			router.start();
 		}
 	];
 
 	// 浏览器特性判断
-	sea.use('/blog/dist/core/character', function( b ) {
-		if ( b.j() ){
+	sea.use('/blog/dist/core/character', function(b) {
+		if (b.j()){
 			return false;
 		}
 		// 初始化开始
 		appInit();
 	});
 
-})( seajs, window );
+})(seajs, window);

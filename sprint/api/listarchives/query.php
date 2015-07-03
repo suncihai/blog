@@ -8,16 +8,16 @@
 
 	// 请求参数过滤
 	$paramFormat =
-		isset( $_GET['catid'] )
-			&& is_numeric( $_GET['catid'] )
-		&& isset( $_GET['page'] )
-			&& is_numeric( $_GET['page'] )
-		&& isset( $_GET['limit'] )
-			&& is_numeric( $_GET['limit'] )
-		&& isset( $_GET['brief'] )
-			&& is_numeric( $_GET['brief'] );
+		isset($_GET['catid'])
+			&& is_numeric($_GET['catid'])
+		&& isset($_GET['page'])
+			&& is_numeric($_GET['page'])
+		&& isset($_GET['limit'])
+			&& is_numeric($_GET['limit'])
+		&& isset($_GET['brief'])
+			&& is_numeric($_GET['brief']);
 
-	if ( $paramFormat )
+	if ($paramFormat)
 	{
 		// 栏目ID
 		$catid =  $_GET['catid'];
@@ -32,9 +32,9 @@
 
 		$Sql->open();
 
-		$result = $Sql->getArchiveList( $catid, $page, $limit, $brief );
+		$result = $Sql->getArchiveList($catid, $page, $limit, $brief);
 
-		echo( $result );
+		echo($result);
 
 		$Sql->close();
 	}
@@ -46,6 +46,6 @@
 			'result'  => null,
 			'message' => 'One of your request parameters is error!'
 		);
-		echo json_encode( $retError );
+		echo json_encode($retError);
 	}
 ?>

@@ -1,7 +1,7 @@
 /**
  * [搜索结果页面]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var app = require('app');
 	var c = app.getConfig();
 	var $ = require('jquery');
@@ -12,7 +12,7 @@ define(function( require, exports ){
 	var loading = require('@modules/loading').base;
 
 	var SearchResult = {
-		init: function( data ) {
+		init: function(data) {
 			this.$data = data;
 			this.$dom = data.dom;
 			this.$word = data.search && data.search.word;
@@ -32,10 +32,10 @@ define(function( require, exports ){
 				'type': 'archive',
 				'content': '<h1 class="bannerTxt fts30">'+ bannerTxt +'</h1>'
 			})
-			// .setCrumbs( this.$title, '' );
+			// .setCrumbs(this.$title, '');
 
 			this.$doms = {
-				listBox: $('<div class="P-search-list"/>').appendTo( this.$dom ).hide()
+				listBox: $('<div class="P-search-list"/>').appendTo(this.$dom).hide()
 			}
 
 			// 数据加载之前显示loading
@@ -74,35 +74,35 @@ define(function( require, exports ){
 			var dc = c.dataCenter;
 			layout.hideFooter();
 			this.showLoading();
-			app.data.get( dc.search, {'word': this.$word}, this.onData, this );
+			app.data.get(dc.search, {'word': this.$word}, this.onData, this);
 		},
 
 		// 拉取数据回调
-		onData: function( err, res ) {
+		onData: function(err, res) {
 			var self = this;
 			var dom = self.$data.dom;
 			var dataError = T('拉取数据似乎出了点问题~');
-			if ( err ) {
+			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
-				if ( err.status === 'timeout' ) {
+				if (err.status === 'timeout') {
 					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
-			if ( !res.success ) {
-				if ( res.message ) {
+			if (!res.success) {
+				if (res.message) {
 					dataError = res.message;
 				}
 				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
 				return;
 			}
 			var info = self.$info = res.result;
-			if ( util.isEmpty( info ) ) {
+			if (util.isEmpty(info)) {
 				dom.html('<div class="noData animated bounce">'+ T('无数据') +'</div>');
 				return;
 			}
 			// 创建列表
-			self.buildArchives( info );
+			self.buildArchives(info);
 
 			var bannerTxt = T("搜到与「{1}」相关的结果共{2}条：", this.$renderWord, (info.total || 0));
 
@@ -118,28 +118,28 @@ define(function( require, exports ){
 		},
 
 		// 创建
-		buildArchives: function( info ) {
+		buildArchives: function(info) {
 			// 先清空之前的列表
 			this.$doms.listBox.empty();
 
-			if ( util.isEmpty( info.items ) ) {
+			if (util.isEmpty(info.items)) {
 				this.$doms.listBox.html('<div class="fts20 pt2 pb2 animated fadeIn">(╯_╰)'+ T('抱歉没有搜到相关内容！') +'</div>');
 			}
 			else {
-				util.each( info.items, this.buildItems, this );
+				util.each(info.items, this.buildItems, this);
 			}
 		},
 
 		// 循环生成列表
-		buildItems: function( item, idx ) {
+		buildItems: function(item, idx) {
 			var sections = [];
-			// var str = item.date.slice( 0, 10 );
+			// var str = item.date.slice(0, 10);
 			// var arr = str.split('-');
 			// var year = arr[0];
 			// var mouth = +arr[1];
 			// var day = +arr[2];
-			var date = util.prettyDate( item.date );
-			var catName = util.getKeyName( item.catId, c.cat );
+			var date = util.prettyDate(item.date);
+			var catName = util.getKeyName(item.catId, c.cat);
 			var anchor = catName + '/' + item.id; // 超链接地址
 			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">'+ T('请进入内页查看') +'</a>' : item.brief + ' ……';
 			sections.push([
@@ -155,7 +155,7 @@ define(function( require, exports ){
 					'</div>',
 				'</section>'
 			].join(''));
-			this.$doms.listBox.append( sections.join('') );
+			this.$doms.listBox.append(sections.join(''));
 		}
 	}
 	exports.base = SearchResult;

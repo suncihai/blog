@@ -1,15 +1,15 @@
 /**
  * [404页面]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var $ = require('jquery');
 	var app = require('app');
 	var layout = require('layout').base;
 
 	var NotFound = {
-		init: function( data ) {
+		init: function(data) {
 			this.$dom = data.dom;
-			layout.setTitle( T('页面都去哪儿了？') );
+			layout.setTitle(T('页面都去哪儿了？'));
 			this.build();
 		},
 
@@ -22,7 +22,7 @@ define(function( require, exports ){
 					'<div class="containerLeft"/>',
 					'<div class="containerRight"/>',
 				'</div>'
-			].join('')).appendTo( blank );
+			].join('')).appendTo(blank);
 
 			this.$doms = {
 				'left': $('.containerLeft', html),
@@ -74,7 +74,7 @@ define(function( require, exports ){
 					'</div>',
 				'</div>'
 			].join(''));
-			obscener.appendTo( this.$doms.left );
+			obscener.appendTo(this.$doms.left);
 
 			var rightPart = $([
 				'<h2 class="title">'+ T('很抱歉，您要访问的页面不存在！') + '</h2>',
@@ -88,10 +88,10 @@ define(function( require, exports ){
 					'<a href="/blog/#frontends" class="btn blog">'+ T('博客') + '</a>',
 				'</p>'
 			].join(''));
-			rightPart.appendTo( this.$doms.right );
+			rightPart.appendTo(this.$doms.right);
 
 			// 绑定返回上一页
-			app.event.bind( $('.back', rightPart), 'click', this.goToBack, this );
+			app.event.bind($('.back', rightPart), 'click', this.goToBack, this);
 		},
 
 		goToBack: function() {

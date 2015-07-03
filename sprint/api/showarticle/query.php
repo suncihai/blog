@@ -7,7 +7,7 @@
 	require_once('../../library/db.class.php');
 
 	// 请求参数过滤
-	if ( isset( $_GET['artid'] ) && is_numeric( $_GET['artid'] ) && ($_GET['artid'] != 2) )
+	if (isset($_GET['artid']) && is_numeric($_GET['artid']) && ($_GET['artid'] != 2))
 	{
 		$Sql = new SQL();
 
@@ -15,9 +15,9 @@
 
 		$artid = $_GET['artid'];
 
-		$result = $Sql->getArticle( $artid );
+		$result = $Sql->getArticle($artid);
 
-		echo( $result );
+		echo($result);
 
 		$Sql->close();
 	}
@@ -29,7 +29,7 @@
 			'result'  => null,
 			'message' => 'One of your request parameters is error!'
 		);
-		echo json_encode( $retError );
+		echo json_encode($retError);
 	}
 
 ?>

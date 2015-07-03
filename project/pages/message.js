@@ -1,7 +1,7 @@
 /**
  * [留言页面]
  */
-define(function( require, exports ){
+define(function(require, exports) {
 	var app = require('app');
 	var c = app.getConfig();
 	var dc = c.dataCenter;
@@ -13,11 +13,11 @@ define(function( require, exports ){
 	var comment = require('@modules/comment');
 
 	var Message = {
-		init: function( data ) {
+		init: function(data) {
 			this.$ = {};
 			this.$data = data;
 			this.$param = $.extend({}, c.commentParam);
-			layout.showFooter().setTitle( c.archiveTitle[data.name] );
+			layout.showFooter().setTitle(c.archiveTitle[data.name]);
 			// banner设置
 			banner.setData({
 				'type': 'archive',
@@ -29,11 +29,11 @@ define(function( require, exports ){
 
 		build: function() {
 			var target = this.$data.dom;
-			var msgDom = $('<div class="M-message"/>').appendTo( target );
+			var msgDom = $('<div class="M-message"/>').appendTo(target);
 			// 留言左侧
-			var main = $('<div class="M-messageMain"/>').appendTo( msgDom );
+			var main = $('<div class="M-messageMain"/>').appendTo(msgDom);
 			// 右侧信息
-			var info = $('<div class="M-messageInfo"/>').appendTo( msgDom );
+			var info = $('<div class="M-messageInfo"/>').appendTo(msgDom);
 
 			// 选项卡
 			$([
@@ -52,7 +52,7 @@ define(function( require, exports ){
 						'<div class="M-messageMainForm"/>',
 					'</div>',
 				'</div>'
-			].join('')).appendTo( main );
+			].join('')).appendTo(main);
 
 			// DOM缓存
 			this.$doms = {
@@ -64,23 +64,23 @@ define(function( require, exports ){
 			}
 
 			// 点击切换选项卡
-			app.event.proxy( main.find('.tabHead'), 'click', 'li', this.eventSwitchTab, this );
+			app.event.proxy(main.find('.tabHead'), 'click', 'li', this.eventSwitchTab, this);
 
 			// 构建细节
 			this.buildForm().buildList().buildInfo();
 		},
 
 		// 切换选项卡
-		eventSwitchTab: function( evt, elm ) {
+		eventSwitchTab: function(evt, elm) {
 			var index = $(elm).index();
 			var type = $(elm).attr('op-type');
-			if ( !$(elm).hasClass('act') ) {
+			if (!$(elm).hasClass('act')) {
 				// 切换容器
 				$(elm).addClass('act').siblings('li').removeClass('act');
-				this.$doms.tabCont.eq( index ).show().siblings().hide();
+				this.$doms.tabCont.eq(index).show().siblings().hide();
 
 				// 切到列表重新拉取数据
-				if ( type === 'list' && this.$.list ) {
+				if (type === 'list' && this.$.list) {
 					this.$.list.load();
 				}
 			}
@@ -150,7 +150,7 @@ define(function( require, exports ){
 					'</ul>',
 					'<p class="sayother">'+ T('欢迎给我提各种改进建议或者博客框架目前存在的BUGs，谢谢！') +'</p>',
 				'</div>'
-			].join('')).appendTo( info );
+			].join('')).appendTo(info);
 			return this;
 		}
 	}

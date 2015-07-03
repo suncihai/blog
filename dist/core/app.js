@@ -1,7 +1,7 @@
 /**
  * [应用模块(通用模块集合)]
  */
-define(function( require, app ) {
+define(function(require, app) {
 	var language = require('@core/language');
 	var config = require('@boot/config');
 	var router = require('@core/router');
@@ -21,11 +21,11 @@ define(function( require, app ) {
 	app.controller = router;
 
 	// 读取系统配置信息(暂支持两层)
-	app.getConfig = function( field ) {
+	app.getConfig = function(field) {
 		var ret, cArr;
-		if ( field ) {
+		if (field) {
 			cArr = field.toString().split('/');
-			if ( cArr.length === 2 ) {
+			if (cArr.length === 2) {
 				ret = config[cArr[0]] && config[cArr[0]][cArr[1]];
 			}
 			else {
