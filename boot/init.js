@@ -35,6 +35,12 @@
 		'debug': 0
 	};
 
+	// 配置文件中的语言标记
+	function _T(text) {
+		return text;
+	}
+	win._T = _T;
+
 	/**
 	 * appInit 初始化配置
 	 */

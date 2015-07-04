@@ -24,7 +24,7 @@ define(function(require, exports) {
 		build: function() {
 
 			// 设置标题
-			layout.setTitle(T('{1}_搜索结果', (this.$word || '')));
+			layout.setTitle(T('{1}_搜索结果', (this.$word || "")));
 
 			var bannerTxt = T('正在搜索有关「{1}」的文章记录', this.$renderWord) + ' ……';
 			// banner设置

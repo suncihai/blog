@@ -25,10 +25,10 @@ define(function() {
 
 		// 导航
 		nav: [
-			{'name': '首页', 'link': '#index'},
-			{'name': '前端那些事', 'link': '#frontends'},
-			{'name': '随便写写', 'link': '#moods'},
-			{'name': '给我留言', 'link': '#message'}
+			{'name': _T('首页'), 'link': '#index'},
+			{'name': _T('前端那些事'), 'link': '#frontends'},
+			{'name': _T('随便写写'), 'link': '#moods'},
+			{'name': _T('给我留言'), 'link': '#message'}
 		],
 
 		// 语录集合
@@ -41,10 +41,10 @@ define(function() {
 
 		// 栏目title
 		archiveTitle: {
-			'index': '小前端 - tangbc.com',
-			'frontends': '前端那些事',
-			'moods': '随便写写',
-			'message': '给我留言'
+			'index': _T('小前端 - tangbc.com'),
+			'frontends': _T('前端那些事'),
+			'moods': _T('随便写写'),
+			'message': _T('给我留言')
 		},
 
 		// 栏目默认请求参数

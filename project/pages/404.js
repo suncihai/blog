@@ -80,7 +80,7 @@ define(function(require, exports) {
 				'<h2 class="title">'+ T('很抱歉，您要访问的页面不存在！') + '</h2>',
 				'<p class="handle">'+ T('有可能是：') + '</p>',
 				'<p class="reason">· '+ T('请求的url有错<span>请检查地址是否完整或存在多余字符') + '</span></p>',
-				'<p class="reason">· '+ T('页面失效') + '<span>' + T('可能页面模块已删除，或者下线等') + '</span></p>',
+				'<p class="reason">· '+ T('页面失效<span>可能页面模块已删除，或者下线等') + '</span></p>',
 				'<p class="handle">',
 					'<span>'+ T('您可以返回：') + '</span>',
 					'<a class="btn back">'+ T('上一页') + '</a>',
