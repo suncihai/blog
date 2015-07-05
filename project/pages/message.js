@@ -4,7 +4,7 @@
 define(function(require, exports) {
 	var app = require('app');
 	var c = app.getConfig();
-	var dc = c.dataCenter;
+	var api = c.api;
 	// var util = require('util');
 	var $ = require('jquery');
 
@@ -94,7 +94,7 @@ define(function(require, exports) {
 			var form = this.$.form = comment.form;
 			form.init({
 				'target': this.$doms.form,
-				'posturl': dc.addmessage,
+				'posturl': api.addmessage,
 				'hasContact': true,
 				'submitTxt': {
 					'init'   : T('发表留言'),
@@ -119,7 +119,7 @@ define(function(require, exports) {
 			var list = this.$.list = comment.list;
 			list.init({
 				'target': this.$doms.list,
-				'geturl': dc.listmessage,
+				'geturl': api.listmessage,
 				'hasHead': false,
 				'hasOp': false,
 				'pageSize': 10, // 每页显示留言条数

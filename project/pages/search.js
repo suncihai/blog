@@ -71,21 +71,22 @@ define(function(require, exports) {
 
 		// 拉取数据
 		load: function() {
-			var dc = c.dataCenter;
+			var api = c.api;
 			layout.hideFooter();
 			this.showLoading();
-			app.data.get(dc.search, {'word': this.$word}, this.onData, this);
+			app.data.get(api.search, {'word': this.$word}, this.onData, this);
 		},
 
 		// 拉取数据回调
 		onData: function(err, res) {
 			var self = this;
 			var dom = self.$data.dom;
+			var errCls = 'noData animated bounce';
 			var dataError = T('拉取数据似乎出了点问题~');
 			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if (err.status === 'timeout') {
-					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
+					dom.html('<div class="errCls">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
@@ -93,12 +94,12 @@ define(function(require, exports) {
 				if (res.message) {
 					dataError = res.message;
 				}
-				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
+				dom.html('<div class="errCls">'+ dataError +'</div>');
 				return;
 			}
 			var info = self.$info = res.result;
 			if (util.isEmpty(info)) {
-				dom.html('<div class="noData animated bounce">'+ T('无数据') +'</div>');
+				dom.html('<div class="errCls">'+ T('无数据') +'</div>');
 				return;
 			}
 			// 创建列表
@@ -139,7 +140,7 @@ define(function(require, exports) {
 			// var mouth = +arr[1];
 			// var day = +arr[2];
 			var date = util.prettyDate(item.date);
-			var catName = util.getKeyName(item.catId, c.cat);
+			var catName = util.getKeyName(item.catId, c.category);
 			var anchor = catName + '/' + item.id; // 超链接地址
 			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">'+ T('请进入内页查看') +'</a>' : item.brief + ' ……';
 			sections.push([

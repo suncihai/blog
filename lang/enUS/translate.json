@@ -2,7 +2,7 @@
 	"success": true,
 	"result": {
 		"首页": "Home",
-		"前端那些事": "FE Matters",
+		"前端那些事": "Articles",
 		"随便写写": "My Moods",
 		"给我留言": "Live Message",
 		"小前端 - tangbc.com": "My blog - tangbc.com",
@@ -66,7 +66,7 @@
 		"简体": "Simplified Chinese",
 		"繁体": "Traditional Chinese",
 		"英文": "English",
-		"请输入关键字": "Enter the keywords here",
+		"请输入关键字": "Keyword here",
 		"搜索文章": "Search the article",
 		"上一页": "Previous",
 		"下一页": "Next",

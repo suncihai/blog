@@ -1,4 +1,5 @@
 <?php
+	header("Cache-Control: no-cache, must-revalidate");
 	// 只匹配iPhone和Android客户端
 	$regMatch = '/(iphone|android)/i';
 	$isWap = preg_match( $regMatch, strtolower($_SERVER['HTTP_USER_AGENT']) );

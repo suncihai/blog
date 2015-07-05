@@ -88,18 +88,18 @@ define(function(require, exports) {
 
 		// 拉取数据
 		load: function(param) {
-			var dc = c.dataCenter;
+			var api = c.api;
 			param = param || this.getParam();
 			layout.hideFooter();
 			this.showLoading();
-			app.data.get(dc.listarchives, param, this.onData, this);
+			app.data.get(api.listarchives, param, this.onData, this);
 		},
 
 		// 获取/更新请求参数<>
 		getParam: function() {
 			var data = this.$data;
 			var param = $.extend({}, this.$param, {
-				'catid': c.cat[data.name]
+				'catid': c.category[data.name]
 			});
 			return param;
 		},

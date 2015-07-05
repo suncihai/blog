@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 		this.callback = null;
 
 		// 语言标记函数
-		WIN.T = this.T = function(text) {
+		WIN.T = function(text) {
 			if (!self.isDefault()) {
 				// 方法转换
 				if (self.translate && self.translate.func) {

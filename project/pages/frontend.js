@@ -31,7 +31,7 @@ define(function(require, exports) {
 
 		// 拉取数据
 		load: function(id) {
-			var dc = c.dataCenter;
+			var api = c.api;
 			var param = {
 				'artid': id || this.$data.param
 			}
@@ -43,7 +43,7 @@ define(function(require, exports) {
 				'class': 'center mt2'
 			});
 
-			app.data.get(dc.showarticle, param, this.onData, this);
+			app.data.get(api.showarticle, param, this.onData, this);
 		},
 
 		// 请求回调

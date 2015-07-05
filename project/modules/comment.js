@@ -6,7 +6,7 @@ define(function(require, exports) {
 	var app = require('app');
 	var util = require('util');
 	var c = app.getConfig();
-	var dc = c.dataCenter;
+	var api = c.api;
 
 	var pager = require('@modules/pager').pagerNoLink;
 	var dialog = require('@modules/dialog').base;
@@ -28,7 +28,7 @@ define(function(require, exports) {
 	var CommentList = {
 		init: function(config) {
 			this.$ = {};
-			this.$geturl = config.geturl || dc.listcomment, // 评论请求接口
+			this.$geturl = config.geturl || api.listcomment, // 评论请求接口
 			this.$comments = 0; // 评论总数
 			this.$target = config.target;
 			this.$hasHead = config.hasHead, // 是否显示头部
@@ -404,8 +404,8 @@ define(function(require, exports) {
 		init: function(config) {
 			this.$target = config.target;
 			this.$data = config.data; // 回复评论时的数据
-			this.$posturl = config.posturl || dc.addcomment,
-			this.$imageUrl = dc.getthecode;
+			this.$posturl = config.posturl || api.addcomment,
+			this.$imageUrl = api.getthecode;
 			this.$hasContact = config.hasContact,
 			this.$pushing = false; // 评论是否正在提交
 			this.$silence = config.silence, // 评论成功后是否发通知
@@ -651,7 +651,7 @@ define(function(require, exports) {
 		eventBlurCode: function(evt, elm) {
 			var code = $(elm).val().trim();
 			if (code !== '') {
-				app.data.post(dc.verifycode, {
+				app.data.post(api.verifycode, {
 					'code': code
 				}, this.onVerify, this);
 			}

@@ -63,14 +63,14 @@ define(function() {
 			'date'  : 1  // 时间升序, -1降序
 		},
 
-		// 栏目hash对应的category数据库id
-		cat: {
+		// 分类hash对应的category数据库id
+		category: {
 			'frontends': 1,
 			'moods': 24
 		},
 
 		// 数据接口
-		dataCenter: {
+		api: {
 			// 搜索
 			'search'       : '/blog/sprint/api/search/query.php',
 			// 获取标题列表

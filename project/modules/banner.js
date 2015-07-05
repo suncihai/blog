@@ -61,7 +61,7 @@ define(function(require, exports) {
 			if (!this.$show) {
 				this.show();
 			}
-			var type = data['type'];
+			var type = data.type;
 			switch(type) {
 				case 'article':
 					this.setArticleInfo(data);
@@ -78,10 +78,10 @@ define(function(require, exports) {
 			var dom = this.$doms.articles;
 			this.$doms.article.addClass('fadeIn');
 			this.$doms.article.show().siblings('.M-bannerArchive').hide();
-			dom.title.text(info['title']);
-			dom.time.text(info['time']);
-			dom.tag.text(info['tag']);
-			dom.comments.text(info['comments']);
+			dom.title.text(info.title);
+			dom.time.text(info.time);
+			dom.tag.text(info.tag);
+			dom.comments.text(info.comments);
 		},
 
 		// 列表页
@@ -89,7 +89,7 @@ define(function(require, exports) {
 			var dom = this.$doms.archives;
 			this.$doms.article.removeClass('fadeIn');
 			this.$doms.archive.show().siblings('.M-bannerArticle').hide();
-			dom.content.html(info['content'] || "");
+			dom.content.html(info.content || "");
 		},
 
 		// 设置公共面包屑
