@@ -764,6 +764,11 @@ a:hover {
   -moz-box-flex: 2;
   box-flex: 2;
 }
+.M-footerInfoSource {
+  font-size: 1.4rem;
+  color: #CCC;
+  margin-left: 1em;
+}
 .M-footerLang {
   -webkit-box-ordinal-group: 1;
   -moz-box-ordinal-group: 1;
@@ -2225,7 +2230,7 @@ a:hover {
 .M-messageInfo .infoBox ul li {
   padding: .2em 0;
 }
-.M-messageInfo .infoBox .sayother {
+.M-messageInfo .infoBox .item {
   padding: 1em 1.5em 0 1.2em;
   color: #22B6AB;
 }

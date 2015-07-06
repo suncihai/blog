@@ -149,7 +149,9 @@ define(function(require, exports) {
 							'<span>went2077@gmail.com</span>',
 						'</li>',
 					'</ul>',
-					'<p class="sayother">'+ T('欢迎给我提各种改进建议或者博客框架目前存在的BUGs，谢谢！') +'</p>',
+					'<p class="item">'+ T('欢迎给我提各种改进建议或者博客框架目前存在的BUGs，谢谢！') +'</p>',
+					'<p class="item">'+ T('博客的源码：') +'</p>',
+					'<p class="item"><a href="https://github.com/tangbc/blog" target="_blank">https://github.com/tangbc/blog</a></p>',
 				'</div>'
 			].join('')).appendTo(info);
 			return this;

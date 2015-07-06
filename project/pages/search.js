@@ -86,7 +86,7 @@ define(function(require, exports) {
 			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if (err.status === 'timeout') {
-					dom.html('<div class="errCls">'+ T('请求超时，请按F5刷新重试~') +'</div>');
+					dom.html('<div class="'+ errCls +'">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
@@ -94,12 +94,12 @@ define(function(require, exports) {
 				if (res.message) {
 					dataError = res.message;
 				}
-				dom.html('<div class="errCls">'+ dataError +'</div>');
+				dom.html('<div class="'+ errCls +'">'+ dataError +'</div>');
 				return;
 			}
 			var info = self.$info = res.result;
 			if (util.isEmpty(info)) {
-				dom.html('<div class="errCls">'+ T('无数据') +'</div>');
+				dom.html('<div class="'+ errCls +'">'+ T('无数据') +'</div>');
 				return;
 			}
 			// 创建列表

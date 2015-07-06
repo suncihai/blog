@@ -32,7 +32,7 @@ define(function(require, exports) {
 			];
 			frame = this.getPairFrame(this.$isRandom);
 			// DIALOG打开动画
-			this.$inFrame = frame.in;
+			this.$inFrame = frame['in'];
 			// DIALOG关闭动画
 			this.$outFrame = frame.out;
 			this.build();
@@ -177,7 +177,7 @@ define(function(require, exports) {
 			var frame = null;
 			if (this.$isRandom) {
 				frame = this.getPairFrame(true);
-				this.$inFrame = frame.in;
+				this.$inFrame = frame['in'];
 				this.$outFrame = frame.out;
 			}
 			return false;
