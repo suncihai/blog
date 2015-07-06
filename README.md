@@ -33,5 +33,6 @@
 # 三、配置以及使用
 详细的配置以及使用请看[这里](https://github.com/tangbc/blog/blob/master/docs/START.md)。
 
-有任何问题或者建议都可以在[这里](https://github.com/tangbc/blog/issues)发表。
+由于水平有限，框架中难免有些实现方式不是最合适的甚至是错误的地方，如果发现非常欢迎提出来一起探讨。
 
+任何问题或者建议都可以在[这里](https://github.com/tangbc/blog/issues)发表。
