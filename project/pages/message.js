@@ -107,7 +107,8 @@ define(function(require, exports) {
 					'nick'   : T('[必填] 在这里输入昵称'),
 					'link'   : T('[选填] 网址(比如博客/微博/知乎主页url)')
 				},
-				'successTxt': T('提交成功！等待审核……')
+				'successTxt': T('提交成功！')
+				// 'successTxt': T('提交成功！等待审核……')
 			});
 			return this;
 		},

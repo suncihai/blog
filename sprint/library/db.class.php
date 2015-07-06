@@ -535,7 +535,7 @@ class SQL
         // 评论昵称
         $author = removeTag($author);
         // 存储的默认类型: 0待审核, 1通过, spam垃圾评论, trash回收站评论
-        $approved = 0;
+        $approved = 1;
         // 当前时间
         $date = date('Y-m-d H:i:s', time());
         // 当前GMT时间
@@ -600,7 +600,7 @@ class SQL
                     'content'  => htmlspecialchars_decode(postAutoP($newData['comment_content'])),
                     'parent'   => $parent,
                     'admin'    => false,
-                    'passed'   => false
+                    'passed'   => $approved === 1
                );
             }
             // 获取新增数据失败
@@ -648,7 +648,7 @@ class SQL
         // 留言昵称
         $author = removeTag($author);
         // 存储的默认类型: 0待审核, 1通过, spam垃圾留言, trash回收站留言
-        $approved = 0;
+        $approved = 1;
         // 当前时间
         $date = date('Y-m-d H:i:s', time());
         // 当前GMT时间
@@ -703,7 +703,7 @@ class SQL
                     'date'     => $newData['comment_date'],
                     'content'  => htmlspecialchars_decode(postAutoP($newData['comment_content'])),
                     'admin'    => false,
-                    'passed'   => false
+                    'passed'   => $approved === 1
                );
             }
             // 获取新增数据失败

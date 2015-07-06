@@ -306,7 +306,7 @@ define(function(require, exports) {
 		// 创建一条评论
 		createAComment: function(info, idx) {
 			// 序号
-			var floor = info.passed ? '#' + (idx + 1) : '-';
+			var floor = info.passed && arguments.length === 2 ? '#' + (idx + 1) : '-';
 			// 评论昵称
 			var nickName = info.admin ?
 				'<span class="M-commentIssuseHeadNickAdmin">'+ info.author +'</span>'
