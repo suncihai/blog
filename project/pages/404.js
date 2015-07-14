@@ -1,10 +1,10 @@
 /**
  * [404页面]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var $ = require('jquery');
 	var app = require('app');
-	var layout = require('layout').base;
+	var layout = require('layout');
 
 	var NotFound = {
 		init: function(data) {
@@ -99,5 +99,5 @@ define(function(require, exports) {
 			return false;
 		}
 	}
-	exports.base = NotFound;
+	module.exports = NotFound;
 });

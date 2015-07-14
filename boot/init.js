@@ -67,7 +67,7 @@
 		},
 		// 启动路由
 		function(layout, router) {
-			layout.base.init();
+			layout.init();
 			router.start();
 		}
 	];

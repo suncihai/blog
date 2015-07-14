@@ -8,8 +8,7 @@ define(function(require, exports) {
 		});
 
 		require.async('@pages/' + type, function(mod) {
-			var module = mod.base;
-			module.init(data);
+			mod.init(data);
 		});
 	}
 });

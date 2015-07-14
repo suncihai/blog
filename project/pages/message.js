@@ -1,15 +1,15 @@
 /**
  * [留言页面]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var app = require('app');
 	var c = app.getConfig();
 	var api = c.api;
 	// var util = require('util');
 	var $ = require('jquery');
 
-	var layout = require('layout').base;
-	var banner = require('@modules/banner').base;
+	var layout = require('layout');
+	var banner = require('@modules/banner');
 	var comment = require('@modules/comment');
 
 	var Message = {
@@ -157,5 +157,5 @@ define(function(require, exports) {
 			return this;
 		}
 	}
-	exports.base = Message;
+	module.exports = Message;
 });

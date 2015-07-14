@@ -1,12 +1,12 @@
 /**
  * [布局模块]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var $ = require('jquery');
 	var util = require('util');
 	var c = require('app').getConfig();
-	var header = require('@modules/header').base;
-	var footer = require('@modules/footer').base;
+	var header = require('@modules/header');
+	var footer = require('@modules/footer');
 
 	// 整体框架布局
 	var layout = [
@@ -259,5 +259,5 @@ define(function(require, exports) {
 			return this.$tick[field];
 		}
 	}
-	exports.base = Main;
+	module.exports = Main;
 });

@@ -1,12 +1,12 @@
 /**
  * [主页]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var app = require('app');
 	var $ = require('jquery');
 	var util = require('util');
 	var c = app.getConfig();
-	var layout = require('layout').base;
+	var layout = require('layout');
 
 	var Index = {
 		init: function(data) {
@@ -42,5 +42,5 @@ define(function(require, exports) {
 			app.animate.play($('.myBlog', html), animateCls, 'slow');
 		}
 	}
-	exports.base = Index;
+	module.exports = Index;
 });

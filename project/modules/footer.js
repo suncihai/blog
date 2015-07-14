@@ -1,7 +1,7 @@
 /**
  * [页脚模块]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var app = require('app');
 	// var c = app.getConfig();
 	var $ = require('jquery');
@@ -132,5 +132,5 @@ define(function(require, exports) {
 			this.$config.target.hide();
 		}
 	}
-	exports.base = Footer;
+	module.exports = Footer;
 });

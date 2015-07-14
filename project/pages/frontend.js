@@ -1,16 +1,16 @@
 /**
  * [文章页面]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var app = require('app');
 	var c = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
 
-	var layout = require('layout').base;
-	var banner = require('@modules/banner').base;
+	var layout = require('layout');
+	var banner = require('@modules/banner');
 	var loading = require('@modules/loading').base;
-	var prism = require('@plugins/prism/prism').base;
+	var prism = require('@plugins/prism/prism');
 	var comment = require('@modules/comment').list;
 
 	var Article = {
@@ -183,5 +183,5 @@ define(function(require, exports) {
 			prism.highlightAll();
 		}
 	}
-	exports.base = Article;
+	module.exports = Article;
 });

@@ -5,7 +5,7 @@ define(function(require, exports) {
 	var $ = require('jquery');
 	var app = require('app');
 	var util = require('util');
-	var layout = require('layout').base;
+	var layout = require('layout');
 	var POPUP = layout.getDOM('POPUP');
 
 	// 带三角的提示框

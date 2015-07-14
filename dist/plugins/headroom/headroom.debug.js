@@ -3,7 +3,7 @@
  * Copyright (c) 2014 Nick Williams - http://wicky.nillia.ms/headroom.js
  * License: MIT
  */
-define(function( require, exports ){
+define(function(require, exports, module){
   (function(window, document) {
 
 
@@ -387,7 +387,7 @@ define(function( require, exports ){
     Headroom.cutsTheMustard = typeof features !== 'undefined' && features.rAF && features.bind && features.classList;
 
     // window.Headroom = Headroom;
-    exports.base = Headroom;
+    module.exports = Headroom;
 
   }(window, document));
 });

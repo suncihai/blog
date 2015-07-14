@@ -5,7 +5,7 @@ define(function(require, exports) {
 	var WIN = window;
 	var LOC = WIN.location;
 	var util = require('util');
-	var view = require('view').base;
+	var view = require('view');
 	var c = require('@boot/config');
 	var action = c.action;
 	var controller = c.controllerPath || '@controller';

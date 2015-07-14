@@ -1,15 +1,15 @@
 /**
  * [前端那些事-栏目页面]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var app = require('app');
 	var c = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
 
 	var pager = require('@modules/pager').pagerHasLink;
-	var banner = require('@modules/banner').base;
-	var layout = require('layout').base;
+	var banner = require('@modules/banner');
+	var layout = require('layout');
 	var loading = require('@modules/loading').base;
 
 	var Archives = {
@@ -209,5 +209,5 @@ define(function(require, exports) {
 			});
 		}
 	}
-	exports.base = Archives;
+	module.exports = Archives;
 });

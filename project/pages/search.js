@@ -1,14 +1,14 @@
 /**
  * [搜索结果页面]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var app = require('app');
 	var c = app.getConfig();
 	var $ = require('jquery');
 	var util = require('util');
 
-	var banner = require('@modules/banner').base;
-	var layout = require('layout').base;
+	var banner = require('@modules/banner');
+	var layout = require('layout');
 	var loading = require('@modules/loading').base;
 
 	var SearchResult = {
@@ -159,5 +159,5 @@ define(function(require, exports) {
 			this.$doms.listBox.append(sections.join(''));
 		}
 	}
-	exports.base = SearchResult;
+	module.exports = SearchResult;
 });

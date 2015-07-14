@@ -6,8 +6,7 @@ define(function(require, exports) {
 		});
 
 		require.async('@pages/index', function(mod) {
-			var module = mod.base;
-			module.init(data);
+			mod.init(data);
 		});
 	}
 });

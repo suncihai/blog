@@ -1,7 +1,7 @@
 /**
  * [视图控制模块]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var $ = require('jquery');
 	var c = require('@boot/config');
 	var LAYOUT_PATH = '@view/layout';
@@ -17,8 +17,7 @@ define(function(require, exports) {
 				return false;
 			}
 			var content = null;
-			require.async(LAYOUT_PATH, function(mod) {
-				var layout = mod.base;
+			require.async(LAYOUT_PATH, function(layout) {
 				content = layout.getDOM('index/content');
 
 				// 隐藏滚动条
@@ -39,11 +38,10 @@ define(function(require, exports) {
 			var self = this;
 			var retDOM = null;
 
-			require.async(LAYOUT_PATH, function(mod) {
-				var layout = mod.base;
+			require.async(LAYOUT_PATH, function(layout) {
 				var blogDOM = layout.getDOM('blog');
-				var head = blogDOM['head'];
-				var foot = blogDOM['footer'];
+				var head = blogDOM.head;
+				var foot = blogDOM.footer;
 
 				// 显示滚动条
 				layout.getDOM('frame').removeClass('overflowHidden');
@@ -96,11 +94,11 @@ define(function(require, exports) {
 			var cont = $('<'+ tag +'/>');
 			var contName = config.container;
 			var blogDOM = layout.getDOM('blog');
-			var archiveDom = blogDOM['archive'];
+			var archiveDom = blogDOM.archive;
 			archiveDom.empty();
 
-			blogDOM['article'].hide();
-			blogDOM['archive'].show();
+			blogDOM.article.hide();
+			blogDOM.archive.show();
 
 
 			// 添加标识属性
@@ -129,11 +127,11 @@ define(function(require, exports) {
 			var marker = contName + '/' + config.pageid;
 
 			var blogDOM = layout.getDOM('blog');
-			var articleDom = blogDOM['article'];
+			var articleDom = blogDOM.article;
 			articleDom.empty();
 
-			blogDOM['archive'].hide();
-			blogDOM['article'].show();
+			blogDOM.archive.hide();
+			blogDOM.article.show();
 
 			// 添加标识属性
 			cont.attr({
@@ -153,14 +151,13 @@ define(function(require, exports) {
 		 */
 		createBlank: function() {
 			var blank = null;
-			require.async(LAYOUT_PATH, function(mod) {
-				var layout = mod.base;
+			require.async(LAYOUT_PATH, function(layout) {
 				blank = layout.getDOM('blank');
 				layout.switchContainer('blank');
 			});
 			return blank;
 		}
 	}
-	exports.base = Main;
+	module.exports = Main;
 
 });

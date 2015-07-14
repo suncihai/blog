@@ -1,12 +1,12 @@
 /**
  * [头部模块(LOGO、导航、搜索框)]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var app = require('app');
 	var $ = require('jquery');
 	var c = app.getConfig();
 	var util = require('util');
-	var HeadRoom = require('@plugins/headroom/headroom').base;
+	var HeadRoom = require('@plugins/headroom/headroom');
 
 	var Header = {
 		// 初始化方法
@@ -197,7 +197,7 @@ define(function(require, exports) {
 			app.event.unbind($(document), 'keydown.search');
 		}
 	}
-	exports.base = Header;
+	module.exports = Header;
 
 	// Navigator 导航
 	function Navigator(options) {

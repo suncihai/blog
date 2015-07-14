@@ -1,10 +1,10 @@
 /**
  * [博客Banner模块]
  */
-define(function(require, exports) {
+define(function(require, exports, module) {
 	var $ = require('jquery');
 	var util = require('util');
-	var layout = require('layout').base;
+	var layout = require('layout');
 
 	var Banner = {
 		// 创建DOM结构
@@ -109,5 +109,5 @@ define(function(require, exports) {
 			this.$show = false;
 		}
 	}
-	exports.base = Banner;
+	module.exports = Banner;
 });
