@@ -48,3 +48,11 @@ frontends和moods为路由hash对应的模块名称，即#frontends和#moods分�
 + 修改页面布局：需要改动的是`project`里的页面pages或者模块modules；
 + 修改样式：所有的css样式都是less编译的，修改样式时先在根目录npm install安装grunt所需要的包，然后开启grunt即可对样式进行实时编译和压缩(grunt cssmin)。
 + 所有less文件都放在`resources/less`目录下，其中M表示组件模块的less，P表示页面模块的less，新增一个文件时需要到app.less文件中进行import
+
+# 5、app模块基础方法
++ `app.animate` app.animate.play: 应用css3动画，并提供一个动画结束的回调函数。
++ `app.cookie` app.cookie.set: 设置cookie值；app.cookie.get: 获取当前cookie值；app.cookie.remove: 删除cookie。
++ `app.data` app.data.get: GET请求；app.data.post: POST请求。
++ `app.event` app.event.bind: 绑定事件； app.event.unbind: 取消绑定； app.event.hover: mouseenter和mouseleave事件结合； app.event.proxy: 代理事件on函数； app.event.unproxy: 取消事件。
++ `app.messager` app.messager.fire: 发布消息；app.messager.on: 订阅消息；app.messager.cancel: 取消消息的订阅。
++ `app.lang` app.lang.load: 加载指定语言。
