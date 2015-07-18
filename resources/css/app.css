@@ -1960,6 +1960,17 @@ a:hover {
 .P-article .content article p {
   padding-top: 1.8rem;
 }
+.P-article .content article p code {
+  display: inline-block;
+  background: #FAFAFA;
+  padding: 0 .3em;
+  border-radius: .3em;
+  border: 1px solid #e7e7e7;
+  line-height: 1.2;
+  font-style: italic;
+  color: #009B8E;
+  font-family: Consolas, Tahoma 'Microsoft Yahei';
+}
 .P-article .content article img {
   display: inline-block;
   position: relative;
