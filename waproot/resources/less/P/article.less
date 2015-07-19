@@ -1,0 +1,90 @@
+// 文章样式
+.P-article{
+	.content{
+		width: @blogWidth;
+		.center;
+		padding: 1em 0 3em 0;
+		article{
+			// padding: 1.5em 0;
+			font-size: 1.6rem;
+			line-height: 150%;
+			font-family: @zhFontFamily;
+			a{
+				text-decoration: underline;
+			}
+			p{
+				padding-top: 1.8rem;
+				// text-indent: 2em;
+				// 行内代码标记
+				code{
+					display: inline-block;
+					background: #FAFAFA;
+					padding: 0 .3em;
+					border-radius: .3em;
+					border: 1px solid #e7e7e7;
+					line-height: 1.2;
+					font-style: italic;
+					color: #009B8E;
+					font-family: @preFontFamily;
+				}
+			}
+			img{
+				display: inline-block;
+				position: relative;
+				// left: 2em;
+				border: 4px solid #E8E4E1;
+				border-radius: 2px;
+			}
+			// p标签里的图片上边距修补
+			p > img{
+				margin-top: -1.0em;
+			}
+			ul, ol {
+				li{
+					padding: .2em 0;
+				}
+				margin-top: .4em;
+				padding: .7em 1.4em;
+				list-style-type: circle;
+				list-style-position: inside;
+				background: #F8F8F8;
+				font-size: 1.4rem;
+			}
+			// 块引用
+			blockquote{
+				p{
+					padding: 0;
+				}
+				margin-top: .4em;
+				padding: 1em;
+				background: #F8F8F8;
+				border-left: 6px solid #DDD;
+				font-size: 1.4rem;
+			}
+		}
+	}
+	// 代码区域
+	pre{
+		// display: none;
+		box-sizing: border-box;
+		width: 100%;
+		padding: 1.5em;
+		margin-top: 0.3em;
+		overflow: auto;
+		border-left: 8px solid rgba(34,182,171,.5);
+		// border-radius: .5em;
+		position: relative;
+		// left: 2em;
+		font-size: 1.5rem;
+		background: url(../icons/code-bg.png) repeat !important;
+	}
+}
+// 无数据
+.noData{
+	width: @blogWidth;
+	.center;
+	.tc;
+	padding-top: 3em;
+	font-size: xx-large;
+	color: red;
+}

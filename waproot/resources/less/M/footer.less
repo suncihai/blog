@@ -1,0 +1,49 @@
+.M-footer{
+	width: 100%;
+	.center;
+	color: #FFF;
+	font-size: 1.8rem;
+	// height: 45px;
+	// line-height: 45px;
+
+	// copyright
+	&Copy{
+		display: block;
+	}
+	// 其他信息
+	&Info{
+		display: block;
+		&Source{
+			font-size: 1.4rem;
+			color: #CCC;
+		}
+	}
+	// 多语言切换
+	&Lang{
+		display: block;
+		text-align: right;
+		li{
+			display: block;
+			margin: .5em 0;
+			width: 24px;
+			height: 16px;
+			vertical-align: middle;
+			cursor: pointer;
+			opacity: .75;
+			background: #404040 url(../icons/icons.png) no-repeat;
+			transistion: opacity 220ms cubic-bezier(0.42,0,.58,1);
+			&:hover{
+				opacity: 1;
+			}
+			&.cn{
+				background-position: 0px -101px;
+			}
+			&.hk{
+				background-position: 0px -117px;
+			}
+			&.us{
+				background-position: 0px -133px;
+			}
+		}
+	}
+}

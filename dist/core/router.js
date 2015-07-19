@@ -7,6 +7,7 @@ define(function(require, exports) {
 	var util = require('util');
 	var view = require('view');
 	var c = require('@boot/config');
+	var cookie = require('@core/cookie');
 	var action = c.action;
 	var controller = c.controllerPath || '@controller';
 	var data = {
@@ -17,10 +18,12 @@ define(function(require, exports) {
 	}
 
 	function hashChanged() {
-		var hash, ms;
+		var hash, ms, cookieSet;
 		hash = LOC.hash.replace(/^[#\/\!]+/, '') || c.defaultPage;
 		ms = formatHash(hash);
+		cookieSet = [ms.name, ms.param, JSON.stringify(ms.search)].join('(^_^)');
 		run(ms.name, ms.param, ms.search);
+		cookie.set('hash', cookieSet);
 		util.scrollTo(0);
 	}
 

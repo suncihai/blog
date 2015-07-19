@@ -17,7 +17,7 @@
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/sea/sea.js"></script>
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/boot/init.js?load_time=<?php echo time();?>"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
-	<style>
+	<style name="<?php echo $_COOKIE['hash'];?>">
 	noscript{
 		font-family: Arial, 'Microsoft Yahei'; display: block; width: 550px; height: 80px;
 		position: absolute; left: 50%; top: 50%; margin-left: -275px; margin-top: -40px;

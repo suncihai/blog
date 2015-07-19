@@ -44,7 +44,7 @@ define(function(require, exports) {
 		},
 
 		build: function() {
-			if (POPUP.has('.M-tooltip').length) {
+			if (POPUP && POPUP.has('.M-tooltip').length) {
 				return false;
 			}
 			var tooltip = $([

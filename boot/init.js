@@ -12,7 +12,6 @@
 			// 控制器目录
 			'@controller' :	'controller',
 			// 项目目录
-			'@project'    : 'project',
 			'@modules'    : 'project/modules',
 			'@pages'      : 'project/pages'
 		},

@@ -1,0 +1,54 @@
+.G-frame{
+	width: @globalWidth;
+	margin: 0 auto;
+	height: 100%;
+	&Body{
+		position: relative;
+		height: 100%;
+		// 主页
+		&Index{
+			width: 100%;
+			height: 100%;
+			background: #a0c5e8;
+			overflow: hidden;
+			&Content{
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+			&Footer{
+				display: none;
+			}
+		}
+		// 博客
+		&Blog{
+			display: none;
+			width: 100%;
+			min-height: 500px;
+			// background:#F9F6F6;
+			&Banner{
+				display: none;
+			}
+			// 博客列表页
+			&Archive{
+				width: 100%;
+				box-sizing: border-box;
+			}
+			// 博客内容页
+			&Article{
+				width: 100%;
+				box-sizing: border-box;
+			}
+			&Footer{
+				display: none;
+				position: relative;
+				width: 100%;
+				background: #404040;
+			}
+		}
+		// 空白页
+		&Blank{
+			position: relative;
+		}
+	}
+}

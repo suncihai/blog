@@ -1,0 +1,98 @@
+// 块级容器居中
+.center {
+	margin: 0 auto;
+}
+
+// 定义块级/行内元素
+.db {
+	display: block;
+}
+.dib {
+	display: inline-block;
+}
+
+//文字对齐
+.tc {
+	text-align: center !important;
+}
+.tl {
+	text-align: left !important;
+}
+.tr {
+	text-align: right !important;
+}
+
+//文字风格
+.ti {
+	font-style: italic;
+}
+.tdl{
+	text-decoration: underline;
+}
+.tdef {
+	font-style: italic;
+	text-align: center;
+	color: #aaa;
+}
+.text_limit {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+
+// 定位
+.pr {
+	position: relative;
+}
+.pa {
+	position: absolute;
+}
+.top-left {
+	top: 0;
+	left: 0;
+}
+.top-right {
+	top: 0;
+	right: 0;
+}
+.bottom-left {
+	bottom: 0;
+	left: 0;
+}
+.bottom-right {
+	bottom: 0;
+	right: 0;
+}
+
+// 漂浮
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.clear {
+	clear:both;
+	&:after {
+		content:".";
+		display:block;
+		clear:both;
+		visibility:hidden;
+		height:0;
+	}
+}
+.clearBox {
+	display: block;
+	overflow: hidden;
+	height: 0px;
+	width: 0px;
+	clear: both;
+}
+.clearMargin:before {
+	display: table-column;
+	content: "";
+	height: 0;
+	width: 0;
+	overflow: hidden;
+}
