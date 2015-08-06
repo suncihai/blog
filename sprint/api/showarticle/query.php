@@ -7,8 +7,7 @@
 	require_once('../../library/db.class.php');
 
 	// 请求参数过滤
-	if (isset($_GET['artid']) && is_numeric($_GET['artid']) && ($_GET['artid'] != 2))
-	{
+	if (isset($_GET['artid']) && is_numeric($_GET['artid']) && ($_GET['artid'] != 2)) {
 		$Sql = new SQL();
 
 		$Sql->open();
@@ -21,10 +20,8 @@
 
 		$Sql->close();
 	}
-	else
-	{
-		$retError = array
-		(
+	else {
+		$retError = array(
 			'success' => false,
 			'result'  => null,
 			'message' => 'One of your request parameters is error!'

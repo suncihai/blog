@@ -17,8 +17,7 @@
 		&& isset($_GET['brief'])
 			&& is_numeric($_GET['brief']);
 
-	if ($paramFormat)
-	{
+	if ($paramFormat) {
 		// 栏目ID
 		$catid =  $_GET['catid'];
 		// 请求第几页
@@ -38,10 +37,8 @@
 
 		$Sql->close();
 	}
-	else
-	{
-		$retError = array
-		(
+	else {
+		$retError = array(
 			'success' => false,
 			'result'  => null,
 			'message' => 'One of your request parameters is error!'

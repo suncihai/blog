@@ -10,22 +10,18 @@
 	// 传入的验证码
 	$code = strtolower($params['code']);
 
-	$ret = array
-	(
+	$ret = array(
 		'success' => true
 	);
 
 	// 还未设置验证码
-	if (!isset($_SESSION['img_code_word']))
-	{
+	if (!isset($_SESSION['img_code_word'])) {
 		$ret['success'] = false;
 		$ret['message'] = '还未读取验证码！';
 	}
-	else
-	{
+	else {
 		// 验证码不正确
-		if ($_SESSION['img_code_word'] !== $code)
-		{
+		if ($_SESSION['img_code_word'] !== $code) {
 			$ret['success'] = false;
 			$ret['message'] = '验证码错误！';
 		}
