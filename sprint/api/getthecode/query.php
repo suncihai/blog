@@ -4,8 +4,7 @@
 	 * 返回随机乱序的验证码
 	 */
 	header("Content-type: image/PNG");
-	if (!isset($_SESSION['img_code_word']))
-	{
+	if (!isset($_SESSION['img_code_word'])) {
 		session_start();
 	}
 
@@ -63,8 +62,7 @@
 		imageline($img, $x, $y, $xx, $yy, $randLineColor);
 	}
 	// 混淆的点
-	for ($i = 0; $i < $width * 2; $i++)
-	{
+	for ($i = 0; $i < $width * 2; $i++) {
 		imagesetpixel($img, rand(1, $width - 1), rand(1, $height - 1), $randPixelColor);
 	}
 
@@ -74,15 +72,13 @@
 	imagedestroy($img);
 
 	// 打乱字符串的顺序
-	function disturbString($string)
-	{
+	function disturbString($string) {
         // 字符个数
 		$len = strlen($string);
 
 		// 存放每个字母的数组
 		$arr = array();
-		for ($i = 0; $i < $len; $i++)
-		{
+		for ($i = 0; $i < $len; $i++) {
 			array_push($arr, substr($string, $i, 1));
 		}
 

@@ -15,8 +15,7 @@
 		&& isset($_GET['date'])
 			&& is_numeric($_GET['date']);
 
-	if ($paramFormat)
-	{
+	if ($paramFormat) {
 		// 请求第几页
 		$page = $_GET['page'];
 		// 每页行数
@@ -34,10 +33,8 @@
 
 		$Sql->close();
 	}
-	else
-	{
-		$retError = array
-		(
+	else {
+		$retError = array(
 			'success' => false,
 			'result'  => null,
 			'message' => 'One of your request parameters is error!'
