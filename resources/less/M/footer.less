@@ -33,51 +33,57 @@
 
 .M-footer{
 	width: 100%;
-	.flexWraper;
+	height: @footerHeight;
 	.center;
 	color: #FFF;
 	font-size: 1.8rem;
-	line-height: 8.0rem;
+	line-height: @footerHeight;
 
 	// copyright
 	&Copy{
-		.flexNumbers(3);
-		display: inline-block;
+		float: left;
 	}
 	// 其他信息
 	&Info{
-		.flexNumbers(2);
+		float: right;
+		padding: 0 1.5em;
 		&Source{
-			font-size: 1.4rem;
-			color: #CCC;
-			margin-left: 1em;
+			font-size: 2.8rem;
+			color: #fff;
 		}
 	}
 	// 多语言切换
 	&Lang{
-		.flexNumbers(1);
-		text-align: right;
+		float: right;
+		height: 100%;
+		// 宽度为图标(li)的宽度
+		width: 24px;
+		ul{
+			position: absolute;
+			top: 50%;
+			-webkit-transform: translateY(-50%);
+			transform: translateY(-50%);
+		}
 		li{
-			display: block;
-			margin: .5em 0;
 			width: 24px;
 			height: 16px;
-			vertical-align: middle;
+			margin: .5em 0;
 			cursor: pointer;
-			opacity: .75;
-			background: #404040 url(../icons/icons.png) no-repeat;
-			transistion: opacity 220ms cubic-bezier(0.42,0,.58,1);
+			opacity: 0.85;
+			border-radius: .1em;
+			background: #404040 url(../icons/lang-icons.png) no-repeat;
+			transistion: opacity 220ms cubic-bezier(0.42, 0, 0.58, 1);
 			&:hover{
 				opacity: 1;
 			}
 			&.cn{
-				background-position: 0px -101px;
+				background-position: 0 0;
 			}
 			&.hk{
-				background-position: 0px -117px;
+				background-position: 0px -16px;
 			}
 			&.us{
-				background-position: 0px -133px;
+				background-position: 0px -32px;
 			}
 		}
 	}

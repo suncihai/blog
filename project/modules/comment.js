@@ -90,7 +90,9 @@ define(function(require, exports) {
 				'<div class="M-comment">',
 					'<header class="M-commentHead">',
 						'<h2 class="M-commentHeadTitle">'+ T('评论') +'</h2>',
-						'<span class="M-commentHeadAdd" title="'+ T('添加评论') +'"/>',
+						'<span class="M-commentHeadAdd" title="'+ T('添加评论') +'">',
+							'<i class="fa fa-edit"></i>',
+						'</span>',
 					'</header>',
 					'<article class="M-commentList"/>',
 					'<div class="M-commentPager"/>',
@@ -354,13 +356,8 @@ define(function(require, exports) {
 							date,
 						'</span>',
 						'<div class="M-commentIssuseHeadOp">',
-							// '<span data-id="'+ info.id +'" class="op like">',
-							// 	T('支持') + '(<i class="likes">0</i>)',
-							// '</span>',
-							// '<span data-id="'+ info.id +'" class="op dislike">',
-							// 	T('反对) + '(<i class="dislikes">0</i>)',
-							// '</span>',
-							(this.$hasOp && info.passed) ? '<span data-id="'+ info.id +'" class="op reply" title="'+ T('回复TA') +'"/>' : '',
+							(this.$hasOp && info.passed) ? 
+							'<span data-id="'+ info.id +'" class="op reply" title="'+ T('回复TA') +'"><i class="fa fa-reply"/></span>' : '',
 						'</div>',
 					'</header>',
 					'<article class="M-commentIssuseContent">'+ content +'</article>',
@@ -375,10 +372,6 @@ define(function(require, exports) {
 			var data = util.find(this.$items, id, 'id');
 			data.postid = this.$param.artid;
 			switch(op) {
-				case 'like':
-				break;
-				case 'dislike':
-				break;
 				case 'reply':
 					popwin.init({'title': T('回复评论：')}).setData(data);
 				break;
@@ -480,7 +473,7 @@ define(function(require, exports) {
 			// 绑定提交
 			app.event.bind(this.$doms.submit, 'click.submit', this.eventClickSubmit, this);
 			// 绑定验证码输入框失去焦点
-			// app.event.bind(this.$doms.code, 'blur.code', this.eventBlurCode, this);
+			app.event.bind(this.$doms.code, 'blur.code', this.eventBlurCode, this);
 			// 绑定更换验证码
 			app.event.bind(this.$doms.image, 'click.image', this.eventClickImage, this);
 		},
@@ -596,7 +589,7 @@ define(function(require, exports) {
 
 			// 提交成功
 			if (res && res.success) {
-				txt = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>'+ self.$successTxt +'</span>';
+				txt = '<span class="ok animated fadeIn"><i class="fa fa-check"></i> '+ self.$successTxt +'</span>';
 				self.$doms.submit.removeClass('pushing error').addClass('success').text(self.$submitTxt.success);
 				self.$res = res.result;
 				self.reset(true);
@@ -623,7 +616,7 @@ define(function(require, exports) {
 				if (err) {
 					txt = [
 						'<span class="warning animated fadeIn">',
-							'<i class="M-iconWarning">×</i>',
+							'<i class="fa fa-warning"></i> ',
 							[err.status, err.message].join(', '),
 						'</span>'
 					].join('');
@@ -631,7 +624,7 @@ define(function(require, exports) {
 				if (res && !res.success) {
 					txt = [
 						'<span class="warning animated fadeIn">',
-							'<i class="M-iconWarning">×</i>',
+							'<i class="fa fa-warning"></i> ',
 							res.message,
 						'</span>'
 					].join('');
@@ -666,10 +659,10 @@ define(function(require, exports) {
 				msg = '<span class="warning animated fadeIn">'+ T('服务器出了点问题~') +'<span>';
 			}
 			if (!data.success) {
-				msg = '<span class="warning animated fadeIn"><i class="M-iconWarning">×</i>' + data.message + '</span>';
+				msg = '<span class="warning animated fadeIn"><i class="fa fa-warning"></i> ' + data.message + '</span>';
 			}
 			else {
-				msg = '<span class="ok animated fadeIn"><i class="M-iconOk">√</i>'+ T('验证码正确！') +'<span>';
+				msg = '<span class="ok animated fadeIn"><i class="fa fa-check"></i> '+ T('验证码正确！') +'<span>';
 			}
 			this.$doms.tips.html(msg);
 		},

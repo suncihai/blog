@@ -25,11 +25,15 @@ define(function(require, exports, module) {
 				'<div class="blogWidth center">',
 					'<div class="M-footer">',
 						'<div class="M-footerCopy">'+ config.content +'</div>',
-						'<div class="M-footerInfo">',
-							'<a class="M-footerInfoSource" href="https://github.com/tangbc/blog" target="_blank">'+ T('本站源码') +'</a>',
-						'</div>',
+						// 多语言切换
 						'<div class="M-footerLang">',
-							'<ul class="fr ulLang"/>',
+							'<ul class="ulLang"/>',
+						'</div>',
+						// 图标信息
+						'<div class="M-footerInfo">',
+							'<a class="M-footerInfoSource" href="https://github.com/tangbc/blog" title="'+ T('本站源码') +'" target="_blank">',
+								'<i class="fa fa-github"/>',
+							'</a>',
 						'</div>',
 					'</div>',
 				'</div>'
