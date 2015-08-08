@@ -332,6 +332,21 @@ a:hover {
 .pr1 {
   padding-right: 1em !important;
 }
+.pd3 {
+  padding: .3em !important;
+}
+.pb3 {
+  padding-bottom: .3em !important;
+}
+.pt3 {
+  padding-top: .3em !important;
+}
+.pl3 {
+  padding-left: .3em !important;
+}
+.pr3 {
+  padding-right: .3em !important;
+}
 .pd5 {
   padding: .5em !important;
 }
@@ -347,6 +362,9 @@ a:hover {
 .pr5 {
   padding-right: .5em !important;
 }
+.mg2 {
+  margin: 2em !important;
+}
 .ml2 {
   margin-left: 2em !important;
 }
@@ -358,6 +376,9 @@ a:hover {
 }
 .mt2 {
   margin-top: 2em !important;
+}
+.mg1 {
+  margin: 1em !important;
 }
 .ml1 {
   margin-left: 1em !important;
@@ -371,6 +392,9 @@ a:hover {
 .mt1 {
   margin-top: 1em !important;
 }
+.mg5 {
+  margin: .5em !important;
+}
 .ml5 {
   margin-left: .5em !important;
 }
@@ -382,6 +406,21 @@ a:hover {
 }
 .mt5 {
   margin-top: .5em !important;
+}
+.mg3 {
+  margin: .3em !important;
+}
+.ml3 {
+  margin-left: .3em !important;
+}
+.mr3 {
+  margin-right: .3em !important;
+}
+.mb3 {
+  margin-bottom: .3em !important;
+}
+.mt3 {
+  margin-top: .3em !important;
 }
 .pr {
   position: relative;
@@ -1801,7 +1840,6 @@ a:hover {
   padding: 0 0 1em 1em;
   color: #666;
   font-size: 1.4rem;
-  text-decoration: underline;
 }
 .P-archives .P-archiveListPager {
   border-top: 3px solid #EDEDED;

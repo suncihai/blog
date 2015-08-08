@@ -165,14 +165,9 @@ define(function(require, exports, module) {
 		buildItems: function(item, idx) {
 			var data = this.$data;
 			var sections = [];
-			// var str = item.date.slice(0, 10);
-			// var arr = str.split('-');
-			// var year = arr[0];
-			// var mouth = +arr[1];
-			// var day = +arr[2];
-			// var date = year + '年' + mouth + '月' + day + '日';
 			var date = util.prettyDate(item.date);
-			var anchor = data.name + '/' + item.id; // 超链接地址
+			// 超链接地址
+			var anchor = data.name + '/' + item.id; 
 			var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
 			sections.push([
 				'<section class="sectionItem" list-id="'+ idx +'">',
@@ -186,11 +181,8 @@ define(function(require, exports, module) {
 						'</article>',
 					// '</a>',
 					'<div class="P-archiveListInfo">',
-						// '<span class="tag">分类：'+ this.$title || data.name +'</span>',
-						// ' | ',
-						'<span class="tag">'+ T('评论数：') + item.comments +'</span>',
-						' / ',
-						'<span class="tag">'+ T('发布时间：')+ date +'</span>',
+						'<span class="tag" title="'+ T('发布时间') +'"><i class="fa fa-calendar mr3"></i>'+ date +'</span>',
+						'<span class="tag mr2 ml2" title="'+ T('评论数') +'"><i class="fa fa-comments mr3"></i>'+ item.comments +'</span>',
 					'</div>',
 				'</section>'
 			].join(''));
