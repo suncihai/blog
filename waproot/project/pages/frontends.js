@@ -1,5 +1,5 @@
 /**
- * [前端那些事-栏目页面]
+ * [栏目页面]
  */
 define(function(require, exports, module) {
 	var app = require('app');
@@ -93,7 +93,7 @@ define(function(require, exports, module) {
 			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if (err.status === 'timeout') {
-					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
+					dom.html('<div class="noData">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
@@ -101,12 +101,12 @@ define(function(require, exports, module) {
 				if (res.message) {
 					dataError = res.message;
 				}
-				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
+				dom.html('<div class="noData">'+ dataError +'</div>');
 				return;
 			}
 			var info = self.$info = res.result;
 			if (util.isEmpty(info && info.items)) {
-				dom.html('<div class="noData animated bounce">'+ T('该页无数据') +':-)</div>');
+				dom.html('<div class="noData">'+ T('该页无数据') +':-)</div>');
 				return false;
 			}
 			// 创建列表
