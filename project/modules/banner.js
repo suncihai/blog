@@ -23,9 +23,18 @@ define(function(require, exports, module) {
 					'<div class="M-bannerArticle animated">',
 						'<h1 class="title"/>',
 						'<div class="info">',
-							'<span class="time"/>',
-							'<span class="tag"/>',
-							'<span class="comments"/>',
+							// 发布时间 
+							'<span title="'+ T('发布时间') +'">',
+								'<i class="fa fa-calendar mr3"></i>',
+								'<span class="time"/>',
+							'</span>',
+							// 标签
+							'<span class="tag ml1 mr1"/>',
+							// 评论数
+							'<span title="'+ T('评论数') +'">',
+								'<i class="fa fa-comments mr3"></i>',
+								'<span class="comments"/>',
+							'</span>',
 						'</div>',
 					'</div>',
 				'</div>'
@@ -33,20 +42,20 @@ define(function(require, exports, module) {
 
 			// dom缓存
 			this.$doms = {
-				'main': dom,
-				'crumbs': dom.find('.M-bannerCrumbs'),
-
-				'archive': dom.find('.M-bannerArchive'),
-				'archives': {
+				'main'     : dom,
+				'crumbs'   : dom.find('.M-bannerCrumbs'),
+				
+				'archive'  : dom.find('.M-bannerArchive'),
+				'archives' : {
 					'content': dom.find('.content')
 				},
 
-				'article': dom.find('.M-bannerArticle'),
-				'articles': {
-					'title': dom.find('.title'),
-					'time': dom.find('.time'),
-					'tag': dom.find('.tag'),
-					'comments': dom.find('.comments')
+				'article'  : dom.find('.M-bannerArticle'),
+				'articles' : {
+					'title'    : dom.find('.title'),
+					'time'     : dom.find('.time'),
+					'tag'      : dom.find('.tag'),
+					'comments' : dom.find('.comments')
 				}
 			}
 

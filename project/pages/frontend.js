@@ -72,9 +72,9 @@ define(function(require, exports, module) {
 				banner.setData({
 					'type': 'article',
 					'title': '******************',
-					'time': T('时间：') +'0000-00-00 | ',
+					'time': '0000-00-00 | ',
 					// 'tag': '标签：* | ',
-					'comments': T('评论数：') + '0'
+					'comments': '0'
 				})
 				// .setCrumbs(c.archiveTitle[this.$data.name], this.$data.param);
 				return;
@@ -106,20 +106,19 @@ define(function(require, exports, module) {
 
 			// 创建评论模块
 			this.$.comment = comment.init({
-				'target': self.$doms.comment,
-				'artid': this.$data.param,
-				'hasHead': true,
-				'hasOp': true,
-				'hasFloor': true
+				'target'   : self.$doms.comment,
+				'artid'    : this.$data.param,
+				'hasHead'  : true,
+				'hasOp'    : true,
+				'hasFloor' : true
 			}).hideAll();
 
 			// 设置banner内容
 			banner.setData({
-				'type': 'article',
-				'title': info.title,
-				'time': T('发布时间：') + info.date.toString().slice(0, 10) + ' | ',
-				// 'tag': T('标签：') + (info.tag || T('无'))  + ' | ',
-				'comments': T('评论数：') + info.comments
+				'type'     : 'article',
+				'title'    : info.title,
+				'time'     : info.date.toString().slice(0, 10),
+				'comments' : info.comments
 			})
 			// .setCrumbs(c.archiveTitle[self.$data.name], self.$data.param);
 

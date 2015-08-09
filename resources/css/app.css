@@ -332,6 +332,21 @@ a:hover {
 .pr1 {
   padding-right: 1em !important;
 }
+.pd3 {
+  padding: .3em !important;
+}
+.pb3 {
+  padding-bottom: .3em !important;
+}
+.pt3 {
+  padding-top: .3em !important;
+}
+.pl3 {
+  padding-left: .3em !important;
+}
+.pr3 {
+  padding-right: .3em !important;
+}
 .pd5 {
   padding: .5em !important;
 }
@@ -347,6 +362,9 @@ a:hover {
 .pr5 {
   padding-right: .5em !important;
 }
+.mg2 {
+  margin: 2em !important;
+}
 .ml2 {
   margin-left: 2em !important;
 }
@@ -358,6 +376,9 @@ a:hover {
 }
 .mt2 {
   margin-top: 2em !important;
+}
+.mg1 {
+  margin: 1em !important;
 }
 .ml1 {
   margin-left: 1em !important;
@@ -371,6 +392,9 @@ a:hover {
 .mt1 {
   margin-top: 1em !important;
 }
+.mg5 {
+  margin: .5em !important;
+}
 .ml5 {
   margin-left: .5em !important;
 }
@@ -382,6 +406,21 @@ a:hover {
 }
 .mt5 {
   margin-top: .5em !important;
+}
+.mg3 {
+  margin: .3em !important;
+}
+.ml3 {
+  margin-left: .3em !important;
+}
+.mr3 {
+  margin-right: .3em !important;
+}
+.mb3 {
+  margin-bottom: .3em !important;
+}
+.mt3 {
+  margin-top: .3em !important;
 }
 .pr {
   position: relative;
@@ -727,79 +766,55 @@ a:hover {
 }
 .M-footer {
   width: 100%;
-  display: -webkit-box;
-  display: -moz-box;
-  display: box;
-  -webkit-box-orient: inline-axis;
-  -moz-box-orient: inline-axis;
-  box-orient: inline-axis;
-  -webkit-box-pack: start;
-  -moz-box-pack: start;
-  box-pack: start;
-  -webkit-box-direction: normal;
-  -moz-box-direction: normal;
-  box-direction: normal;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  box-align: center;
+  height: 80px;
   margin: 0 auto;
   color: #FFF;
   font-size: 1.8rem;
-  line-height: 8.0rem;
+  line-height: 80px;
 }
 .M-footerCopy {
-  -webkit-box-ordinal-group: 1;
-  -moz-box-ordinal-group: 1;
-  box-ordinal-group: 1;
-  -webkit-box-flex: 3;
-  -moz-box-flex: 3;
-  box-flex: 3;
-  display: inline-block;
+  float: left;
 }
 .M-footerInfo {
-  -webkit-box-ordinal-group: 1;
-  -moz-box-ordinal-group: 1;
-  box-ordinal-group: 1;
-  -webkit-box-flex: 2;
-  -moz-box-flex: 2;
-  box-flex: 2;
+  float: right;
+  padding: 0 1.5em;
 }
 .M-footerInfoSource {
-  font-size: 1.4rem;
-  color: #CCC;
-  margin-left: 1em;
+  font-size: 2.8rem;
+  color: #fff;
 }
 .M-footerLang {
-  -webkit-box-ordinal-group: 1;
-  -moz-box-ordinal-group: 1;
-  box-ordinal-group: 1;
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  box-flex: 1;
-  text-align: right;
+  float: right;
+  height: 100%;
+  width: 24px;
+}
+.M-footerLang ul {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 .M-footerLang li {
-  display: block;
-  margin: .5em 0;
   width: 24px;
   height: 16px;
-  vertical-align: middle;
+  margin: .5em 0;
   cursor: pointer;
-  opacity: .75;
-  background: #404040 url(../icons/icons.png) no-repeat;
+  opacity: 0.85;
+  border-radius: .1em;
+  background: #404040 url(../icons/lang-icons.png) no-repeat;
   transistion: opacity 220ms cubic-bezier(0.42, 0, 0.58, 1);
 }
 .M-footerLang li:hover {
   opacity: 1;
 }
 .M-footerLang li.cn {
-  background-position: 0px -101px;
+  background-position: 0 0;
 }
 .M-footerLang li.hk {
-  background-position: 0px -117px;
+  background-position: 0px -16px;
 }
 .M-footerLang li.us {
-  background-position: 0px -133px;
+  background-position: 0px -32px;
 }
 .M-banner {
   width: 100%;
@@ -1087,61 +1102,27 @@ a:hover {
 }
 .M-headToolSearch .searchBtn {
   display: inline-block;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
   position: relative;
   top: .1em;
-  right: 0;
-  -webkit-transform: scale(0.7);
-  transform: scale(0.7);
   z-index: 1;
+  color: #BEBEBE;
+  font-size: 1.8rem;
+  cursor: pointer;
 }
-.M-headToolSearch .searchBtn .circle,
-.M-headToolSearch .searchBtn .line {
-  display: block;
-  position: absolute;
-  transition: border-color 218ms cubic-bezier(0.42, 0, 0.58, 1);
-}
-.M-headToolSearch .searchBtn .circle {
-  top: 2px;
-  left: 4px;
-  width: 50%;
-  height: 50%;
-  border: 3px solid #B6B6B6;
-  border-radius: 50%;
-}
-.M-headToolSearch .searchBtn .line {
-  bottom: 2px;
-  right: -3px;
-  width: 12px;
-  height: 0;
-  border: 2px solid #B6B6B6;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  -webkit-transform-origin: 50% 50%;
-  transform-origin: 50% 50%;
-  -webkit-transform: rotate(50deg);
-  transform: rotate(50deg);
-}
-.M-headToolSearch .searchBtn:hover .circle,
-.M-headToolSearch .searchBtn.act .circle,
-.M-headToolSearch .searchBtn:hover .line,
-.M-headToolSearch .searchBtn.act .line {
-  border-color: #FFF;
+.M-headToolSearch .searchBtn.act {
+  color: #fff;
 }
 .M-headToolSearch .searchIpt {
   display: none;
   padding: .5em 1.8em .5em .5em;
   position: relative;
-  top: -0.65em;
-  right: -2.3em;
+  right: -2em;
   max-width: 10em;
   opacity: 1;
   border: none;
   background: rgba(238, 238, 238, 0.45);
   outline: none;
-  border-radius: .2em;
+  border-radius: 0.1em;
   z-index: 0;
   color: #FFF;
   cursor: default;
@@ -1259,14 +1240,9 @@ a:hover {
 }
 .M-commentHeadAdd {
   float: right;
-  width: 18px;
-  height: 25px;
-  position: relative;
-  top: 0;
   left: 0.15em;
-  padding: 0 .5em;
-  color: #A52A2A;
-  background: #ffffff url(../icons/icons.png) 6px 0 no-repeat;
+  color: #C3652A;
+  font-size: 2.6rem;
   z-index: 3;
   cursor: pointer;
 }
@@ -1329,21 +1305,12 @@ a:hover {
   float: right;
   display: none;
   font-size: 1.5rem;
-  padding-right: 2em;
+  padding-right: 1em;
 }
 .M-commentIssuseHeadOp .op {
   display: inline-block;
-  width: 24px;
-  height: 20px;
-  margin-left: 1em;
   cursor: pointer;
-}
-.M-commentIssuseHeadOp .reply {
-  background: url(../icons/icons.png) 0px -28px no-repeat;
-}
-.M-commentIssuseHeadOp .likes,
-.M-commentIssuseHeadOp .dislikes {
-  font-style: normal;
+  color: #96A6A5;
 }
 .M-commentIssuseContent {
   padding: .6em 1em;
@@ -1873,7 +1840,6 @@ a:hover {
   padding: 0 0 1em 1em;
   color: #666;
   font-size: 1.4rem;
-  text-decoration: underline;
 }
 .P-archives .P-archiveListPager {
   border-top: 3px solid #EDEDED;

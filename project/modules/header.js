@@ -119,8 +119,7 @@ define(function(require, exports, module) {
 				'<div class="M-headToolSearch">',
 					'<input type="text" class="searchIpt animated" placeholder="'+ T('请输入关键字') +'">',
 					'<div class="searchBtn" title="'+ T('搜索文章') +'">',
-						'<div class="circle"/>',
-						'<div class="line"/>',
+						'<i class="fa fa-search"/>',
 					'</div>',
 				'</div>'
 				// '<div class="M-headToolOption">',
