@@ -22,13 +22,22 @@ define(function(require, exports, module) {
 			var target = config['target'];
 			var head = $([
 				'<div class="M-head">',
-					'<div class="M-headLogo">',
-						'<a href="/blog/" class="logoAnchor">',
-							'&lt;TANGBC/&gt;',
-						'</a>',
+					// 顶部
+					'<div class="M-headTop">',
+						'<div class="M-headTopOption">',
+							'<i class="fa fa-reorder"/>',
+						'</div>',
+						'<div class="M-headTopLogo">',
+							'<a href="/blog/" class="logoAnchor">',
+								'&lt;TANGBC/&gt;',
+							'</a>',
+						'</div>',
+						'<div class="M-headTopTool"/>',
 					'</div>',
-					'<div class="M-headNav"/>',
-					'<div class="M-headTool"/>',
+					// 导航
+					'<div class="M-headNav">',
+						'<i class="fa fa-sort-up triangle"/>',
+					'</div>',
 				'</div>'
 			].join(''));
 
@@ -38,9 +47,10 @@ define(function(require, exports, module) {
 			}
 
 			var doms = this.$doms = {
-				'logo': $('.M-headLogo', head),
-				'nav': $('.M-headNav', head),
-				'tool': $('.M-headTool', head)
+				'option' : $('.M-headTopOption', head),
+				'logo'   : $('.M-headTopLogo', head),
+				'nav'    : $('.M-headNav', head),
+				'tool'   : $('.M-headTopTool', head)
 			}
 
 			// 创建导航对象
@@ -50,11 +60,14 @@ define(function(require, exports, module) {
 			// 创建工具
 			this.buildTool();
 
+			// 触摸选项显示导航
+			app.event.bind(this.$doms.option, 'touchstart', this.eventTouchOption, this);
+
 			// 缓存对象
 			this.$ = {
 				'nav': nav
 			}
-			head.appendTo(target.show());
+			head.appendTo(target);
 
 			// 创建完成后回调(@todo: 去掉,这里没必要回调)
 			if (util.isFunc(this.callback)) {
@@ -63,28 +76,23 @@ define(function(require, exports, module) {
 			return this;
 		},
 
-		// 显示导航
-		show: function() {
-			this.$config.target.show();
-			return this;
+		// 选项触摸事件
+		eventTouchOption: function(evt, elm) {
+			this.$timeStamp = evt.timeStamp;
+			var nav = this.$doms.nav;
+			nav.show();
+			// 为导航隐藏绑定document事件
+			app.event.bind($(document), 'touchstart.oblank', this.eventTouchOBlank, this);
+			return false;
 		},
 
-		// 隐藏导航
-		hide: function() {
-			this.$config.target.hide();
-			return this;
-		},
-
-		// 锁住headroom
-		lockHead: function(unShow) {
-			this.$.headroom.destroy();
-			return this;
-		},
-
-		// 解开headroom,
-		unlockHead: function() {
-			this.$.headroom.init();
-			return this;
+		// 触摸空白处(处理非选项图标)
+		eventTouchOBlank: function(evt, elm) {
+			if (evt.timeStamp !== this.$timeStamp) {
+				this.$doms.nav.hide();
+				app.event.unbind($(document), 'touchstart.oblank');
+			}
+			return false;
 		},
 
 		// 获取header的子对象(模块)
@@ -93,41 +101,43 @@ define(function(require, exports, module) {
 			return arguments.length === 1 ? mods[childName] : mods;
 		},
 
+		// 创建右侧工具栏(暂时只有搜索框)
 		buildTool: function() {
 			var html = $([
-				'<div class="M-headToolSearch">',
+				'<div class="M-headTopToolSearch">',
 					'<input type="text" class="searchIpt animated" placeholder="'+ T('请输入关键字') +'">',
 					'<div class="searchBtn" title="'+ T('搜索文章') +'">',
-						'<div class="circle"/>',
-						'<div class="line"/>',
+						'<i class="fa fa-search"/>',
 					'</div>',
 				'</div>'
-				// '<div class="M-headToolOption">',
-				// 	'<div class="btn">',
-				// 		'<span/>',
-				// 		'<span/>',
-				// 		'<span/>',
-				// 	'</div>',
-				// '</div>'
 			].join(''));
 			html.appendTo(this.$doms.tool);
 			this.$doms.tool.input = $('.searchIpt', html);
 			this.$doms.tool.btn = $('.searchBtn', html);
 
-			app.event.proxy(html, 'click.search', this.eventClickSearch, this);
+			app.event.bind(this.$doms.tool.btn, 'touchstart.search', this.eventTouchSearch, this);
 		},
 
 		// 点击搜索框
-		eventClickSearch: function(evt, elm) {
+		eventTouchSearch: function(evt, elm) {
+			this.$timeStamp = evt.timeStamp;
+			// 隐藏logo
+			this.$doms.logo.hide();
+			// 输入框的值
 			var input = this.$doms.tool.input;
 			var val = input.val();
+			// 搜索按钮
 			this.$doms.tool.btn.addClass('act');
-			this.$timeStamp = evt.timeStamp;
+
 			// 点击空白处收起INPUT
-			app.event.bind($(document), 'click.blank', this.eventClickBlank, this);
+			app.event.bind($(document), 'touchstart.sblank', this.eventTouchSBlank, this);
+
 			// 按下回车键响应搜索操作
 			app.event.bind($(document), 'keydown.search', this.eventKeydownSearch, this);
-			input.show().removeClass('inputInit').addClass('inputReady');
+
+			// 搜索框展现动画
+			app.animate.play(input.show().removeClass('inputInit'), 'inputReady');
+
 			if (!val) {
 				input.focus();
 			}
@@ -155,8 +165,8 @@ define(function(require, exports, module) {
 			return false;
 		},
 
-		// 点击空白处隐藏INPUT
-		eventClickBlank: function(evt) {
+		// 触摸空白处(处理非搜索图标)
+		eventTouchSBlank: function(evt) {
 			if (this.$timeStamp !== evt.timeStamp) {
 				this.hideSearchInput();
 			}
@@ -165,14 +175,19 @@ define(function(require, exports, module) {
 
 		// 隐藏搜索框+解除事件的绑定
 		hideSearchInput: function() {
-			var self = this;
-			this.$doms.tool.btn.removeClass('act');
-			self.$doms.tool.input
-				.val('')
-				.addClass('inputInit')
-				.removeClass('inputReady');
+			var input = this.$doms.tool.input;
+			var logo = this.$doms.logo;
+			var btn = this.$doms.tool.btn;
+			
+			// 搜索按钮隐藏动画
+			app.animate.play(input.val('').removeClass('inputReady'), 'inputInit', function() {
+				input.hide();
+				logo.show();
+				btn.removeClass('act');
+			});
+
 			// 解除绑定
-			app.event.unbind($(document), 'click.blank');
+			app.event.unbind($(document), 'touchstart.sblank');
 			app.event.unbind($(document), 'keydown.search');
 		}
 	}
@@ -187,7 +202,6 @@ define(function(require, exports, module) {
 		// 创建导航布局
 		buildNavDOM: function() {
 			var options = this.options;
-			var dom = this.$dom = $('<div class="M-nav"/>');
 			var navs = [];
 			util.each(options, function(item, idx) {
 				navs.push([
@@ -196,8 +210,8 @@ define(function(require, exports, module) {
 					'</li>'
 				].join(''));
 			});
-			dom.append('<ul>' + navs.join('') + '</ul>');
-			return dom;
+			this.$dom = $('<ul>' + navs.join('') + '</ul>');
+			return this.$dom;
 		},
 		// 导航的激活状态
 		updateNav: function(link) {

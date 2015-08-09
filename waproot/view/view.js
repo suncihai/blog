@@ -52,11 +52,7 @@ define(function(require, exports, module) {
 				// 创建博客头部/激活导航状态
 				layout.buildHeader({
 					'target': head,
-					'type': 'blog',
-					'headroom': false,
-					'css': {
-						'width': c.blogWidth
-					}
+					'type': 'blog'
 				}).updateNav(config.container);
 
 				// 创建博客页脚

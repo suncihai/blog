@@ -7,7 +7,6 @@ define(function(require, exports, module) {
 	var $ = require('jquery');
 	var util = require('util');
 
-	var pager = require('@modules/pager').pagerHasLink;
 	var layout = require('layout');
 	var loading = require('@modules/loading').base;
 
@@ -32,16 +31,8 @@ define(function(require, exports, module) {
 
 			this.$doms = {
 				listBox: $('<div class="P-archiveList"/>').appendTo(dom).hide(),
-				pagerBox: $('<div class="P-archivePager"/>').appendTo(dom).hide()
+				loadBox: $('<div class="P-archiveLoad"/>').appendTo(dom).hide()
 			}
-
-			// 创建分页模块
-			pager.init({
-				'name': 'achivePager',
-				'target': this.$doms.pagerBox,
-				'showInfo': false,
-				'max': 7
-			});
 
 			// 数据加载之前显示loading
 			this.$.loading = loading.init({
@@ -58,12 +49,12 @@ define(function(require, exports, module) {
 
 		hide: function() {
 			this.$doms.listBox.hide();
-			this.$doms.pagerBox.hide();
+			this.$doms.loadBox.hide();
 		},
 
 		show: function() {
 			this.$doms.listBox.show();
-			this.$doms.pagerBox.show();
+			this.$doms.loadBox.show();
 		},
 
 		showLoading: function() {
@@ -120,13 +111,6 @@ define(function(require, exports, module) {
 			}
 			// 创建列表
 			self.buildArchives(info);
-			// 更新页码
-			pager.setParam({
-				'link': self.$data.name,
-				'page': info.page,
-				'pages': info.pages,
-				'total': info.total
-			});
 
 			// 隐藏loading
 			setTimeout(function() {
@@ -155,14 +139,9 @@ define(function(require, exports, module) {
 		buildItems: function(item, idx) {
 			var data = this.$data;
 			var sections = [];
-			// var str = item.date.slice(0, 10);
-			// var arr = str.split('-');
-			// var year = arr[0];
-			// var mouth = +arr[1];
-			// var day = +arr[2];
-			// var date = year + '年' + mouth + '月' + day + '日';
 			var date = util.prettyDate(item.date);
-			var anchor = data.name + '/' + item.id; // 超链接地址
+			// 超链接地址
+			var anchor = data.name + '/' + item.id; 
 			var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
 			sections.push([
 				'<section class="sectionItem" list-id="'+ idx +'">',
@@ -176,11 +155,8 @@ define(function(require, exports, module) {
 						'</article>',
 					// '</a>',
 					'<div class="P-archiveListInfo">',
-						// '<span class="tag">分类：'+ this.$title || data.name +'</span>',
-						// ' | ',
-						'<span class="tag">'+ T('评论数：') + item.comments +'</span>',
-						' / ',
-						'<span class="tag">'+ T('发布时间：')+ date +'</span>',
+						'<span class="tag"><i class="fa fa-calendar mr3"></i>'+ date +'</span>',
+						'<span class="tag mr2 ml2"><i class="fa fa-comments mr3"></i>'+ item.comments +'</span>',
 					'</div>',
 				'</section>'
 			].join(''));

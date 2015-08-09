@@ -1,49 +1,89 @@
+// 页脚容器flex定义
+.flexWraper() {
+	display: -webkit-box;
+	display: -moz-box;
+	display: box;
+
+	-webkit-box-orient: inline-axis;
+	-moz-box-orient: inline-axis;
+	box-orient: inline-axis;
+
+	-webkit-box-pack: start;
+	-moz-box-pack: start;
+	box-pack: start;
+
+	-webkit-box-direction: normal;
+	-moz-box-direction: normal;
+	box-direction: normal;
+
+	-webkit-box-align: center;
+	-moz-box-align: center;
+	box-align: center;
+}
+// flex定义
+.flexNumbers( @num ) {
+	-webkit-box-ordinal-group: 1;
+	-moz-box-ordinal-group: 1;
+	box-ordinal-group: 1;
+
+	-webkit-box-flex: @num;
+	-moz-box-flex: @num;
+	box-flex: @num;
+}
+
 .M-footer{
 	width: 100%;
+	height: @footerHeight;
+	padding: .5em 0;
 	.center;
 	color: #FFF;
-	font-size: 1.8rem;
-	// height: 45px;
-	// line-height: 45px;
-
 	// copyright
 	&Copy{
 		display: block;
+		padding: .5em;
 	}
 	// 其他信息
 	&Info{
 		display: block;
+		padding: 0 .5em;
 		&Source{
-			font-size: 1.4rem;
-			color: #CCC;
+			display: inline-block;
+			font-size: 2.8rem;
+			color: #fff;
+		}
+		// 多语言切换
+		&Lang{
+			display: inline-block;
+			padding-left: 1em;
+			position: relative;
+			top: -.3em;
+			li{
+				display: inline-block;
+				// width: 24px;
+				padding-left: 28px;
+				height: 16px;
+				line-height: 16px;
+				font-size: 1.4rem;
+				margin: 0 1em;
+				cursor: pointer;
+				opacity: 0.85;
+				border-radius: .1em;
+				background: #404040 url(/blog/resources/icons/lang-icons.png) no-repeat;
+				&.cn{
+					background-position: 0 0;
+				}
+				&.hk{
+					background-position: 0px -16px;
+				}
+				&.us{
+					background-position: 0px -32px;
+				}
+				&.act{
+					border: 1px solid #FFF3E1;
+					opacity: 0.5;
+				}
+			}
 		}
 	}
-	// 多语言切换
-	&Lang{
-		display: block;
-		text-align: right;
-		li{
-			display: block;
-			margin: .5em 0;
-			width: 24px;
-			height: 16px;
-			vertical-align: middle;
-			cursor: pointer;
-			opacity: .75;
-			background: #404040 url(../icons/icons.png) no-repeat;
-			transistion: opacity 220ms cubic-bezier(0.42,0,.58,1);
-			&:hover{
-				opacity: 1;
-			}
-			&.cn{
-				background-position: 0px -101px;
-			}
-			&.hk{
-				background-position: 0px -117px;
-			}
-			&.us{
-				background-position: 0px -133px;
-			}
-		}
-	}
+	
 }

@@ -41,9 +41,13 @@ define(function(require, exports) {
 			// 分页器HTML结构
 			var html = [
 				'<div class="M-pager '+ this.$class +'">',
-					'<input class="M-pagerPN M-pagerPrev" type="button" title="'+ T('上一页') +'"/>',
+					'<a class="M-pagerPN M-pagerPrev" title="'+ T('上一页') +'">',
+						'<i class="fa fa-angle-left"/>',
+					'</a>',
 					'<div class="M-pagerList"/>',
-					'<input class="M-pagerPN M-pagerNext" type="button" title="'+ T('下一页') +'"/>',
+					'<a class="M-pagerPN M-pagerNext" title="'+ T('下一页') +'">',
+						'<i class="fa fa-angle-right"/>',
+					'</a>',
 					'<div class="M-pagerInfo"/>',
 				'</div>'
 			].join('');
@@ -69,7 +73,7 @@ define(function(require, exports) {
 			app.event.bind(doms.next, 'click', this.eventClickNext, this);
 
 			// 页码点击事件
-			app.event.proxy($('.M-pager'), 'click', 'input.M-pagerItem', this.eventClickPage, this);
+			app.event.proxy($('.M-pager'), 'click', 'a.M-pagerItem', this.eventClickPage, this);
 		},
 
 		// 创建页码选项
@@ -92,7 +96,7 @@ define(function(require, exports) {
 					item = '<span class="M-pagerItem M-pagerOmit" title="'+ T('已隐藏部分页码') +'">···</span>';
 				}
 				else {
-					item = '<input type="button" class="M-pagerItem" value="'+ num +'"/>';
+					item = '<a class="M-pagerItem" data-id="'+ num +'">'+ num +'</a>';
 				}
 				$(item).appendTo(doms.list);
 			});
@@ -219,7 +223,7 @@ define(function(require, exports) {
 
 		// 点击页码
 		eventClickPage: function(evt, elm) {
-			var id = +$(elm).val();
+			var id = +$(elm).attr('data-id');
 			var page = this.$param.page;
 			if (id === page) {
 				return false;
@@ -244,9 +248,13 @@ define(function(require, exports) {
 			// 分页器HTML结构
 			var html = [
 				'<div class="M-pager '+ this.$class +'">',
-					'<input class="M-pagerPN M-pagerPrev" type="button" title="'+ T('上一页') +'"/>',
+					'<a class="M-pagerPN M-pagerPrev" title="'+ T('上一页') +'">',
+						'<i class="fa fa-angle-left"/>',
+					'</a>',
 					'<div class="M-pagerList"/>',
-					'<input class="M-pagerPN M-pagerNext" type="button" title="'+ T('下一页') +'"/>',
+					'<a class="M-pagerPN M-pagerNext" title="'+ T('下一页') +'">',
+						'<i class="fa fa-angle-right"/>',
+					'</a>',
 					'<div class="M-pagerInfo"/>',
 				'</div>'
 			].join('');

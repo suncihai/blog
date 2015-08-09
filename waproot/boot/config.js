@@ -43,8 +43,8 @@ define(function() {
 		archiveParam: {
 			'catid' : 1,  // 分类ID
 			'page'  : 1,  // 请求第1页
-			'limit' : 6,  // 每页显示数
-			'brief' : 180 // 摘要长度
+			'limit' : 3,  // 每页显示数
+			'brief' : 50 // 摘要长度
 		},
 
 		// 评论列表默认请求参数
