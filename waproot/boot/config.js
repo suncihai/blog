@@ -43,7 +43,7 @@ define(function() {
 		archiveParam: {
 			'catid' : 1,  // 分类ID
 			'page'  : 1,  // 请求第1页
-			'limit' : 3,  // 每页显示数
+			'limit' : 1,  // 每页显示数
 			'brief' : 50 // 摘要长度
 		},
 

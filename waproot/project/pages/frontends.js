@@ -12,11 +12,18 @@ define(function(require, exports, module) {
 
 	var Archives = {
 		init: function(data) {
+			// 子模块对象
 			this.$ = {};
+			// 数据加载状态
+			this.$dataReady = false;
+			// 请求的页码
+			this.$page = (data.search && +data.search.page);
+			// 页面参数缓存
 			this.$data = data;
+			// 页面标题
 			this.$title = c.archiveTitle[data.name];
 			this.$param = $.extend({}, c.archiveParam, {
-				'page': data.search && +data.search.page || 1
+				'page': this.$page || 1
 			});
 			layout.hideFooter();
 			this.build();
@@ -30,8 +37,12 @@ define(function(require, exports, module) {
 			layout.setTitle(this.$title);
 
 			this.$doms = {
-				listBox: $('<div class="P-archiveList"/>').appendTo(dom).hide(),
-				loadBox: $('<div class="P-archiveLoad"/>').appendTo(dom).hide()
+				'listBox': $('<div class="P-archiveList"/>').appendTo(dom).hide(),
+				'loadBox': $([
+					'<div class="P-archiveLoad">',
+						T('加载更多'),
+					'</div>'
+				].join('')).appendTo(dom).hide()
 			}
 
 			// 数据加载之前显示loading
@@ -42,6 +53,9 @@ define(function(require, exports, module) {
 				'class': 'center mt2',
 				'autoHide': true
 			});
+
+			// 触摸加载更多
+			app.event.bind(this.$doms.loadBox, 'touchend', this.eventTouchLoad, this);
 
 			// 加载数据
 			this.load();
@@ -67,13 +81,58 @@ define(function(require, exports, module) {
 			this.show();
 		},
 
+		// 触摸加载更多
+		eventTouchLoad: function() {
+			// 未加载完数据不重复加载
+			if (!this.$dataReady) {
+				return false;
+			}
+			var api = c.api;
+			var param = $.extend(this.getParam(), {
+				'page': this.$page + 1
+			});
+			this.$doms.loadBox.html('<i class="fa fa-spinner mr3 spinnerRotate"></i>正在加载');
+			app.data.get(api.listarchives, param, this.afterLoadMore, this);
+		},
+
+		// 加载更多数据回调
+		afterLoadMore: function(err, data) {
+			if (err) {
+				this.$doms.loadBox.html(err.status + '加载失败！请重试');
+				return false;
+			}
+			var self = this;
+			var result = data.result;
+			// 延迟展现
+			setTimeout(function() {
+				self.$page = result.page;
+				if (result && result.items) {
+					self.$dataReady = true;
+					// 返回不为空数组
+					if (result.items.length) {
+						var moreList = self.buildItems(result.items);
+						$(moreList.join('')).appendTo(self.$doms.listBox);
+						self.$doms.loadBox.html('加载更多');
+					}
+					else {
+						self.$doms.loadBox.html('没有了');
+					}
+				}
+				else {
+					self.$doms.loadBox.html('加载失败！请重试');
+				}
+			}, c.delay);
+		},
+
 		// 拉取数据
 		load: function(param) {
 			var api = c.api;
+			this.$dataReady = false;
+			// 请求参数
 			param = param || this.getParam();
 			layout.hideFooter();
 			this.showLoading();
-			app.data.get(api.listarchives, param, this.onData, this);
+			app.data.get(api.listarchives, param, this.afterLoad, this);
 		},
 
 		// 获取/更新请求参数<>
@@ -85,11 +144,12 @@ define(function(require, exports, module) {
 			return param;
 		},
 
-		// 拉取数据回调
-		onData: function(err, res) {
+		// 页面初始化拉取数据回调
+		afterLoad: function(err, res) {
 			var self = this;
 			var dom = self.$data.dom;
 			var dataError = T('拉取数据似乎出了点问题~');
+			this.$dataReady = true;
 			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if (err.status === 'timeout') {
@@ -104,11 +164,12 @@ define(function(require, exports, module) {
 				dom.html('<div class="noData">'+ dataError +'</div>');
 				return;
 			}
-			var info = self.$info = res.result;
+			var info = res.result;
 			if (util.isEmpty(info && info.items)) {
 				dom.html('<div class="noData">'+ T('该页无数据') +':-)</div>');
 				return false;
 			}
+
 			// 创建列表
 			self.buildArchives(info);
 
@@ -117,50 +178,54 @@ define(function(require, exports, module) {
 				self.hideLoading();
 				layout.showFooter();
 			}, c.delay);
-
 		},
 
 		// 创建
 		buildArchives: function(info) {
-			// 先清空之前的列表
-			this.$doms.listBox.empty();
-
 			// 循环创建列表
-			util.each(info.items, this.buildItems, this);
+			var list = this.buildItems(info.items);
+			$(list.join('')).appendTo(this.$doms.listBox);
 
 			// 创建完显示缩略图
 			this.showThumb();
-
-			// 设置标题
-			layout.setTitle(T('{1} - 第{2}页', this.$title, info.page));
 		},
 
-		// * buildItems 循环生成列表. idx->序号, item->选项对象
-		buildItems: function(item, idx) {
-			var data = this.$data;
+		// 创建文章列表
+		buildItems: function(items) {
+			var self = this;
+			// 存放列表html结构
 			var sections = [];
-			var date = util.prettyDate(item.date);
-			// 超链接地址
-			var anchor = data.name + '/' + item.id; 
-			var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
-			sections.push([
-				'<section class="sectionItem" list-id="'+ idx +'">',
-					'<div class="P-archiveListTitle">',
-						'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">'+ item.title +'</a></h2>',
-					'</div>',
-					// '<a href="#'+ anchor +'" class="abstract">',
+
+			// 循环创建列表结构
+			util.each(items, function(item, idx) {
+				var data = self.$data;
+				var date = util.prettyDate(item.date);
+				// 超链接地址
+				var anchor = data.name + '/' + item.id; 
+				// 缩略图
+				var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
+				// 一条列表记录
+				var section = [
+					'<section class="sectionItem" list-id="'+ idx +'">',
+						'<div class="P-archiveListTitle">',
+							'<h2><a href="#'+ anchor +'" title="'+ item.title +'" class="title">'+ item.title +'</a></h2>',
+						'</div>',
 						'<article>',
 							'<p class="abstract">' + item.content +' ……</p>',
 							cover,
 						'</article>',
-					// '</a>',
-					'<div class="P-archiveListInfo">',
-						'<span class="tag"><i class="fa fa-calendar mr3"></i>'+ date +'</span>',
-						'<span class="tag mr2 ml2"><i class="fa fa-comments mr3"></i>'+ item.comments +'</span>',
-					'</div>',
-				'</section>'
-			].join(''));
-			this.$doms.listBox.append(sections.join(''));
+						'<div class="P-archiveListInfo">',
+							'<span class="tag"><i class="fa fa-calendar mr3"></i>'+ date +'</span>',
+							'<span class="tag mr2 ml2"><i class="fa fa-comments mr3"></i>'+ item.comments +'</span>',
+						'</div>',
+					'</section>'
+				].join('');
+
+				// 记录集合
+				sections.push(section);
+			});
+			
+			return sections;
 		},
 
 		// 显示缩略图
