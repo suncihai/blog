@@ -37,10 +37,10 @@ define(function(require, exports, module) {
 			}
 			// 数据加载之前显示loading
 			this.$.loading = loading.init({
-				'target': this.$data.dom,
-				'width':  this.$data.dom.width(),
-				'size': 25,
-				'class': 'center mt2'
+				'target' : this.$data.dom,
+				'width'  : this.$data.dom.width(),
+				'size'   : 25,
+				'class'  : 'center mt2'
 			});
 
 			app.data.get(api.showarticle, param, this.onData, this);
@@ -53,7 +53,7 @@ define(function(require, exports, module) {
 			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if (err.status === 'timeout') {
-					dom.html('<div class="noData animated bounce">'+ T('请求超时，请按F5刷新重试~') +'</div>');
+					dom.html('<div class="noData">'+ T('请求超时，请按F5刷新重试~') +'</div>');
 				}
 				return false;
 			}
@@ -61,67 +61,62 @@ define(function(require, exports, module) {
 				if (res.message) {
 					dataError = res.message;
 				}
-				dom.html('<div class="noData animated bounce">'+ dataError +'</div>');
+				dom.html('<div class="noData">'+ dataError +'</div>');
 				return;
 			}
 			var info = this.$info = res.result;
 			if (res.total === 0) {
 				var noText = T('数据库无该文章记录：') + this.$data.param;
-				dom.html('<div class="noData animated bounce">'+ noText +'</div>');
+				dom.html('<div class="noData">'+ noText +'</div>');
 				layout.setTitle(noText);
-				banner.setData({
-					'type': 'article',
-					'title': '******************',
-					'time': T('时间：') +'0000-00-00 | ',
-					// 'tag': '标签：* | ',
-					'comments': T('评论数：') + '0'
-				})
-				// .setCrumbs(c.archiveTitle[this.$data.name], this.$data.param);
-				return;
+				return false;
 			}
+
+			// 构建页面
 			this.build(info);
 		},
 
 		// 创建
 		build: function(info) {
 			var self = this;
-			var dom = self.$data.dom;
+			var dom = this.$data.dom;
 			var cont = $([
 				'<div class="content">',
+					'<h1 class="title">'+ info.title +'</h1>',
+					'<div class="info">',
+							// 发布时间 
+							'<i class="fa fa-calendar mr3"></i>',
+							info.date.toString().slice(0, 10),
+							// 标签
+							'<span class="ml1 mr1"/>',
+							// 评论数
+							'<i class="fa fa-comments mr3"></i>',
+							info.comments,
+						'</div>',
 					'<article class="article">'+ info.content +'</article>',
 				'</div>'
 			].join('')).appendTo(dom).hide();
 
-			self.$doms = {
+			this.$doms = {
 				'content' : cont,
 				'article' : $('.article', cont),
 				'comment' : $('<div class="comments"/>').appendTo(dom)
 			}
 
 			// 代码高亮渲染
-			self.renderHighLighter();
+			this.renderHighLighter();
 
 			// 标题
-			layout.setTitle(self.$data.name, info.title);
+			layout.setTitle(this.$data.name, info.title);
 
 			// 创建评论模块
 			this.$.comment = comment.init({
-				'target': self.$doms.comment,
-				'artid': this.$data.param,
-				'hasHead': true,
-				'hasOp': true,
-				'hasFloor': true
+				'target'   : this.$doms.comment,
+				'artid'    : this.$data.param,
+				'hasHead'  : true,
+				'hasOp'    : true,
+				'hasFloor' : true
 			}).hideAll();
-
-			// 设置banner内容
-			banner.setData({
-				'type': 'article',
-				'title': info.title,
-				'time': T('发布时间：') + info.date.toString().slice(0, 10) + ' | ',
-				// 'tag': T('标签：') + (info.tag || T('无'))  + ' | ',
-				'comments': T('评论数：') + info.comments
-			})
-			// .setCrumbs(c.archiveTitle[self.$data.name], self.$data.param);
 
 			// 监听评论列表数据加载完成消息
 			app.messager.on('commentDataLoaded', this.onCommentDataLoaded, this);
@@ -131,10 +126,12 @@ define(function(require, exports, module) {
 				self.hideLoading();
 				layout.showFooter();
 				self.$.comment.showAll();
+
 				// 判断页面是否出现滚动条
 				var doc = document;
 				var docHeight = $(doc).height();
 				var cHeight = util.getClientHeight();
+
 				if (docHeight <= cHeight) {
 					this.$reach = true;
 					this.$.comment.showLoading().load();
@@ -153,7 +150,7 @@ define(function(require, exports, module) {
 			var cHeight = util.getClientHeight();
 			var dTop = Math.floor((oTop - sTop) * 1.15);
 			// 滚动条到达评论区域
-			if (dTop < cHeight && !this.$reach && this.$.comment) {
+			if ((dTop < cHeight) && !this.$reach && this.$.comment) {
 				this.$reach = true;
 				this.$.comment.showLoading().load();
 			}

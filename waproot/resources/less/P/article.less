@@ -1,9 +1,19 @@
 // 文章样式
 .P-article{
+	padding: .5em 1em;
 	.content{
 		width: @blogWidth;
 		.center;
 		padding: 1em 0 3em 0;
+		.title{
+			font-weight: normal;
+			font-size: 2rem;
+		}
+		.info{
+		    padding: .5em 0 1em;
+			color: #666;
+			border-bottom: 1px dashed #666;
+		}
 		article{
 			// padding: 1.5em 0;
 			font-size: 1.6rem;
@@ -68,13 +78,7 @@
 		// display: none;
 		box-sizing: border-box;
 		width: 100%;
-		padding: 1.5em;
-		margin-top: 0.3em;
-		overflow: auto;
-		border-left: 8px solid rgba(34,182,171,.5);
-		// border-radius: .5em;
-		position: relative;
-		// left: 2em;
+		// border: 1px solid #F1F0F0;
 		font-size: 1.5rem;
 		background: url(../icons/code-bg.png) repeat !important;
 	}
