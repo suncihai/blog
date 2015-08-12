@@ -8,11 +8,6 @@ define(function(require, exports) {
 	var c = app.getConfig();
 	var api = c.api;
 
-	var pager = require('@modules/pager').pagerNoLink;
-	var dialog = require('@modules/dialog').base;
-	var tooltip = require('@modules/tooltip').tooltip.init();
-	var loading = require('@modules/loading').chrysanthemum;
-
 	/*
 	 * 评论列表 参数config：
 	 * {
@@ -72,14 +67,12 @@ define(function(require, exports) {
 		// 显示加载动画
 		showLoading: function() {
 			this.$doms.loading.show();
-			this.$.loading.show();
 			return this;
 		},
 
 		// 隐藏加载动画
 		hideLoading: function() {
 			this.$doms.loading.hide();
-			this.$.loading.hide();
 			return this;
 		},
 
@@ -96,7 +89,9 @@ define(function(require, exports) {
 					'</header>',
 					'<article class="M-commentList"/>',
 					'<div class="M-commentPager"/>',
-					'<div class="M-commentLoading"/>',
+					'<div class="M-commentLoading">',
+						'<i class="fa fa-spinner mr3 spinnerRotate"></i>',
+					'</div>',
 					'<div class="M-commentEmpty">',
 						'<div class="M-commentEmptyWrap">',
 							'<div class="M-commentEmptyLeftHand"/>',
@@ -133,26 +128,6 @@ define(function(require, exports) {
 				$('.M-commentHead', html).hide();
 			}
 
-			// 创建分页模块
-			pager.init({
-				'name': 'commentPager',
-				'target': this.$doms.pager,
-				'max': 5,
-				'showInfo': false
-			});
-
-			this.$.loading = loading.init({
-				'target': this.$doms.loading,
-				'width':  0,
-				'scale': 30,
-				// 'size': 8,
-				'class': 'center',
-				'autoHide': true
-			});
-
-			// 监听页码选择事件
-			app.messager.on('pagerSelected', this.onPagerSelected, this);
-
 			// 监听添加评论成功消息
 			app.messager.on('commentAdded', this.onAddAComment, this);
 
@@ -185,14 +160,6 @@ define(function(require, exports) {
 				this.load();
 			}
 			return false;
-		},
-
-		// 点击新增评论
-		eventClickAdd: function() {
-			var param = {
-				'postid': this.$param.artid
-			}
-			popwin.init({'title': T('添加评论：')}).setData(param);
 		},
 
 		// 清空评论列表
@@ -255,13 +222,6 @@ define(function(require, exports) {
 						title = T('共{1}条评论，第{2}页', res.total, res.page);
 						self.$doms.title.text(title);
 				}
-
-				// 更新页码
-				pager.setParam({
-					'page': res.page,
-					'pages': res.pages,
-					'total': res.total
-				});
 			}, 0);
 
 			// 发通知消息
@@ -283,24 +243,9 @@ define(function(require, exports) {
 
 			$(list.join('')).appendTo(this.$doms.list);
 
-			// 鼠标移入显示回复按钮
-			app.event.proxy('section.M-commentIssuse', 'mouseenter mouseleave', this.eventEnterLeave, this);
 			// 评论操作
 			var op = $('.M-commentIssuseHeadOp', this.$doms.list);
 			app.event.proxy(op, 'click', 'span', this.eventClickOp, this);
-		},
-
-		// 评论选项鼠标移入移出事件
-		eventEnterLeave: function(evt, elm) {
-			switch(evt.type) {
-				case 'mouseenter':
-					$(elm).find('.M-commentIssuseHeadOp').addClass('fadeIn animated').show();
-				break;
-				case 'mouseleave':
-					$(elm).find('.M-commentIssuseHeadOp').removeClass('fadeIn').hide();
-				break;
-			}
-			return false;
 		},
 
 		// 创建一条评论
@@ -313,8 +258,8 @@ define(function(require, exports) {
 				: info.url ?
 				'<a href="http://'+ info.url +'" target="_blank">'+ info.author +'</a>'
 				: info.author;
-			// 评论时间
-			var date = util.prettyDate(info.date);
+			// // 评论时间
+			// var date = util.prettyDate(info.date);
 			// 评论内容(html)
 			var content = '';
 			// 评论者所在地
@@ -361,20 +306,6 @@ define(function(require, exports) {
 					'<article class="M-commentIssuseContent">'+ content +'</article>',
 				'</section>'
 			].join('');
-		},
-
-		// 点击评论操作
-		eventClickOp: function(evt, elm) {
-			var op = $(elm).attr('class').substr(3);
-			var id = +$(elm).attr('data-id');
-			var data = util.find(this.$items, id, 'id');
-			data.postid = this.$param.artid;
-			switch(op) {
-				case 'reply':
-					popwin.init({'title': T('回复评论：')}).setData(data);
-				break;
-			}
-			return false;
 		}
 	}
 	exports.list = $.extend(false, {}, CommentList);
@@ -527,46 +458,12 @@ define(function(require, exports) {
 
 		// 表单验证
 		validate: function(data) {
-			if (data.content === '') {
-				tooltip.setTip({
-					'refer': this.$doms.text,
-					'arrow': {'position': 'top'},
-					'offset': {'left': 10, 'top': 25},
-					'content': T('评论内容不能为空~'),
-					'width': 140
-				});
-				this.$doms.text.focus();
-				return false;
-			}
-			if (data.author === '') {
-				tooltip.setTip({
-					'refer': this.$doms.nick,
-					'arrow': {'position': 'bottom'},
-					'offset': {'left': 0, 'top': -45},
-					'content': T('昵称不能为空~'),
-					'width': 120
-				});
-				this.$doms.nick.focus();
-				return false;
-			}
-			if (data.code === '') {
-				tooltip.setTip({
-					'refer': this.$doms.code,
-					'arrow': {'position': 'bottom'},
-					'offset': {'left': 0, 'top': -45},
-					'content': T('验证码不能为空~'),
-					'width': 130
-				});
-				this.$doms.code.focus();
-				return false;
-			}
 			return true;
 		},
 
 		// 点击提交
 		eventClickSubmit: function(evt) {
 			var data = this.getData();
-			tooltip.setTimeStamp(evt.timeStamp);
 			if (this.$pushing) {
 				return false;
 			}
@@ -597,13 +494,6 @@ define(function(require, exports) {
 				}
 				if (!clink || clink !== self.$res.url) {
 					app.cookie.set('userlink', self.$res.url);
-				}
-
-				// 发通知给dialog自动隐藏
-				if (self.$silence) {
-					setTimeout(function() {
-						dialog.hide(self.afterDialogHide, self);
-					}, 1000);
 				}
 			}
 			// 提交失败
@@ -685,45 +575,4 @@ define(function(require, exports) {
 		}
 	}
 	exports.form = $.extend(true, {}, CommentForm);
-
-	/*
-	 * 评论弹窗 参数config：
-	 * {
-	 *	'title': String
-	 * }
-	 */
-	var popwin = {
-		// config配置参数：{title: 对话框标题}
-		init: function(config) {
-			this.$dialogBody = dialog
-				.init({
-					'height': 24
-				})
-				.setTitle(config.title)
-				.show()
-				.getBody();
-			return this;
-		},
-
-		// 设置表单数据
-		setData: function(data) {
-			// 创建评论表单
-			this.$form = $.extend(true, {}, CommentForm);
-			this.$dialogBody.empty();
-			this.$form.init({
-				'target': this.$dialogBody,
-				'data': data,
-				'silence': true
-			});
-
-			// 对话框关闭 解除绑定
-			app.messager.on('dialogClosed', this.onDialogClosed, this);
-		},
-
-		// 对话框关闭事件
-		onDialogClosed: function() {
-			this.$form.resetEvent();
-			return false;
-		}
-	}
 });
