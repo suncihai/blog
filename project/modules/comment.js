@@ -28,13 +28,13 @@ define(function(require, exports) {
 	var CommentList = {
 		init: function(config) {
 			this.$ = {};
-			this.$geturl = config.geturl || api.listcomment, // 评论请求接口
+			this.$geturl = config.geturl || api.listcomment; // 评论请求接口
 			this.$comments = 0; // 评论总数
 			this.$target = config.target;
-			this.$hasHead = config.hasHead, // 是否显示头部
-			this.$cls = config.cls || '', // 额外样式
-			this.$hasOp = config.hasOp, // 是否有回复操作
-			this.$hasFloor = config.hasFloor, // 是否有序号
+			this.$hasHead = config.hasHead; // 是否显示头部
+			this.$cls = config.cls || ''; // 额外样式
+			this.$hasOp = config.hasOp; // 是否有回复操作
+			this.$hasFloor = config.hasFloor; // 是否有序号
 			this.$param = $.extend({}, c.commentParam, {
 				'artid': config.artid || 0,
 				'limit': config.pageSize
@@ -356,7 +356,7 @@ define(function(require, exports) {
 							date,
 						'</span>',
 						'<div class="M-commentIssuseHeadOp">',
-							(this.$hasOp && info.passed) ? 
+							(this.$hasOp && info.passed) ?
 							'<span data-id="'+ info.id +'" class="op reply" title="'+ T('回复TA') +'"><i class="fa fa-reply"/></span>' : '',
 						'</div>',
 					'</header>',
@@ -397,11 +397,11 @@ define(function(require, exports) {
 		init: function(config) {
 			this.$target = config.target;
 			this.$data = config.data; // 回复评论时的数据
-			this.$posturl = config.posturl || api.addcomment,
+			this.$posturl = config.posturl || api.addcomment;
 			this.$imageUrl = api.getthecode;
-			this.$hasContact = config.hasContact,
+			this.$hasContact = config.hasContact;
 			this.$pushing = false; // 评论是否正在提交
-			this.$silence = config.silence, // 评论成功后是否发通知
+			this.$silence = config.silence; // 评论成功后是否发通知
 			this.$submitTxt = {
 				'init'   : config.submitTxt && config.submitTxt.init || T('发表评论'),
 				'pushing': config.submitTxt && config.submitTxt.pushing || T('正在提交……'),
