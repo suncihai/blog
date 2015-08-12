@@ -90,7 +90,7 @@ define(function(require, exports) {
 				'<div class="M-comment">',
 					'<header class="M-commentHead">',
 						'<h2 class="M-commentHeadTitle">'+ T('评论') +'</h2>',
-						'<span class="M-commentHeadAdd" title="'+ T('添加评论') +'">',
+						'<span class="M-commentHeadAdd">',
 							'<i class="fa fa-edit"></i>',
 						'</span>',
 					'</header>',
@@ -252,9 +252,7 @@ define(function(require, exports) {
 						self.$doms.title.text(title);
 					break;
 					default:
-						title = res.page === res.pages ?
-							T('共{1}条评论，已经最后一页了', res.total)
-							: T('共{1}条评论，第{2}页', res.total, res.page);
+						title = T('共{1}条评论，第{2}页', res.total, res.page);
 						self.$doms.title.text(title);
 				}
 
@@ -351,10 +349,10 @@ define(function(require, exports) {
 						this.$hasFloor ? '<b class="M-commentIssuseHeadFloor">'+ floor +'</b>' : '',
 						'<b class="M-commentIssuseHeadNick">'+ nickName +'</b>',
 						'<span class="M-commentIssuseHeadAddress">'+ address +'</span>',
-						'<span class="M-commentIssuseHeadTime" title="'+ info.date +'">',
-							// info.parent ? T('回复于 ') : T('评论于 '),
-							date,
-						'</span>',
+						// '<span class="M-commentIssuseHeadTime" title="'+ info.date +'">',
+						// 	// info.parent ? T('回复于 ') : T('评论于 '),
+						// 	date,
+						// '</span>',
 						'<div class="M-commentIssuseHeadOp">',
 							(this.$hasOp && info.passed) ?
 							'<span data-id="'+ info.id +'" class="op reply" title="'+ T('回复TA') +'"><i class="fa fa-reply"/></span>' : '',

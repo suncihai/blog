@@ -17,13 +17,7 @@
 			height: 100%;
 			line-height: 2.9em;
 			border-bottom: 3px solid #DDD;
-			cursor: pointer;
 			color: #aaa;
-			transition: all 220ms cubic-bezier(0.42,0,.58,1);
-			&:hover{
-				border-color: #26CABD;
-				color: #26CABD;
-			}
 			&.act{
 				border-color: #22B6AB;
 				color: #22B6AB;
@@ -70,11 +64,6 @@
 				outline: none;
 				line-height: 1.5;
 				font-size: 1.4rem;
-				transition: all linear .5s;
-			}
-			input:focus,textarea:focus{
-				background: #F7FDFD;
-				box-shadow: 1px 1px 8px #EEE, -1px -1px 8px #EEE;
 			}
 			// 评论内容表单
 			.textarea{
@@ -101,10 +90,8 @@
 					padding: .5em 1em;
 					// background: #FFF;
 					border: none;
-					cursor: pointer;
 					outline: none;
 					opacity: 1;
-					transition: all 218ms cubic-bezier(0.42,0,.58,1);
 				}
 			}
 			// 验证码输入
@@ -119,7 +106,6 @@
 				width: 90px;
 				height: 35px;
 				margin-left: 1em;
-				cursor: pointer;
 				border-radius: 2px;
 			}
 			.tips{
@@ -131,17 +117,11 @@
 			.reset{
 				background: #FFF;
 				color: #0080C0;
-				&:hover{
-					background: #f4f4f4;
-				}
 			}
 			.submit{
 				margin-left: .5em;
 				background: #0d8454;
 				color: #FFF;
-				&:hover{
-					opacity: .8;
-				}
 			}
 		}
 	}
