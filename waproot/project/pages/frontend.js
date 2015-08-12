@@ -8,10 +8,9 @@ define(function(require, exports, module) {
 	var util = require('util');
 
 	var layout = require('layout');
-	var banner = require('@modules/banner');
 	var loading = require('@modules/loading').base;
 	var prism = require('@plugins/prism/prism');
-	var comment = require('@modules/comment').list;
+	var comment = require('@selfModules/comment').list;
 
 	var Article = {
 		// 初始化
@@ -84,7 +83,7 @@ define(function(require, exports, module) {
 				'<div class="content">',
 					'<h1 class="title">'+ info.title +'</h1>',
 					'<div class="info">',
-							// 发布时间 
+							// 发布时间
 							'<i class="fa fa-calendar mr3"></i>',
 							info.date.toString().slice(0, 10),
 							// 标签
