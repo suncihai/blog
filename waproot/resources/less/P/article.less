@@ -1,10 +1,10 @@
 // 文章样式
 .P-article{
-	padding: .5em 1em;
-	.content{
-		width: @blogWidth;
 		.center;
+	width: 90%;
+	.content{
 		padding: 1em 0 3em 0;
+		word-break: break-all;
 		.title{
 			font-weight: normal;
 			font-size: 2rem;
@@ -48,6 +48,8 @@
 			// p标签里的图片上边距修补
 			p > img{
 				margin-top: -1.0em;
+				width: 100%;
+				max-width: 320px;
 			}
 			ul, ol {
 				li{

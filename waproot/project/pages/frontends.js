@@ -39,7 +39,7 @@ define(function(require, exports, module) {
 			this.$doms = {
 				'listBox': $('<div class="P-archiveList"/>').appendTo(dom).hide(),
 				'loadBox': $([
-					'<div class="P-archiveLoad">',
+					'<div class="P-archiveLoad load-more">',
 						T('加载更多'),
 					'</div>'
 				].join('')).appendTo(dom).hide()

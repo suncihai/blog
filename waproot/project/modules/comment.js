@@ -53,14 +53,14 @@ define(function(require, exports) {
 		// 显示评论列表及分页模块
 		show: function() {
 			this.$doms.list.show();
-			this.$doms.pager.show();
+			this.$doms.loadMore.show();
 			return this;
 		},
 
 		// 隐藏列表及分页模块
 		hide: function() {
 			this.$doms.list.hide();
-			this.$doms.pager.hide();
+			this.$doms.loadMore.hide();
 			return this;
 		},
 
@@ -88,7 +88,9 @@ define(function(require, exports) {
 						'</span>',
 					'</header>',
 					'<article class="M-commentList"/>',
-					'<div class="M-commentPager"/>',
+					'<div class="M-commentLoadMore load-more">',
+						T('加载更多'),
+					'</div>',
 					'<div class="M-commentLoading">',
 						'<i class="fa fa-spinner mr3 spinnerRotate"></i>',
 					'</div>',
@@ -108,14 +110,14 @@ define(function(require, exports) {
 			].join('')).appendTo(this.$target);
 
 			this.$doms = {
-				'body'    : html,
-				'title'   : $('.M-commentHeadTitle', html),
-				'add'     : $('.M-commentHeadAdd', html),
-				'loading' : $('.M-commentLoading', html),
-				'list'    : $('.M-commentList', html).hide(),
-				'pager'   : $('.M-commentPager', html).hide(),
-				'empty'   : $('.M-commentEmpty', html).hide(),
-				'error'   : $('.M-commentError', html).hide()
+				'body'     : html,
+				'title'    : $('.M-commentHeadTitle', html),
+				'add'      : $('.M-commentHeadAdd', html),
+				'loading'  : $('.M-commentLoading', html),
+				'list'     : $('.M-commentList', html).hide(),
+				'loadMore' : $('.M-commentLoadMore', html).hide(),
+				'empty'    : $('.M-commentEmpty', html).hide(),
+				'error'    : $('.M-commentError', html).hide()
 			}
 
 			// 增加额外样式
@@ -208,7 +210,7 @@ define(function(require, exports) {
 
 			setTimeout(function() {
 				self.show().hideLoading();
-				switch(res.total) {
+				switch (res.total) {
 					case 0:
 						self.hide();
 						self.$doms.title.text(T('没有评论，快抢沙发~'));
