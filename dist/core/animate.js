@@ -63,9 +63,13 @@ define(function(require, exports) {
 			}
 		}
 
-		// 处理动画结束事件
-		function handleAnimateEndEvent() {
-			$elm.addClass(animateCls).one(
+		/*
+		 * 处理动画结束事件
+		 * again: 是否是二次执行, 子节点冒泡后不应重复添加animateCls
+		 * mark: 在Chrome浏览器下，重复添加classname会触发两次原有的addClass事件
+		 */
+		function handleAnimateEndEvent(again) {
+			$elm.addClass(again ? '' : animateCls).one(
 				c.animationdEnd,
 				function(evt) {
 					if (evt.target === $elm.get(0)) {
@@ -78,12 +82,12 @@ define(function(require, exports) {
 						 * 因为子节点动画事件可能先于$elm触发
 						 * 所以不能用evt.stopPropagation();
 						 */
-						handleAnimateEndEvent();
+						handleAnimateEndEvent(true);
 					}
 				}
 			);
 		}
 
-		handleAnimateEndEvent();
+		handleAnimateEndEvent(false);
 	}
 });
