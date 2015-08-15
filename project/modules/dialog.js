@@ -112,7 +112,7 @@ define(function(require, exports) {
 				'<div class="M-dialog">',
 					'<div class="M-dialogHead">',
 						'<h2 class="M-dialogHeadTitle"/>',
-						'<div class="M-dialogHeadClose">',
+						'<div class="M-dialogHeadClose animated">',
 							'<div class="M-dialogHeadCloseLine"/>',
 							'<div class="M-dialogHeadCloseLine"/>',
 						'</div>',
@@ -140,15 +140,14 @@ define(function(require, exports) {
 
 		eventCloseEnter: function() {
 			if (this.$show) {
-				app.animate.play(this.$doms.close, 'rotateCloseForward');
+				this.$doms.close.removeClass('rotateCloseBack').addClass('rotateCloseForward');
 			}
 			return false;
 		},
 
 		eventCloseOut: function() {
-			// 对话框未关闭的状态下
 			if (this.$show) {
-				app.animate.play(this.$doms.close, 'rotateCloseBack');
+				this.$doms.close.removeClass('rotateCloseForward').addClass('rotateCloseBack');
 			}
 			return false;
 		},
