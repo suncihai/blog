@@ -17,13 +17,13 @@ define(function(require, exports, module) {
 			// 数据加载状态
 			this.$dataReady = false;
 			// 请求的页码
-			this.$page = (data.search && +data.search.page);
+			this.$page = (data.search && +data.search.page) || 1;
 			// 页面参数缓存
 			this.$data = data;
 			// 页面标题
 			this.$title = c.archiveTitle[data.name];
 			this.$param = $.extend({}, c.archiveParam, {
-				'page': this.$page || 1
+				'page': this.$page
 			});
 			layout.hideFooter();
 			this.build();
@@ -41,6 +41,7 @@ define(function(require, exports, module) {
 				'loadBox': $([
 					'<div class="P-archiveLoad load-more">',
 						T('加载更多'),
+						'<i class="fa fa-angle-down ml3"/>',
 					'</div>'
 				].join('')).appendTo(dom).hide()
 			}
@@ -91,14 +92,14 @@ define(function(require, exports, module) {
 			var param = $.extend(this.getParam(), {
 				'page': this.$page + 1
 			});
-			this.$doms.loadBox.html('<i class="fa fa-spinner mr3 spinnerRotate"></i>正在加载');
+			this.$doms.loadBox.html('<i class="fa fa-spinner mr3 spinnerRotate"></i>' + T('正在加载'));
 			app.data.get(api.listarchives, param, this.afterLoadMore, this);
 		},
 
 		// 加载更多数据回调
 		afterLoadMore: function(err, data) {
 			if (err) {
-				this.$doms.loadBox.html(err.status + '加载失败！请重试');
+				this.$doms.loadBox.html(err.status + T('加载失败！请重试'));
 				return false;
 			}
 			var self = this;
@@ -112,14 +113,14 @@ define(function(require, exports, module) {
 					if (result.items.length) {
 						var moreList = self.buildItems(result.items);
 						$(moreList.join('')).appendTo(self.$doms.listBox);
-						self.$doms.loadBox.html('加载更多');
+						self.$doms.loadBox.html(T('加载更多')+'<i class="fa fa-angle-down ml3"/>');
 					}
 					else {
-						self.$doms.loadBox.html('没有了');
+						self.$doms.loadBox.html(T('没有了'));
 					}
 				}
 				else {
-					self.$doms.loadBox.html('加载失败！请重试');
+					self.$doms.loadBox.html(T('加载失败！请重试'));
 				}
 			}, c.delay);
 		},
@@ -177,6 +178,9 @@ define(function(require, exports, module) {
 			setTimeout(function() {
 				self.hideLoading();
 				layout.showFooter();
+				if (info.pages === 1) {
+					self.$doms.loadBox.hide();
+				}
 			}, c.delay);
 		},
 
@@ -201,7 +205,7 @@ define(function(require, exports, module) {
 				var data = self.$data;
 				var date = util.prettyDate(item.date);
 				// 超链接地址
-				var anchor = data.name + '/' + item.id; 
+				var anchor = data.name + '/' + item.id;
 				// 缩略图
 				var cover = item.cover ? '<img class="cover" data-src="'+ item.cover +'"/>' : "";
 				// 一条列表记录
@@ -224,7 +228,7 @@ define(function(require, exports, module) {
 				// 记录集合
 				sections.push(section);
 			});
-			
+
 			return sections;
 		},
 

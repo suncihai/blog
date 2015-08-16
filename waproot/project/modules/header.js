@@ -61,7 +61,9 @@ define(function(require, exports, module) {
 			this.buildTool();
 
 			// 触摸选项显示导航
-			app.event.bind(this.$doms.option, 'touchstart', this.eventTouchOption, this);
+			app.event.bind(this.$doms.option, 'touchend', this.eventTouchOption, this);
+
+			app.event.bind(this.$doms.nav, 'touchend', this.eventTouchNav, this);
 
 			// 缓存对象
 			this.$ = {
@@ -76,13 +78,18 @@ define(function(require, exports, module) {
 			return this;
 		},
 
+		// 触摸导航
+		eventTouchNav: function(evt) {
+			this.$timeStamp = evt.timeStamp;
+		},
+
 		// 选项触摸事件
 		eventTouchOption: function(evt, elm) {
 			this.$timeStamp = evt.timeStamp;
 			var nav = this.$doms.nav;
 			nav.show();
 			// 为导航隐藏绑定document事件
-			app.event.bind($(document), 'touchstart.oblank', this.eventTouchOBlank, this);
+			app.event.bind($(document), 'touchend.oblank', this.eventTouchOBlank, this);
 			return false;
 		},
 
@@ -90,7 +97,7 @@ define(function(require, exports, module) {
 		eventTouchOBlank: function(evt, elm) {
 			if (evt.timeStamp !== this.$timeStamp) {
 				this.$doms.nav.hide();
-				app.event.unbind($(document), 'touchstart.oblank');
+				app.event.unbind($(document), 'touchend.oblank');
 			}
 			return false;
 		},
@@ -115,7 +122,7 @@ define(function(require, exports, module) {
 			this.$doms.tool.input = $('.searchIpt', html);
 			this.$doms.tool.btn = $('.searchBtn', html);
 
-			app.event.bind(this.$doms.tool.btn, 'touchstart.search', this.eventTouchSearch, this);
+			app.event.bind(this.$doms.tool.btn, 'touchend.search', this.eventTouchSearch, this);
 		},
 
 		// 点击搜索框
@@ -130,7 +137,7 @@ define(function(require, exports, module) {
 			this.$doms.tool.btn.addClass('act');
 
 			// 点击空白处收起INPUT
-			app.event.bind($(document), 'touchstart.sblank', this.eventTouchSBlank, this);
+			app.event.bind($(document), 'touchend.sblank', this.eventTouchSBlank, this);
 
 			// 按下回车键响应搜索操作
 			app.event.bind($(document), 'keydown.search', this.eventKeydownSearch, this);
@@ -178,7 +185,7 @@ define(function(require, exports, module) {
 			var input = this.$doms.tool.input;
 			var logo = this.$doms.logo;
 			var btn = this.$doms.tool.btn;
-			
+
 			// 搜索按钮隐藏动画
 			app.animate.play(input.val('').removeClass('inputReady'), 'inputInit', function() {
 				input.hide();
@@ -187,7 +194,7 @@ define(function(require, exports, module) {
 			});
 
 			// 解除绑定
-			app.event.unbind($(document), 'touchstart.sblank');
+			app.event.unbind($(document), 'touchend.sblank');
 			app.event.unbind($(document), 'keydown.search');
 		}
 	}

@@ -34,7 +34,7 @@
 		"拉取数据失败！状态: {1}, 错误信息: {2}": "data load failed! status: {1}, info: {2}",
 		"服务器请求超时": "Request timeout from remote",
 		"评论列表请求超时，点击这里重试~": "Request timeout, click here try to reload~",
-		"没有评论，快抢沙发~": "No comment, click and add the first~",
+		"没有评论": "No comment",
 		"共{1}条评论": "{1} comments",
 		"共{1}条评论，已经最后一页了": "{1} comments, no more page",
 		"共{1}条评论，第{2}页": "Page {2}, {1} comments",
@@ -116,6 +116,10 @@
 		"未知分类": "Unknown category",
 		"博客的源码：": "Blog framework source code in here:",
 		"本站源码": "Source code",
-		"加载更多": "Loading more"
+		"加载更多": "Loading more",
+		"加载失败！请重试": "Load failure, try again",
+		"正在加载": "Loading",
+		"没有了": "There are no more",
+		"没有评论": "No any comments"
 	}
 }

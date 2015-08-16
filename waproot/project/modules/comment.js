@@ -34,6 +34,10 @@ define(function(require, exports) {
 				'artid': config.artid || 0,
 				'limit': config.pageSize
 			});
+			// 数据是否加载完成
+			this.$dataReady = false;
+			// 加载的页数
+			this.$page = 1;
 			this.build();
 			return this;
 		},
@@ -83,28 +87,29 @@ define(function(require, exports) {
 				'<div class="M-comment">',
 					'<header class="M-commentHead">',
 						'<h2 class="M-commentHeadTitle">'+ T('评论') +'</h2>',
-						'<span class="M-commentHeadAdd">',
-							'<i class="fa fa-edit"></i>',
-						'</span>',
+						// '<span class="M-commentHeadAdd">',
+						// 	'<i class="fa fa-edit"></i>',
+						// '</span>',
 					'</header>',
 					'<article class="M-commentList"/>',
 					'<div class="M-commentLoadMore load-more">',
 						T('加载更多'),
+						'<i class="fa fa-angle-down ml3"/>',
 					'</div>',
 					'<div class="M-commentLoading">',
 						'<i class="fa fa-spinner mr3 spinnerRotate"></i>',
 					'</div>',
-					'<div class="M-commentEmpty">',
-						'<div class="M-commentEmptyWrap">',
-							'<div class="M-commentEmptyLeftHand"/>',
-							'<div class="M-commentEmptyRightHand"/>',
-							'<div class="M-commentEmptyCushion"/>',
-							'<div class="M-commentEmptyFootLeft"/>',
-							'<div class="M-commentEmptyFootRight"/>',
-							'<div class="M-commentEmptyFootBack"/>',
-						'</div>',
-						'<div class=M-commentEmptyTxt>'+ T('有空沙发') +'</div>',
-					'</div>',
+					// '<div class="M-commentEmpty">',
+					// 	'<div class="M-commentEmptyWrap">',
+					// 		'<div class="M-commentEmptyLeftHand"/>',
+					// 		'<div class="M-commentEmptyRightHand"/>',
+					// 		'<div class="M-commentEmptyCushion"/>',
+					// 		'<div class="M-commentEmptyFootLeft"/>',
+					// 		'<div class="M-commentEmptyFootRight"/>',
+					// 		'<div class="M-commentEmptyFootBack"/>',
+					// 	'</div>',
+					// 	'<div class=M-commentEmptyTxt>'+ T('有空沙发') +'</div>',
+					// '</div>',
 					'<div class="M-commentError"/>',
 				'</div>'
 			].join('')).appendTo(this.$target);
@@ -130,48 +135,60 @@ define(function(require, exports) {
 				$('.M-commentHead', html).hide();
 			}
 
-			// 监听添加评论成功消息
-			app.messager.on('commentAdded', this.onAddAComment, this);
-
-			// 绑定添加评论事件
-			app.event.bind(this.$doms.add, 'click', this.eventClickAdd, this);
-			app.event.bind(this.$doms.empty.find('.M-commentEmptyWrap'), 'click', this.eventClickAdd, this);
+			// 点击加载更多
+			app.event.bind(this.$doms.loadMore, 'touchend', this.eventTouchLoadMore, this);
 
 			// 加载超时点击重试
-			app.event.bind(this.$doms.error, 'click', this.eventClickReload, this);
+			app.event.bind(this.$doms.error, 'touchend', this.eventTouchReload, this);
 		},
 
-		// 添加一条评论
-		onAddAComment: function(ev) {
-			var param = ev.param;
-			var newComment = this.createAComment(param);
-			if (!this.$comments) {
-				this.$comments++;
-				this.$doms.title.text(T('评论'));
-				this.show().$doms.empty.hide();
+		// 点击加载更多
+		eventTouchLoadMore: function() {
+			// 未加载完成状态下不重复加载
+			if (!this.$dataReady) {
+				return false;
 			}
-			this.$doms.list.prepend($(newComment).addClass('animated flipInX'));
+			var param = $.extend(this.$param, {
+				'page': this.$page + 1
+			});
+			this.$doms.loadMore.html('<i class="fa fa-spinner mr3 spinnerRotate"></i>' + T('正在加载'));
+			app.data.get(api.listcomment, param, this.afterLoadMore, this);
 		},
 
-		// 分页响应事件
-		onPagerSelected: function(ev) {
-			var param = ev.param;
-			var page = param.page;
-			if (param.name === 'commentPager') {
-				this.$param.page = page;
-				this.load();
+		// 加载更多数据返回
+		afterLoadMore: function(err, data) {
+			if (err) {
+				this.$doms.loadMore.html(T('加载失败！请重试'));
+				return false;
 			}
-			return false;
-		},
-
-		// 清空评论列表
-		empty: function() {
-			this.$doms.list.empty();
-			return this;
+			var self = this;
+			var result = data.result;
+			setTimeout(function() {
+				self.$page = result.page;
+				if (result && result.items) {
+					self.$dataReady = true;
+					// 返回不为空数组
+					if (result.items.length) {
+						var moreList = [];
+						util.each(result.items, function(item, idx) {
+							var comment = self.createAComment(item, idx);
+							moreList.push(comment);
+						});
+						$(moreList.join('')).appendTo(self.$doms.list);
+						self.$doms.loadMore.html(T('加载更多') + '<i class="fa fa-angle-down ml3"/>');
+					}
+					else {
+						self.$doms.loadMore.html(T('没有了'));
+					}
+				}
+				else {
+					self.$doms.loadMore.html(T('加载失败！请重试'));
+				}
+			}, c.delay);
 		},
 
 		// 点击重试
-		eventClickReload: function() {
+		eventTouchReload: function() {
 			this.$doms.error.hide().removeClass('animated shake');
 			this.load();
 			return false;
@@ -179,9 +196,7 @@ define(function(require, exports) {
 
 		// 拉取评论列表
 		load: function(param) {
-			this.$doms.title.text(T('评论努力加载中···'));
 			param = param || this.$param;
-			this.hide().empty().showLoading();
 			app.data.get(this.$geturl, param, this.onData, this);
 		},
 
@@ -190,6 +205,7 @@ define(function(require, exports) {
 			var self = this;
 			var dataError = T('评论列表拉取失败~');
 			var title = '';
+			this.$dataReady = true;
 			if (err) {
 				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
 				if (err.status === 'timeout') {
@@ -213,16 +229,15 @@ define(function(require, exports) {
 				switch (res.total) {
 					case 0:
 						self.hide();
-						self.$doms.title.text(T('没有评论，快抢沙发~'));
-						self.$doms.empty.show();
-					break;
-					case 1:case 2:
-						title = T('共{1}条评论', res.total);
-						self.$doms.title.text(title);
+						self.$doms.title.text(T('没有评论'));
+						// self.$doms.empty.show();
 					break;
 					default:
-						title = T('共{1}条评论，第{2}页', res.total, res.page);
+						title = T('共{1}条评论', res.total);
 						self.$doms.title.text(title);
+				}
+				if (res.pages === 1) {
+					self.$doms.loadMore.hide();
 				}
 			}, 0);
 
@@ -300,10 +315,10 @@ define(function(require, exports) {
 						// 	// info.parent ? T('回复于 ') : T('评论于 '),
 						// 	date,
 						// '</span>',
-						'<div class="M-commentIssuseHeadOp">',
-							(this.$hasOp && info.passed) ?
-							'<span data-id="'+ info.id +'" class="op reply" title="'+ T('回复TA') +'"><i class="fa fa-reply"/></span>' : '',
-						'</div>',
+						// '<div class="M-commentIssuseHeadOp">',
+						// 	(this.$hasOp && info.passed) ?
+						// 	'<span data-id="'+ info.id +'" class="op reply" title="'+ T('回复TA') +'"><i class="fa fa-reply"/></span>' : '',
+						// '</div>',
 					'</header>',
 					'<article class="M-commentIssuseContent">'+ content +'</article>',
 				'</section>'
