@@ -140,7 +140,7 @@ define(function(require, exports, module) {
 			// var mouth = +arr[1];
 			// var day = +arr[2];
 			var date = util.prettyDate(item.date);
-			var catName = util.getKeyName(item.catId, c.category);
+			var catName = util.getKey(item.catId, c.category);
 			var anchor = catName + '/' + item.id; // 超链接地址
 			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">'+ T('请进入内页查看') +'</a>' : item.brief + ' ……';
 			sections.push([

@@ -10,6 +10,13 @@ define(function(require, util) {
 	var docElem = document.documentElement;
 
 	/**
+	 * typeOfObject 是否是对象
+	 */
+	function typeOfObject(obj) {
+		return (obj && typeof(obj) === 'object');
+	}
+
+	/**
 	 * isObject 是否是对象自变量, {}或new Object()的形式
 	 */
 	function isObject(obj) {
@@ -27,28 +34,28 @@ define(function(require, util) {
 	 * isFunc 是否是函数
 	 */
 	function isFunc(fn) {
-		return (fn instanceof Function);
+		return fn instanceof Function;
 	}
 
 	/**
 	 * isString 是否是字符串
 	 */
 	function isString(str) {
-		return (typeof(str) === 'string');
+		return typeof(str) === 'string';
 	}
 
 	/**
 	 * isBoolean 是否是布尔值
 	 */
 	function isBoolean(bool) {
-		return (typeof(bool) === 'boolean');
+		return typeof(bool) === 'boolean';
 	}
 
 	/**
 	 * isNumber 是否是数字
 	 */
 	function isNumber(num) {
-		return (typeof(num) === 'number' && !isNaN(num));
+		return typeof(num) === 'number' && !isNaN(num);
 	}
 
 	/**
@@ -65,8 +72,45 @@ define(function(require, util) {
 	}
 
 	/**
+	 * isFakeArray 是否是假数组
+	 */
+	function isFakeArray(val) {
+		var key;
+		for (key in val) {
+			if (key === 'length') {
+				if (isNaN(+val[key])) {
+					return false;
+				}
+			}
+			else if (has(val, key) && isNaN(+key)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * isPlainObject 是否是纯粹对象
+	 */
+	function isPlainObject(val) {
+		if (!isObject(val) || val.nodeType || val === window) {
+			return false;
+		}
+		try {
+			if (val.constructor && !has(val.constructor.prototype, 'isPrototypeOf')) {
+				return false;
+			}
+		}
+		catch (e) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * 工具方法导出
 	 */
+	util.typeOfObject = typeOfObject;
 	util.isObject = isObject;
 	util.isArray = isArray;
 	util.isFunc = isFunc;
@@ -74,9 +118,11 @@ define(function(require, util) {
 	util.inArray = inArray;
 	util.isBoolean = isBoolean;
 	util.isNumber = isNumber;
+	util.isFakeArray = isFakeArray;
+	util.isPlainObject = isPlainObject;
 
 	/**
-	 * 系统日志函数
+	 * 日志函数
 	 */
 	var cons = WIN.console || {};
 	util.log = function() {
@@ -91,6 +137,17 @@ define(function(require, util) {
 		}
 	}
 
+	/*
+	 * has 自有属性检测
+	 */
+	function has(key, obj) {
+		if (key === UDF) {
+			return false;
+		}
+		return OP.hasOwnProperty.call(obj, key);
+	}
+	util.has = has;
+
 	/**
 	 * scrollTo 自定义滚动条位置(用于hash改变时纠正滚动条位置)
 	 * @param  {Number} x [横位置]
@@ -99,7 +156,7 @@ define(function(require, util) {
 	util.scrollTo = function(x, y) {
 		var _x = x || 0;
 		var _y = y || 0;
-		window.scrollTo(_x, _y);
+		WIN.scrollTo(_x, _y);
 	}
 
 	/**
@@ -117,22 +174,21 @@ define(function(require, util) {
 	}
 
 	/**
-	 * getKeyName 获取JSON对象键值名
+	 * getKey 获取对象键值名
 	 * @param  {String} val  [值]
 	 * @param  {Object} obj  [值所在的对象]
 	 * @return {String}      [键值名称]
 	 */
-	util.getKeyName = function(val, obj) {
+	util.getKey = function(val, obj) {
 		var key = '';
-		if ((!val || !obj) && !isObject(obj)) {
-			return false;
-		}
-		for (key in obj) {
-			if (obj[key] == val) {
-				return key;
+		if ((val && obj) && isObject(obj)) {
+			for (key in obj) {
+				if (has(key, obj)) {
+					return key;
+				}
 			}
 		}
-		return false;
+		return UDF;
 	}
 
 	/**
@@ -143,7 +199,7 @@ define(function(require, util) {
 	util.isEmpty = function(val) {
 		if (isObject(val)) {
 			for (var property in val) {
-				if (val.hasOwnProperty(property)) {
+				if (has(property, val)) {
 					return false;
 				}
 				return true;
@@ -250,6 +306,7 @@ define(function(require, util) {
 	/**
 	 * parse 解析get请求参数
 	 * @param   {Object}  param  [参数JSON]
+	 * @param   {String}  param  [参数JSON]
 	 * @return  {String}         [解析的字符创]
 	 */
 	util.parse = function(param) {
@@ -297,7 +354,7 @@ define(function(require, util) {
 	 */
 	util.fixZero = function(num, zeros) {
 		var b, v, x = 10, y, ns = num.toString().length;
-		if (!this.isNumber(zeros) || !this.isNumber(zeros)) {
+		if (!isNumber(zeros) || !isNumber(zeros)) {
 			return num;
 		}
 		y = ns + zeros;
@@ -390,4 +447,118 @@ define(function(require, util) {
 		templateReplaceList = arguments;
 		return template.replace(templateReplaceRegx, _templateReplace);
 	}
+
+	/**
+	 * 防环状嵌套克隆
+	 * @param {Mix} obj 克隆的对象值
+	 */
+	function Clone(obj) {
+		if (isPlainObject(obj) || isArray(obj)) {
+			var cloneKey = '___deep_clone___';
+
+			// 已经被克隆过, 返回新克隆对象
+			if (obj[cloneKey]) {
+				return obj[cloneKey];
+			}
+
+			var objClone = obj[cloneKey] = (obj instanceof Array ? [] : {});
+			for (var key in obj) {
+				if (key !== cloneKey && has(obj, key)) {
+					objClone[key] = (typeOfObject(obj[key]) ? Clone(obj[key]) : obj[key]);
+				}
+			}
+			delete obj[cloneKey];
+			return objClone;
+		}
+		return obj;
+	}
+	util.clone = Clone;
+
+	/**
+	 * extend 扩展合并
+	 */
+	function ExtendObject(dst, src, deep) {
+		if (dst === src) {
+			return dst;
+		}
+		var i, type = (dst instanceof Array ? 0 : 1) + (src instanceof Array ? 0 : 2);
+		switch (type) {
+			// 都是数组, 合并有值的, 忽略undefined的
+			case 0:
+				for (i = src.length-1; i >= 0; i--) {
+					ExtendItem(dst, i, src[i], 0, deep);
+				}
+			break;
+			// 目标是对象, 新值是数组
+			case 1:
+				dst = Clone(src);
+			break;
+			// 目标是数组, 新值是对象
+			case 2:
+				if (!isFakeArray(src)) {
+					dst = Clone(src);
+					break;
+				}
+			// 都是对象
+			case 3:
+				if (!dst) {
+					dst = {};
+				}
+				for (i in src) {
+					if (has(src, i)) {
+						ExtendItem(dst, i, src[i], 1, deep);
+					}
+				}
+			break;
+		}
+		return dst;
+	}
+	function ExtendItem(dst, key, value, remove, deep) {
+		// undefined 时删除值
+		if (value === UDF) {
+			if (remove) {
+				delete dst[key];
+			}
+		}
+		else if (value && (isArray(value) || isPlainObject(value))) {
+			// 新值为对象
+			if (dst[key] === value) {
+				return;
+			}
+			// 继续合并数组和简答对象
+			if (deep !== 0) {
+				dst[key] = ExtendObject(dst[key], value, --deep);
+			}
+			// 克隆新对象赋值
+			else {
+				dst[key] = Clone(value);
+			}
+		}
+		// 直接赋值
+		else {
+			dst[key] = value;
+		}
+	}
+	util.extend = function() {
+		var args = arguments;
+		var len = args.length;
+		var deep = args[0];
+		var target = args[1];
+		var i = 2;
+		if (!isNumber(deep)) {
+			target = deep;
+			deep = -1;
+			i = 1;
+		}
+		if (!target) {
+			target = {};
+		}
+		while (i < len) {
+			if (typeOfObject(args[i])) {
+				target = ExtendObject(target, args[i], deep);
+			}
+			i++;
+		}
+		return target;
+	};
 });
