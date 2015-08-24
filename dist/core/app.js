@@ -5,6 +5,7 @@
  */
 define(function(require, exports, module) {
 	var util = require('./util');
+	var jquery = require('jquery');
 
 
 	/*
@@ -156,8 +157,81 @@ define(function(require, exports, module) {
 	 * Container 视图容器类，实现页面容器和组件的通用方法
 	 */
 	var Container = Module.extend({
+		/**
+		 * init 初始化方法
+		 * @param  {Object} config [模块参数配置]
+		 * @param  {Object} parent [父模块对象]
+		 */
 		init: function(config, parent) {
-			//
+			this.$config = util.extend(config, {
+				// 视图容器DOM元素
+				'dom'    : null,
+				// DOM元素的目标容器
+				'target' : parent,
+				// DOM元素的标签
+				'tag'    : 'div',
+				// DOM元素的class
+				'class'  : '',
+				// DOM元素的attr
+				'attr'   : ''
+			});
+			// 模块是否已经创建完成
+			this.$ready = false;
+			// 调用构建方法
+			this.build();
+		},
+
+		/**
+		 * 获取配置选项
+		 * @param  {String} name [description]
+		 */
+		getConfig: function(name) {},
+
+		/**
+		 * 设置配置选项
+		 * @param {String} name  [配置字段名]
+		 * @param {Mix}    value [值]
+		 */
+		setConfig: function(name, value) {},
+
+		/**
+		 * 构建一个空的DOM元素
+		 */
+		build: function() {
+			// 判断是否已创建过
+			if (this.$ready) {
+				return this;
+			}
+			this.$ready = true;
+
+			var c = this.getConfig();
+
+			this._domElement = jquery('<'+ c.tag +'>');
+
+			if (c.class) {
+				this._domElement.addClass(c.class);
+			}
+
+			if (c.attr) {
+				this._domElement.attr(c.attr);
+			}
+
+			// 插入目标容器
+			var target = c.target;
+			if (target) {
+				this._domElement.appendTo(target);
+			}
+			// 调用子模块的已创建方法(如果定义了)
+			if (util.isFunc(this.afterBuild)) {
+				this.afterBuild();
+			}
+		},
+
+		/**
+		 * 返回模块的DOM元素
+		 */
+		getDOM: function() {
+			return this._domElement;
 		}
 	});
 	exports.Container = Container;
