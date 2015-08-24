@@ -61,7 +61,7 @@ define(function(require, exports, module) {
 	/**
 	 * sysCaches 系统模块实例缓存队列
 	 */
-	var sysCaches = {'id': 0, 'length': 0};
+	var sysCaches = exports.sysCaches = {'id': 0, 'length': 0};
 
 	/**
 	 * Module 系统核心模块类，所有模块都继承于Module
@@ -154,6 +154,12 @@ define(function(require, exports, module) {
 
 
 	/**
+	 * app模块导出一个Module的实例
+	 */
+	exports.core = new Module();
+
+
+	/**
 	 * Container 视图容器类，实现页面容器和组件的通用方法
 	 */
 	var Container = Module.extend({
@@ -163,7 +169,7 @@ define(function(require, exports, module) {
 		 * @param  {Object} parent [父模块对象]
 		 */
 		init: function(config, parent) {
-			this.$config = util.extend(config, {
+			this.$config = {
 				// 视图容器DOM元素
 				'dom'    : null,
 				// DOM元素的目标容器
@@ -174,7 +180,7 @@ define(function(require, exports, module) {
 				'class'  : '',
 				// DOM元素的attr
 				'attr'   : ''
-			});
+			};
 			// 模块是否已经创建完成
 			this.$ready = false;
 			// 调用构建方法
@@ -185,7 +191,9 @@ define(function(require, exports, module) {
 		 * 获取配置选项
 		 * @param  {String} name [description]
 		 */
-		getConfig: function(name) {},
+		getConfig: function(name) {
+			return name ? this.$config[name]: this.$config;
+		},
 
 		/**
 		 * 设置配置选项

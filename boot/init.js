@@ -62,12 +62,13 @@
 		},
 		// 加载布局和路由模块
 		function() {
-			sea.use(['layout', '@core/router'], appInit);
+			sea.use(['layout', '@core/router', 'app'], appInit);
 		},
 		// 启动路由
-		function(layout, router) {
+		function(layout, router, app) {
 			layout.init();
 			router.start();
+			win.app = app;
 		}
 	];
 
