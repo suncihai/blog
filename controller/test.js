@@ -8,15 +8,15 @@ define(function(require, exports) {
 
 		var Wellcome = app.Container.extend({
 			init: function(config, parent) {
-				this.$config = {
+				config = {
 					'class': 'test-class'
 				};
-				Object.getPrototypeOf(this).init();
+				this.Super('init', arguments);
 			},
-			afterBuild: function() {
-				var elem = this.getDOM();
-				console.log(elem)
-				elm.html('I am new here');
+			domReady: function() {
+				// var elem = this.getDOM();
+				// console.log('subClass domReady trigger!!');
+				// elm.html('I am new here');
 			}
 		});
 

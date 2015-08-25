@@ -1,7 +1,7 @@
 /**
- * =======================
- * 核心应用模块
- * =======================
+ * ====================================
+ * 核心应用模块，基础模块及其拓展的实现
+ * ====================================
  */
 define(function(require, exports, module) {
 	var util = require('./util');
@@ -41,10 +41,26 @@ define(function(require, exports, module) {
 		// 父原型对象，相当于proto要从parent继承
 		var parent = this.prototype;
 
-		// 返回(继承后)的类
-		function Class() {};
-		var classProto = Class.prototype = createProto(parent);
+		/**
+		 * 超类，实现在子类中对父类的调用
+		 * @param {String} method [调用父类的方法]
+		 * @param {Object} args   [传入的参数数组]
+		 */
+		function Super(method, args) {
+			var func = parent[method];
+			func.apply(this, arguments);
+		}
 
+		/**
+		 * 返回(继承后)的类
+		 * @param {Object} config [类生成实例的配置]
+		 */
+		function Class(config) {
+			console.log(this);
+			return this;
+		};
+		var classProto = Class.prototype = createProto(parent);
+		// 写入自身属性或方法
 		for (var property in proto) {
 			if (util.has(property, proto)) {
 				classProto[property] = proto[property];
@@ -52,6 +68,7 @@ define(function(require, exports, module) {
 		}
 
 		proto = null;
+		classProto.Super = Super;
 		classProto.constructor = Class;
 		Class.extend = this.extend;
 		return Class;
@@ -61,7 +78,9 @@ define(function(require, exports, module) {
 	/**
 	 * sysCaches 系统模块实例缓存队列
 	 */
-	var sysCaches = exports.sysCaches = {'id': 0, 'length': 0};
+	var sysCaches = {'id': 0, 'length': 0};
+	// @todo: 便于调试，故导出
+	exports.sysCaches = sysCaches;
 
 	/**
 	 * Module 系统核心模块类，所有模块都继承于Module
@@ -119,7 +138,7 @@ define(function(require, exports, module) {
 			collections[childId]++;
 
 			// 生成子模块的实例
-			var childInstance = new Class();
+			var childInstance = new Class(config);
 
 			// 记录子模块信息
 			var childInfo = {
@@ -142,9 +161,9 @@ define(function(require, exports, module) {
 			collections[childs].push(childInstance);
 			collections[childName][name] = childInstance;
 
-			// 调用模块的初始化方法，传入配置config父模块this
+			// 调用模块的初始化方法，传入配置config
 			if (util.isFunc(childInstance.init)) {
-				childInstance.init(config, this);
+				childInstance.init(config);
 			}
 
 			return childInstance;
@@ -169,7 +188,7 @@ define(function(require, exports, module) {
 		 * @param  {Object} parent [父模块对象]
 		 */
 		init: function(config, parent) {
-			this.$config = {
+			this.$config = util.extend(config, {
 				// 视图容器DOM元素
 				'dom'    : null,
 				// DOM元素的目标容器
@@ -180,7 +199,7 @@ define(function(require, exports, module) {
 				'class'  : '',
 				// DOM元素的attr
 				'attr'   : ''
-			};
+			});
 			// 模块是否已经创建完成
 			this.$ready = false;
 			// 调用构建方法
@@ -226,12 +245,13 @@ define(function(require, exports, module) {
 
 			// 插入目标容器
 			var target = c.target;
-			if (target) {
-				this._domElement.appendTo(target);
-			}
-			// 调用子模块的已创建方法(如果定义了)
-			if (util.isFunc(this.afterBuild)) {
-				this.afterBuild();
+			console.log(target);
+			// if (target) {
+			// 	this._domElement.appendTo(target);
+			// }
+			// 调用子模块的domReady方法(如果有定义)
+			if (util.isFunc(this.domReady)) {
+				this.domReady();
 			}
 		},
 

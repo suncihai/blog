@@ -23,7 +23,7 @@
 			'jquery' : '@dist/jquery/jquery-1.8.3.min.js'
 		},
 		'map': [
-			[/^(.*\.(?:css|js))(.*)$/i, '$1?v=1.1.2']
+			[/^(.*\.(?:css|js))(.*)$/i, '$1?v=2.0']
 		],
 		'preload': [
 			'resources/css/app.min.css',
