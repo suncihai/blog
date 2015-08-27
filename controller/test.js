@@ -6,20 +6,39 @@ define(function(require, exports) {
 
 		var blankDom = view.createBlank();
 
-		var Wellcome = app.Container.extend({
-			init: function(config, parent) {
+		var inner = app.Container.extend({
+			init: function(config) {
 				config = app.merge(config, {
-					'class': 'welcome'
+					'class': 'wraperInner',
+					'tag': 'p'
 				});
 				this.Super('init', arguments);
 			},
 			domReady: function() {
-				// elm.html('I am new here');
+				var elm = this.getDOM();
+				elm.html('i am wraperInner');
 			}
 		});
 
-		app.core.create('blank', Wellcome, {
-			'target': blankDom
+		var wraper = app.Container.extend({
+			init: function(config) {
+				config = app.merge(config, {
+					'class': 'wraper'
+				});
+				this.Super('init', arguments);
+			},
+			domReady: function() {
+				var elm = this.getDOM();
+				elm.html('I am wraper');
+
+				this.create('wraperInner', inner, {
+					'target': elm
+				});
+			}
+		});
+
+		var bd = app.core.create('wraper', wraper, {
+			'target': wraper
 		});
 	}
 });

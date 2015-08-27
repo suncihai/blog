@@ -49,7 +49,9 @@ define(function(require, exports, module) {
 		 */
 		function Super(method, args) {
 			var func = parent[method];
-			func.apply(this, args);
+			if (util.isFunc(func)) {
+				func.apply(this, args);
+			}
 		}
 
 		/**
@@ -95,19 +97,15 @@ define(function(require, exports, module) {
 	exports.merge = merge;
 
 	/**
-	 * config 设置/读取模块配置
+	 * appConfig 设置/读取模块配置
 	 * @param  {Object} configData [配置名称, 使用/分隔层次]
 	 * @param  {String} name       [配置名称, 使用/分隔层次]
 	 * @param  {Mix}	value      [不设为读取配置信息, null为删除配置, 其他为设置值]
 	 * @return {Mix}               [返回读取的配置值, 返回false操作失败]
 	 */
-	function config(configData, name, value) {
+	function appConfig(configData, name, value) {
 		if (!util.isObject(configData)) {
 			util.error('configData must be an Object', configData);
-			return false;
-		}
-		if (!util.isString(name)) {
-			util.error('name must be an String', name);
 			return false;
 		}
 		var set = (value !== UDF);
@@ -116,7 +114,6 @@ define(function(require, exports, module) {
 
 		if (name) {
 			var ns = name.split('/');
-			data = config.data;
 			while (ns.length > 1 && util.has(ns[0], data)) {
 				data = data[ns.shift()];
 			}
@@ -135,8 +132,8 @@ define(function(require, exports, module) {
 			name = ns[0];
 		}
 		// 根节点不能删除
-		else if {
-			return false;
+		else {
+			return data;
 		}
 
 		if (set) {
@@ -265,17 +262,15 @@ define(function(require, exports, module) {
 		 * @param  {Object} parent [父模块对象]
 		 */
 		init: function(config, parent) {
-			this.$config = merge(config, {
-				// 视图容器DOM元素
-				'dom'    : null,
-				// DOM元素的目标容器
-				'target' : parent,
-				// DOM元素的标签
+			this._config = merge(config, {
+				// 视图元素的目标容器
+				'target' : null,
+				// 视图元素的标签
 				'tag'    : 'div',
-				// DOM元素的class
+				// 视图元素的class
 				'class'  : '',
-				// DOM元素的attr
-				'attr'   : ''
+				// 视图元素的attr
+				'attr'   : null
 			});
 			// 模块是否已经创建完成
 			this.$ready = false;
@@ -288,7 +283,7 @@ define(function(require, exports, module) {
 		 * @param  {String} name [description]
 		 */
 		getConfig: function(name) {
-			return config(this.$config, name);
+			return appConfig(this._config, name);
 		},
 
 		/**
@@ -297,7 +292,7 @@ define(function(require, exports, module) {
 		 * @param {Mix}    value [值]
 		 */
 		setConfig: function(name, value) {
-			return config(this.$config, name, value);
+			return appConfig(this._config, name, value);
 		},
 
 		/**
@@ -312,20 +307,20 @@ define(function(require, exports, module) {
 
 			var c = this.getConfig();
 
-			this._domElement = jquery('<'+ c.tag +'>');
+			this._domObject = jquery('<'+ c.tag +'/>');
 
 			if (c.class) {
-				this._domElement.addClass(c.class);
+				this._domObject.addClass(c.class);
 			}
 
 			if (c.attr) {
-				this._domElement.attr(c.attr);
+				this._domObject.attr(c.attr);
 			}
 
 			// 插入目标容器
 			var target = c.target;
 			if (target) {
-				this._domElement.appendTo(target);
+				this._domObject.appendTo(target);
 			}
 			// 调用子模块的domReady方法(如果有定义)
 			if (util.isFunc(this.domReady)) {
@@ -334,10 +329,10 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 返回模块的DOM元素
+		 * 返回视图模块的DOM元素
 		 */
 		getDOM: function() {
-			return this._domElement;
+			return this._domObject;
 		}
 	});
 	exports.Container = Container;
