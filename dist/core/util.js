@@ -463,7 +463,7 @@ define(function(require, util) {
 
 			var objClone = obj[cloneKey] = (obj instanceof Array ? [] : {});
 			for (var key in obj) {
-				if (key !== cloneKey && has(obj, key)) {
+				if (key !== cloneKey && has(key, obj)) {
 					objClone[key] = (typeOfObject(obj[key]) ? Clone(obj[key]) : obj[key]);
 				}
 			}
@@ -505,7 +505,7 @@ define(function(require, util) {
 					dst = {};
 				}
 				for (i in src) {
-					if (has(src, i)) {
+					if (has(i, src)) {
 						ExtendItem(dst, i, src[i], 1, deep);
 					}
 				}

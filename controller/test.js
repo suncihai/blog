@@ -8,14 +8,12 @@ define(function(require, exports) {
 
 		var Wellcome = app.Container.extend({
 			init: function(config, parent) {
-				config = {
-					'class': 'test-class'
-				};
+				config = app.merge(config, {
+					'class': 'welcome'
+				});
 				this.Super('init', arguments);
 			},
 			domReady: function() {
-				// var elem = this.getDOM();
-				// console.log('subClass domReady trigger!!');
 				// elm.html('I am new here');
 			}
 		});

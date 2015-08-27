@@ -4,8 +4,9 @@
  * ====================================
  */
 define(function(require, exports, module) {
-	var util = require('./util');
+	var UDF;
 	var jquery = require('jquery');
+	var util = exports.util = require('./util');
 
 
 	/*
@@ -48,7 +49,7 @@ define(function(require, exports, module) {
 		 */
 		function Super(method, args) {
 			var func = parent[method];
-			func.apply(this, arguments);
+			func.apply(this, args);
 		}
 
 		/**
@@ -56,7 +57,6 @@ define(function(require, exports, module) {
 		 * @param {Object} config [类生成实例的配置]
 		 */
 		function Class(config) {
-			console.log(this);
 			return this;
 		};
 		var classProto = Class.prototype = createProto(parent);
@@ -73,6 +73,85 @@ define(function(require, exports, module) {
 		Class.extend = this.extend;
 		return Class;
 	};
+
+
+	/**
+	 * merge 子父模块的配置合并，子模块应覆盖父模块同名属性
+	 * @param  {Object} child_config  [子类模块配置参数]
+	 * @param  {Object} parent_config [父类模块配置参数]
+	 * @return {Object}               [合并后的配置参数]
+	 */
+	function merge(child_config, parent_config) {
+		if (!util.isObject(child_config)) {
+			child_config = {};
+		}
+		if (!util.isObject(parent_config)) {
+			parent_config = {};
+		}
+
+		var config = util.extend(parent_config, child_config);
+		return config;
+	}
+	exports.merge = merge;
+
+	/**
+	 * config 设置/读取模块配置
+	 * @param  {Object} configData [配置名称, 使用/分隔层次]
+	 * @param  {String} name       [配置名称, 使用/分隔层次]
+	 * @param  {Mix}	value      [不设为读取配置信息, null为删除配置, 其他为设置值]
+	 * @return {Mix}               [返回读取的配置值, 返回false操作失败]
+	 */
+	function config(configData, name, value) {
+		if (!util.isObject(configData)) {
+			util.error('configData must be an Object', configData);
+			return false;
+		}
+		if (!util.isString(name)) {
+			util.error('name must be an String', name);
+			return false;
+		}
+		var set = (value !== UDF);
+		var remove = (value === null);
+		var data = configData;
+
+		if (name) {
+			var ns = name.split('/');
+			data = config.data;
+			while (ns.length > 1 && util.has(ns[0], data)) {
+				data = data[ns.shift()];
+			}
+			if (ns.length > 1) {
+				// 设置值, 但是父层配置不存在
+				if (set) {
+					return false;
+				}
+				// 父层已经删除
+				if (remove)	{
+					return true;
+				}
+				// 值不存在, 不能获取
+				return UDF;
+			}
+			name = ns[0];
+		}
+		// 根节点不能删除
+		else if {
+			return false;
+		}
+
+		if (set) {
+			data[name] = value;
+			return true;
+		}
+		else if (remove) {
+			data[name] = null;
+			delete data[name];
+			return true;
+		}
+		else {
+			return data[name];
+		}
+	}
 
 
 	/**
@@ -142,8 +221,6 @@ define(function(require, exports, module) {
 
 			// 记录子模块信息
 			var childInfo = {
-				// 子模块实路径
-				'uri'  : collections.uri + '/' + name,
 				// 子模块实例名称
 				'name' : name,
 				// 子模块实例id
@@ -163,7 +240,7 @@ define(function(require, exports, module) {
 
 			// 调用模块的初始化方法，传入配置config
 			if (util.isFunc(childInstance.init)) {
-				childInstance.init(config);
+				childInstance.init(config, this);
 			}
 
 			return childInstance;
@@ -188,7 +265,7 @@ define(function(require, exports, module) {
 		 * @param  {Object} parent [父模块对象]
 		 */
 		init: function(config, parent) {
-			this.$config = util.extend(config, {
+			this.$config = merge(config, {
 				// 视图容器DOM元素
 				'dom'    : null,
 				// DOM元素的目标容器
@@ -211,7 +288,7 @@ define(function(require, exports, module) {
 		 * @param  {String} name [description]
 		 */
 		getConfig: function(name) {
-			return name ? this.$config[name]: this.$config;
+			return config(this.$config, name);
 		},
 
 		/**
@@ -219,7 +296,9 @@ define(function(require, exports, module) {
 		 * @param {String} name  [配置字段名]
 		 * @param {Mix}    value [值]
 		 */
-		setConfig: function(name, value) {},
+		setConfig: function(name, value) {
+			return config(this.$config, name, value);
+		},
 
 		/**
 		 * 构建一个空的DOM元素
@@ -245,10 +324,9 @@ define(function(require, exports, module) {
 
 			// 插入目标容器
 			var target = c.target;
-			console.log(target);
-			// if (target) {
-			// 	this._domElement.appendTo(target);
-			// }
+			if (target) {
+				this._domElement.appendTo(target);
+			}
 			// 调用子模块的domReady方法(如果有定义)
 			if (util.isFunc(this.domReady)) {
 				this.domReady();
