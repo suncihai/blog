@@ -14,7 +14,7 @@ define(function(require, exports) {
 				});
 				this.Super('init', arguments);
 			},
-			domReady: function() {
+			afterBuild: function() {
 				var elm = this.getDOM();
 				elm.html('i am wraperInner');
 			}
@@ -27,7 +27,7 @@ define(function(require, exports) {
 				});
 				this.Super('init', arguments);
 			},
-			domReady: function() {
+			afterBuild: function() {
 				var elm = this.getDOM();
 				elm.html('I am wraper');
 
@@ -40,5 +40,7 @@ define(function(require, exports) {
 		var bd = app.core.create('wraper', wraper, {
 			'target': wraper
 		});
+
+		console.log(bd);
 	}
 });

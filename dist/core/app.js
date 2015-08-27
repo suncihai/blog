@@ -59,6 +59,7 @@ define(function(require, exports, module) {
 		 * @param {Object} config [类生成实例的配置]
 		 */
 		function Class(config) {
+			// @todo 在构造函数里处理配置参数
 			return this;
 		};
 		var classProto = Class.prototype = createProto(parent);
@@ -155,7 +156,6 @@ define(function(require, exports, module) {
 	 * sysCaches 系统模块实例缓存队列
 	 */
 	var sysCaches = {'id': 0, 'length': 0};
-	// @todo: 便于调试，故导出
 	exports.sysCaches = sysCaches;
 
 	/**
@@ -322,9 +322,10 @@ define(function(require, exports, module) {
 			if (target) {
 				this._domObject.appendTo(target);
 			}
-			// 调用子模块的domReady方法(如果有定义)
-			if (util.isFunc(this.domReady)) {
-				this.domReady();
+
+			// 调用子模块的afterBuild方法
+			if (util.isFunc(this.afterBuild)) {
+				this.afterBuild();
 			}
 		},
 
