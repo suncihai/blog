@@ -17,11 +17,12 @@ define(function(require, exports, module) {
 	function createProto(proto) {
 		// 返回的原型指针对象
 		var pointer = null;
-		var standard = util.isFunc(Object.create);
+		var Obc = Object.create;
+		var standard = util.isFunc(Obc);
 		var Foo = !standard ? function() {} : null;
 
 		if (standard) {
-			pointer = Object.create(proto);
+			pointer = Obc(proto);
 		}
 		else {
 			Foo.prototype = proto;
@@ -79,7 +80,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * merge 子父模块的配置合并，子模块应覆盖父模块同名属性
+	 * merge 子父模块的配置合并，子模块覆盖父模块同名配置
 	 * @param  {Object} child_config  [子类模块配置参数]
 	 * @param  {Object} parent_config [父类模块配置参数]
 	 * @return {Object}               [合并后的配置参数]
@@ -105,9 +106,8 @@ define(function(require, exports, module) {
 	 * @return {Mix}               [返回读取的配置值, 返回false操作失败]
 	 */
 	function appConfig(configData, name, value) {
-		if (!util.isObject(configData)) {
-			util.error('configData must be an Object', configData);
-			return false;
+		if (!configData) {
+			configData = appConfig.configData;
 		}
 		var set = (value !== UDF);
 		var remove = (value === null);
@@ -150,27 +150,29 @@ define(function(require, exports, module) {
 			return data[name];
 		}
 	}
+	appConfig.configData = {};
+	exports.config = appConfig;
 
 
 	/**
-	 * sysCaches 系统模块实例缓存队列
+	 * sysCaches 系统模块实例缓存
 	 */
 	var sysCaches = {'id': 0, 'length': 0};
 	exports.sysCaches = sysCaches;
 
 	/**
 	 * Module 系统核心模块类，所有模块都继承于Module
-	 * childs    Array  对应该模块下所有子模块数组的key
-	 * childName Object 子模块名称集合映射
-	 * childId   Number 子模块id
+	 * childArray Array  对应该模块下所有子模块数组的key
+	 * childMap   Object 子模块名称集合映射
+	 * childId    Number 子模块id
 	 */
-	var childs = 'childs', childName = 'childName', childId = 'childId';
+	var childArray = 'childArray', childMap = 'childMap', childId = 'childId';
 	var Module = Root.extend({
 		/**
-		 * [_collections_ 子模块映射集合]
+		 * [_collections 子模块映射集合]
 		 * @type {Object}
 		 */
-		_collections_: {},
+		'_collections': {},
 
 		/**
 		 * create 同步创建一个子模块实例
@@ -193,19 +195,19 @@ define(function(require, exports, module) {
 				return false;
 			}
 
-			var collections = this._collections_;
+			var collections = this._collections;
 			// 建立映射表
-			if (!util.has(childs, collections)) {
+			if (!util.has(childArray, collections)) {
 				// 子模块缓存列表
-				collections[childs] = [];
+				collections[childArray] = [];
 				// 子模块命名索引,在实例中可通过childs遍历子模块
-				collections[childName] = this.childs = {};
+				collections[childMap] = this.childs = {};
 				// 子模块计数id
 				collections[childId] = 0;
 			}
 
 			// 判断是否已经创建过
-			if (collections[childName][name]) {
+			if (collections[childMap][name]) {
 				util.error('Module Name already exists: ', name);
 				return false;
 			}
@@ -221,19 +223,19 @@ define(function(require, exports, module) {
 				// 子模块实例名称
 				'name' : name,
 				// 子模块实例id
-				'cid'  : sysCaches.id++,
+				'id'  : sysCaches.id++,
 				// 父模块实例id
 				'pid'  : collections.guid
 			};
-			childInstance._collections_ = childInfo;
+			childInstance._collections = childInfo;
 
-			// 存入系统缓存队列
-			sysCaches[childInfo.cid] = childInstance;
+			// 存入系统缓存
+			sysCaches[childInfo.id] = childInstance;
 			sysCaches.length++;
 
 			// 记录子模块与父模块的对应关系
-			collections[childs].push(childInstance);
-			collections[childName][name] = childInstance;
+			collections[childArray].push(childInstance);
+			collections[childMap][name] = childInstance;
 
 			// 调用模块的初始化方法，传入配置config
 			if (util.isFunc(childInstance.init)) {
@@ -241,7 +243,32 @@ define(function(require, exports, module) {
 			}
 
 			return childInstance;
-		}
+		},
+
+		/**
+		 * createAsync 异步创建一个子模块实例
+		 * @param  {String}   name     [子模块名称，同一模块下创建的子模块名称不能重复]
+		 * @param  {String}   uri      [子模块文件路径，支持.获取文件中的实例]
+		 * @param  {Object}   config   [<可选>子模块配置参数]
+		 * @param  {Function} callback [<可选>子模块实例创建后的回调函数]
+		 */
+		createAsync: function(name, uri, config, callback) {},
+
+		destory: function() {},
+
+		getParent: function() {},
+
+		getChild: function() {},
+
+		removeChild: function() {},
+
+		bind: function() {},
+
+		unBind: function() {},
+
+		proxy: function() {},
+
+		unProxy: function() {}
 	});
 	exports.Module = Module;
 

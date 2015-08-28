@@ -31,16 +31,20 @@ define(function(require, exports) {
 				var elm = this.getDOM();
 				elm.html('I am wraper');
 
-				this.create('wraperInner', inner, {
+				var inn = this.create('wraperInner', inner, {
 					'target': elm
 				});
+
+				console.log('inner', inn);
+
+				console.log('wraper', this);
 			}
 		});
 
 		var bd = app.core.create('wraper', wraper, {
-			'target': wraper
+			'target': blankDom
 		});
 
-		console.log(bd);
+		console.log('blankDom', bd);
 	}
 });
