@@ -4,7 +4,31 @@ define(function(require, exports) {
 
 	exports.onRun = function(data, view) {
 
+		var ev1, ev2, ev3;
+
 		var blankDom = view.createBlank();
+
+		var bottom = app.Container.extend({
+			init: function(config) {
+				config = app.merge(config, {
+					'class': 'wraperBottom',
+					'tag': 'p'
+				});
+				this.Super('init', arguments);
+			},
+			afterBuild: function() {
+				var elm = this.getDOM();
+				elm.html([
+					'<span class="ml2">I am wraperBottom</span>',
+					'<button class="ml1 wraperBottomBtn">destroy self</button>'
+				].join(''));
+
+				this.event.bind(elm.find('.wraperBottomBtn'), 'click', 'eventBtn');
+			},
+			eventBtn: function() {
+				this.destroy();
+			}
+		});
 
 		var inner = app.Container.extend({
 			init: function(config) {
@@ -16,7 +40,22 @@ define(function(require, exports) {
 			},
 			afterBuild: function() {
 				var elm = this.getDOM();
-				elm.html('i am wraperInner');
+				elm.html([
+					'<span class="ml1">I am wraperInner</span>',
+					'<button class="ml1 wraperInnerBtn">destroy child</button>'
+				].join(''));
+
+				var bt = this.create('wraperBottom', bottom, {
+					'target': elm
+				});
+
+				this.event.bind(elm.find('.wraperInnerBtn'), 'click', 'eventBtn');
+			},
+			eventBtn: function() {
+				var chs = this.getChild('wraperBottom');
+				if (chs) {
+					chs.destroy();
+				}
 			}
 		});
 
@@ -29,22 +68,24 @@ define(function(require, exports) {
 			},
 			afterBuild: function() {
 				var elm = this.getDOM();
-				elm.html('I am wraper');
+				elm.html([
+					'I am wraper',
+					'<button class="ml1 wraperBtn">destroy all child</button>'
+				].join(''));
 
 				var inn = this.create('wraperInner', inner, {
 					'target': elm
 				});
 
-				console.log('inner', inn);
-
-				console.log('wraper', this);
+				this.event.bind(elm.find('.wraperBtn'), 'click', this.eventBtn);
+			},
+			eventBtn: function(evt, elm) {
+				this.destroy();
 			}
 		});
 
 		var bd = app.core.create('wraper', wraper, {
 			'target': blankDom
 		});
-
-		console.log('blankDom', bd);
 	}
 });

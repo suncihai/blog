@@ -1,10 +1,10 @@
 /**
- * ====================================
- * 核心应用模块，基础模块及其拓展的实现
- * ====================================
+ * ========================================
+ * 框架核心应用模块，基础模块及其拓展的实现
+ * ========================================
  */
 define(function(require, exports, module) {
-	var UDF;
+	var UDF, WIN = window;
 	var jquery = require('jquery');
 	var util = exports.util = require('./util');
 
@@ -59,11 +59,9 @@ define(function(require, exports, module) {
 		 * 返回(继承后)的类
 		 * @param {Object} config [类生成实例的配置]
 		 */
-		function Class(config) {
-			// @todo 在构造函数里处理配置参数
-			return this;
-		};
+		function Class(config) {};
 		var classProto = Class.prototype = createProto(parent);
+
 		// 写入自身属性或方法
 		for (var property in proto) {
 			if (util.has(property, proto)) {
@@ -81,25 +79,25 @@ define(function(require, exports, module) {
 
 	/**
 	 * merge 子父模块的配置合并，子模块覆盖父模块同名配置
-	 * @param  {Object} child_config  [子类模块配置参数]
-	 * @param  {Object} parent_config [父类模块配置参数]
-	 * @return {Object}               [合并后的配置参数]
+	 * @param  {Object} childConfig  [子类模块配置参数]
+	 * @param  {Object} parentConfig [父类模块配置参数]
+	 * @return {Object}              [合并后的配置参数]
 	 */
-	function merge(child_config, parent_config) {
-		if (!util.isObject(child_config)) {
-			child_config = {};
+	function merge(childConfig, parentConfig) {
+		if (!util.isObject(childConfig)) {
+			childConfig = {};
 		}
-		if (!util.isObject(parent_config)) {
-			parent_config = {};
+		if (!util.isObject(parentConfig)) {
+			parentConfig = {};
 		}
 
-		var config = util.extend(parent_config, child_config);
-		return config;
+		return util.extend(parentConfig, childConfig);
 	}
 	exports.merge = merge;
 
+
 	/**
-	 * appConfig 设置/读取模块配置
+	 * appConfig 设置/读取配置对象
 	 * @param  {Object} configData [配置名称, 使用/分隔层次]
 	 * @param  {String} name       [配置名称, 使用/分隔层次]
 	 * @param  {Mix}	value      [不设为读取配置信息, null为删除配置, 其他为设置值]
@@ -150,34 +148,36 @@ define(function(require, exports, module) {
 			return data[name];
 		}
 	}
+	// 全局系统配置对象
 	appConfig.configData = {};
+	// 导出作为全局系统配置函数
 	exports.config = appConfig;
 
 
 	/**
-	 * sysCaches 系统模块实例缓存
+	 * sysCaches 系统模块实例缓存队列
+	 * 模块的唯一id对应模块的实例
 	 */
-	var sysCaches = {'id': 0, 'length': 0};
+	var sysCaches = {'id': 1, 'length': 0};
 	exports.sysCaches = sysCaches;
 
 	/**
-	 * Module 系统核心模块类，所有模块都继承于Module
-	 * childArray Array  对应该模块下所有子模块数组的key
-	 * childMap   Object 子模块名称集合映射
-	 * childId    Number 子模块id
+	 * Module 系统模块基类，所有模块都继承于Module
+	 * childArray Array  对应该模块下所有子模块数组字段
+	 * childMap   Object 子模块名称集合映射字段
 	 */
-	var childArray = 'childArray', childMap = 'childMap', childId = 'childId';
+	var childArray = 'childArray', childMap = 'childMap';
 	var Module = Root.extend({
 		/**
-		 * [_collections 子模块映射集合]
+		 * _collections 子模块映射集合
 		 * @type {Object}
 		 */
-		'_collections': {},
+		_collections: {},
 
 		/**
-		 * create 同步创建一个子模块实例
+		 * 同步创建一个子模块实例
 		 * @param  {String} name   [子模块名称，同一模块下创建的子模块名称不能重复]
-		 * @param  {Object} Class  [子模块的类，用于生成实例的构造函数]
+		 * @param  {Class}  Class  [子模块的类，用于生成实例的构造函数]
 		 * @param  {Object} config [<可选>子模块配置参数]
 		 * @return {Object}        [返回子模块实例，失败返回false]
 		 */
@@ -200,10 +200,8 @@ define(function(require, exports, module) {
 			if (!util.has(childArray, collections)) {
 				// 子模块缓存列表
 				collections[childArray] = [];
-				// 子模块命名索引,在实例中可通过childs遍历子模块
-				collections[childMap] = this.childs = {};
-				// 子模块计数id
-				collections[childId] = 0;
+				// 子模块命名索引
+				collections[childMap] = {};
 			}
 
 			// 判断是否已经创建过
@@ -212,32 +210,29 @@ define(function(require, exports, module) {
 				return false;
 			}
 
-			// 计数
-			collections[childId]++;
-
 			// 生成子模块的实例
 			var childInstance = new Class(config);
 
-			// 记录子模块信息
+			// 记录子模块信息和父模块的对应关系
 			var childInfo = {
 				// 子模块实例名称
 				'name' : name,
 				// 子模块实例id
-				'id'  : sysCaches.id++,
-				// 父模块实例id
-				'pid'  : collections.guid
+				'id'   : sysCaches.id++,
+				// 父模块实例id，-1为最父层模块
+				'pid'  : collections.id || -1
 			};
 			childInstance._collections = childInfo;
 
-			// 存入系统缓存
+			// 存入系统缓存队列
 			sysCaches[childInfo.id] = childInstance;
 			sysCaches.length++;
 
-			// 记录子模块与父模块的对应关系
+			// 缓存子模块集合
 			collections[childArray].push(childInstance);
 			collections[childMap][name] = childInstance;
 
-			// 调用模块的初始化方法，传入配置config
+			// 调用模块的初始化方法
 			if (util.isFunc(childInstance.init)) {
 				childInstance.init(config, this);
 			}
@@ -246,45 +241,158 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * createAsync 异步创建一个子模块实例
+		 * 异步创建一个子模块实例
 		 * @param  {String}   name     [子模块名称，同一模块下创建的子模块名称不能重复]
-		 * @param  {String}   uri      [子模块文件路径，支持.获取文件中的实例]
+		 * @param  {String}   uri      [子模块文件路径，支持.获取文件特定实例]
 		 * @param  {Object}   config   [<可选>子模块配置参数]
 		 * @param  {Function} callback [<可选>子模块实例创建后的回调函数]
 		 */
 		createAsync: function(name, uri, config, callback) {},
 
-		destory: function() {},
+		/**
+		 * 获取当前模块的父模块对象
+		 */
+		getParent: function() {
+			var cls = this._collections;
+			var pid = cls && cls.pid;
+			return sysCaches[pid] || null;
+		},
 
-		getParent: function() {},
+		/**
+		 * 获取指定名称的子模块对象
+		 * @param  {String} name [子模块名称]
+		 * @return {Object}      [目标对象，子模块不存在返回null]
+		 */
+		getChild: function(name) {
+			var cls = this._collections;
+			return cls && cls[childMap] && cls[childMap][name] || null;
+		},
 
-		getChild: function() {},
+		/**
+		 * 返回当前模块的子模块集合
+		 * @param  {Boolean} returnArray [返回的集合是否为数组形式，否则返回映射结构]
+		 * @return {Mix}                 [对象或者数组]
+		 */
+		getChilds: function(returnArray) {
+			var cls = this._collections;
+			returnArray = util.isBoolean(returnArray) && returnArray;
+			return returnArray ? (cls[childArray] || []) : (cls[childMap] || {});
+		},
 
-		removeChild: function() {},
+		/**
+		 * 删除指定子模块在当前模块的记录
+		 * @param  {String}  name [子模块名称]
+		 * @return {Boolean}      [result]
+		 */
+		_removeChild: function(name) {
+			var cls = this._collections;
+			var cMap = cls[childMap] || {};
+			var cArray = cls[childArray] || [];
+			var child = cMap[name];
+			if (!child) {
+				return false;
+			}
+			for (var i = 0; i < cArray.length; i++) {
+				if (cArray[i].id === child.id) {
+					delete cMap[name];
+					cArray.splice(i, 1);
+					break;
+				}
+			}
+			return true;
+		},
 
-		bind: function() {},
+		/**
+		 * 模块自身销毁函数，只删除缓存队列中的记录和子模块集合
+		 * @param  {Mix}  silent [是否向父模块发送销毁消息]
+		 * @return {Null}        [无返回值]
+		 */
+		destroy: function(silent) {
+			var cls = this._collections;
 
-		unBind: function() {},
+			// 调用销毁前函数，可用于必要的数据保存
+			if (util.isFunc(this.beforeDestroy)) {
+				this.beforeDestroy();
+			}
 
-		proxy: function() {},
+			// 递归调用子模块的销毁函数
+			var childs = this.getChilds(true);
+			for (var i = 0; i < childs.length; i++) {
+				if (util.isFunc(childs[i].destroy)) {
+					childs[i].destroy(-1);
+				}
+			}
 
-		unProxy: function() {}
+			// 从父模块删除（递归调用时不需要）
+			var parent = this.getParent();
+			if (silent !== -1 && parent) {
+				parent._removeChild(cls.name);
+			}
+
+			// 从缓存队列中销毁相关记录
+			var id = cls.id;
+			if (util.has(id, sysCaches)) {
+				delete sysCaches[id];
+				sysCaches.length--;
+			}
+
+			// 调用销毁后函数，可用于销毁界面和事件
+			if (util.isFunc(this.afterDestroy)) {
+				this.afterDestroy();
+			}
+		},
+
+		/**
+		 * 修正作用域的定时器
+		 * @param {Function} callback [定时器回调函数]
+		 * @param {[type]}   time     [回调等待时间（毫秒）]
+		 * @param {[type]}   param    [<可选>回调函数的参数]
+		 */
+		setTimeout: function(callback, time, param) {
+			var self = this;
+			time = time || 0;
+
+			// callback为属性值
+			if (util.isString(callback)) {
+				callback = this[callback];
+			}
+
+			// 不合法的回调函数
+			if (!util.isFunc(callback)) {
+				return null;
+			}
+
+			return setTimeout(function() {
+				callback.call(self, param);
+				self = callback = time = param = null;
+			}, time);
+		}
 	});
 	exports.Module = Module;
 
 
 	/**
-	 * app模块导出一个Module的实例
+	 * Core 核心模块
 	 */
-	exports.core = new Module();
+	var Core = Module.extend({
+		/**
+		 * 获取最父层模块
+		 * @param  {String} name [模块实例名称]
+		 * @return {Object}      [模块实例]
+		 */
+		get: function(name) {
+			return this.getChild(name);
+		}
+	});
+	exports.core = new Core();
 
 
 	/**
-	 * Container 视图容器类，实现页面容器和组件的通用方法
+	 * Container 视图容器类，实现页面容器组件的通用方法
 	 */
 	var Container = Module.extend({
 		/**
-		 * init 初始化方法
+		 * init 模块初始化方法
 		 * @param  {Object} config [模块参数配置]
 		 * @param  {Object} parent [父模块对象]
 		 */
@@ -301,6 +409,8 @@ define(function(require, exports, module) {
 			});
 			// 模块是否已经创建完成
 			this.$ready = false;
+			// 事件对象
+			this.event = new Event(this);
 			// 调用构建方法
 			this.build();
 		},
@@ -357,28 +467,251 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 返回视图模块的DOM元素
+		 * 返回/查找视图模块的DOM元素
+		 * @param  {String}    selector [子元素选择器，空则返回模块容器DOM]
+		 * @return {DOMObject}          [jQuery DOM对象]
 		 */
-		getDOM: function() {
-			return this._domObject;
+		getDOM: function(selector) {
+			return selector && util.isString(selector) ? this._domObject.find(selector) : this._domObject;
+		},
+
+		/**
+		 * 模块销毁后的回调函数，移除视图界面和取消所有事件的绑定
+		 */
+		afterDestroy: function() {
+			var domObject = this._domObject;
+			if (domObject) {
+				// 取消所有事件
+				this.event.unbind(domObject);
+				domObject.find('*').unbind();
+				// 销毁DOM对象
+				domObject.remove();
+				domObject = null;
+			}
 		}
 	});
 	exports.Container = Container;
 
 
+	/**
+	 * Event 事件类（处理视图模块的事件绑定与取消）
+	 * @param {Object} context [事件执行环境]
+	 */
+	function Event(context) {
+		this.context = context;
+	};
+	Event.prototype = {
+		constructor: Event,
+
+		/**
+		 * 检测参数是否是jQuery对象
+		 * @param  {Mix}     elm [需要检测的参数]
+		 * @return {Boolean}     [result]
+		 */
+		_isJquery: function(elm) {
+			return WIN.jQuery ? elm instanceof jQuery : false;
+		},
+
+		/**
+		 * 为元素添加绑定事件
+		 * @param  {Object}   elm       [绑定事件的元素]
+		 * @param  {String}   _event    [绑定的事件，多个事件用空格分开，或者数组形式]
+		 * @param  {Mix}      data      [<可选>传递到回调函数的额外数据]
+		 * @param  {Function} callback  [回调函数, 回调参数evt, elm]
+		 * @return {Boolean}            [result]
+		 */
+		bind: function(elm, _event, data, callback) {
+			var arglen = arguments.length;
+			var context = this.context, ret;
+
+			if (!this._isJquery(elm)) {
+				return false;
+			}
+
+			// 事件为数组形式
+			if (util.isArray(_event)) {
+				_event = _event.join(' ');
+			}
+
+			// 不传data
+			if (arglen === 3) {
+				callback = data;
+				data = null;
+			}
+
+			// callback为属性值
+			if (util.isString(callback)) {
+				callback = context[callback];
+			}
+
+			// 不合法的回调函数
+			if (!util.isFunc(callback)) {
+				return false;
+			}
+
+			elm.bind(_event, data, function(ev) {
+				ret = callback.call(context, ev, this);
+				// 阻止默认事件和冒泡
+				if (ret === false) {
+					ev.preventDefault();
+					ev.stopPropagation();
+				}
+			});
+
+			return true;
+		},
+
+		/**
+		 * 从元素上移除bind添加的事件处理函数
+		 * @param  {Object}   elm      [取消绑定事件的元素]
+		 * @param  {String}   _event   [<可选>绑定的事件，可为多个事件用空格分开、数组形式和命名空间]
+		 * @param  {Function} callback [<可选>指定事件取消绑定的函数名]
+		 * @return {Boolean}           [result]
+		 */
+		unbind: function(elm, _event, callback) {
+			var args = util.argumentsToArray(arguments);
+
+			if (!this._isJquery(elm)) {
+				return false;
+			}
+
+			args.shift();
+
+			elm.unbind.apply(elm, args);
+
+			return true;
+		},
+
+		/**
+		 * 代理事件
+		 * @param  {Object}   elm      [绑定事件的元素]
+		 * @param  {String}   _event   [绑定的事件，多个事件用空格分开，或者数组形式]
+		 * @param  {String}   selector [<可选>选择器，可为单个元素或者元素数组]
+		 * @param  {Mix}      data     [<可选>传递到回调函数的额外数据]
+		 * @param  {Function} callback [回调函数，回调参数evt, elm]
+		 * @return {Boolean}           [result]
+		 */
+		proxy: function(elm, _event, selector, data, callback) {
+			var arglen = arguments.length;
+			var context = this.context, ret;
+
+			if (!this._isJquery(elm)) {
+				return false;
+			}
+
+			// 事件为数组形式
+			if (util.isArray(_event)) {
+				_event = _event.join(' ');
+			}
+
+			// selector和data传一个
+			if (arglen === 4) {
+				callback = data;
+				if (!util.isString(selector)) {
+					data = selector;
+					selector = null;
+				}
+				else {
+					data = null;
+				}
+			}
+			// selector和data都不传
+			else if (arglen === 3) {
+				callback = selector;
+				data = null;
+				selector = null;
+			}
+
+			// callback为属性值
+			if (util.isString(callback)) {
+				callback = context[callback];
+			}
+
+			// 不合法的回调函数
+			if (!util.isFunc(callback)) {
+				return false;
+			}
+
+			elm.on(_event, selector, data, function(ev) {
+				ret = callback.call(context, ev, this);
+				// 阻止默认事件和冒泡
+				if (ret === false) {
+					ev.preventDefault();
+					ev.stopPropagation();
+				}
+			});
+
+			return true;
+		},
+
+		/**
+		 * 移除proxy添加的事件处理函数
+		 * @param  {Object}   elm      [取消绑定事件的元素]
+		 * @param  {String}   _event   [<可选>绑定的事件，可为多个事件用空格分开、数组形式和命名空间]
+		 * @param  {Function} callback [<可选>指定事件取消绑定的函数名]
+		 * @return {Boolean}           [result]
+		 */
+		unProxy: function(elm, _event, callback) {
+			var args = util.argumentsToArray(arguments);
+
+			if (!this._isJquery(elm)) {
+				return false;
+			}
+
+			args.shift();
+
+			elm.off.apply(elm, args);
+
+			return true;
+		}
+	};
+
+	/**
+	 * Messager 消息类（处理模块间通信）
+	 * 约定：消息的冒泡/广播方式都先触发消息接收事件函数，再将消息逐层上/下发
+	 */
+	function Messager() {};
+	Messager.prototype = {
+		constructor: Messager,
+
+		/**
+		 * 创建一条消息
+		 * @param  {Object} sender [发送消息的模块实例]
+		 * @param  {String} name   [发送的消息名称]
+		 * @param  {Mix}    param  [<可选>附加消息参数]
+		 * @return {Object}        [消息对象]
+		 */
+		_createMessage: function(sender, name, param) {},
+
+		/**
+		 * 冒泡（由下往上）方式发送消息，由子模块发出，父模块接收
+		 * @param  {Object}   sender   [发送消息的子模块实例]
+		 * @param  {String}   name     [发送的消息名称]
+		 * @param  {Mix}      param    [<可选>附加消息参数]
+		 * @param  {Function} callback [<可选>发送完毕的回调函数，可在回调中指定回应数据]
+		 * @param  {Object}   context  [执行环境]
+		 * @return {Boolean}           [result]
+		 */
+		fire: function(sender, name, param, callback, context) {},
+
+		/**
+		 * 广播（由上往下）方式发送消息，由父模块发出，子模块接收
+		 */
+		broadcast: function(sender, name, param, callback, context) {}
+	};
+	// 消息通信实例
+	var messager = new Messager();
 
 
 
-
-
-
-
-
-
-
-
-
-
+	/**
+	 * 初始化接口，可将全局配置文件引入
+	 * @param  {Object} config [系统全局配置文件]
+	 */
+	exports.init = function(config) {
+		appConfig.configData = config;
+		return this;
+	}
 
 	// ===================== old line ===========================
 
