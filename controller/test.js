@@ -1,6 +1,5 @@
 define(function(require, exports) {
 	var app = require('app');
-	var util = require('util');
 
 	exports.onRun = function(data, view) {
 
@@ -23,7 +22,13 @@ define(function(require, exports) {
 					'<button class="ml1 wraperBottomBtn">destroy self</button>'
 				].join(''));
 
-				this.event.bind(elm.find('.wraperBottomBtn'), 'click', 'eventBtn');
+				this.bind(elm.find('.wraperBottomBtn'), 'click', 'eventBtn');
+			},
+			onBottomFire: function(msg) {
+				console.log('received in bottom', msg);
+			},
+			onWraperBroadcast: function(msg) {
+				console.log('received in bottom', msg.param);
 			},
 			eventBtn: function() {
 				this.destroy();
@@ -49,7 +54,15 @@ define(function(require, exports) {
 					'target': elm
 				});
 
-				this.event.bind(elm.find('.wraperInnerBtn'), 'click', 'eventBtn');
+				this.bind(elm.find('.wraperInnerBtn'), 'click', 'eventBtn');
+			},
+			onBottomFire: function(msg) {
+				console.log('received in inner', msg);
+				// msg.returns = 'return at inner';
+				// return false;
+			},
+			onWraperBroadcast: function(msg) {
+				console.log('received in inner', msg.param);
 			},
 			eventBtn: function() {
 				var chs = this.getChild('wraperBottom');
@@ -77,7 +90,18 @@ define(function(require, exports) {
 					'target': elm
 				});
 
-				this.event.bind(elm.find('.wraperBtn'), 'click', this.eventBtn);
+				app.ajax.get('/user/list', {'id': 1}, this.onData);
+
+				this.broadcast('wraperBroadcast', 'I am wraper', 'out');
+
+				this.bind(elm.find('.wraperBtn'), 'click', this.eventBtn);
+			},
+			onBottomFire: function(msg) {
+				console.log('received in wraper', msg);
+				// msg.returns = 'return at wraper';
+			},
+			onOut: function(msg) {
+				console.log('onMessageSendOut', msg);
 			},
 			eventBtn: function(evt, elm) {
 				this.destroy();

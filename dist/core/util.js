@@ -2,8 +2,8 @@
  * [工具方法模块]
  */
 define(function(require, util) {
-	var WIN = window;
 	var UDF;
+	var WIN = window;
 	var OP = Object.prototype;
 	var AP = Array.prototype;
 	var docBody = document.body;
@@ -108,6 +108,15 @@ define(function(require, util) {
 	}
 
 	/**
+	 * 检测是否是jQuery对象
+	 * @param  {Mix}     elm [需要检测的参数]
+	 * @return {Boolean}     [result]
+	 */
+	function isJquery(elm) {
+		return WIN.jQuery ? elm instanceof jQuery : false;
+	}
+
+	/**
 	 * 工具方法导出
 	 */
 	util.typeOfObject = typeOfObject;
@@ -120,6 +129,7 @@ define(function(require, util) {
 	util.isNumber = isNumber;
 	util.isFakeArray = isFakeArray;
 	util.isPlainObject = isPlainObject;
+	util.isJquery = isJquery;
 
 	/**
 	 * 日志函数
@@ -561,4 +571,15 @@ define(function(require, util) {
 		}
 		return target;
 	};
+
+	/**
+	 * 字符串首字母大写
+	 */
+	util.ucFirst = function(str) {
+		if (!isString(str)) {
+			return str;
+		}
+		var first = str.charAt(0).toUpperCase();
+		return first + str.substr(1);
+	}
 });

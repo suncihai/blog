@@ -5,8 +5,8 @@
  */
 define(function(require, exports, module) {
 	var UDF, WIN = window;
-	var jquery = require('jquery');
 	var util = exports.util = require('./util');
+	var jquery = require('../jquery/jquery-1.8.3.min');
 
 
 	/*
@@ -100,12 +100,12 @@ define(function(require, exports, module) {
 	 * appConfig 设置/读取配置对象
 	 * @param  {Object} configData [配置名称, 使用/分隔层次]
 	 * @param  {String} name       [配置名称, 使用/分隔层次]
-	 * @param  {Mix}	value      [不设为读取配置信息, null为删除配置, 其他为设置值]
+	 * @param  {Mix}    value      [不设为读取配置信息, null为删除配置, 其他为设置值]
 	 * @return {Mix}               [返回读取的配置值, 返回false操作失败]
 	 */
 	function appConfig(configData, name, value) {
 		if (!configData) {
-			configData = appConfig.configData;
+			configData = appConfig.config;
 		}
 		var set = (value !== UDF);
 		var remove = (value === null);
@@ -149,9 +149,432 @@ define(function(require, exports, module) {
 		}
 	}
 	// 全局系统配置对象
-	appConfig.configData = {};
+	appConfig.config = {};
 	// 导出作为全局系统配置函数
 	exports.config = appConfig;
+
+
+	/**
+	 * Event 事件类（处理视图模块的事件绑定与取消）
+	 * @param {Object} context [事件执行环境，暂不用到，可作为模块属性时传入]
+	 */
+	function Event(context) {
+		this.context = context;
+	};
+	Event.prototype = {
+		constructor: Event,
+
+		/**
+		 * 为元素添加绑定事件
+		 * @param  {Object}   elm       [绑定事件的元素]
+		 * @param  {String}   _event    [绑定的事件，多个事件用空格分开，或者数组形式]
+		 * @param  {Mix}      data      [<可选>传递到回调函数的额外数据]
+		 * @param  {Function} callback  [回调函数, 回调参数evt, elm]
+		 * @return {Boolean}            [result]
+		 */
+		bind: function(elm, _event, data, callback) {
+			var arglen = arguments.length;
+			var context = this.context || this;
+			var ret;
+
+			if (!util.isJquery(elm)) {
+				return false;
+			}
+
+			// 事件为数组形式
+			if (util.isArray(_event)) {
+				_event = _event.join(' ');
+			}
+
+			// 不传data
+			if (arglen === 3) {
+				callback = data;
+				data = null;
+			}
+
+			// callback为属性值
+			if (util.isString(callback)) {
+				callback = context[callback];
+			}
+
+			// 不合法的回调函数
+			if (!util.isFunc(callback)) {
+				return false;
+			}
+
+			elm.bind(_event, data, function(ev) {
+				ret = callback.call(context, ev, this);
+				// 阻止默认事件和冒泡
+				if (ret === false) {
+					ev.preventDefault();
+					ev.stopPropagation();
+				}
+			});
+
+			return true;
+		},
+
+		/**
+		 * 从元素上移除bind添加的事件处理函数
+		 * @param  {Object}   elm      [取消绑定事件的元素]
+		 * @param  {String}   _event   [<可选>绑定的事件，可为多个事件用空格分开、数组形式和命名空间]
+		 * @param  {Function} callback [<可选>指定事件取消绑定的函数名]
+		 * @return {Boolean}           [result]
+		 */
+		unbind: function(elm, _event, callback) {
+			var args = util.argumentsToArray(arguments);
+
+			if (!util.isJquery(elm)) {
+				return false;
+			}
+
+			args.shift();
+
+			elm.unbind.apply(elm, args);
+
+			return true;
+		},
+
+		/**
+		 * 代理事件
+		 * @param  {Object}   elm      [绑定事件的元素]
+		 * @param  {String}   _event   [绑定的事件，多个事件用空格分开，或者数组形式]
+		 * @param  {String}   selector [<可选>选择器，可为单个元素或者元素数组]
+		 * @param  {Mix}      data     [<可选>传递到回调函数的额外数据]
+		 * @param  {Function} callback [回调函数，回调参数evt, elm]
+		 * @return {Boolean}           [result]
+		 */
+		proxy: function(elm, _event, selector, data, callback) {
+			var arglen = arguments.length;
+			var context = this.context || this;
+			var ret;
+
+			if (!util.isJquery(elm)) {
+				return false;
+			}
+
+			// 事件为数组形式
+			if (util.isArray(_event)) {
+				_event = _event.join(' ');
+			}
+
+			// selector和data传一个
+			if (arglen === 4) {
+				callback = data;
+				if (!util.isString(selector)) {
+					data = selector;
+					selector = null;
+				}
+				else {
+					data = null;
+				}
+			}
+			// selector和data都不传
+			else if (arglen === 3) {
+				callback = selector;
+				data = null;
+				selector = null;
+			}
+
+			// callback为属性值
+			if (util.isString(callback)) {
+				callback = context[callback];
+			}
+
+			// 不合法的回调函数
+			if (!util.isFunc(callback)) {
+				return false;
+			}
+
+			elm.on(_event, selector, data, function(ev) {
+				ret = callback.call(context, ev, this);
+				// 阻止默认事件和冒泡
+				if (ret === false) {
+					ev.preventDefault();
+					ev.stopPropagation();
+				}
+			});
+
+			return true;
+		},
+
+		/**
+		 * 移除proxy添加的事件处理函数
+		 * @param  {Object}   elm      [取消绑定事件的元素]
+		 * @param  {String}   _event   [<可选>绑定的事件，可为多个事件用空格分开、数组形式和命名空间]
+		 * @param  {Function} callback [<可选>指定事件取消绑定的函数名]
+		 * @return {Boolean}           [result]
+		 */
+		unProxy: function(elm, _event, callback) {
+			var args = util.argumentsToArray(arguments);
+
+			if (!util.isJquery(elm)) {
+				return false;
+			}
+
+			args.shift();
+
+			elm.off.apply(elm, args);
+
+			return true;
+		}
+	};
+	// 事件处理实例
+	var events = new Event();
+
+
+	/**
+	 * Messager 消息类（处理模块间通信）
+	 * 消息的冒泡/广播方式都先触发消息接收事件函数，再将消息逐层上/下发
+	 * 默认接收消息onMessage, 默认全部发送完毕回调onMessageSendOut
+	 */
+	function Messager() {
+		/**
+		 * 是否正在发送消息
+		 * @type {Bool}
+		 */
+		this.busy = false;
+		/**
+		 * 等待发送的消息队列
+		 * @type {Array}
+		 */
+		this.queue = [];
+	};
+	Messager.prototype = {
+		constructor: Messager,
+
+		/**
+		 * 创建一条消息
+		 * @param  {Object} sender [发送消息的模块实例]
+		 * @param  {String} name   [发送的消息名称]
+		 * @param  {Mix}    param  [<可选>附加消息参数]
+		 * @return {Object}        [消息对象]
+		 */
+		_create: function(sender, name, param) {
+			var message = {
+				// 消息发起模块
+				'form'    : sender,
+				// 消息目标模块
+				'target'  : null,
+				// 该消息被传递的次数
+				'count'   : 0,
+				// 消息名称
+				'name'    : name,
+				// 消息参数
+				'param'   : param,
+				// 接受消息模块的调用方法 on + 首字母大写
+				'method'  : 'on' + util.ucFirst(name),
+				// 接受消息模块的返回值
+				'returns' : null
+			};
+			return message;
+		},
+
+		/**
+		 * 触发接收消息模块实例的处理方法
+		 * @param  {Object} receiver [接收消息的模块实例]
+		 * @param  {Mix}    msg      [消息体（内容）]
+		 * @param  {Mix}    returns  [返回给发送者的数据]
+		 * @return {Mix}             [returns]
+		 */
+		_trigger: function(receiver, msg, returns) {
+			// 接收者对该消息的接收方法
+			var func = receiver[msg.method];
+			// 标识消息的发送目标
+			msg.target = receiver;
+
+			// 触发接收者的消息处理方法，若未定义则默认为onMessage
+			if (util.isFunc(func)) {
+				returns = func.call(receiver, msg);
+				msg.count++;
+			}
+			else if (util.isFunc(receiver.onMessage)) {
+				returns = receiver.onMessage.call(receiver, msg);
+				msg.count++;
+			}
+
+			return returns;
+		},
+
+		/**
+		 * 通知发送者消息已被全部接收者接收完毕
+		 * @param  {Mix}      msg      [消息体（内容）]
+		 * @param  {Function} callback [通知发送者的回调函数]
+		 * @param  {Object}   context  [执行环境]
+		 * @return {Boolean}           [result]
+		 */
+		_notifySend: function(msg, callback, context) {
+			// callback为null时触发默认事件
+			if (!callback) {
+				callback = context.onMessageSendOut;
+			}
+
+			// callback为属性值
+			if (util.isString(callback)) {
+				callback = context[callback];
+			}
+
+			// 合法的回调函数
+			if (util.isFunc(callback)) {
+				callback.call(context, msg);
+			}
+
+			// 接着发送队列中的消息
+			if (this.queue.length) {
+				setTimeout(this._sendQueue, 0);
+			}
+			else {
+				this.busy = false;
+			}
+
+			return true;
+		},
+
+		/**
+		 * 发送消息队列中的消息
+		 */
+		_sendQueue: function() {
+			// 取出消息队列最前面的一条发送请求
+			var request = this.queue.shift();
+			this.busy = false;
+
+			if (!request) {
+				return false;
+			}
+
+			// 消息类型
+			var type = request.shift();
+			// 消息方法
+			var func = this[type];
+
+			if (util.isFunc(func)) {
+				func.call(this, request);
+			}
+		},
+
+		/**
+		 * 冒泡（由下往上）方式发送消息，由子模块发出，所有父模块接收
+		 * @param  {Object}   sender   [发送消息的子模块实例]
+		 * @param  {String}   name     [发送的消息名称]
+		 * @param  {Mix}      param    [<可选>附加消息参数]
+		 * @param  {Function} callback [<可选>发送完毕的回调函数，可在回调中指定回应数据]
+		 * @param  {Object}   context  [执行环境]
+		 */
+		fire: function(sender, name, param, callback, context) {
+			// 是否处于忙碌状态
+			if (this.busy) {
+				this.queue.push(['fire', sender, name, param, callback, context]);
+				return false;
+			}
+			this.busy = true;
+
+			var senderCls = sender._collections;
+			// 发送者全局实例缓存id
+			var id = senderCls && senderCls.id;
+			// 创建消息
+			var msg = this._create(sender, name, param);
+			// 消息接收者，先从自身开始接收
+			var receiver = sender;
+			var returns;
+
+			// 循环触发sender的子模块接收消息方法
+			while (receiver) {
+				returns = this._trigger(receiver, msg);
+				// 接收消息方法返回false不再继续冒泡
+				if (returns === false) {
+					break;
+				}
+				msg.form = receiver;
+				receiver = receiver.getParent();
+			}
+
+			return this._notifySend(msg, callback, context);
+		},
+
+		/**
+		 * 广播（由上往下）方式发送消息，由父模块发出，所有子模块接收
+		 */
+		broadcast: function(sender, name, param, callback, context) {
+			// 是否处于忙碌状态
+			if (this.busy) {
+				this.queue.push(['broadcast', sender, name, param, callback, context]);
+				return false;
+			}
+			this.busy = true;
+
+			var senderCls = sender._collections;
+			// 发送者全局实例缓存id
+			var id = senderCls && senderCls.id;
+			// 创建消息
+			var msg = this._create(sender, name, param);
+			// 消息接收者集合，先从自身开始接收
+			var receivers = [sender];
+			var receiver, returns;
+
+			while (receivers.length) {
+				receiver = receivers.shift();
+				returns = this._trigger(receiver, msg);
+				// 接收消息方法返回false不再继续广播
+				if (returns === false) {
+					break;
+				}
+				receivers.push.apply(receivers, receiver.getChilds(true));
+			}
+
+			return this._notifySend(msg, callback, context);
+		}
+	};
+	// 模块消息通信实例
+	var messager = new Messager();
+
+
+	/**
+	 * Ajax数据请求处理类
+	 */
+	function Ajax() {
+		/**
+		 * 最大同时请求数
+		 * @type {Number}
+		 */
+		this.maxQuery = 5;
+		/**
+		 * 等待请求的缓存队列
+		 * @type {Object}
+		 */
+		this.queue = {};
+	};
+	Ajax.prototype = {
+		constructor: Ajax,
+
+		/**
+		 * 发送一个请求
+		 * @param  {String}   type     [请求类型]
+		 * @param  {String}   uri      [请求地址]
+		 * @param  {Mix}      data     [请求数据]
+		 * @param  {Function} callback [请求回调]
+		 */
+		_send: function(type, uri, data, callback) {},
+
+		/**
+		 * GET请求 @todo: 支持允许在body上带参数
+		 * @param  {String}   uri      [请求地址]
+		 * @param  {Json}     param    [请求参数]
+		 * @param  {Function} callback [请求回调]
+		 */
+		get: function(uri, param, callback) {
+			this._send('GET', uri + util.parse(param), null, callback);
+		},
+
+		/**
+		 * POST请求
+		 * @param  {String}   uri      [请求地址]
+		 * @param  {Json}     param    [请求参数]
+		 * @param  {Function} callback [请求回调]
+		 */
+		post: function(uri, param, callback) {}
+	};
+	// 导出数据请求处理实例
+	exports.ajax = new Ajax();
 
 
 	/**
@@ -162,7 +585,7 @@ define(function(require, exports, module) {
 	exports.sysCaches = sysCaches;
 
 	/**
-	 * Module 系统模块基类，所有模块都继承于Module
+	 * Module 系统模块基础类，实现所有模块的通用方法
 	 * childArray Array  对应该模块下所有子模块数组字段
 	 * childMap   Object 子模块名称集合映射字段
 	 */
@@ -305,7 +728,6 @@ define(function(require, exports, module) {
 		/**
 		 * 模块自身销毁函数，只删除缓存队列中的记录和子模块集合
 		 * @param  {Mix}  silent [是否向父模块发送销毁消息]
-		 * @return {Null}        [无返回值]
 		 */
 		destroy: function(silent) {
 			var cls = this._collections;
@@ -345,8 +767,8 @@ define(function(require, exports, module) {
 		/**
 		 * 修正作用域的定时器
 		 * @param {Function} callback [定时器回调函数]
-		 * @param {[type]}   time     [回调等待时间（毫秒）]
-		 * @param {[type]}   param    [<可选>回调函数的参数]
+		 * @param {Number}   time     [回调等待时间（毫秒）]
+		 * @param {Mix}      param    [<可选>回调函数的参数]
 		 */
 		setTimeout: function(callback, time, param) {
 			var self = this;
@@ -366,6 +788,66 @@ define(function(require, exports, module) {
 				callback.call(self, param);
 				self = callback = time = param = null;
 			}, time);
+		},
+
+		/**
+		 * 冒泡（由下往上）方式发送消息，由子模块发出，所有父模块接收
+		 * @param  {String}   name     [发送的消息名称]
+		 * @param  {Mix}      param    [<可选>附加消息参数]
+		 * @param  {Function} callback [<可选>发送完毕的回调函数，可在回调中指定回应数据]
+		 * @return {Boolean}           [result]
+		 */
+		fire: function(name, param, callback) {
+			if (!util.isString(name)) {
+				return false;
+			}
+
+			// 不传param
+			if (util.isFunc(param)) {
+				callback = param;
+				param = null;
+			}
+
+			// callback为属性值，加上on前缀
+			if (util.isString(callback)) {
+				callback = 'on' + util.ucFirst(callback);
+				callback = this[callback];
+			}
+
+			// 不传callback
+			if (!callback) {
+				callback = null;
+			}
+
+			return messager.fire(this, name, param, callback, this);
+		},
+
+		/**
+		 * 广播（由上往下）方式发送消息，由父模块发出，所有子模块接收
+		 */
+		broadcast: function(name, param, callback) {
+			if (!util.isString(name)) {
+				return false;
+			}
+
+			// 不传param
+			if (util.isFunc(param)) {
+				callback = param;
+				param = null;
+			}
+
+			// callback为属性值，加上on前缀
+			if (util.isString(callback)) {
+				callback = 'on' + util.ucFirst(callback);
+				callback = this[callback];
+			}
+
+			// 不传callback
+			if (!callback) {
+				callback = null;
+			}
+
+			return messager.broadcast(this, name, param, callback, this);
 		}
 	});
 	exports.Module = Module;
@@ -409,8 +891,6 @@ define(function(require, exports, module) {
 			});
 			// 模块是否已经创建完成
 			this.$ready = false;
-			// 事件对象
-			this.event = new Event(this);
 			// 调用构建方法
 			this.build();
 		},
@@ -476,13 +956,41 @@ define(function(require, exports, module) {
 		},
 
 		/**
+		 * 为元素添加绑定事件
+		 */
+		bind: function() {
+			return events.bind.apply(this, arguments);
+		},
+
+		/**
+		 * 从元素上移除bind添加的事件处理函数
+		 */
+		unbind: function() {
+			return events.unbind.apply(this, arguments);
+		},
+
+		/**
+		 * 代理事件
+		 */
+		proxy: function() {
+			return events.proxy.apply(this, arguments);
+		},
+
+		/**
+		 * 移除proxy添加的事件处理函数
+		 */
+		unProxy: function() {
+			return events.unProxy.apply(this, arguments);
+		},
+
+		/**
 		 * 模块销毁后的回调函数，移除视图界面和取消所有事件的绑定
 		 */
 		afterDestroy: function() {
 			var domObject = this._domObject;
 			if (domObject) {
 				// 取消所有事件
-				this.event.unbind(domObject);
+				this.unbind(domObject);
 				domObject.find('*').unbind();
 				// 销毁DOM对象
 				domObject.remove();
@@ -494,224 +1002,24 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * Event 事件类（处理视图模块的事件绑定与取消）
-	 * @param {Object} context [事件执行环境]
-	 */
-	function Event(context) {
-		this.context = context;
-	};
-	Event.prototype = {
-		constructor: Event,
-
-		/**
-		 * 检测参数是否是jQuery对象
-		 * @param  {Mix}     elm [需要检测的参数]
-		 * @return {Boolean}     [result]
-		 */
-		_isJquery: function(elm) {
-			return WIN.jQuery ? elm instanceof jQuery : false;
-		},
-
-		/**
-		 * 为元素添加绑定事件
-		 * @param  {Object}   elm       [绑定事件的元素]
-		 * @param  {String}   _event    [绑定的事件，多个事件用空格分开，或者数组形式]
-		 * @param  {Mix}      data      [<可选>传递到回调函数的额外数据]
-		 * @param  {Function} callback  [回调函数, 回调参数evt, elm]
-		 * @return {Boolean}            [result]
-		 */
-		bind: function(elm, _event, data, callback) {
-			var arglen = arguments.length;
-			var context = this.context, ret;
-
-			if (!this._isJquery(elm)) {
-				return false;
-			}
-
-			// 事件为数组形式
-			if (util.isArray(_event)) {
-				_event = _event.join(' ');
-			}
-
-			// 不传data
-			if (arglen === 3) {
-				callback = data;
-				data = null;
-			}
-
-			// callback为属性值
-			if (util.isString(callback)) {
-				callback = context[callback];
-			}
-
-			// 不合法的回调函数
-			if (!util.isFunc(callback)) {
-				return false;
-			}
-
-			elm.bind(_event, data, function(ev) {
-				ret = callback.call(context, ev, this);
-				// 阻止默认事件和冒泡
-				if (ret === false) {
-					ev.preventDefault();
-					ev.stopPropagation();
-				}
-			});
-
-			return true;
-		},
-
-		/**
-		 * 从元素上移除bind添加的事件处理函数
-		 * @param  {Object}   elm      [取消绑定事件的元素]
-		 * @param  {String}   _event   [<可选>绑定的事件，可为多个事件用空格分开、数组形式和命名空间]
-		 * @param  {Function} callback [<可选>指定事件取消绑定的函数名]
-		 * @return {Boolean}           [result]
-		 */
-		unbind: function(elm, _event, callback) {
-			var args = util.argumentsToArray(arguments);
-
-			if (!this._isJquery(elm)) {
-				return false;
-			}
-
-			args.shift();
-
-			elm.unbind.apply(elm, args);
-
-			return true;
-		},
-
-		/**
-		 * 代理事件
-		 * @param  {Object}   elm      [绑定事件的元素]
-		 * @param  {String}   _event   [绑定的事件，多个事件用空格分开，或者数组形式]
-		 * @param  {String}   selector [<可选>选择器，可为单个元素或者元素数组]
-		 * @param  {Mix}      data     [<可选>传递到回调函数的额外数据]
-		 * @param  {Function} callback [回调函数，回调参数evt, elm]
-		 * @return {Boolean}           [result]
-		 */
-		proxy: function(elm, _event, selector, data, callback) {
-			var arglen = arguments.length;
-			var context = this.context, ret;
-
-			if (!this._isJquery(elm)) {
-				return false;
-			}
-
-			// 事件为数组形式
-			if (util.isArray(_event)) {
-				_event = _event.join(' ');
-			}
-
-			// selector和data传一个
-			if (arglen === 4) {
-				callback = data;
-				if (!util.isString(selector)) {
-					data = selector;
-					selector = null;
-				}
-				else {
-					data = null;
-				}
-			}
-			// selector和data都不传
-			else if (arglen === 3) {
-				callback = selector;
-				data = null;
-				selector = null;
-			}
-
-			// callback为属性值
-			if (util.isString(callback)) {
-				callback = context[callback];
-			}
-
-			// 不合法的回调函数
-			if (!util.isFunc(callback)) {
-				return false;
-			}
-
-			elm.on(_event, selector, data, function(ev) {
-				ret = callback.call(context, ev, this);
-				// 阻止默认事件和冒泡
-				if (ret === false) {
-					ev.preventDefault();
-					ev.stopPropagation();
-				}
-			});
-
-			return true;
-		},
-
-		/**
-		 * 移除proxy添加的事件处理函数
-		 * @param  {Object}   elm      [取消绑定事件的元素]
-		 * @param  {String}   _event   [<可选>绑定的事件，可为多个事件用空格分开、数组形式和命名空间]
-		 * @param  {Function} callback [<可选>指定事件取消绑定的函数名]
-		 * @return {Boolean}           [result]
-		 */
-		unProxy: function(elm, _event, callback) {
-			var args = util.argumentsToArray(arguments);
-
-			if (!this._isJquery(elm)) {
-				return false;
-			}
-
-			args.shift();
-
-			elm.off.apply(elm, args);
-
-			return true;
-		}
-	};
-
-	/**
-	 * Messager 消息类（处理模块间通信）
-	 * 约定：消息的冒泡/广播方式都先触发消息接收事件函数，再将消息逐层上/下发
-	 */
-	function Messager() {};
-	Messager.prototype = {
-		constructor: Messager,
-
-		/**
-		 * 创建一条消息
-		 * @param  {Object} sender [发送消息的模块实例]
-		 * @param  {String} name   [发送的消息名称]
-		 * @param  {Mix}    param  [<可选>附加消息参数]
-		 * @return {Object}        [消息对象]
-		 */
-		_createMessage: function(sender, name, param) {},
-
-		/**
-		 * 冒泡（由下往上）方式发送消息，由子模块发出，父模块接收
-		 * @param  {Object}   sender   [发送消息的子模块实例]
-		 * @param  {String}   name     [发送的消息名称]
-		 * @param  {Mix}      param    [<可选>附加消息参数]
-		 * @param  {Function} callback [<可选>发送完毕的回调函数，可在回调中指定回应数据]
-		 * @param  {Object}   context  [执行环境]
-		 * @return {Boolean}           [result]
-		 */
-		fire: function(sender, name, param, callback, context) {},
-
-		/**
-		 * 广播（由上往下）方式发送消息，由父模块发出，子模块接收
-		 */
-		broadcast: function(sender, name, param, callback, context) {}
-	};
-	// 消息通信实例
-	var messager = new Messager();
-
-
-
-	/**
 	 * 初始化接口，可将全局配置文件引入
 	 * @param  {Object} config [系统全局配置文件]
 	 */
 	exports.init = function(config) {
-		appConfig.configData = config;
+		appConfig.config = config;
 		return this;
 	}
+
+
+
+
+
+
+
+
+
+
+
 
 	// ===================== old line ===========================
 
@@ -721,7 +1029,7 @@ define(function(require, exports, module) {
 	var animate = require('@core/animate');
 	var eventHelper = require('@core/eventHelper');
 	var dataHelper = require('@core/dataHelper');
-	var messager = require('@core/messager');
+	// var messager = require('@core/messager');
 	var cookie = require('@core/cookie');
 
 	// 应用模块导出
@@ -729,7 +1037,7 @@ define(function(require, exports, module) {
 	exports.animate = animate;
 	exports.data = dataHelper;
 	exports.event = eventHelper;
-	exports.messager = messager;
+	// exports.messager = messager;
 	exports.cookie = cookie;
 	exports.controller = router;
 
