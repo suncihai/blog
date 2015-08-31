@@ -78,27 +78,26 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * merge 子父模块的配置合并，子模块覆盖父模块同名配置
-	 * @param  {Object} childConfig  [子类模块配置参数]
-	 * @param  {Object} parentConfig [父类模块配置参数]
-	 * @return {Object}              [合并后的配置参数]
+	 * cover 子模块覆盖父模块的同名配置
+	 * @param  {Object} child  [子类模块配置参数]
+	 * @param  {Object} parent [父类模块配置参数]
+	 * @return {Object}        [覆盖后的配置参数]
 	 */
-	function merge(childConfig, parentConfig) {
-		if (!util.isObject(childConfig)) {
-			childConfig = {};
+	function cover(child, parent) {
+		if (!util.isObject(child)) {
+			child = {};
 		}
-		if (!util.isObject(parentConfig)) {
-			parentConfig = {};
+		if (!util.isObject(parent)) {
+			parent = {};
 		}
-
-		return util.extend(parentConfig, childConfig);
+		return util.extend(parent, child);
 	}
-	exports.merge = merge;
+	exports.cover = cover;
 
 
 	/**
 	 * appConfig 设置/读取配置对象
-	 * @param  {Object} configData [配置名称, 使用/分隔层次]
+	 * @param  {Object} configData [配置对象，不存在则读取app.init方法导入的系统配置]
 	 * @param  {String} name       [配置名称, 使用/分隔层次]
 	 * @param  {Mix}    value      [不设为读取配置信息, null为删除配置, 其他为设置值]
 	 * @return {Mix}               [返回读取的配置值, 返回false操作失败]
@@ -155,14 +154,14 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * Event 事件类（处理视图模块的事件绑定与取消）
+	 * Events 事件类（处理视图模块的事件绑定与取消）
 	 * @param {Object} context [事件执行环境，暂不用到，可作为模块属性时传入]
 	 */
-	function Event(context) {
+	function Events(context) {
 		this.context = context;
 	};
-	Event.prototype = {
-		constructor: Event,
+	Events.prototype = {
+		constructor: Events,
 
 		/**
 		 * 为元素添加绑定事件
@@ -320,7 +319,7 @@ define(function(require, exports, module) {
 		}
 	};
 	// 事件处理实例
-	var events = new Event();
+	var events = new Events();
 
 
 	/**
@@ -542,6 +541,16 @@ define(function(require, exports, module) {
 		 * @type {Object}
 		 */
 		this.queue = {};
+		/**
+		 * 请求唯一id标识
+		 * @type {Number}
+		 */
+		this.id = 1;
+		/**
+		 * 当前请求数
+		 * @type {Number}
+		 */
+		this.count = 0;
 	};
 	Ajax.prototype = {
 		constructor: Ajax,
@@ -552,17 +561,52 @@ define(function(require, exports, module) {
 		 * @param  {String}   uri      [请求地址]
 		 * @param  {Mix}      data     [请求数据]
 		 * @param  {Function} callback [请求回调]
+		 * @param  {Object}   context  [执行环境]
 		 */
-		_send: function(type, uri, data, callback) {},
+		_send: function(type, uri, data, callback, context) {},
+
+		/**
+		 * 执行下一个请求
+		 * @param  {Object} request [请求对象]
+		 */
+		_next: function(request) {},
+
+		/**
+		 * 执行一个请求
+		 * @param  {Object} request [请求对象]
+		 */
+		_execute: function(request) {},
+
+		/**
+		 * 终止一个请求或者所有请求
+		 * @param  {Number} id [需要终止的请求id，为空时终止所有请求]
+		 * @return {Number}    [返回成功终止的请求数目]
+		 */
+		_abort: function(id) {},
+
+		/**
+		 * 请求成功处理函数
+		 * @param  {Object} result [ajax成功请求的数据]
+		 */
+		_onSuccess: function(result) {},
+
+		/**
+		 * 请求错误处理函数
+		 * @param  {Object} xhr        [XMLRequest对象]
+		 * @param  {String} textStatus [错误文本信息]
+		 * @param  {Object} err        [错误对象]
+		 */
+		_onError: function(xhr, textStatus, err) {},
 
 		/**
 		 * GET请求 @todo: 支持允许在body上带参数
 		 * @param  {String}   uri      [请求地址]
 		 * @param  {Json}     param    [请求参数]
 		 * @param  {Function} callback [请求回调]
+		 * @param  {Object}   context  [执行环境]
 		 */
-		get: function(uri, param, callback) {
-			this._send('GET', uri + util.parse(param), null, callback);
+		get: function(uri, param, callback, context) {
+			this._send('GET', uri + util.parse(param), null, callback, context);
 		},
 
 		/**
@@ -570,8 +614,29 @@ define(function(require, exports, module) {
 		 * @param  {String}   uri      [请求地址]
 		 * @param  {Json}     param    [请求参数]
 		 * @param  {Function} callback [请求回调]
+		 * @param  {Object}   context  [执行环境]
 		 */
-		post: function(uri, param, callback) {}
+		post: function(uri, param, callback, context) {
+			this._send('GET', uri, param, callback, context);
+		},
+
+		/**
+		 * 加载静态模板文件
+		 * @param  {String}   uri      [模板地址]
+		 * @param  {Json}     param    [请求参数]
+		 * @param  {Function} callback [请求回调]
+		 * @param  {Object}   context  [执行环境]
+		 */
+		load: function(uri, param, callback, context) {},
+
+		/**
+		 * jsonp请求
+		 * @param  {String}   uri      [请求地址]
+		 * @param  {Json}     param    [请求参数]
+		 * @param  {Function} callback [请求回调]
+		 * @param  {Object}   context  [执行环境]
+		 */
+		jsonp: function(uri, param, callback, context) {}
 	};
 	// 导出数据请求处理实例
 	exports.ajax = new Ajax();
@@ -854,7 +919,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * Core 核心模块
+	 * Core 核心模块，用于顶层模块创建
 	 */
 	var Core = Module.extend({
 		/**
@@ -879,7 +944,7 @@ define(function(require, exports, module) {
 		 * @param  {Object} parent [父模块对象]
 		 */
 		init: function(config, parent) {
-			this._config = merge(config, {
+			this._config = cover(config, {
 				// 视图元素的目标容器
 				'target' : null,
 				// 视图元素的标签

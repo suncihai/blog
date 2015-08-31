@@ -9,7 +9,7 @@ define(function(require, exports) {
 
 		var bottom = app.Container.extend({
 			init: function(config) {
-				config = app.merge(config, {
+				config = app.cover(config, {
 					'class': 'wraperBottom',
 					'tag': 'p'
 				});
@@ -37,7 +37,7 @@ define(function(require, exports) {
 
 		var inner = app.Container.extend({
 			init: function(config) {
-				config = app.merge(config, {
+				config = app.cover(config, {
 					'class': 'wraperInner',
 					'tag': 'p'
 				});
@@ -74,7 +74,7 @@ define(function(require, exports) {
 
 		var wraper = app.Container.extend({
 			init: function(config) {
-				config = app.merge(config, {
+				config = app.cover(config, {
 					'class': 'wraper'
 				});
 				this.Super('init', arguments);
