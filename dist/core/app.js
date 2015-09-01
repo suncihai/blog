@@ -528,7 +528,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * Ajax数据请求处理类
+	 * 数据请求交互处理类
 	 */
 	function Ajax() {
 		/**
@@ -556,14 +556,55 @@ define(function(require, exports, module) {
 		constructor: Ajax,
 
 		/**
-		 * 发送一个请求
+		 * 建立一个请求记录，如果队列空闲则立即执行
 		 * @param  {String}   type     [请求类型]
 		 * @param  {String}   uri      [请求地址]
-		 * @param  {Mix}      data     [请求数据]
+		 * @param  {Mix}      param    [请求数据]
 		 * @param  {Function} callback [请求回调]
 		 * @param  {Object}   context  [执行环境]
 		 */
-		_send: function(type, uri, data, callback, context) {},
+		_build: function(type, uri, param, callback, context) {
+			if (!util.isString(uri)) {
+				util.error('request uri must be a type of String: ', uri);
+			}
+
+			// POST请求数据处理
+			if (type === 'POST' && param) {
+				param = JSON.stringify(param);
+			}
+
+			// callback为属性值
+			if (util.isString(callback)) {
+				callback = context[callback];
+			}
+
+			// 不合法的回调函数
+			if (!util.isFunc(callback)) {
+				return false;
+			}
+
+			var request = {
+				'type'  : type,
+				'uri'   : uri,
+				'param' : param,
+				'cb'    : callback,
+				'ct'    : context
+			};
+			var id = this.id++;
+
+			// 存入请求队列
+			this.queue[id] = request;
+
+			// 执行队列请求
+			if (this.count < this.maxQuery) {
+				this._sendQueue();
+			}
+		},
+
+		/**
+		 * 发送/处理请求队列中的请求
+		 */
+		_sendQueue: function() {},
 
 		/**
 		 * 执行下一个请求
@@ -575,7 +616,19 @@ define(function(require, exports, module) {
 		 * 执行一个请求
 		 * @param  {Object} request [请求对象]
 		 */
-		_execute: function(request) {},
+		_execute: function(request) {
+			// 拉取数据
+			jquery.ajax({
+				'url'         : url,
+				'type'        : type,
+				'dataType'    : 'json',
+				'contentType' : 'application/json; charset=UTF-8',
+				'data'        : data,
+				'timeout'     : 8888,
+				'success'     : _fnSuccess,
+				'error'       : _fnError
+			});
+		},
 
 		/**
 		 * 终止一个请求或者所有请求
@@ -606,7 +659,7 @@ define(function(require, exports, module) {
 		 * @param  {Object}   context  [执行环境]
 		 */
 		get: function(uri, param, callback, context) {
-			this._send('GET', uri + util.parse(param), null, callback, context);
+			this._build('GET', uri + util.parse(param), null, callback, context);
 		},
 
 		/**
@@ -617,7 +670,7 @@ define(function(require, exports, module) {
 		 * @param  {Object}   context  [执行环境]
 		 */
 		post: function(uri, param, callback, context) {
-			this._send('GET', uri, param, callback, context);
+			this._build('POST', uri, param, callback, context);
 		},
 
 		/**
@@ -671,15 +724,15 @@ define(function(require, exports, module) {
 		 */
 		create: function(name, Class, config) {
 			if (!util.isString(name)) {
-				util.error('Module name must be a String: ', name);
+				util.error('module name must be a type of String: ', name);
 				return false;
 			}
 			if (!util.isFunc(Class)) {
-				util.error('Module Class must be a Function: ', Class);
+				util.error('module Class must be a type of Function: ', Class);
 				return false;
 			}
 			if (config && !util.isObject(config)) {
-				util.error('Module config must be an Object: ', config);
+				util.error('module config must be a type of Object: ', config);
 				return false;
 			}
 
