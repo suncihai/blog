@@ -1,10 +1,10 @@
 /**
- * ========================================
+ * =================================
  * 框架核心应用模块，基础模块及其拓展的实现
- * ========================================
+ * =================================
  */
 define(function(require, exports, module) {
-	var UDF, WIN = window;
+	var UDF;
 	var util = exports.util = require('./util');
 	var jquery = require('../jquery/jquery-1.8.3.min');
 
@@ -323,7 +323,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * Messager 消息类（处理模块间通信）
+	 * Messager 消息类（实现模块间通信）
 	 * 消息的冒泡/广播方式都先触发消息接收事件函数，再将消息逐层上/下发
 	 * 默认接收消息onMessage, 默认全部发送完毕回调onMessageSendOut
 	 */
@@ -521,6 +521,23 @@ define(function(require, exports, module) {
 			}
 
 			return this._notifySend(msg, callback, context);
+		},
+
+		/**
+		 * 全局广播发消息，系统全部实例接受
+		 * @param  {String}   name     [发送的消息名称]
+		 * @param  {Mix}      param    [<可选>附加消息参数]
+		 */
+		globalCast: function(name, param) {
+			var receiver = null, func = null;
+			var msg = this._create('core', name, param);
+			for (var cls in sysCaches) {
+				if (!util.has(cls, sysCaches)) {
+					continue;
+				}
+				receiver = sysCaches[cls];
+				this._trigger(receiver, msg);
+			}
 		}
 	};
 	// 模块消息通信实例
@@ -528,7 +545,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * 数据请求交互处理类
+	 * 数据请求交互处理
 	 */
 	function Ajax() {
 		/**
@@ -583,65 +600,125 @@ define(function(require, exports, module) {
 				return false;
 			}
 
-			var request = {
-				'type'  : type,
-				'uri'   : uri,
-				'param' : param,
-				'cb'    : callback,
-				'ct'    : context
-			};
 			var id = this.id++;
+			var request = {
+				// 请求id，与队列中的id对应
+				'id'      : id,
+				// xmlRequest请求对象
+				'xhr'     : null,
+				// 是否已被阻止
+				'isAbort' : false,
+				// 请求类型
+				'type'    : type,
+				// 请求地址
+				'uri'     : uri,
+				// 请求参数
+				'param'   : param,
+				// 回调函数
+				'callback': callback,
+				// 执行环境
+				'context' : context
+			};
 
 			// 存入请求队列
 			this.queue[id] = request;
 
 			// 执行队列请求
 			if (this.count < this.maxQuery) {
-				this._sendQueue();
+				setTimeout(this._sendQueue, 0);
 			}
+
+			return id;
 		},
 
 		/**
 		 * 发送/处理请求队列中的请求
 		 */
-		_sendQueue: function() {},
+		_sendQueue: function() {
+			var queue = this.queue;
+
+			// 取出请求队列中的第一条
+			for (var property in queue) {
+				if (util.has(property, queue)) {
+					// 跳过已经执行过的
+					if (queue[property]['xhr']) {
+						continue;
+					}
+					// 执行请求
+					this._execute(queue[property]);
+					break;
+				}
+			}
+		},
 
 		/**
-		 * 执行下一个请求
-		 * @param  {Object} request [请求对象]
+		 * 删除当前成功请求，执行下一个请求
+		 * @param  {Object} request [当前完成的请求对象]
 		 */
-		_next: function(request) {},
+		_next: function(request) {
+			// 删除已成功的上一个记录
+			var queue = this.queue;
+			var id = request.id;
+			delete queue[id];
+			this.count--;
+
+			// 继续请求队列
+			this._sendQueue();
+		},
 
 		/**
 		 * 执行一个请求
 		 * @param  {Object} request [请求对象]
 		 */
 		_execute: function(request) {
-			// 拉取数据
-			jquery.ajax({
-				'url'         : url,
-				'type'        : type,
+			// 发起请求并保存对应关系
+			request.xhr = jquery.ajax({
+				'url'         : request.uri,
+				'type'        : request.type,
 				'dataType'    : 'json',
 				'contentType' : 'application/json; charset=UTF-8',
-				'data'        : data,
-				'timeout'     : 8888,
-				'success'     : _fnSuccess,
-				'error'       : _fnError
+				'data'        : request.param,
+				'timeout'     : 9288,
+				'success'     : this._onSuccess,
+				'error'       : this._onError,
+				'context'     : request
 			});
+
+			// 请求数计数
+			this.count++;
 		},
 
 		/**
-		 * 终止一个请求或者所有请求
-		 * @param  {Number} id [需要终止的请求id，为空时终止所有请求]
-		 * @return {Number}    [返回成功终止的请求数目]
-		 */
-		_abort: function(id) {},
-
-		/**
 		 * 请求成功处理函数
-		 * @param  {Object} result [ajax成功请求的数据]
+		 * @param  {Object} data [ajax成功请求的数据]
 		 */
-		_onSuccess: function(result) {},
+		_onSuccess: function(data) {
+			// 请求成功，处理下一个请求
+			ajax._next(this);
+
+			var callback = this.callback;
+			var context = this.context || this;
+
+			if (!util.isFunc(callback)) {
+				util.error('callback must be a type of Function: ', callback);
+				return false;
+			}
+
+			// 数据格式化
+			var result = null, error = null;
+			if (data && data.success && data.result) {
+				result = data.result;
+			}
+			else {
+				error = data || {
+					'success': false,
+					'message': 'The server returns information is invalid'
+				};
+			}
+
+			// 回调数据
+			callback.call(context, error, result);
+		},
 
 		/**
 		 * 请求错误处理函数
@@ -649,7 +726,25 @@ define(function(require, exports, module) {
 		 * @param  {String} textStatus [错误文本信息]
 		 * @param  {Object} err        [错误对象]
 		 */
-		_onError: function(xhr, textStatus, err) {},
+		_onError: function(xhr, textStatus, err) {
+			// 请求失败，处理下一个请求
+			ajax._next(this);
+
+			var callback = this.callback
+			var context = this.context;
+			var error = {
+				'status' : textStatus,
+				'message': err,
+				'code'   : xhr.status
+			};
+
+			if (!util.isFunc(callback)) {
+				util.error('callback must be a type of Function: ', callback);
+				return false;
+			}
+
+			callback.call(context, error, null);
+		},
 
 		/**
 		 * GET请求 @todo: 支持允许在body上带参数
@@ -689,10 +784,41 @@ define(function(require, exports, module) {
 		 * @param  {Function} callback [请求回调]
 		 * @param  {Object}   context  [执行环境]
 		 */
-		jsonp: function(uri, param, callback, context) {}
+		jsonp: function(uri, param, callback, context) {},
+
+		/**
+		 * 终止一个请求或者所有请求
+		 * @param  {Number} id [需要终止的请求id，为空时终止所有请求]
+		 * @return {Number}    [返回成功终止的请求数目]
+		 */
+		abort: function(id) {
+			var count = 0;
+			var request = this.queue[id];
+			// 终止指定id的请求
+			if (request) {
+				if (request.xhr && !request.isAbort) {
+					request.isAbort = true;
+					request.xhr.abort();
+					this.count--;
+				}
+				return +(delete this.queue[id]);
+			}
+			// 终止所有请求
+			else {
+				for (id in this.queue) {
+					if (!util.has(id, this.queue)) {
+						continue;
+					}
+					this.queue[id].isAbort = true;
+					this.queue[id].abort();
+					count++;
+				}
+				return count;
+			}
+		}
 	};
 	// 导出数据请求处理实例
-	exports.ajax = new Ajax();
+	var ajax = exports.ajax = new Ajax();
 
 
 	/**
@@ -982,6 +1108,22 @@ define(function(require, exports, module) {
 		 */
 		get: function(name) {
 			return this.getChild(name);
+		},
+
+		/**
+		 * 全局广播发消息，由core模块发出，系统全部实例接受
+		 * @param  {String}   name     [发送的消息名称]
+		 * @param  {Mix}      param    [<可选>附加消息参数]
+		 * @return {Boolean}           [result]
+		 */
+		globalCast: function(name, param) {
+			if (!util.isString(name)) {
+				return false;
+			}
+
+			this.setTimeout(function() {
+				return messager.globalCast(name, param);
+			});
 		}
 	});
 	exports.core = new Core();

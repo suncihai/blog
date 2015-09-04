@@ -7,7 +7,7 @@
     define('DB_USER', 'root');
 
     /* 数据库密码 */
-    define('DB_PASSWORD', '');
+    define('DB_PASSWORD', '123456');
 
     /* 默认数据库 */
     define('DB_NAME', 'tangbc');
