@@ -1006,8 +1006,8 @@ define(function(require, exports, module) {
 			// 模块导出点
 			var expt = null;
 			if (point !== -1) {
-				path = uri.substr(0, pos);
-				expt = uri.substr(pos + 1);
+				path = uri.substr(0, point);
+				expt = uri.substr(point + 1);
 			}
 
 			// 异步加载模块
