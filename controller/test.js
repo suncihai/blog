@@ -3,8 +3,6 @@ define(function(require, exports) {
 
 	exports.onRun = function(data, view) {
 
-		var ev1, ev2, ev3;
-
 		var blankDom = view.createBlank();
 
 		var bottom = app.Container.extend({
@@ -15,7 +13,7 @@ define(function(require, exports) {
 				});
 				this.Super('init', arguments);
 			},
-			afterBuild: function() {
+			domReady: function() {
 				var elm = this.getDOM();
 				elm.html([
 					'<span class="ml2">I am wraperBottom</span>',
@@ -46,7 +44,7 @@ define(function(require, exports) {
 				});
 				this.Super('init', arguments);
 			},
-			afterBuild: function() {
+			domReady: function() {
 				var elm = this.getDOM();
 				elm.html([
 					'<span class="ml1">I am wraperInner</span>',
@@ -81,43 +79,18 @@ define(function(require, exports) {
 		var wraper = app.Container.extend({
 			init: function(config) {
 				config = app.cover(config, {
-					'class': 'wraper'
+					'class': 'wraper',
+					'template': 'project/template/wraper.html',
+					'vModel': {
+						'message': 'I am Vue.js'
+					}
 				});
 				this.Super('init', arguments);
 			},
-			afterBuild: function() {
+			viewReady: function() {
 				var elm = this.getDOM();
-				elm.html([
-					'I am wraper',
-					'<button class="ml1 wraperBtn">destroy all child</button>'
-				].join(''));
-
-				var inn = this.create('wraperInner', inner, {
-					'target': elm
-				});
-
-				app.ajax.get('/blog/sprint/api/showarticle/query.php', {'artid': 395}, 'onData', this);
-
-				// this.broadcast('wraperBroadcast', 'I am wraper', 'out');
-
-				this.bind(elm.find('.wraperBtn'), 'click', this.eventBtn);
-			},
-			onData: function() {
-				console.log(arguments);
-			},
-			onBottomFire: function(msg) {
-				console.log('received in wraper', msg);
-				// msg.returns = 'return at wraper';
-			},
-			onCast: function(msg) {
-				console.log('onCast', msg);
-			},
-			eventBtn: function(evt, elm) {
-				this.destroy();
 			}
 		});
-
-		app.core.globalCast('cast', 123);
 
 		var bd = app.core.create('wraper', wraper, {
 			'target': blankDom
@@ -125,5 +98,3 @@ define(function(require, exports) {
 
 	}
 });
-
-

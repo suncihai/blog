@@ -4,9 +4,14 @@
  * =================================
  */
 define(function(require, exports, module) {
-	var UDF;
+	var UDF, WIN = window;
+	// util辅助功能函数库
 	var util = exports.util = require('./util');
-	var jquery = require('../jquery/jquery-1.8.3.min');
+	// jquery
+	var jquery = exports.jquery = require('../jquery/jquery-1.8.3.min');
+	// Vue.js MVVM框架
+	var Vue = require('../vue/vue');
+	Vue.config.debug = true;
 
 
 	/*
@@ -31,7 +36,6 @@ define(function(require, exports, module) {
 
 		return pointer;
 	}
-
 
 	/*
 	 * Root 根函数，实现类式继承
@@ -545,7 +549,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * 数据请求交互处理
+	 * 数据请求交互类
 	 */
 	function Ajax() {
 		/**
@@ -769,13 +773,46 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 加载静态模板文件
+		 * 加载模板文件
 		 * @param  {String}   uri      [模板地址]
 		 * @param  {Json}     param    [请求参数]
 		 * @param  {Function} callback [请求回调]
 		 * @param  {Object}   context  [执行环境]
 		 */
-		load: function(uri, param, callback, context) {},
+		load: function(uri, param, callback, context) {
+			var error = null;
+			// 不传param
+			if (util.isFunc(param)) {
+				callback = param;
+				context = callback;
+				param = null;
+			}
+			context = context || WIN;
+
+			// 模板拉取成功
+			function _fnSuccess(text) {
+				callback.call(context, false, text);
+			}
+
+			// 模板拉取失败
+			function _fnError(xhr, textStatus, err) {
+				error = {
+					'status' : textStatus,
+					'message': err,
+					'code'   : xhr.status
+				};
+				callback.call(context, error, null);
+			}
+
+			jquery.ajax({
+				'url'     : uri,
+				'data'    : param,
+				'type'    : 'GET',
+				'dataType': 'text',
+				'success' : _fnSuccess,
+				'error'   : _fnError
+			});
+		},
 
 		/**
 		 * jsonp请求
@@ -784,7 +821,9 @@ define(function(require, exports, module) {
 		 * @param  {Function} callback [请求回调]
 		 * @param  {Object}   context  [执行环境]
 		 */
-		jsonp: function(uri, param, callback, context) {},
+		jsonp: function(uri, param, callback, context) {
+			// @todo;
+		},
 
 		/**
 		 * 终止一个请求或者所有请求
@@ -819,6 +858,30 @@ define(function(require, exports, module) {
 	};
 	// 导出数据请求处理实例
 	var ajax = exports.ajax = new Ajax();
+
+
+	/**
+	 * MVVM类，封装Vue
+	 * @param  {Object}  element  [Vue实例的挂载点DOM元素]
+	 * @param  {Object}  options  [Vue实例所使用的实例化选项]
+	 * @param  {Object}  context  [Vue实例方法执行环境]
+	 */
+	function MVVM(element, options, context) {
+		// 执行环境
+		this.context = context;
+
+		// 创建一个内部MVVM实例
+		this._vm = new Vue({
+			'el'  : util.isJquery(element) ? element.get(0) : element,
+			'data': options
+		});
+
+		// 正在监视的所有数据对象，可对其进行读写操作
+		this.$ = this._vm.$data;
+	};
+	MVVM.prototype = {
+		constructor: MVVM
+	};
 
 
 	/**
@@ -1141,18 +1204,54 @@ define(function(require, exports, module) {
 		init: function(config, parent) {
 			this._config = cover(config, {
 				// 视图元素的目标容器
-				'target' : null,
+				'target'  : null,
 				// 视图元素的标签
-				'tag'    : 'div',
+				'tag'     : 'div',
 				// 视图元素的class
-				'class'  : '',
+				'class'   : '',
 				// 视图元素的attr
-				'attr'   : null
+				'attr'    : null,
+				// 视图布局内容(html结构字符串)
+				'html'    : '',
+				// 静态模板uri
+				'template': '',
+				// 模板拉取请求参数(用于输出不同模板的情况)
+				'tplParam': null,
+				// mvvvm对象模型
+				'vModel'  : null
 			});
+			// DOM对象
+			this._domObject = null;
+			// mvvm对象
+			this.vm = null;
 			// 模块是否已经创建完成
 			this.$ready = false;
-			// 调用构建方法
-			this.build();
+			// 是否从模板拉取布局
+			if (this.getConfig('template')) {
+				this._loadTemplate();
+			}
+			else {
+				// 直接调用构建方法
+				this.build();
+			}
+		},
+
+		/**
+		 * 加载模板文件
+		 */
+		_loadTemplate: function() {
+			var self = this;
+			var c = this.getConfig();
+			var uri = c.template, param = c.tplParam;
+			// 拉取模板文本
+			ajax.load(uri, param, function(err, text) {
+				if (err) {
+					text = err.code + ' ' + err.message + ': ' + uri;
+					util.error(err);
+				}
+				self.setConfig('html', text);
+				self.build();
+			});
 		},
 
 		/**
@@ -1173,7 +1272,7 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 构建一个空的DOM元素
+		 * 构建视图容器的布局、初始化vm
 		 */
 		build: function() {
 			// 判断是否已创建过
@@ -1194,15 +1293,24 @@ define(function(require, exports, module) {
 				this._domObject.attr(c.attr);
 			}
 
-			// 插入目标容器
-			var target = c.target;
+			// 添加页面元素
+			if (c.html && util.isString(c.html)) {
+				this._domObject.html(c.html);
+			}
+
+			// 插入目标容器，初始化vm
+			var target = c.target, vModel = c.vModel;;
 			if (target) {
+				// 初始化vm对象
+				if (util.isObject(vModel)) {
+					this.vm = new MVVM(this._domObject, vModel, this);
+				}
 				this._domObject.appendTo(target);
 			}
 
-			// 调用子模块的afterBuild方法
-			if (util.isFunc(this.afterBuild)) {
-				this.afterBuild();
+			// 调用子模块的viewReady(视图渲染完毕)方法
+			if (util.isFunc(this.viewReady)) {
+				this.viewReady();
 			}
 		},
 

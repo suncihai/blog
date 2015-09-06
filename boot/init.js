@@ -8,7 +8,7 @@
 			'@view'       : 'view',
 			'@dist'       : 'dist',
 			'@core'       : 'dist/core',
-			'@plugins'    : 'dist/plugins',
+			'@plugins'    : 'plugins',
 			// 控制器目录
 			'@controller' :	'controller',
 			// 项目目录
@@ -28,8 +28,8 @@
 		'preload': [
 			'resources/css/app.min.css',
 			'resources/css/font-awesome.min.css',
-			'@dist/plugins/prism/prism.min.css',
-			'@dist/plugins/animate/animate.min.css'
+			'@plugins/prism/prism.min.css',
+			'@plugins/animate/animate.min.css'
 		],
 		'debug': 0
 	};
