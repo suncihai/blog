@@ -2,8 +2,10 @@
  * [Animate CSS3动画处理模块]
  */
 define(function(require, exports) {
-	var util = require('util');
-	var c = require('@boot/config');
+	var util = require('../core/util');
+	// 动画结束事件
+	var animationdEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+
 
 	/**
 	 * play 应用CSS3 keyframe
@@ -22,11 +24,13 @@ define(function(require, exports) {
 			type = null;
 			remove = false;
 		}
+
 		if (util.isBoolean(type)) {
 			callback = remove;
 			context = callback;
 			remove = type;
 		}
+
 		if (util.isString(type) && util.isFunc(remove)) {
 			callback = remove;
 			context = callback;
@@ -66,11 +70,11 @@ define(function(require, exports) {
 		/*
 		 * 处理动画结束事件
 		 * again: 是否是二次执行, 子节点冒泡后不应重复添加animateCls
-		 * mark: 在Chrome浏览器下，重复添加classname会触发两次原有的addClass事件
+		 * (在Chrome浏览器下，重复添加classname会触发两次原有的addClass事件)
 		 */
 		function handleAnimateEndEvent(again) {
 			$elm.addClass(again ? '' : animateCls).one(
-				c.animationdEnd,
+				animationdEnd,
 				function(evt) {
 					if (evt.target === $elm.get(0)) {
 						cbAnimateEnd();

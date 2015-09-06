@@ -4,7 +4,7 @@
 define(function(require, exports, module) {
 	var $ = require('jquery');
 	var util = require('util');
-	var c = require('app').getConfig();
+	var c = require('@boot/config');
 	var header = require('@modules/header');
 	var footer = require('@modules/footer');
 

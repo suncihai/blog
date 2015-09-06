@@ -1,17 +1,14 @@
 /**
- * =================================
- * 框架核心应用模块，基础模块及其拓展的实现
- * =================================
+ * app.js 框架核心应用模块，基础模块及其拓展的实现
  */
 define(function(require, exports, module) {
 	var UDF, WIN = window;
 	// util辅助功能函数库
 	var util = exports.util = require('./util');
 	// jquery
-	var jquery = exports.jquery = require('../jquery/jquery-1.8.3.min');
+	var jquery = exports.jquery = require('../jquery/jquery-2.1.4.min');
 	// Vue.js MVVM框架
-	var Vue = require('../vue/vue');
-	Vue.config.debug = true;
+	var Vue = require('../vue/vue.min');
 
 
 	/*
@@ -101,18 +98,22 @@ define(function(require, exports, module) {
 
 	/**
 	 * appConfig 设置/读取配置对象
-	 * @param  {Object} configData [配置对象，不存在则读取app.init方法导入的系统配置]
-	 * @param  {String} name       [配置名称, 使用/分隔层次]
-	 * @param  {Mix}    value      [不设为读取配置信息, null为删除配置, 其他为设置值]
-	 * @return {Mix}               [返回读取的配置值, 返回false操作失败]
+	 * @param  {Object} cData  [配置对象，不存在则读取app.init方法导入的系统配置]
+	 * @param  {String} name   [配置名称, 使用/分隔层次]
+	 * @param  {Mix}    value  [不设为读取配置信息, null为删除配置, 其他为设置值]
+	 * @return {Mix}           [返回读取的配置值, 返回false操作失败]
 	 */
-	function appConfig(configData, name, value) {
-		if (!configData) {
-			configData = appConfig.config;
+	function appConfig(cData, name, value) {
+		// 不传cData配置对象
+		if (util.isString(cData)) {
+			value = name;
+			name = cData;
+			cData = appConfig.config;
 		}
+
 		var set = (value !== UDF);
 		var remove = (value === null);
-		var data = configData;
+		var data = cData;
 
 		if (name) {
 			var ns = name.split('/');
@@ -913,15 +914,15 @@ define(function(require, exports, module) {
 		 */
 		create: function(name, Class, config) {
 			if (!util.isString(name)) {
-				util.error('module name must be a type of String: ', name);
+				util.error('module\'s name must be a type of String: ', name);
 				return false;
 			}
 			if (!util.isFunc(Class)) {
-				util.error('module Class must be a type of Function: ', Class);
+				util.error('module\'s Class must be a type of Function: ', Class);
 				return false;
 			}
 			if (config && !util.isObject(config)) {
-				util.error('module config must be a type of Object: ', config);
+				util.error('module\'s config must be a type of Object: ', config);
 				return false;
 			}
 
@@ -936,7 +937,7 @@ define(function(require, exports, module) {
 
 			// 判断是否已经创建过
 			if (collections[childMap][name]) {
-				util.error('Module Name already exists: ', name);
+				util.error('Module\'s name already exists: ', name);
 				return false;
 			}
 
@@ -973,11 +974,62 @@ define(function(require, exports, module) {
 		/**
 		 * 异步创建一个子模块实例
 		 * @param  {String}   name     [子模块名称，同一模块下创建的子模块名称不能重复]
-		 * @param  {String}   uri      [子模块文件路径，支持.获取文件特定实例]
+		 * @param  {String}   uri      [子模块uri（路径），支持.获取文件特定实例]
 		 * @param  {Object}   config   [<可选>子模块配置参数]
 		 * @param  {Function} callback [<可选>子模块实例创建后的回调函数]
 		 */
-		createAsync: function(name, uri, config, callback) {},
+		createAsync: function(name, uri, config, callback) {
+			if (!util.isString(name)) {
+				util.error('module\'s name must be a type of String: ', name);
+				return false;
+			}
+			if (!util.isString(uri)) {
+				util.error('module\'s uri must be a type of String: ', uri);
+				return false;
+			}
+
+			// 不传配置
+			if (util.isFunc(config) || util.isString(config)) {
+				callback = config;
+				config = null;
+			}
+
+			// callback作为属性值
+			if (util.isString(callback)) {
+				callback = this[callback];
+			}
+
+			// 根据"."拆解uri，处理/file/to/ptah.base的情况
+			var point = uri.lastIndexOf('.');
+			// 模块路径
+			var path = '';
+			// 模块导出点
+			var expt = null;
+			if (point !== -1) {
+				path = uri.substr(0, pos);
+				expt = uri.substr(pos + 1);
+			}
+
+			// 异步加载模块
+			var self = this, child = null;
+			require.async(path, function(Class) {
+				// 取导出点
+				if (Class && expt) {
+					Class = Class[expt];
+				}
+
+				// 创建子模块
+				if (Class) {
+					child = self.create(name, Class, config);
+					// 执行回调
+					if (child) {
+						callback.call(self || WIN);
+					}
+				}
+			});
+
+			return this;
+		},
 
 		/**
 		 * 获取当前模块的父模块对象
@@ -1231,8 +1283,7 @@ define(function(require, exports, module) {
 				this._loadTemplate();
 			}
 			else {
-				// 直接调用构建方法
-				this.build();
+				this.render();
 			}
 		},
 
@@ -1250,7 +1301,7 @@ define(function(require, exports, module) {
 					util.error(err);
 				}
 				self.setConfig('html', text);
-				self.build();
+				self.render();
 			});
 		},
 
@@ -1272,9 +1323,9 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 构建视图容器的布局、初始化vm
+		 * 渲染视图容器的布局、初始化vm
 		 */
-		build: function() {
+		render: function() {
 			// 判断是否已创建过
 			if (this.$ready) {
 				return this;
@@ -1370,58 +1421,31 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * 初始化接口，可将全局配置文件引入
-	 * @param  {Object} config [系统全局配置文件]
+	 * app初始化接口，可将全局配置文件引入，挂载其他基础模块
+	 * @param  {Object} config  [系统全局配置文件]
+	 * @param  {Object} modMap  [挂载模块映射对象]
 	 */
-	exports.init = function(config) {
-		appConfig.config = config;
-		return this;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-	// ===================== old line ===========================
-
-	var language = require('@core/language');
-	var config = require('@boot/config');
-	var router = require('@core/router');
-	var animate = require('@core/animate');
-	var eventHelper = require('@core/eventHelper');
-	var dataHelper = require('@core/dataHelper');
-	// var messager = require('@core/messager');
-	var cookie = require('@core/cookie');
-
-	// 应用模块导出
-	exports.lang = language;
-	exports.animate = animate;
-	exports.data = dataHelper;
-	exports.event = eventHelper;
-	// exports.messager = messager;
-	exports.cookie = cookie;
-	exports.controller = router;
-
-	// 读取系统配置信息(暂支持两层)
-	exports.getConfig = function(field) {
-		var ret, cArr;
-		if (field) {
-			cArr = field.toString().split('/');
-			if (cArr.length === 2) {
-				ret = config[cArr[0]] && config[cArr[0]][cArr[1]];
-			} else {
-				ret = config[field];
-			}
-		} else {
-			ret = config;
+	exports.init = function(config, modMap) {
+		// 系统全局配置对象
+		if (util.isObject(config)) {
+			appConfig.config = config;
 		}
-		return ret;
+
+		// 挂载通用模块
+		if (util.isObject(modMap)) {
+			for (var name in modMap) {
+				if (util.has(name, modMap)) {
+					if (this[name]) {
+						util.error(name + ' is already defined in app.js!');
+						continue;
+					}
+					else {
+						this[name] = modMap[name];
+					}
+				}
+			}
+		}
+
+		return this;
 	}
 });

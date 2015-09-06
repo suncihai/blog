@@ -159,14 +159,14 @@ define(function(require, util) {
 	util.has = has;
 
 	/**
-	 * scrollTo 自定义滚动条位置(用于hash改变时纠正滚动条位置)
+	 * scrollTo 自定义滚动条位置
 	 * @param  {Number} x [横位置]
 	 * @param  {Number} y [纵位置]
 	 */
 	util.scrollTo = function(x, y) {
-		var _x = x || 0;
-		var _y = y || 0;
-		WIN.scrollTo(_x, _y);
+		x = x || 0;
+		y = y || 0;
+		WIN.scrollTo(x, y);
 	}
 
 	/**

@@ -1,40 +1,38 @@
 /**
- * [视图控制模块]
+ * 视图切换控制模块
  */
 define(function(require, exports, module) {
 	var $ = require('jquery');
+	var util = require('util');
 	var c = require('@boot/config');
 	var LAYOUT_PATH = '@view/layout';
 
-	var Main = {
+	var ViewControler = {
 		/**
-		 * createIndex 创建主页容器
-		 * @param  {JSON} config   [配置参数]
-		 * @return {Object}        [容器对象]
+		 * getIndex 获取主页容器
+		 * @return  {Object}  [容器对象]
 		 */
-		createIndex: function(config) {
-			if ($.type(config) !== 'object') {
-				return false;
-			}
-			var content = null;
+		getIndex: function(config) {
+			var container = null;
 			require.async(LAYOUT_PATH, function(layout) {
-				content = layout.getDOM('index/content');
+				// 获取容器
+				container = layout.getDOM('index/content');
 
-				// 隐藏滚动条
+				// 主页隐藏滚动条
 				layout.getDOM('frame').addClass('overflowHidden');
 
-				// 隐藏blog容器
 				layout.switchContainer('index');
 
 			});
-			return content;
+
+			return container;
 		},
 
 		/**
-		 * createBlog 创建博客容器<archive or article>
+		 * getBlog 获取博客容器
 		 * @param  {JSON} config   [配置参数]
 		 */
-		createBlog: function(config) {
+		getBlog: function(config) {
 			var self = this;
 			var retDOM = null;
 
@@ -82,69 +80,6 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * _createArchive 创建栏目容器
-		 * @param  {JSON} config   [配置参数]
-		 * @return {Object}        [容器对象]
-		 */
-		_createArchive: function(layout, config) {
-			if ($.type(config) !== 'object') {
-				return false;
-			}
-			var tag = 'div';
-			var cont = $('<'+ tag +'/>');
-			var contName = config.container;
-			var blogDOM = layout.getDOM('blog');
-			var archiveDom = blogDOM.archive;
-			archiveDom.empty();
-
-			blogDOM.article.hide();
-			blogDOM.archive.show();
-
-
-			// 添加标识属性
-			cont.attr({
-				'class': 'P-archives',
-				'archive-name': contName
-			});
-
-			archiveDom.append(cont);
-
-			return cont;
-		},
-
-		/**
-		 * _createArticle 创建文章容器
-		 * @param  {JSON} config   [配置参数]
-		 * @return {Object}        [容器对象]
-		 */
-		_createArticle: function(layout, config) {
-			if ($.type(config) !== 'object') {
-				return false;
-			}
-			var tag = 'div';
-			var cont = $('<'+ tag +'/>');
-			var contName = config.container;
-			var marker = contName + '/' + config.pageid;
-
-			var blogDOM = layout.getDOM('blog');
-			var articleDom = blogDOM.article;
-			articleDom.empty();
-
-			blogDOM.archive.hide();
-			blogDOM.article.show();
-
-			// 添加标识属性
-			cont.attr({
-				'class': 'P-article',
-				'article-name': marker
-			});
-
-			articleDom.append(cont);
-
-			return cont;
-		},
-
-		/**
 		 * createBlank 返回空白容器<与index/blog同级>
 		 * @param  {JSON} config   [配置参数]
 		 * @return {Object}        [容器对象]
@@ -158,6 +93,6 @@ define(function(require, exports, module) {
 			return blank;
 		}
 	}
-	module.exports = Main;
+	module.exports = ViewControler;
 
 });

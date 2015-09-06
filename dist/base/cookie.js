@@ -2,8 +2,7 @@
 	cookie相关操作模块
  */
 define(function(require, exports) {
-	var util = require('util');
-	var jquery = require('jquery');
+	var util = require('../core/util');
 	// cookie默认配置
 	var defaults = {
 		'raw'     : true,
@@ -11,11 +10,12 @@ define(function(require, exports) {
 		'expires' : 30,
 		'path'    : '',
 		'domain'  : ''
-	}
+	};
+
 
 	// 写入cookie
 	exports.set = function(key, value, options) {
-		options = jquery.extend({}, defaults, options);
+		options = util.extend({}, defaults, options);
 		if (util.isNumber(options.expires)) {
 			var days = options.expires;
 			var t = options.expires = new Date();
@@ -29,6 +29,7 @@ define(function(require, exports) {
 			options.domain  ? '; domain=' + options.domain : ''
 		].join(''));
 	}
+
 
 	// 读取cookie
 	exports.get = function(key) {
@@ -53,11 +54,13 @@ define(function(require, exports) {
 		return result;
 	}
 
+
 	// 删除cookie
 	exports.remove = function(key, options) {
-		this.setCookie(key, jquery.extend({}, options, {'expires': -1}));
+		this.setCookie(key, util.extend({}, options, {'expires': -1}));
 		return !this.setCookie(key);
 	}
+
 
 	function encode(s) {
 		return defaults.raw ? s : encodeURIComponent(s);

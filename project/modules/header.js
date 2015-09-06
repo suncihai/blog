@@ -4,7 +4,7 @@
 define(function(require, exports, module) {
 	var app = require('app');
 	var $ = require('jquery');
-	var c = app.getConfig();
+	var c = app.config();
 	var util = require('util');
 	var HeadRoom = require('@plugins/headroom/headroom');
 

@@ -1,16 +1,16 @@
 /**
  * [多语言处理模块]
+ * 多语言cookie名称为lang, 有三种值：zhCN、zhHK、enUS
  */
 define(function(require, exports, module) {
 	var WIN = window;
-	var util = require('util');
-	var c = require('@boot/config');
-	var cookie = require('@core/cookie');
-	var ajax = require('@core/dataHelper');
+	var app = require('../core/app');
+	var util = app.util;
+	var cookie = require('../base/cookie');
 
 	function Language() {
 		var self = this;
-		var defaultLang = c.appCookie && c.appCookie.lang || 'zhCN';
+		var defaultLang = 'zhCN';
 		// 默认语言
 		this.defaultLang = defaultLang;
 		// 正在加载的语言
@@ -45,7 +45,7 @@ define(function(require, exports, module) {
 				}
 			}
 			if (arguments.length > 1) {
-				text = util.templateReplace.apply(this, arguments);
+				text = util.templateReplace.apply(self, arguments);
 			}
 			return text;
 		}
@@ -66,7 +66,7 @@ define(function(require, exports, module) {
 			}
 			this.loadLang = lang;
 			if (!this.isDefault()) {
-				ajax.get('lang/' + lang + '/translate.json', null, this.afterLoad, this);
+				app.ajax.get('lang/' + lang + '/translate.json', null, this.afterLoad, this);
 			}
 		};
 

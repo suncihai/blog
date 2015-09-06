@@ -4,26 +4,28 @@
 		'base': '/blog/',
 		'paths': {
 			// 核心目录
-			'@boot'       : 'boot',
-			'@view'       : 'view',
 			'@dist'       : 'dist',
 			'@core'       : 'dist/core',
-			'@plugins'    : 'plugins',
+			'@base'       : 'dist/base',
 			// 控制器目录
 			'@controller' :	'controller',
 			// 项目目录
+			'@pages'      : 'project/pages',
 			'@modules'    : 'project/modules',
-			'@pages'      : 'project/pages'
+			// 其他目录
+			'@boot'       : 'boot',
+			'@view'       : 'view',
+			'@plugins'    : 'plugins'
 		},
 		'alias': {
 			'app'    : '@core/app.js',
 			'view'   : '@view/view.js',
 			'layout' : '@view/layout.js',
 			'util'   : '@core/util.js',
-			'jquery' : '@dist/jquery/jquery-1.8.3.min.js'
+			'jquery' : '@dist/jquery/jquery-2.1.4.min.js'
 		},
 		'map': [
-			[/^(.*\.(?:css|js))(.*)$/i, '$1?v=2.0']
+			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=2.0']
 		],
 		'preload': [
 			'resources/css/app.min.css',
@@ -34,11 +36,13 @@
 		'debug': 0
 	};
 
+
 	// 配置文件中的语言标记
 	function _T(text) {
 		return text;
 	}
 	win._T = _T;
+
 
 	/**
 	 * appInit 初始化配置
@@ -50,30 +54,55 @@
 			cb.apply(win, arguments);
 		}
 	};
+
+	var lang = null;
 	var stepFunc = [
-		// 配置文件以及语言包
 		function() {
+			// 配置以及语言包
 			sea.config(config);
-			sea.use('@core/language', appInit);
+			sea.use(['@base/language'], appInit);
 		},
-		// 语言包回调
 		function(language) {
-			language.load(appInit);
+			// 多语言模块回调
+			lang = language;
+			lang.load(appInit);
 		},
-		// 加载布局和路由模块
 		function() {
-			sea.use(['layout', '@core/router', 'app'], appInit);
+			// 加载基础模块
+			sea.use([
+				'app',
+				'layout',
+				'@boot/config',
+				'@base/cookie',
+				'@base/animate',
+				'@plugins/router'
+			], appInit);
 		},
-		// 启动路由
-		function(layout, router, app) {
+		function(app, layout, config, cookie, animate, router) {
+			// 将系统配置和基础模块挂载到app下
+			app.init(config, {
+				'lang'      : lang,
+				'cookie'    : cookie,
+				'animate'   : animate,
+				'controller': router
+			});
+
+			// app是否作为全局变量调试
+			if (app.config('debug')) {
+				win.app = app;
+			}
+
+			// 初始化布局
 			layout.init();
+
+			// 启动路由监听
 			router.start();
-			win.app = app;
 		}
 	];
 
+
 	// 浏览器特性判断
-	sea.use('/blog/dist/core/character', function(b) {
+	sea.use('/blog/dist/base/character', function(b) {
 		if (b.j()){
 			return false;
 		}

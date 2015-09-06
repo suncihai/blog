@@ -2,7 +2,11 @@
  * [系统配置信息]
  */
 define(function() {
-	var CONFIG = {
+
+	return {
+
+		// 是否将app暴露为全局变量
+		debug: true,
 
 		// 默认页面
 		defaultPage: 'frontends',
@@ -12,13 +16,6 @@ define(function() {
 
 		// 控制器的调用方法
 		action: 'onRun',
-
-		// 默认cookie
-		appCookie: {
-			'lang'        : 'zhCN',
-			'usernickname': '',
-			'userlink'    : ''
-		},
 
 		// 页脚文字
 		copyright: 'Copyright ©2012-2015 TANGBC.COM',
@@ -93,11 +90,7 @@ define(function() {
 			'listarchives' : '/blog/sprint/api/listarchives/query.php'
 		},
 
-		// 动画结束事件
-		animationdEnd: 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
-
 		// 延迟展示(毫秒)
 		delay: 388
-	}
-	return CONFIG;
+	};
 });

@@ -5,17 +5,20 @@ define(function(require, exports) {
 	var WIN = window;
 	var LOC = WIN.location;
 	var util = require('util');
-	var view = require('view');
 	var c = require('@boot/config');
-	var cookie = require('@core/cookie');
+	var cookie = require('@base/cookie');
 	var action = c.action;
-	var controller = c.controllerPath || '@controller';
+	var controller = c.controllerPath || '@controller/';
+	// 传递到响应路由控制模块的参数数据
 	var data = {
-		dom    : null, // 容器对象
-		name   : null, // 模块名称
-		param  : null, // 页面参数
-		search : null  // url参数
+		// 页面名称，对应主hash值
+		'name'   : null,
+		// 页面参数
+		'param'  : null,
+		// url参数
+		'search' : null
 	}
+
 
 	function hashChanged() {
 		var hash, ms, cookieSet;
@@ -120,7 +123,8 @@ define(function(require, exports) {
 		}
 		else {
 			if (module[action] && util.isFunc(module[action])) {
-				module[action](data, view);
+				// 传递路由参数数据
+				module[action](data);
 			}
 			else {
 				util.error('路由控制文件' + controller + data.name + '.js' + '的' + action + '方法调用错误！');
