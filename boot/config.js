@@ -21,7 +21,7 @@ define(function() {
 		copyright: 'Copyright ©2012-2015 TANGBC.COM',
 
 		// 导航
-		nav: [
+		navs: [
 			{'name': _T('首页'), 'link': '#index'},
 			{'name': _T('前端那些事'), 'link': '#frontends'},
 			{'name': _T('随便写写'), 'link': '#moods'},

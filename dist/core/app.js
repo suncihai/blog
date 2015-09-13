@@ -359,7 +359,7 @@ define(function(require, exports, module) {
 				// 消息发起模块
 				'form'    : sender,
 				// 消息目标模块
-				'target'  : null,
+				'to'      : null,
 				// 该消息被传递的次数
 				'count'   : 0,
 				// 消息名称
@@ -385,7 +385,7 @@ define(function(require, exports, module) {
 			// 接收者对该消息的接收方法
 			var func = receiver[msg.method];
 			// 标识消息的发送目标
-			msg.target = receiver;
+			msg.to = receiver;
 
 			// 触发接收者的消息处理方法，若未定义则默认为onMessage
 			if (util.isFunc(func)) {
@@ -396,6 +396,8 @@ define(function(require, exports, module) {
 				returns = receiver.onMessage.call(receiver, msg);
 				msg.count++;
 			}
+
+			msg.returns = returns;
 
 			return returns;
 		},
@@ -439,8 +441,8 @@ define(function(require, exports, module) {
 		 */
 		_sendQueue: function() {
 			// 取出消息队列最前面的一条发送请求
-			var request = this.queue.shift();
-			this.busy = false;
+			var request = messager.queue.shift();
+			messager.busy = false;
 
 			if (!request) {
 				return false;
@@ -449,10 +451,10 @@ define(function(require, exports, module) {
 			// 消息类型
 			var type = request.shift();
 			// 消息方法
-			var func = this[type];
+			var func = messager[type];
 
 			if (util.isFunc(func)) {
-				func.call(this, request);
+				func.call(messager, request);
 			}
 		},
 
@@ -524,6 +526,68 @@ define(function(require, exports, module) {
 				}
 				receivers.push.apply(receivers, receiver.getChilds(true));
 			}
+
+			return this._notifySend(msg, callback, context);
+		},
+
+		/**
+		 * 向指定模块实例发送消息
+		 * @param  {Object}   sender   [发送消息的模块实例]
+		 * @param  {Mix}      receiver [接受消息的模块实例，实例名称或者对象]
+		 * @param  {String}   name     [发送的消息名称]
+		 * @param  {Mix}      param    [<可选>附加消息参数]
+		 * @param  {Function} callback [<可选>发送完毕的回调函数，可在回调中指定回应数据]
+		 * @param  {Object}   context  [执行环境]
+		 */
+		send: function(sender, receiver, name, param, callback, context) {
+			// 是否处于忙碌状态
+			if (this.busy) {
+				this.queue.push(['send', sender, receiver, name, param, callback, context]);
+				return false;
+			}
+			this.busy = true;
+
+			// 根据名称获取系统实例
+			function _getInstanceByName(name) {
+				var target = null;
+				util.each(sysCaches, function(cache) {
+					if ((cache._collections && cache._collections.name) === name) {
+						target = cache;
+						return false;
+					}
+				});
+				return target;
+			};
+
+			// 找到receiver，名称可能为superName.fatherName.childName的情况
+			var ns = null, stop = false, tmp, tar;
+			if (util.isString(receiver)) {
+				ns = receiver.split('.');
+
+				// 有层级
+				while (ns.length > 1) {
+					if (!tmp) {
+						tmp = _getInstanceByName(ns.shift());
+						tar = tmp ? tmp.getChild(ns[0]) : null;
+					}
+					else {
+						tar = tmp.getChild(ns.shift());
+					}
+				}
+
+				if (util.isObject(tar)) {
+					receiver = tar;
+				}
+			}
+
+			if (!util.isObject(receiver)) {
+				util.error('module: \'' + receiver + '\' is not found in sysCaches!');
+				return false;
+			}
+
+			var msg = this._create(sender, name, param);
+			msg.to = receiver;
+			this._trigger(receiver, msg);
 
 			return this._notifySend(msg, callback, context);
 		},
@@ -640,7 +704,7 @@ define(function(require, exports, module) {
 		 * 发送/处理请求队列中的请求
 		 */
 		_sendQueue: function() {
-			var queue = this.queue;
+			var queue = ajax.queue;
 
 			// 取出请求队列中的第一条
 			for (var property in queue) {
@@ -650,7 +714,7 @@ define(function(require, exports, module) {
 						continue;
 					}
 					// 执行请求
-					this._execute(queue[property]);
+					ajax._execute(queue[property]);
 					break;
 				}
 			}
@@ -893,6 +957,89 @@ define(function(require, exports, module) {
 	exports.sysCaches = sysCaches;
 
 	/**
+	 * 解析子模块路径，返回真实路径和导出点
+	 * @param   {String}  uri  [子模块uri]
+	 * @return  {Object}       [导出对象]
+	 */
+	function resolveUri(uri) {
+		if (!util.isString(uri)) {
+			return {};
+		}
+
+		// 根据"."拆解uri，处理/file/to/ptah.base的情况
+		var point = uri.lastIndexOf('.');
+		// 模块路径
+		var path = '';
+		// 模块导出点
+		var expt = null;
+
+		if (point !== -1) {
+			path = uri.substr(0, point);
+			expt = uri.substr(point + 1);
+		}
+		else {
+			path = uri;
+			expt = null;
+		}
+
+		return {
+			'path': path,
+			'expt': expt
+		};
+	};
+
+	/**
+	 * 处理子模块的回调，实现异步回调函数按队列触发
+	 * @param  {Mix}       callback  [回调函数]
+	 * @param  {Object}    context   [回调函数执行环境]
+	 * @param  {Array}     args      [callback回调参数]
+	 */
+	var syncCount = 0, syncQueue = [];
+	function SyncCreate(callback, context, args) {
+		var sync, cb, ct, ags;
+		// 异步创建的调用计数
+		if (callback === null) {
+			syncCount++;
+		}
+		// 已完成全部异步请求
+		else if (callback === true) {
+			syncCount--;
+
+			// 依次从最后的回调开始处理，防止访问未创建完成的模块而出错
+			while (syncCount === 0 && syncQueue.length) {
+				sync = syncQueue.pop();
+				// 回调函数
+				cb = sync[0];
+				// 执行环境
+				ct = sync[1];
+				// 回调参数
+				ags = sync[2];
+
+				// callback为属性值
+				if (util.isString(cb)) {
+					cb = ct[cb];
+				}
+
+				if (util.isFunc(cb)) {
+					cb.apply(ct, ags);
+				}
+			}
+		}
+		// 回调请求，先放入队列
+		else if (util.isFunc(callback)) {
+			syncQueue.push([callback, context, args]);
+		}
+	};
+	exports.sync = function(done) {
+		if (done) {
+			SyncCreate(true);
+		}
+		else {
+			SyncCreate(null);
+		}
+	}
+
+	/**
 	 * Module 系统模块基础类，实现所有模块的通用方法
 	 * childArray Array  对应该模块下所有子模块数组字段
 	 * childMap   Object 子模块名称集合映射字段
@@ -994,24 +1141,16 @@ define(function(require, exports, module) {
 				config = null;
 			}
 
-			// callback作为属性值
-			if (util.isString(callback)) {
-				callback = this[callback];
-			}
-
-			// 根据"."拆解uri，处理/file/to/ptah.base的情况
-			var point = uri.lastIndexOf('.');
-			// 模块路径
-			var path = '';
+			// 解析子模块路径
+			var resolve = resolveUri(uri);
+			// 子模块真实路径
+			var path = resolve.path;
 			// 模块导出点
-			var expt = null;
-			if (point !== -1) {
-				path = uri.substr(0, point);
-				expt = uri.substr(point + 1);
-			}
+			var expt = resolve.expt;
 
 			// 异步加载模块
-			var self = this, child = null;
+			var self = this, args = null;
+			SyncCreate(null);
 			require.async(path, function(Class) {
 				// 取导出点
 				if (Class && expt) {
@@ -1020,15 +1159,67 @@ define(function(require, exports, module) {
 
 				// 创建子模块
 				if (Class) {
-					child = self.create(name, Class, config);
-					// 执行回调
-					if (child) {
-						callback.call(self || WIN);
-					}
+					args = Array(1);
+					SyncCreate(callback, self, args);
+					args[0] = self.create(name, Class, config);
 				}
+				SyncCreate(true);
 			});
 
 			return this;
+		},
+
+		/**
+		 * 异步创建子模块集合
+		 * @param   {Object}    modsMap   [子模块名称与路径和配置的映射关系]
+		 * @param   {Function}  callback  [全部子模块创建完后的回调函数]
+		 */
+		createArrayAsync: function(modsMap, callback) {
+			var self = this;
+			// 子模块数组
+			var modArray = [];
+			// 子模块真实路径集合
+			var pathArray = [];
+
+			util.each(modsMap, function(item, index) {
+				if (item.path && item.name && item.target) {
+					modArray.push({
+						'name'  : item.name,
+						'expt'  : item.expt,
+						'target': item.target,
+						'config': item.config
+					});
+					pathArray.push(item.path);
+				}
+			});
+
+			SyncCreate(null);
+			require.async(pathArray, function() {
+				var args = util.argumentsToArray(arguments);
+				var retMods = [], mod, name, expt, config, child;
+
+				SyncCreate(callback, self, [retMods]);
+				util.each(args, function(Class, index) {
+					mod = modArray[index];
+					name = mod.name;
+					expt = mod.expt;
+					config = util.extend(mod.config, {
+						'target': mod.target
+					});
+
+					// 取导出点
+					if (Class && expt) {
+						Class = Class[expt];
+					}
+
+					// 创建子模块
+					if (Class) {
+						child = self.create(name, Class, config);
+						retMods.push(child);
+					}
+				});
+				SyncCreate(true);
+			});
 		},
 
 		/**
@@ -1207,6 +1398,42 @@ define(function(require, exports, module) {
 			}
 
 			return messager.broadcast(this, name, param, callback, this);
+		},
+
+		/**
+		 * 向指定的模块发送消息
+		 * @param   {Mix}       receiver  [消息接受模块实例或者名称以.分隔，要求完整的层级]
+		 * @param   {String}    name      [发送的消息名称]
+		 * @param   {Mix}       param     [<可选>附加消息参数]
+		 * @param   {Function}  callback  [<可选>发送完毕的回调函数，可在回调中指定回应数据]]
+		 */
+		send: function(receiver, name, param, callback) {
+			if (!receiver) {
+				return false;
+			}
+
+			if (!util.isString(name)) {
+				return false;
+			}
+
+			// 不传param
+			if (util.isFunc(param)) {
+				callback = param;
+				param = null;
+			}
+
+			// callback为属性值，加上on前缀
+			if (util.isString(callback)) {
+				callback = 'on' + util.ucFirst(callback);
+				callback = this[callback];
+			}
+
+			// 不传callback
+			if (!callback) {
+				callback = null;
+			}
+
+			messager.send(self, receiver, name, param, callback, self);
 		}
 	});
 	exports.Module = Module;
@@ -1236,9 +1463,7 @@ define(function(require, exports, module) {
 				return false;
 			}
 
-			this.setTimeout(function() {
-				return messager.globalCast(name, param);
-			});
+			return messager.globalCast(name, param);
 		}
 	});
 	exports.core = new Core();
@@ -1270,7 +1495,11 @@ define(function(require, exports, module) {
 				// 模板拉取请求参数(用于输出不同模板的情况)
 				'tplParam': null,
 				// mvvvm对象模型
-				'vModel'  : null
+				'vModel'  : null,
+				// 视图渲染完成后的回调函数，默认调用viewReady方法
+				'cbRender': 'viewReady',
+				// 从模板创建子模块后，是否移除节点的模块路径标记
+				'tidyNode': true
 			});
 			// DOM对象
 			this._domObject = null;
@@ -1359,10 +1588,67 @@ define(function(require, exports, module) {
 				this._domObject.appendTo(target);
 			}
 
-			// 调用子模块的viewReady(视图渲染完毕)方法
-			if (util.isFunc(this.viewReady)) {
-				this.viewReady();
+			// 调用子模块的(视图渲染完毕)后续回调方法
+			var cb = this[c.cbRender];
+			if (util.isFunc(cb)) {
+				cb.call(this);
 			}
+		},
+
+		/**
+		 * 创建模板中所有标记的子模块，子模块创建的目标容器即为标记的DOM节点
+		 * @param   {Object}    configMap  [模块配置映射]
+		 * @param   {Function}  callback   [全部子模块创建完成后的回调]
+		 */
+		createTplModules: function(configMap, callback) {
+			var modsMap = {};
+			var dom = this.getDOM();
+			var c = this.getConfig();
+			var config = util.isObject(configMap) ? configMap : {};
+
+			// 收集子模块定义节点
+			var node, resolve, uri, path, name;
+			var modNodes = dom.find('[m-name]');
+			modNodes.each(function() {
+				node = jquery(this);
+				uri = node.attr('m-module');
+				name = node.attr('m-name');
+
+				// 是否去掉路径节点记录
+				if (c.tidyNode) {
+					node.removeAttr('m-module');
+				}
+
+				// 解析子模块路径
+				resolve = resolveUri(uri);
+
+				// 记录子模块
+				modsMap[name] = {
+					// 子模块名称
+					'name'  : name,
+					// 子模块真实路径
+					'path'  : resolve.path,
+					// 子模块导出点
+					'expt'  : resolve.expt,
+					// 子模块配置参数
+					'config': config[name],
+					// 子模块目标容器
+					'target': node
+				};
+			});
+
+			// callback为属性值
+			if (util.isString(callback)) {
+				callback = this[callback];
+			}
+
+			// 没有特殊指定callback默认调用afterBuild
+			if (!callback) {
+				callback = this.afterBuild;
+			}
+
+			// 批量创建子模块集合
+			this.createArrayAsync(modsMap, callback);
 		},
 
 		/**

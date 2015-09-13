@@ -80,6 +80,19 @@ define(function(require, exports, module) {
 		},
 
 		/**
+		 * 返回栏目页容器
+		 * @return  {Object}  [栏目页jQueryDOM对象]
+		 */
+		getBlogAchive: function() {},
+
+		/**
+		 * 返回文章页容器
+		 * @return  {Object}  [文章页jQueryDOM对象]
+		 */
+		getBlogArticle: function() {},
+
+
+		/**
 		 * createBlank 返回空白容器<与index/blog同级>
 		 * @param  {JSON} config   [配置参数]
 		 * @return {Object}        [容器对象]

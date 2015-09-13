@@ -10,17 +10,16 @@
 			// 控制器目录
 			'@controller' :	'controller',
 			// 项目目录
+			'@project'    : 'project',
 			'@pages'      : 'project/pages',
 			'@modules'    : 'project/modules',
+			'@template'   : 'project/template',
 			// 其他目录
 			'@boot'       : 'boot',
-			'@view'       : 'view',
 			'@plugins'    : 'plugins'
 		},
 		'alias': {
 			'app'    : '@core/app.js',
-			'view'   : '@view/view.js',
-			'layout' : '@view/layout.js',
 			'util'   : '@core/util.js',
 			'jquery' : '@dist/jquery/jquery-2.1.4.min.js'
 		},
@@ -71,14 +70,14 @@
 			// 加载基础模块
 			sea.use([
 				'app',
-				'layout',
 				'@boot/config',
 				'@base/cookie',
 				'@base/animate',
-				'@plugins/router'
+				'@plugins/router',
+				'@project/layout'
 			], appInit);
 		},
-		function(app, layout, config, cookie, animate, router) {
+		function(app, config, cookie, animate, router, layout) {
 			// 将系统配置和基础模块挂载到app下
 			app.init(config, {
 				'lang'      : lang,
@@ -92,11 +91,16 @@
 				win.app = app;
 			}
 
-			// 初始化布局
-			layout.init();
-
+			// 创建整体布局layout模块
+			var body = app.jquery('body').empty();
+			var mod = app.core.create('layout', layout.base, {
+				'target': body
+			});
+			mod.broadcast('test');
 			// 启动路由监听
 			router.start();
+
+
 		}
 	];
 

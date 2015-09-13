@@ -1,0 +1,25 @@
+<!-- 列表页 -->
+<div class="P-archiveList">
+	<section class="P-archiveListItem" v-repeat="item in archives">
+		<!-- 标题 -->
+		<div class="P-archiveListItemTitle">
+			<h2>
+				<a v-attr="href: item.href, title: item.title" class="title" v-text="item.title"></a>
+			</h2>
+		</div>
+		<!-- 摘要&缩略图 -->
+		<article>
+			<p class="abstract" v-html="item.content"></p>
+			<span class="cover" v-html="item.cover"></span>
+		</article>
+		<!-- 其他信息 -->
+		<div class="P-archiveListItemInfo">
+			<span class="tag" title="发布时间">
+				<i class="fa fa-calendar mr3"></i>{{item.date}}
+			</span>
+			<span class="tag mr2 ml2" title="评论数">
+				<i class="fa fa-comments mr3"></i>{{item.comments}}
+			</span>
+		</div>
+	</section>
+</div>

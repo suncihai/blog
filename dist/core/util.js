@@ -221,29 +221,48 @@ define(function(require, util) {
 	}
 
 	/**
-	 * each 遍历数组 (TODO:遍历对象)
-	 * @param  {Array}     items     [数组]
-	 * @param  {Fuction}   callback  [回调函数]
-	 * @param  {Object}    context   [作用域]
+	 * each 遍历数组
+	 * @param  {Array,Object}  items     [数组或对象]
+	 * @param  {Fuction}       callback  [回调函数]
+	 * @param  {Object}        context   [作用域]
 	 */
 	util.each = function(items, callback, context) {
-		if (!isArray(items) || !isFunc(callback)) {
-			return false;
-		}
 		if (!context) {
 			context = WIN;
 		}
-		var ret;
-		for (var i = 0; i < items.length; i++) {
-			ret = callback.call(context, items[i], i);
-			// 回调返回false退出循环
-			if (ret === false) {
-				break;
+		var ret, i;
+		if (isArray(items)) {
+			for (i = 0; i < items.length; i++) {
+				ret = callback.call(context, items[i], i);
+
+				// 回调返回false退出循环
+				if (ret === false) {
+					break;
+				}
+
+				// 回调返回null删除当前选项
+				if (ret === null) {
+					items.splice(i, 1);
+					i--;
+				}
 			}
-			// 回调返回null删除当前选项
-			if (ret === null) {
-				items.splice(i, 1);
-				i--;
+		}
+		else if (isObject(items)) {
+			for (i in items) {
+				if (!has(i, items)) {
+					continue;
+				}
+				ret = callback.call(context, items[i], i);
+
+				// 回调返回false退出循环
+				if (ret === false) {
+					break;
+				}
+
+				// 回调返回null删除当前选项
+				if (ret === null) {
+					delete items[i];
+				}
 			}
 		}
 	}

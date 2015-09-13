@@ -1,78 +1,62 @@
 // 列表页样式
-.P-archives{
-	.P-archive{
-		&List{
-			width: @blogWidth;
-			min-height: 200px;
-			.center;
-			&Title{
-				.title{
+.P-archive  {
+	&List {
+		width: @blogWidth;
+		min-height: 200px;
+		.center;
+		// 每一条列表
+		&Item{
+			padding: 1.5em 0;
+			box-sizing: border-box;
+			border-radius: 2px;
+			border-bottom: 1px dashed #999;
+			article {
+				margin: 1em;
+				padding: 1em;
+				color: #444;
+				line-height: 150%;
+				background: #FAF9F9;
+				border-left: 8px solid rgba(34,182,171,.38);
+				.abstract {
+					display: inline-block;
+					font-family: @zhFontFamily;
+				}
+				// .abstract:hover {
+				// 	color: #000;
+				// }
+				.cover {
+					max-width: 30%;
+					display: inline-block;
+					margin-top: 15px;
+					border: 1px solid #DDD;
+				}
+			}
+			&:last-child {
+				border-bottom: none;
+			}
+			&Title {
+				.title {
 					display: inline-block;
 					font-size: 2.4rem;
+					padding-left: .5em;
 					font-weight: normal;
 					color: #1EA096;
 					transition: color 218ms cubic-bezier(0.42,0,.58,1);
-				}
-				.title:hover{
-					color: #F27900;
+					&:hover {
+						color: #F27900;
+					}
 				}
 			}
-			&Info{
+			&Info {
 				padding: 0 0 1em 1em;
 				color: #666;
 				font-size: 1.4rem;
 				// font-style: italic;
 			}
-			&Pager{
-				border-top: 3px solid #EDEDED;
-				background: #F5F5F4;
-			}
-		}
-		&Pager{
-			border-top: 1px solid #E6EAEA;
-			background: rgb(245,245,245);
 		}
 	}
-	.sectionItem{
-		padding: 1.5em 0;
-		box-sizing: border-box;
-		border-radius: 2px;
-		border-bottom: 1px dashed #999;
-		h2{
-			// font-family: '黑体';
-			padding: 6px 0;
-			font-weight: normal;
-			font-size: 2.2rem;
-			padding-left: 10px;
-		}
-		article{
-			margin: 1em;
-			padding: 1em;
-			color: #444;
-			line-height: 150%;
-			background: #FAF9F9;
-			border-left: 8px solid rgba(34,182,171,.38);
-			.abstract{
-				display: inline-block;
-				font-family: @zhFontFamily;
-			}
-			// .abstract:hover{
-			// 	color: #000;
-			// }
-			.cover{
-				max-width: 30%;
-				display: inline-block;
-				margin-top: 15px;
-				border: 1px solid #DDD;
-			}
-		}
+	&Pager {
+		border-top: 1px solid #E6EAEA;
+		background: rgb(245,245,245);
 	}
-	.sectionItem:last-child{
-		border-bottom: none;
-	}
-	// section:hover{
-	// 	background: #FFFFF0;
-	// 	border: 1px dashed #CCC;
-	// 	border-bottom: 1px dashed #DDD;
-	// }
 }

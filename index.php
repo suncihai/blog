@@ -24,10 +24,6 @@
 		text-align: center; font-size: 35px; color: #666; text-shadow: 2px 2px 3px #CCC;
 	}
 	</style>
-	<script type="text/javascript">
-	var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-	document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_5606127'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s96.cnzz.com/stat.php%3Fid%3D5606127' type='text/javascript'%3E%3C/script%3E"));
-	</script>
 </head>
 <body>
 	<noscript>请开启浏览器JavaScript哦~~~~</noscript>

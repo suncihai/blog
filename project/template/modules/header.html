@@ -1,0 +1,21 @@
+<!-- logo -->
+<div class="M-headerLogo">
+	<a href="/blog/" class="logoAnchor" v-text="logo"></a>
+</div>
+<!-- 导航 -->
+<div class="M-headerNav">
+	<ul>
+		<li v-repeat="nav in navs">
+			<a v-attr="href: nav.link" v-text="nav.name"></a>
+		</li>
+	</ul>
+</div>
+<!-- 右侧工具栏 -->
+<div class="M-headerTool">
+	<div class="M-headerToolSearch">
+		<input type="text" class="searchIpt animated" placeholder="请输入关键字">
+		<div class="searchBtn" title="搜索文章">
+			<i class="fa fa-search"/>
+		</div>
+	</div>
+</div>

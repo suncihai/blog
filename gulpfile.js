@@ -3,6 +3,8 @@ var gulp = require('gulp');
 var less = require('gulp-less');
 // js语法检测
 var jshint = require('gulp-jshint');
+// 文件重命名
+var rename = require('gulp-rename');
 // css压缩
 var minify = require('gulp-minify-css');
 
@@ -17,7 +19,11 @@ var jsFiles = [
 	'boot/*.js',
 	'controller/*.js',
 	'project/**/*.js',
-	'view/*.js'
+	'dist/base/*.js',
+	'dist/core/*.js',
+	'plugins/router.js',
+	'project/**/*.js',
+	'project/*.js'
 ];
 // js语法检测配置
 var jshintConfig = {
@@ -56,7 +62,8 @@ gulp.task('compile', function() {
 	gulp.src('resources/less/app.less')
 		.pipe(less())
 		.pipe(minify())
-		.pipe(gulp.dest('resources/css'));
+		.pipe(rename({'suffix': '.min'}))
+		.pipe(gulp.dest('resources/css/'));
 });
 
 
@@ -71,12 +78,13 @@ gulp.task('jshint', function() {
 // gulp start 开启任务监听
 gulp.task('start', function() {
 	// 初始化时开启一次
-	gulp.run('compile', 'jshint');
+	// gulp.run('compile', 'jshint');
+	gulp.run('compile');
 
 	// 监听js文件变化
-	gulp.watch(jsFiles, function() {
-		gulp.run('jshint');
-	});
+	// gulp.watch(jsFiles, function() {
+	// 	gulp.run('jshint');
+	// });
 
 	// 监听less文件变化
 	gulp.watch(lessFiles, function() {

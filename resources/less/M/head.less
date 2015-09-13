@@ -1,76 +1,68 @@
 .G-frameBodyBlogHead{
-	display: none;
+	// display: none;
 	width: 100%;
 	height: @headHeight;
 	overflow: hidden;
 	background: #282828;
 	border-bottom: 1px solid #125454;
 	box-shadow: 0 1px 1px #22A5A5;
-	.logoAnchor{
-		display: block;
-		position: relative;
-		// height: 50px;
-		color: #8FE8E2;
-		font-size: 2.6rem;
-		font-weight: bold;
-		i{
-			font-style: normal;
-			color: #51B6C2;
-			text-shadow: -1px 0px 5px #1EA096;
-		}
-	}
-	// .logoAnchor:hover{
-	// 	color: #ddff00;
-	// }
-	ul{
-		float: left;
-		padding-left: 4em;
-	}
-	li{
-		display: inline-block;
-		margin-right: 2em;
-		font-size: 1.8rem;
-		a{
-			color: #eee;
-			letter-spacing: 1px;
-			-webkit-transition: color 218ms cubic-bezier(0.3,0,.6,1);
-			transition: all 218ms cubic-bezier(0.3,0,.6,1);
-		}
-		a:hover, a.act{
-			color: #8FE8E2;
-			text-shadow: -1px 0px 6px #22B6AB;
-		}
-	}
 }
 
-.M-head{
+.M-header {
 	width: @blogWidth;
 	height: 100%;
 	position: relative;
 	.center;
-	// display: -webkit-flex;
-	// display: flex;
-	&Logo{
-		// -webkit-flex: 1;
-		// flex: 1;
+	&Logo {
 		.dib;
 		.fl;
 		max-width: 10em;
 		height: 100%;
 		line-height: @headHeight;
 		z-index: 3;
+		.logoAnchor {
+			display: block;
+			position: relative;
+			// height: 50px;
+			color: #8FE8E2;
+			font-size: 2.6rem;
+			font-weight: bold;
+			i {
+				font-style: normal;
+				color: #51B6C2;
+				text-shadow: -1px 0px 5px #1EA096;
+			}
+			// &:hover{
+			// 	color: #ddff00;
+			// }
+		}
 	}
-	&Nav{
-		// -webkit-flex: 3;
-		// flex: 3;
+	&Nav {
 		.dib;
+		.fl;
 		height: 100%;
 		line-height: @headHeight;
 		z-index: 2;
+		ul {
+			padding-left: 4em;
+		}
+		li {
+			display: inline-block;
+			margin-right: 2em;
+			font-size: 1.8rem;
+			a {
+				color: #eee;
+				letter-spacing: 1px;
+				-webkit-transition: color 218ms cubic-bezier(0.3,0,.6,1);
+				transition: all 218ms cubic-bezier(0.3,0,.6,1);
+			}
+			a:hover, a.act{
+				color: #8FE8E2;
+				text-shadow: -1px 0px 6px #22B6AB;
+			}
+		}
 	}
-	&Tool{
-		// -webkit-flex: 1;
-		// flex: 1;
+	&Tool {
 		position: absolute;
 		right: 0;
 		top: 0;
