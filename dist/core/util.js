@@ -2,7 +2,7 @@
  * [工具方法模块]
  */
 define(function(require, util) {
-	var UDF;
+	var UDF, LANG;
 	var WIN = window;
 	var OP = Object.prototype;
 	var AP = Array.prototype;
@@ -131,6 +131,11 @@ define(function(require, util) {
 	util.isPlainObject = isPlainObject;
 	util.isJquery = isJquery;
 
+	// 多语言转换函数，若未定义则原样返回
+	LANG = !isFunc(WIN && WIN.T) ? function(text) {
+		return text;
+	} : WIN.T;
+
 	/**
 	 * 日志函数
 	 */
@@ -146,6 +151,23 @@ define(function(require, util) {
 			cons.error(arguments[0]);
 		}
 	}
+
+	/**
+	 * 读取对象（数据）属性
+	 * @param   {Object}  data  [对象数据]
+	 * @param   {String}  name  [属性名称]
+	 * @return  {Mix}           [读取结果]
+	 */
+	util.get = function(data, name) {}
+
+	/**
+	 * 设置对象（数据）属性
+	 * @param   {Object}  data  [对象数据]
+	 * @param   {String}  name  [属性名称]
+	 * @return  {Mix}     value [设置值]
+	 * @return  {Object}  data  [对象数据]
+	 */
+	util.set = function(data, name, value) {}
 
 	/*
 	 * has 自有属性检测
@@ -396,7 +418,7 @@ define(function(require, util) {
 	 * 格式化某段时间, 返回与当前的时间差 2015-05-16 16:14:30
 	 */
 	util.prettyDate = function(dateStr) {
-		if(!isString(dateStr)) {
+		if (!isString(dateStr)) {
 			return dateStr
 		}
 		var date = new Date();
@@ -415,44 +437,44 @@ define(function(require, util) {
 		var opDate = new Date(year, month, day , hour, minute, second);
 		var secondDiff = (new Date().getTime() - opDate.getTime()) / 1000;
 		var retStr = '';
-		if(secondDiff < 60) {
-			retStr = T('刚刚');
+		if (secondDiff < 60) {
+			retStr = LANG('刚刚');
 		}
-		if(!retStr && secondDiff < 60 * 30) {
-			retStr = T('{1}分钟前', Math.ceil(secondDiff / 60));
+		if (!retStr && secondDiff < 60 * 30) {
+			retStr = LANG('{1}分钟前', Math.ceil(secondDiff / 60));
 		}
-		if(!retStr && secondDiff < 1800) {
-			retStr= T('半小时前');
+		if (!retStr && secondDiff < 1800) {
+			retStr= LANG('半小时前');
 		}
-		if(!retStr && secondDiff < 3600) {
-			retStr= T('1小时前');
+		if (!retStr && secondDiff < 3600) {
+			retStr= LANG('1小时前');
 		}
-		if(!retStr && secondDiff < 3600 * 2) {
-			retStr= T('2小时前');
+		if (!retStr && secondDiff < 3600 * 2) {
+			retStr= LANG('2小时前');
 		}
-		if(!retStr && secondDiff < 3600 * 3) {
-			retStr= T('3小时前');
+		if (!retStr && secondDiff < 3600 * 3) {
+			retStr= LANG('3小时前');
 		}
-		if(!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() == day) {
-			retStr = T('今天') + hour + ':' + minute;
+		if (!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() == day) {
+			retStr = LANG('今天') + hour + ':' + minute;
 		}
-		if(!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 1 == day) {
-			retStr = T('昨天') + hour + ':' + minute;
+		if (!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 1 == day) {
+			retStr = LANG('昨天') + hour + ':' + minute;
 		}
-		if(!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 2 == day) {
-			retStr = T('前天') + hour + ':' + minute;
+		if (!retStr && date.getFullYear() == year && date.getMonth() == month && date.getDate() - 2 == day) {
+			retStr = LANG('前天') + hour + ':' + minute;
 		}
-		if(!retStr && date.getFullYear() == year && date.getMonth() == month) {
-			retStr = T('{1}月{2}日', month + 1, day);
+		if (!retStr && date.getFullYear() == year && date.getMonth() == month) {
+			retStr = LANG('{1}月{2}日', month + 1, day);
 		}
-		if(!retStr && date.getFullYear() == year) {
-			retStr = T('今年{1}月{2}日', month + 1, day);
+		if (!retStr && date.getFullYear() == year) {
+			retStr = LANG('今年{1}月{2}日', month + 1, day);
 		}
-		if(!retStr && date.getFullYear() - 1 == year) {
-			retStr = T('去年{1}月{2}日', month + 1, day);
+		if (!retStr && date.getFullYear() - 1 == year) {
+			retStr = LANG('去年{1}月{2}日', month + 1, day);
 		}
-		if(!retStr && date.getFullYear() - year > 1) {
-			retStr = T('{1}年{2}月{3}日', year, month + 1, day);
+		if (!retStr && date.getFullYear() - year > 1) {
+			retStr = LANG('{1}年{2}月{3}日', year, month + 1, day);
 		}
 		return retStr;
 	}

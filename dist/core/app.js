@@ -2,22 +2,27 @@
  * app.js 框架核心应用模块，基础模块及其拓展的实现
  */
 define(function(require, exports, module) {
-	var UDF, WIN = window;
+	var UDF, WIN = (function() {return this})();
+
+	// Vue.js MVVM框架
+	var Vue = require('../vue/vue.min');
 	// util辅助功能函数库
 	var util = exports.util = require('./util');
 	// jquery
 	var jquery = exports.jquery = require('../jquery/jquery-2.1.4.min');
-	// Vue.js MVVM框架
-	var Vue = require('../vue/vue.min');
+
+	// 多语言转换函数，若未定义则原样返回
+	var LANG = !util.isFunc(WIN && WIN.T) ? function(text) {
+		return text;
+	} : WIN.T;
 
 
 	/*
-	 * createProto 创建并返回一个拥有指定原型的原型对象
+	 * 创建一个拥有指定原型的原型对象
 	 * @param  {Object} proto   [指定的原型对象]
 	 * @return {Object} pointer [指向proto原型的原型对象]
 	 */
 	function createProto(proto) {
-		// 返回的原型指针对象
 		var pointer = null;
 		var Obc = Object.create;
 		var standard = util.isFunc(Obc);
@@ -41,20 +46,7 @@ define(function(require, exports, module) {
 	 */
 	function Root() {};
 	Root.extend = function(proto) {
-		// 父原型对象，相当于proto要从parent继承
 		var parent = this.prototype;
-
-		/**
-		 * 超类，实现在子类中对父类的调用
-		 * @param {String} method [调用父类的方法]
-		 * @param {Object} args   [传入的参数数组]
-		 */
-		function Super(method, args) {
-			var func = parent[method];
-			if (util.isFunc(func)) {
-				func.apply(this, args);
-			}
-		}
 
 		/**
 		 * 返回(继承后)的类
@@ -63,15 +55,25 @@ define(function(require, exports, module) {
 		function Class(config) {};
 		var classProto = Class.prototype = createProto(parent);
 
-		// 写入自身属性或方法
 		for (var property in proto) {
 			if (util.has(property, proto)) {
 				classProto[property] = proto[property];
 			}
 		}
 
+		/**
+		 * 子类对父类的调用
+		 * @param {String} method [调用父类的方法]
+		 * @param {Object} args   [传入的参数数组]
+		 */
+		classProto.Super = function(method, args) {
+			var func = parent[method];
+			if (util.isFunc(func)) {
+				func.apply(this, args);
+			}
+		}
+
 		proto = null;
-		classProto.Super = Super;
 		classProto.constructor = Class;
 		Class.extend = this.extend;
 		return Class;
@@ -79,7 +81,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * cover 子模块覆盖父模块的同名配置
+	 * 模块配置参数覆盖
 	 * @param  {Object} child  [子类模块配置参数]
 	 * @param  {Object} parent [父类模块配置参数]
 	 * @return {Object}        [覆盖后的配置参数]
@@ -121,20 +123,16 @@ define(function(require, exports, module) {
 				data = data[ns.shift()];
 			}
 			if (ns.length > 1) {
-				// 设置值, 但是父层配置不存在
 				if (set) {
 					return false;
 				}
-				// 父层已经删除
 				if (remove)	{
 					return true;
 				}
-				// 值不存在, 不能获取
 				return UDF;
 			}
 			name = ns[0];
 		}
-		// 根节点不能删除
 		else {
 			return data;
 		}
@@ -590,6 +588,7 @@ define(function(require, exports, module) {
 
 			var msg = this._create(sender, name, param);
 			msg.to = receiver;
+
 			this._trigger(receiver, msg);
 
 			this._notifySend(msg, callback, context);
@@ -961,46 +960,6 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * sysCaches 系统模块实例缓存队列
-	 * 模块的唯一id对应模块的实例
-	 */
-	var sysCaches = {'id': 1, 'length': 0};
-	exports.sysCaches = sysCaches;
-
-	/**
-	 * 解析子模块路径，返回真实路径和导出点
-	 * @param   {String}  uri  [子模块uri]
-	 * @return  {Object}       [导出对象]
-	 */
-	function resolveUri(uri) {
-		if (!util.isString(uri)) {
-			return {};
-		}
-
-		// 根据"."拆解uri，处理/file/to/ptah.base的情况
-		var point = uri.lastIndexOf('.');
-		// 模块路径
-		var path = '';
-		// 模块导出点
-		var expt = null;
-
-		if (point !== -1) {
-			path = uri.substr(0, point);
-			expt = uri.substr(point + 1);
-		}
-		else {
-			path = uri;
-			expt = null;
-		}
-
-		return {
-			'path': path,
-			'expt': expt
-		};
-	};
-
-
-	/**
 	 * syncCount 回调计数器
 	 * syncQueue 回调队列
 	 */
@@ -1053,6 +1012,46 @@ define(function(require, exports, module) {
 		}
 	};
 	exports.sync = Sync;
+
+
+	/**
+	 * sysCaches 系统模块实例缓存队列
+	 * 模块的唯一id对应模块的实例
+	 */
+	var sysCaches = {'id': 1, 'length': 0};
+	exports.sysCaches = sysCaches;
+
+	/**
+	 * 解析子模块路径，返回真实路径和导出点
+	 * @param   {String}  uri  [子模块uri]
+	 * @return  {Object}       [导出对象]
+	 */
+	function resolveUri(uri) {
+		if (!util.isString(uri)) {
+			return {};
+		}
+
+		// 根据"."拆解uri，处理/file/to/ptah.base的情况
+		var point = uri.lastIndexOf('.');
+		// 模块路径
+		var path = '';
+		// 模块导出点
+		var expt = null;
+
+		if (point !== -1) {
+			path = uri.substr(0, point);
+			expt = uri.substr(point + 1);
+		}
+		else {
+			path = uri;
+			expt = null;
+		}
+
+		return {
+			'path': path,
+			'expt': expt
+		};
+	};
 
 	/**
 	 * Module 系统模块基础类，实现所有模块的通用方法
@@ -1477,7 +1476,7 @@ define(function(require, exports, module) {
 				return false;
 			}
 
-			return messager.globalCast(name, param);
+			messager.globalCast(name, param);
 		}
 	});
 	exports.core = new Core();
