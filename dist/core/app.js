@@ -454,7 +454,7 @@ define(function(require, exports, module) {
 			var func = messager[type];
 
 			if (util.isFunc(func)) {
-				func.call(messager, request);
+				func.apply(messager, request);
 			}
 		},
 
@@ -468,8 +468,9 @@ define(function(require, exports, module) {
 		 */
 		fire: function(sender, name, param, callback, context) {
 			// 是否处于忙碌状态
-			if (this.busy) {
+			if (this.busy || syncCount) {
 				this.queue.push(['fire', sender, name, param, callback, context]);
+				Sync(this._sendQueue, this);
 				return false;
 			}
 			this.busy = true;
@@ -494,7 +495,7 @@ define(function(require, exports, module) {
 				receiver = receiver.getParent();
 			}
 
-			return this._notifySend(msg, callback, context);
+			this._notifySend(msg, callback, context);
 		},
 
 		/**
@@ -502,8 +503,9 @@ define(function(require, exports, module) {
 		 */
 		broadcast: function(sender, name, param, callback, context) {
 			// 是否处于忙碌状态
-			if (this.busy) {
+			if (this.busy || syncCount) {
 				this.queue.push(['broadcast', sender, name, param, callback, context]);
+				Sync(this._sendQueue, this);
 				return false;
 			}
 			this.busy = true;
@@ -527,7 +529,7 @@ define(function(require, exports, module) {
 				receivers.push.apply(receivers, receiver.getChilds(true));
 			}
 
-			return this._notifySend(msg, callback, context);
+			this._notifySend(msg, callback, context);
 		},
 
 		/**
@@ -541,8 +543,9 @@ define(function(require, exports, module) {
 		 */
 		send: function(sender, receiver, name, param, callback, context) {
 			// 是否处于忙碌状态
-			if (this.busy) {
+			if (this.busy || syncCount) {
 				this.queue.push(['send', sender, receiver, name, param, callback, context]);
+				Sync(this._sendQueue, this);
 				return false;
 			}
 			this.busy = true;
@@ -589,7 +592,7 @@ define(function(require, exports, module) {
 			msg.to = receiver;
 			this._trigger(receiver, msg);
 
-			return this._notifySend(msg, callback, context);
+			this._notifySend(msg, callback, context);
 		},
 
 		/**
@@ -598,6 +601,14 @@ define(function(require, exports, module) {
 		 * @param  {Mix}      param    [<可选>附加消息参数]
 		 */
 		globalCast: function(name, param) {
+			// 是否处于忙碌状态
+			if (this.busy || syncCount) {
+				this.queue.push(['globalCast', name, param]);
+				Sync(this._sendQueue, this);
+				return false;
+			}
+			this.busy = false;
+
 			var receiver = null, func = null;
 			var msg = this._create('core', name, param);
 			for (var cls in sysCaches) {
@@ -988,24 +999,35 @@ define(function(require, exports, module) {
 		};
 	};
 
+
 	/**
-	 * 处理子模块的回调，实现异步回调函数按队列触发
-	 * @param  {Mix}       callback  [回调函数]
-	 * @param  {Object}    context   [回调函数执行环境]
-	 * @param  {Array}     args      [callback回调参数]
+	 * syncCount 回调计数器
+	 * syncQueue 回调队列
 	 */
 	var syncCount = 0, syncQueue = [];
-	function SyncCreate(callback, context, args) {
+	/**
+	 * 处理模块异步通信和回调，实现回调函数按队列触发
+	 * @param  {Mix}     callback  [回调函数]
+	 * @param  {Object}  context   [回调函数执行环境]
+	 * @param  {Array}   args      [callback回调参数]
+	 *
+	 *   Sync(null)                   : 回调计数开始
+	 *   Sync(true)                   : 回调计数结束
+	 *   Sync(callback, context, args): 放入回调队列
+	 *
+	 */
+	function Sync(callback, context, args) {
 		var sync, cb, ct, ags;
-		// 异步创建的调用计数
+
+		// 回调计数开始
 		if (callback === null) {
 			syncCount++;
 		}
-		// 已完成全部异步请求
+		// 回调计数结束（已完成全部异步请求）
 		else if (callback === true) {
 			syncCount--;
 
-			// 依次从最后的回调开始处理，防止访问未创建完成的模块而出错
+			// 依次从最后的回调开始处理，防止访问未创建完成的模块
 			while (syncCount === 0 && syncQueue.length) {
 				sync = syncQueue.pop();
 				// 回调函数
@@ -1025,19 +1047,12 @@ define(function(require, exports, module) {
 				}
 			}
 		}
-		// 回调请求，先放入队列
+		// 异步请求，放入回调队列
 		else if (util.isFunc(callback)) {
 			syncQueue.push([callback, context, args]);
 		}
 	};
-	exports.sync = function(done) {
-		if (done) {
-			SyncCreate(true);
-		}
-		else {
-			SyncCreate(null);
-		}
-	}
+	exports.sync = Sync;
 
 	/**
 	 * Module 系统模块基础类，实现所有模块的通用方法
@@ -1150,7 +1165,7 @@ define(function(require, exports, module) {
 
 			// 异步加载模块
 			var self = this, args = null;
-			SyncCreate(null);
+			Sync(null);
 			require.async(path, function(Class) {
 				// 取导出点
 				if (Class && expt) {
@@ -1160,10 +1175,10 @@ define(function(require, exports, module) {
 				// 创建子模块
 				if (Class) {
 					args = Array(1);
-					SyncCreate(callback, self, args);
+					Sync(callback, self, args);
 					args[0] = self.create(name, Class, config);
 				}
-				SyncCreate(true);
+				Sync(true);
 			});
 
 			return this;
@@ -1193,12 +1208,12 @@ define(function(require, exports, module) {
 				}
 			});
 
-			SyncCreate(null);
+			Sync(null);
 			require.async(pathArray, function() {
 				var args = util.argumentsToArray(arguments);
 				var retMods = [], mod, name, expt, config, child;
 
-				SyncCreate(callback, self, [retMods]);
+				Sync(callback, self, [retMods]);
 				util.each(args, function(Class, index) {
 					mod = modArray[index];
 					name = mod.name;
@@ -1218,7 +1233,7 @@ define(function(require, exports, module) {
 						retMods.push(child);
 					}
 				});
-				SyncCreate(true);
+				Sync(true);
 			});
 		},
 
@@ -1345,7 +1360,6 @@ define(function(require, exports, module) {
 		 * @param  {String}   name     [发送的消息名称]
 		 * @param  {Mix}      param    [<可选>附加消息参数]
 		 * @param  {Function} callback [<可选>发送完毕的回调函数，可在回调中指定回应数据]
-		 * @return {Boolean}           [result]
 		 */
 		fire: function(name, param, callback) {
 			if (!util.isString(name)) {
@@ -1369,7 +1383,7 @@ define(function(require, exports, module) {
 				callback = null;
 			}
 
-			return messager.fire(this, name, param, callback, this);
+			messager.fire(this, name, param, callback, this);
 		},
 
 		/**
@@ -1397,7 +1411,7 @@ define(function(require, exports, module) {
 				callback = null;
 			}
 
-			return messager.broadcast(this, name, param, callback, this);
+			messager.broadcast(this, name, param, callback, this);
 		},
 
 		/**
@@ -1433,7 +1447,7 @@ define(function(require, exports, module) {
 				callback = null;
 			}
 
-			messager.send(self, receiver, name, param, callback, self);
+			messager.send(this, receiver, name, param, callback, this);
 		}
 	});
 	exports.Module = Module;
@@ -1524,6 +1538,7 @@ define(function(require, exports, module) {
 			var c = this.getConfig();
 			var uri = c.template, param = c.tplParam;
 			// 拉取模板文本
+			Sync(null);
 			ajax.load(uri, param, function(err, text) {
 				if (err) {
 					text = err.code + ' ' + err.message + ': ' + uri;
@@ -1531,6 +1546,7 @@ define(function(require, exports, module) {
 				}
 				self.setConfig('html', text);
 				self.render();
+				Sync(true);
 			});
 		},
 

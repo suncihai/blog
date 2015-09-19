@@ -92,11 +92,10 @@
 			}
 
 			// 创建整体布局layout模块
-			var body = app.jquery('body').empty();
-			var mod = app.core.create('layout', layout.base, {
-				'target': body
+			app.core.create('layout', layout.base, {
+				'target': app.jquery('body').empty()
 			});
-			mod.broadcast('test');
+
 			// 启动路由监听
 			router.start();
 

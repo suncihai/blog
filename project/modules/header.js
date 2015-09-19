@@ -21,9 +21,6 @@ define(function(require, exports, module) {
 			this.Super('init', arguments);
 		},
 
-		onTest: function(){console.log('header')},
-
-
 		/**
 		 * 布局视图初始化完成
 		 */

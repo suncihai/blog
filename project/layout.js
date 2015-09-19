@@ -49,8 +49,6 @@ define(function(require, exports) {
 			this.createTplModules();
 		},
 
-		onTest: function(){console.log('layout')},
-
 		/**
 		 * 子模块创建完成
 		 */

@@ -25,15 +25,13 @@ define(function(require, exports) {
 			this.Super('init', arguments);
 		},
 
-		onTest: function(){console.log('banner')},
-
 		/**
 		 * 更新栏目banner的内容
 		 */
 		onUpdateQuotations: function(ev) {
-			// var vm = this.vm.$;
-			// vm.content = ev.param;
-			// console.log('callback');
+			var vm = this.vm.$;
+			vm.content = ev.param;
+			console.log('callback', vm, ev.param);
 		}
 	});
 	exports.base = Banner;
