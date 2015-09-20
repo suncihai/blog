@@ -13,7 +13,6 @@
 			'@project'    : 'project',
 			'@pages'      : 'project/pages',
 			'@modules'    : 'project/modules',
-			'@template'   : 'project/template',
 			// 其他目录
 			'@boot'       : 'boot',
 			'@plugins'    : 'plugins'
@@ -98,15 +97,13 @@
 
 			// 启动路由监听
 			router.start();
-
-
 		}
 	];
 
 
 	// 浏览器特性判断
 	sea.use('/blog/dist/base/character', function(b) {
-		if (b.j()){
+		if (b.j()) {
 			return false;
 		}
 		// 初始化开始

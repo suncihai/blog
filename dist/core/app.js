@@ -347,13 +347,16 @@ define(function(require, exports, module) {
 
 		/**
 		 * 创建一条消息
+		 * @param  {String} type   [消息类型]
 		 * @param  {Object} sender [发送消息的模块实例]
 		 * @param  {String} name   [发送的消息名称]
 		 * @param  {Mix}    param  [<可选>附加消息参数]
 		 * @return {Object}        [消息对象]
 		 */
-		_create: function(sender, name, param) {
+		_create: function(type, sender, name, param) {
 			var message = {
+				// 消息类型
+				'type'    : type,
 				// 消息发起模块
 				'form'    : sender,
 				// 消息目标模块
@@ -465,9 +468,10 @@ define(function(require, exports, module) {
 		 * @param  {Object}   context  [执行环境]
 		 */
 		fire: function(sender, name, param, callback, context) {
+			var type = 'fire';
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
-				this.queue.push(['fire', sender, name, param, callback, context]);
+				this.queue.push([type, sender, name, param, callback, context]);
 				Sync(this._sendQueue, this);
 				return false;
 			}
@@ -477,12 +481,11 @@ define(function(require, exports, module) {
 			// 发送者全局实例缓存id
 			var id = senderCls && senderCls.id;
 			// 创建消息
-			var msg = this._create(sender, name, param);
+			var msg = this._create(type, sender, name, param);
 			// 消息接收者，先从自身开始接收
 			var receiver = sender;
 			var returns;
 
-			// 循环触发sender的子模块接收消息方法
 			while (receiver) {
 				returns = this._trigger(receiver, msg);
 				// 接收消息方法返回false不再继续冒泡
@@ -500,6 +503,7 @@ define(function(require, exports, module) {
 		 * 广播（由上往下）方式发送消息，由父模块发出，所有子模块接收
 		 */
 		broadcast: function(sender, name, param, callback, context) {
+			var type = 'broadcast';
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
 				this.queue.push(['broadcast', sender, name, param, callback, context]);
@@ -512,7 +516,7 @@ define(function(require, exports, module) {
 			// 发送者全局实例缓存id
 			var id = senderCls && senderCls.id;
 			// 创建消息
-			var msg = this._create(sender, name, param);
+			var msg = this._create(type, sender, name, param);
 			// 消息接收者集合，先从自身开始接收
 			var receivers = [sender];
 			var receiver, returns;
@@ -540,9 +544,10 @@ define(function(require, exports, module) {
 		 * @param  {Object}   context  [执行环境]
 		 */
 		send: function(sender, receiver, name, param, callback, context) {
+			var type = 'send';
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
-				this.queue.push(['send', sender, receiver, name, param, callback, context]);
+				this.queue.push([type, sender, receiver, name, param, callback, context]);
 				Sync(this._sendQueue, this);
 				return false;
 			}
@@ -586,8 +591,7 @@ define(function(require, exports, module) {
 				return false;
 			}
 
-			var msg = this._create(sender, name, param);
-			msg.to = receiver;
+			var msg = this._create(type, sender, name, param);
 
 			this._trigger(receiver, msg);
 
@@ -600,16 +604,17 @@ define(function(require, exports, module) {
 		 * @param  {Mix}      param    [<可选>附加消息参数]
 		 */
 		globalCast: function(name, param) {
+			var type = 'globalCast';
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
-				this.queue.push(['globalCast', name, param]);
+				this.queue.push([type, name, param]);
 				Sync(this._sendQueue, this);
 				return false;
 			}
 			this.busy = false;
 
 			var receiver = null, func = null;
-			var msg = this._create('core', name, param);
+			var msg = this._create(type, 'core', name, param);
 			for (var cls in sysCaches) {
 				if (!util.has(cls, sysCaches)) {
 					continue;
@@ -624,7 +629,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * 数据请求交互类
+	 * 数据请求类
 	 */
 	function Ajax() {
 		/**
@@ -786,7 +791,12 @@ define(function(require, exports, module) {
 			// 数据格式化
 			var result = null, error = null;
 			if (data && data.success && data.result) {
-				result = data.result;
+				try {
+					result = JSON.parse(LANG(JSON.stringify(data.result)));
+				}
+				catch (e) {
+					result = data.result;
+				}
 			}
 			else {
 				error = data || {
@@ -942,20 +952,96 @@ define(function(require, exports, module) {
 	 * @param  {Object}  context  [Vue实例方法执行环境]
 	 */
 	function MVVM(element, options, context) {
+		var data = {};
 		// 执行环境
 		this.context = context;
+
+		util.each(options, function(value, key) {
+			// 函数重新绑定作用域
+			if (util.isFunc(value) && Function.prototype.bind) {
+				data[key] = value.bind(context);
+			}
+			else {
+				data[key] = value;
+			}
+		});
+
+		// 初始数据备份
+		this._backup = util.clone(data);
 
 		// 创建一个内部MVVM实例
 		this._vm = new Vue({
 			'el'  : util.isJquery(element) ? element.get(0) : element,
-			'data': options
+			'data': data
 		});
 
 		// 正在监视的所有数据对象，可对其进行读写操作
 		this.$ = this._vm.$data;
 	};
 	MVVM.prototype = {
-		constructor: MVVM
+		constructor: MVVM,
+
+		/**
+		 * 获取指定数据对象
+		 * @param   {String}  key  [数据对象名称，空则返回全部数据]
+		 * @return  {Mix}          [结果]
+		 */
+		get: function(key) {
+			var vm = this.$;
+			return util.isString(key) ? vm[key] : vm;
+		},
+
+		/**
+		 * 设置数据对象的值，数组时批量设置
+		 * @param  {String}  key    [数据对象名称]
+		 * @param  {Mix}     value  [值]
+		 */
+		set: function(key, value) {
+			var vm = this.$;
+			// 批量设置
+			if (util.isArray(key) && util.isArray(value)) {
+				util.each(key, function(k, index) {
+					if (util.has(k, vm)) {
+						vm[k] = value[index];
+					}
+				});
+			}
+			else {
+				if (util.has(key, vm)) {
+					vm[key] = value;
+				}
+			}
+		},
+
+		/**
+		 * 重置数据对象为初始状态
+		 * @param   {Mix}     key  [数据对象名称，或数组，空则重置所有]
+		 */
+		reset: function(key) {
+			var vm = this.$;
+			var backup = this._backup;
+
+			// 重置单个
+			if (util.isString(key)) {
+				if (util.has(key, vm)) {
+					vm[key] = backup[key];
+				}
+			}
+			// 重置多个
+			else if (util.isArray(key)) {
+				util.each(key, function(k) {
+					if (util.has(k, vm)) {
+						vm[k] = backup[k];
+					}
+				});
+			}
+			// 重置所有
+			else {
+				util.each(vm, function(k) {
+					vm[k] = backup[k];
+				});
+			}
+		}
 	};
 
 
@@ -1012,7 +1098,6 @@ define(function(require, exports, module) {
 		}
 	};
 	exports.sync = Sync;
-
 
 	/**
 	 * sysCaches 系统模块实例缓存队列

@@ -29,9 +29,7 @@ define(function(require, exports) {
 		 * 更新栏目banner的内容
 		 */
 		onUpdateQuotations: function(ev) {
-			var vm = this.vm.$;
-			vm.content = ev.param;
-			console.log('callback', vm, ev.param);
+			this.vm.set('content', ev.param);
 		}
 	});
 	exports.base = Banner;

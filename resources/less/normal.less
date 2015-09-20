@@ -16,49 +16,39 @@
 }
 .o-hidden {overflow: hidden;}
 
-// 文字状态
-.warning {color: #FF5700 !important;}
-.ok {color: #008000 !important;}
-// 背景状态
-.pushing {
-	opacity: .8 !important;
-	.cur_d;
-}
-.success {
-	background: #81CF5A !important;
-	.cur_d;
-}
-.error {
-	background: #FF5700 !important;
+// 动画
+.animate-spinner-rotate{
+    -webkit-animation: spinnerRotate 1500ms linear;
+    animation: spinnerRotate 1500ms linear;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    @-webkit-keyframes spinnerRotate{
+        0%{
+            -webkit-transform: rotate(0deg);
+        }
+        100%{
+            -webkit-transform: rotate(360deg);
+        }
+    }
+    @keyframes spinnerRotate{
+        0%{
+            transform: rotate(0deg);
+        }
+        100%{
+            transform: rotate(360deg);
+        }
+    }
 }
 
-//文字对齐
-.tc {text-align: center !important;} //居中
-.tl {text-align: left !important;}   //左对齐
-.tr {text-align: right !important;}  //右对齐
-
-//文字风格
-.ti {font-style: italic;}
-.tdl {text-decoration: underline;}
-.tdef {
-	font-style: italic;
-	text-align: center;
-	color: #aaa;
-}
+// 文字溢出隐藏
 .text_limit {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	width: 100%;
 }
-
-//浮动
-.fl {float:left;}
-.fr {float:right;}
-
-// 行/块元素
-.db {display: block;}
-.dib {display: inline-block;}
 
 // 文字大小
 .fts12 {font-size: 1.2rem !important;}

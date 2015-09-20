@@ -1,10 +1,11 @@
 /**
- * [前端那些事-栏目页面]
+ * [栏目页面]
  */
 define(function(require, exports, module) {
 	var app = require('app');
 	var util = app.util;
 	var $ = app.jquery;
+
 	// 请求地址
 	var api = app.config('api/listarchives');
 	// 初始请求参数
@@ -19,24 +20,17 @@ define(function(require, exports, module) {
 				'class'   : 'P-archive',
 				'template': 'project/template/pages/archive.html',
 				'vModel'  : {
+					// 显示加载
+					'isLoading': true,
 					// 列表数组
-					'archives': []
+					'archives' : []
 				}
 			});
 			// 动态请求参数，随着分页数据变化
-			this.$param = null;
+			this.$param = util.clone(param);
 			// 请求数据状态锁
 			this.$dataReady = false;
 			this.Super('init', arguments);
-		},
-
-		/**
-		 * 在路由调用之后，保存路由参数
-		 * @param  {Object}  data  [路由参数]
-		 */
-		saveRouter: function(data) {
-			this.$data = data;
-			return this;
 		},
 
 		/**
@@ -45,20 +39,50 @@ define(function(require, exports, module) {
 		viewReady: function() {
 			var c = this.getConfig();
 
-			// 请求整合参数
-			this.$param = util.clone(param);
-			// url参数
-			if (c.search) {
-				this.$param.page = +c.search;
-			}
+			// 创建子模块
+			this.createTplModules();
 
 			// 向banner模块发消息
 			var n = quotations.length - 1;
 			var qts = quotations[util.random(0, n)];
 			this.send('layout.blogBanner', 'updateQuotations', qts);
+		},
 
-			// 加载数据
+		/**
+		 * 显示加载状态
+		 */
+		showLoading: function() {
+			this.vm.set('isLoading', true);
+			return this;
+		},
+
+		/**
+		 * 隐藏加载状态
+		 */
+		hideLoading: function() {
+			this.vm.set('isLoading', false);
+			return this;
+		},
+
+		/**
+		 * 在路由调用之后，保存路由参数
+		 * @param  {Object}  data  [路由参数]
+		 */
+		saveRouter: function(data) {
+			this.$router = data;
+			// 加载列表数据
 			this.load();
+			return this;
+		},
+
+		/**
+		 * 更新请求参数
+		 * @param  {Object}   param    [新参数]
+		 * @param  {Boolean}  replace  [是否替换当前参数]
+		 */
+		setParam: function(param, replace) {
+			this.$param = replace ? param : util.extend(this.$param, param);
+			return this;
 		},
 
 		/**
@@ -66,8 +90,18 @@ define(function(require, exports, module) {
 		 * @param   {Object}  param  [请求参数]
 		 */
 		load: function(param) {
+			// 检查路由参数
+			var search = this.$router && this.$router.search;
+			if (search) {
+				this.$param = util.extend(this.$param, {
+					'page': +search.page
+				});
+			}
+
 			this.$dataReady = false;
 			param = param || this.$param;
+
+			this.showLoading();
 			app.ajax.get(api, param, this.dataListRequested, this);
 		},
 
@@ -83,6 +117,18 @@ define(function(require, exports, module) {
 			}
 			// 创建列表
 			this.setList(data.items);
+
+			// 更新分页信息
+			var pager = this.getChild('pager');
+			if (pager) {
+				pager.setParam({
+					'page' : data.page,
+					'pages': data.pages,
+					'path' : this.$router && this.$router.name
+				});
+			}
+
+			this.setTimeout('hideLoading', app.config('delay') || 500);
 		},
 
 		/**
@@ -91,9 +137,8 @@ define(function(require, exports, module) {
 		 */
 		setList: function(items) {
 			var archives = [];
-			var vm = this.vm.$;
 			// 路由名称
-			var routerName = this.$data && this.$data.name;
+			var routerName = this.$router && this.$router.name;
 
 			// 数据结构转化
 			util.each(items, function(item) {
@@ -108,7 +153,7 @@ define(function(require, exports, module) {
 				});
 			});
 
-			vm.archives = archives;
+			this.vm.set('archives', archives);
 
 			this.showThumb();
 		},

@@ -1,5 +1,15 @@
 // 列表页样式
 .P-archive  {
+	&Loading{
+		width: @blogWidth;
+		.center;
+		text-align: center;
+		padding: 4.5em 0;
+		.icon{
+			font-size: 4.4rem;
+			color: #22B6AB;
+		}
+	}
 	&List {
 		width: @blogWidth;
 		min-height: 200px;
@@ -11,7 +21,7 @@
 			border-radius: 2px;
 			border-bottom: 1px dashed #999;
 			article {
-				margin: 1em;
+				margin: 1em .2em;
 				padding: 1em;
 				color: #444;
 				line-height: 150%;
@@ -20,14 +30,14 @@
 				.abstract {
 					display: inline-block;
 					font-family: @zhFontFamily;
+					&:hover{
+						color: #000;
+					}
 				}
-				// .abstract:hover {
-				// 	color: #000;
-				// }
 				.cover {
 					max-width: 30%;
 					display: inline-block;
-					margin-top: 15px;
+					margin-top: 1em;
 					border: 1px solid #DDD;
 				}
 			}
@@ -38,7 +48,6 @@
 				.title {
 					display: inline-block;
 					font-size: 2.4rem;
-					padding-left: .5em;
 					font-weight: normal;
 					color: #1EA096;
 					transition: color 218ms cubic-bezier(0.42,0,.58,1);
@@ -48,7 +57,7 @@
 				}
 			}
 			&Info {
-				padding: 0 0 1em 1em;
+				padding: 0 0 1em .2em;
 				color: #666;
 				font-size: 1.4rem;
 				// font-style: italic;

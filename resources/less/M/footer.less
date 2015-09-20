@@ -1,55 +1,22 @@
-// 页脚容器flex定义
-.flexWraper() {
-	display: -webkit-box;
-	display: -moz-box;
-	display: box;
-
-	-webkit-box-orient: inline-axis;
-	-moz-box-orient: inline-axis;
-	box-orient: inline-axis;
-
-	-webkit-box-pack: start;
-	-moz-box-pack: start;
-	box-pack: start;
-
-	-webkit-box-direction: normal;
-	-moz-box-direction: normal;
-	box-direction: normal;
-
-	-webkit-box-align: center;
-	-moz-box-align: center;
-	box-align: center;
-}
-// flex定义
-.flexNumbers( @num ) {
-	-webkit-box-ordinal-group: 1;
-	-moz-box-ordinal-group: 1;
-	box-ordinal-group: 1;
-
-	-webkit-box-flex: @num;
-	-moz-box-flex: @num;
-	box-flex: @num;
-}
-
 .M-footer{
-	width: 100%;
+	width: @blogWidth;
 	height: @footerHeight;
 	.center;
 	color: #FFF;
-	font-size: 1.8rem;
 	line-height: @footerHeight;
 
 	// copyright
 	&Copy{
 		float: left;
+		letter-spacing: 1px;
 	}
 	// 其他信息
 	&Info{
 		float: right;
 		padding: 0 1.5em;
-		&Source{
-			font-size: 2.8rem;
-			color: #fff;
+		.github{
+			font-size: 2.6rem;
+			color: #f5f5f5;
 		}
 	}
 	// 多语言切换

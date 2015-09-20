@@ -7,8 +7,12 @@ define(function(require, exports, module) {
 	var Footer = app.Container.extend({
 		init: function(config) {
 			config = app.cover(config, {
-				'class': 'M-banner',
-				'template': 'project/template/modules/footer.html'
+				'class'   : 'M-footer',
+				'template': 'project/template/modules/footer.html',
+				'vModel'  : {
+					// copyright
+					'copy': app.config('copyright')
+				}
 			});
 			this.Super('init', arguments);
 		},
