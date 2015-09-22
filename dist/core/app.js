@@ -571,10 +571,10 @@ define(function(require, exports, module) {
 				ns = receiver.split('.');
 
 				// 有层级
-				while (ns.length > 1) {
+				while (ns.length > 0) {
 					if (!tmp) {
 						tmp = _getInstanceByName(ns.shift());
-						tar = tmp ? tmp.getChild(ns[0]) : null;
+						tar = ns.length === 0 ? tmp : (tmp ? tmp.getChild(ns[0]) : null);
 					}
 					else {
 						tar = tmp.getChild(ns.shift());

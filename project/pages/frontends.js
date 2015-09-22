@@ -12,6 +12,8 @@ define(function(require, exports, module) {
 	var param = app.config('archiveParam');
 	// 语录集合
 	var quotations = app.config('quotations');
+	// 栏目名称
+	var catMap = app.config('archiveTitle');
 
 
 	var Achives = app.Container.extend({
@@ -49,18 +51,20 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 显示加载状态
+		 * 显示加载状态并隐藏页脚
 		 */
 		showLoading: function() {
 			this.vm.set('isLoading', true);
+			this.send('layout.blogFooter', 'switchFooter', false);
 			return this;
 		},
 
 		/**
-		 * 隐藏加载状态
+		 * 隐藏加载状态并显示页脚
 		 */
 		hideLoading: function() {
 			this.vm.set('isLoading', false);
+			this.send('layout.blogFooter', 'switchFooter', true);
 			return this;
 		},
 
@@ -103,6 +107,7 @@ define(function(require, exports, module) {
 
 			this.showLoading();
 			app.ajax.get(api, param, this.dataListRequested, this);
+			return this;
 		},
 
 		/**
@@ -120,13 +125,18 @@ define(function(require, exports, module) {
 
 			// 更新分页信息
 			var pager = this.getChild('pager');
+			var page = data.page;
 			if (pager) {
 				pager.setParam({
-					'page' : data.page,
+					'page' : page,
 					'pages': data.pages,
 					'path' : this.$router && this.$router.name
 				});
 			}
+
+			var routerName = this.$router && this.$router.name;
+			var title = catMap[routerName] + ' - ' + T('第{1}页', page);
+			this.send('layout', 'changeTitle', title);
 
 			this.setTimeout('hideLoading', app.config('delay') || 500);
 		},

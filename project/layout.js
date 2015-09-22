@@ -3,6 +3,8 @@
  */
 define(function(require, exports) {
 	var app = require('app');
+	var util = app.util;
+	var $ = app.jquery;
 
 	var Layout = app.Container.extend({
 		init: function(config) {
@@ -19,6 +21,8 @@ define(function(require, exports) {
 		 */
 		viewReady: function() {
 			// DOM缓存
+			this.$doc = $(document);
+
 			var dom = this.getDOM();
 			this.$doms = {
 				// 全局布局主体
@@ -89,6 +93,14 @@ define(function(require, exports) {
 					doms.blogArticle.show();
 					doms.blogArchive.hide();
 				break;
+			}
+		},
+
+		// 更换网站的标题
+		onChangeTitle: function(ev) {
+			var title = ev.param;
+			if (util.isString(title)) {
+				this.$doc.attr('title', title);
 			}
 		}
 	});
