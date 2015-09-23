@@ -358,7 +358,7 @@ define(function(require, exports, module) {
 				// 消息类型
 				'type'    : type,
 				// 消息发起模块
-				'form'    : sender,
+				'from'    : sender,
 				// 消息目标模块
 				'to'      : null,
 				// 该消息被传递的次数
@@ -472,7 +472,9 @@ define(function(require, exports, module) {
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
 				this.queue.push([type, sender, name, param, callback, context]);
-				Sync(this._sendQueue, this);
+				if (syncCount) {
+					Sync(this._sendQueue, this);
+				}
 				return false;
 			}
 			this.busy = true;
@@ -492,7 +494,7 @@ define(function(require, exports, module) {
 				if (returns === false) {
 					break;
 				}
-				msg.form = receiver;
+				msg.from = receiver;
 				receiver = receiver.getParent();
 			}
 
@@ -507,7 +509,9 @@ define(function(require, exports, module) {
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
 				this.queue.push(['broadcast', sender, name, param, callback, context]);
-				Sync(this._sendQueue, this);
+				if (syncCount) {
+					Sync(this._sendQueue, this);
+				}
 				return false;
 			}
 			this.busy = true;
@@ -548,7 +552,9 @@ define(function(require, exports, module) {
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
 				this.queue.push([type, sender, receiver, name, param, callback, context]);
-				Sync(this._sendQueue, this);
+				if (syncCount) {
+					Sync(this._sendQueue, this);
+				}
 				return false;
 			}
 			this.busy = true;
@@ -608,7 +614,9 @@ define(function(require, exports, module) {
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
 				this.queue.push([type, name, param]);
-				Sync(this._sendQueue, this);
+				if (syncCount) {
+					Sync(this._sendQueue, this);
+				}
 				return false;
 			}
 			this.busy = false;

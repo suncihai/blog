@@ -30,6 +30,13 @@ define(function(require, exports) {
 		 */
 		onUpdateQuotations: function(ev) {
 			this.vm.set('content', ev.param);
+		},
+
+		/**
+		 * 更新文章banner内容
+		 */
+		onChangeInfo: function(ev) {
+			//
 		}
 	});
 	exports.base = Banner;

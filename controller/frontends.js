@@ -30,9 +30,14 @@ define(function(require, exports) {
 
 		// 已经创建过
 		if (mod) {
-			mod.setParam({
-				'page': data && data.search && +data.search.page || 1
-			}).load();
+			if (isAchive) {
+				mod.setParam({
+					'page': data && data.search && +data.search.page || 1
+				}).load();
+			}
+			else {
+				mod.setParam(data).load();
+			}
 		}
 		else {
 			mod = app.core.createAsync(name, path, {

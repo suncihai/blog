@@ -15,7 +15,6 @@ define(function(require, exports, module) {
 	// 栏目名称
 	var catMap = app.config('archiveTitle');
 
-
 	var Achives = app.Container.extend({
 		init: function(config) {
 			config = app.cover(config, {
@@ -106,7 +105,7 @@ define(function(require, exports, module) {
 			param = param || this.$param;
 
 			this.showLoading();
-			app.ajax.get(api, param, this.dataListRequested, this);
+			app.ajax.get(api, param, this.afterDataBack, this);
 			return this;
 		},
 
@@ -115,7 +114,10 @@ define(function(require, exports, module) {
 		 * @param   {Object}  err   [请求错误信息]
 		 * @param   {Object}  data  [请求成功信息]
 		 */
-		dataListRequested: function(err, data) {
+		afterDataBack: function(err, data) {
+			this.$dataReady = true;
+			this.setTimeout('hideLoading', app.config('delay'));
+
 			if (err) {
 				util.error(err);
 				return false;
@@ -134,11 +136,10 @@ define(function(require, exports, module) {
 				});
 			}
 
+			// 更改标题
 			var routerName = this.$router && this.$router.name;
 			var title = catMap[routerName] + ' - ' + T('第{1}页', page);
 			this.send('layout', 'changeTitle', title);
-
-			this.setTimeout('hideLoading', app.config('delay') || 500);
 		},
 
 		/**
