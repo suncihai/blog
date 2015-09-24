@@ -547,8 +547,8 @@ define(function(require, exports, module) {
 		 * @param  {Function} callback [<可选>发送完毕的回调函数，可在回调中指定回应数据]
 		 * @param  {Object}   context  [执行环境]
 		 */
-		send: function(sender, receiver, name, param, callback, context) {
-			var type = 'send';
+		notify: function(sender, receiver, name, param, callback, context) {
+			var type = 'notify';
 			// 是否处于忙碌状态
 			if (this.busy || syncCount) {
 				this.queue.push([type, sender, receiver, name, param, callback, context]);
@@ -798,12 +798,12 @@ define(function(require, exports, module) {
 
 			// 数据格式化
 			var result = null, error = null;
-			if (data && data.success && data.result) {
+			if (data && data.success) {
 				try {
-					result = JSON.parse(LANG(JSON.stringify(data.result)));
+					result = JSON.parse(LANG(JSON.stringify(data)));
 				}
 				catch (e) {
-					result = data.result;
+					result = data;
 				}
 			}
 			else {
@@ -1000,21 +1000,21 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 设置数据对象的值，数组时批量设置
+		 * 设置数据对象的值，对象时批量设置
 		 * @param  {String}  key    [数据对象名称]
 		 * @param  {Mix}     value  [值]
 		 */
 		set: function(key, value) {
 			var vm = this.$;
 			// 批量设置
-			if (util.isArray(key) && util.isArray(value)) {
-				util.each(key, function(k, index) {
+			if (util.isObject(key) && !value) {
+				util.each(key, function(v, k) {
 					if (util.has(k, vm)) {
-						vm[k] = value[index];
+						vm[k] = v;
 					}
 				});
 			}
-			else {
+			else if (util.isString(key) && arguments.length === 2) {
 				if (util.has(key, vm)) {
 					vm[key] = value;
 				}
@@ -1429,7 +1429,7 @@ define(function(require, exports, module) {
 		 */
 		setTimeout: function(callback, time, param) {
 			var self = this;
-			time = time || 0;
+			time = util.isNumber(time) ? time : 0;
 
 			// callback为属性值
 			if (util.isString(callback)) {
@@ -1513,7 +1513,7 @@ define(function(require, exports, module) {
 		 * @param   {Mix}       param     [<可选>附加消息参数]
 		 * @param   {Function}  callback  [<可选>发送完毕的回调函数，可在回调中指定回应数据]]
 		 */
-		send: function(receiver, name, param, callback) {
+		notify: function(receiver, name, param, callback) {
 			if (!receiver) {
 				return false;
 			}
@@ -1539,7 +1539,7 @@ define(function(require, exports, module) {
 				callback = null;
 			}
 
-			messager.send(this, receiver, name, param, callback, this);
+			messager.notify(this, receiver, name, param, callback, this);
 		}
 	});
 	exports.Module = Module;

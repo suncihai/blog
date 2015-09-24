@@ -3,6 +3,7 @@
  */
 define(function(require, exports, module) {
 	var app = require('app');
+	var util = app.util;
 	var headRoom = require('@plugins/headroom/headroom');
 
 	var Header = app.Container.extend({
@@ -30,8 +31,16 @@ define(function(require, exports, module) {
 			var c = this.getConfig();
 
 			// 获取导航数据
-			var navs = app.config('navs') || [];
-			vm.navs = navs;
+			var items = app.config('navs') || [];
+			var navs = [];
+			util.each(items, function(item) {
+				navs.push({
+					'text': item.name,
+					'link': item.link,
+					'act' : false
+				});
+			});
+			this.vm.set('navs', navs);
 
 			// DOM缓存
 			this.$doms = {
@@ -52,6 +61,17 @@ define(function(require, exports, module) {
 					'unpinned': 'slideOutUp'
 				}
 			})).init();
+		},
+
+		/**
+		 * 更新导航激活状态消息
+		 */
+		onUpdateNav: function(ev) {
+			var navs = this.vm.get('navs');
+			var name = ev.param;
+			util.each(navs, function(nav) {
+				nav.act = nav.link === '#' + name;
+			});
 		}
 	});
 	exports.base = Header;

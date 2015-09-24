@@ -6,7 +6,7 @@
 <div class="M-headerNav">
 	<ul>
 		<li v-repeat="nav in navs">
-			<a v-attr="href: nav.link" v-text="nav.name"></a>
+			<a v-attr="href: nav.link" v-text="nav.text" v-class="act: nav.act"></a>
 		</li>
 	</ul>
 </div>

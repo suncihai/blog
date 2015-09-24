@@ -22,7 +22,7 @@ define(function() {
 
 		// 导航
 		navs: [
-			{'name': _T('首页'), 'link': '#index'},
+			// {'name': _T('首页'), 'link': '#index'},
 			{'name': _T('前端那些事'), 'link': '#frontends'},
 			{'name': _T('随便写写'), 'link': '#moods'},
 			{'name': _T('给我留言'), 'link': '#message'}

@@ -13,7 +13,10 @@ define(function(require, exports, module) {
 	// 语录集合
 	var quotations = app.config('quotations');
 	// 栏目名称
-	var catMap = app.config('archiveTitle');
+	var catNameMap = app.config('archiveTitle');
+	// 栏目数据库id
+	var category = app.config('category');
+
 
 	var Achives = app.Container.extend({
 		init: function(config) {
@@ -43,10 +46,8 @@ define(function(require, exports, module) {
 			// 创建子模块
 			this.createTplModules();
 
-			// 向banner模块发消息
-			var n = quotations.length - 1;
-			var qts = quotations[util.random(0, n)];
-			this.send('layout.blogBanner', 'updateQuotations', qts);
+			// 更新banner内容
+			this.updateBanner();
 		},
 
 		/**
@@ -54,7 +55,7 @@ define(function(require, exports, module) {
 		 */
 		showLoading: function() {
 			this.vm.set('isLoading', true);
-			this.send('layout.blogFooter', 'switchFooter', false);
+			this.notify('layout.blogFooter', 'switchFooter', false);
 			return this;
 		},
 
@@ -63,7 +64,7 @@ define(function(require, exports, module) {
 		 */
 		hideLoading: function() {
 			this.vm.set('isLoading', false);
-			this.send('layout.blogFooter', 'switchFooter', true);
+			this.notify('layout.blogFooter', 'switchFooter', true);
 			return this;
 		},
 
@@ -73,9 +74,22 @@ define(function(require, exports, module) {
 		 */
 		saveRouter: function(data) {
 			this.$router = data;
+			// 栏目id
+			this.$param.catid = category[data && data.name];
 			// 加载列表数据
 			this.load();
 			return this;
+		},
+
+		/**
+		 * 更新banner
+		 * @return  {[type]}  [description]
+		 */
+		updateBanner: function() {
+			// 向banner模块发消息
+			var n = quotations.length - 1;
+			var qts = quotations[util.random(0, n)];
+			this.notify('layout.blogBanner', 'updateQuotations', qts);
 		},
 
 		/**
@@ -85,6 +99,7 @@ define(function(require, exports, module) {
 		 */
 		setParam: function(param, replace) {
 			this.$param = replace ? param : util.extend(this.$param, param);
+			this.updateBanner();
 			return this;
 		},
 
@@ -93,8 +108,11 @@ define(function(require, exports, module) {
 		 * @param   {Object}  param  [请求参数]
 		 */
 		load: function(param) {
+			var router = this.$router;
+			// 路由名称
+			var name = router && router.name;
 			// 检查路由参数
-			var search = this.$router && this.$router.search;
+			var search = router && router.search;
 			if (search) {
 				this.$param = util.extend(this.$param, {
 					'page': +search.page
@@ -122,24 +140,26 @@ define(function(require, exports, module) {
 				util.error(err);
 				return false;
 			}
+
 			// 创建列表
-			this.setList(data.items);
+			var result = data.result;
+			this.setList(result.items);
 
 			// 更新分页信息
 			var pager = this.getChild('pager');
-			var page = data.page;
+			var page = result.page;
 			if (pager) {
 				pager.setParam({
 					'page' : page,
-					'pages': data.pages,
+					'pages': result.pages,
 					'path' : this.$router && this.$router.name
 				});
 			}
 
 			// 更改标题
 			var routerName = this.$router && this.$router.name;
-			var title = catMap[routerName] + ' - ' + T('第{1}页', page);
-			this.send('layout', 'changeTitle', title);
+			var title = catNameMap[routerName] + ' - ' + T('第{1}页', page);
+			this.notify('layout', 'changeTitle', title);
 		},
 
 		/**

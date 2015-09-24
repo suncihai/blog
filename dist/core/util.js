@@ -243,7 +243,7 @@ define(function(require, util) {
 	}
 
 	/**
-	 * each 遍历数组
+	 * each 遍历数组或对象
 	 * @param  {Array,Object}  items     [数组或对象]
 	 * @param  {Fuction}       callback  [回调函数]
 	 * @param  {Object}        context   [作用域]

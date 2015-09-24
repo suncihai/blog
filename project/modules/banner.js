@@ -29,14 +29,27 @@ define(function(require, exports) {
 		 * 更新栏目banner的内容
 		 */
 		onUpdateQuotations: function(ev) {
-			this.vm.set('content', ev.param);
+			this.vm.set({
+				'isAchive': true,
+				'content' : ev.param
+			});
 		},
 
 		/**
 		 * 更新文章banner内容
 		 */
 		onChangeInfo: function(ev) {
-			//
+			var param = ev.param;
+			var time = param.date;
+			var title = param.title;
+			var comments = param.comments;
+
+			this.vm.set({
+				'isAchive': false,
+				'title'   : title,
+				'time'    : time,
+				'comments': comments
+			});
 		}
 	});
 	exports.base = Banner;

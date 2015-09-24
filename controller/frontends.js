@@ -5,6 +5,8 @@ define(function(require, exports) {
 	var app = require('app');
 	var util = app.util;
 	var layout = app.core.get('layout');
+	// 栏目数据库id
+	var category = app.config('category');
 
 	/**
 	 * @param   {Object}  data  [路由参数]
@@ -32,11 +34,12 @@ define(function(require, exports) {
 		if (mod) {
 			if (isAchive) {
 				mod.setParam({
-					'page': data && data.search && +data.search.page || 1
+					'page' : data && data.search && +data.search.page || 1,
+					'catid': category[data && data.name]
 				}).load();
 			}
 			else {
-				mod.setParam(data).load();
+				mod.setParam(data.param).load();
 			}
 		}
 		else {
@@ -46,5 +49,8 @@ define(function(require, exports) {
 				md.saveRouter(data);
 			});
 		}
+
+		// 更新导航激活
+		app.core.notify('layout.blogHeader', 'updateNav', data.name);
 	}
 });

@@ -1,11 +1,11 @@
 // 文章样式
 .P-article{
-	.content{
+	&Content{
 		width: @blogWidth;
 		.center;
 		padding: 1em 0 3em 0;
-		article{
-			// padding: 1.5em 0;
+		// 正文区域
+		&Main{
 			font-size: 1.6rem;
 			line-height: 150%;
 			font-family: @zhFontFamily;
@@ -21,10 +21,10 @@
 					background: #FAFAFA;
 					padding: 0 .3em;
 					border-radius: .3em;
-					border: 1px solid #e7e7e7;
+					border: 1px solid #dadada;
 					line-height: 1.2;
 					font-style: italic;
-					color: #009B8E;
+					color: #333;
 					font-family: @preFontFamily;
 				}
 			}
@@ -62,29 +62,20 @@
 				font-size: 1.4rem;
 			}
 		}
+		// 代码区域
+		pre{
+			// display: none;
+			box-sizing: border-box;
+			width: 100%;
+			padding: 1.5em;
+			margin-top: 0.3em;
+			overflow: auto;
+			border-left: 8px solid rgba(34,182,171,.5);
+			// border-radius: .5em;
+			position: relative;
+			// left: 2em;
+			font-size: 1.5rem;
+			background: url(../icons/code-bg.png) repeat !important;
+		}
 	}
-	// 代码区域
-	pre{
-		// display: none;
-		box-sizing: border-box;
-		width: 100%;
-		padding: 1.5em;
-		margin-top: 0.3em;
-		overflow: auto;
-		border-left: 8px solid rgba(34,182,171,.5);
-		// border-radius: .5em;
-		position: relative;
-		// left: 2em;
-		font-size: 1.5rem;
-		background: url(../icons/code-bg.png) repeat !important;
-	}
-}
-// 无数据
-.noData{
-	width: @blogWidth;
-	.center;
-	text-align: center;
-	padding-top: 3em;
-	font-size: xx-large;
-	color: red;
 }
