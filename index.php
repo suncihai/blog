@@ -14,7 +14,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>应用加载中……</title>
-	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/dist/sea/sea.js"></script>
+	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/plugins/sea/sea.js"></script>
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/boot/init.js?load_time=<?php echo time();?>"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	<style name="<?php echo $_COOKIE['hash'];?>">

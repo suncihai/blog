@@ -4,23 +4,23 @@
 		'base': '/blog/',
 		'paths': {
 			// 核心目录
-			'@dist'       : 'dist',
-			'@core'       : 'dist/core',
-			'@base'       : 'dist/base',
+			'@sugar'     : 'sugar',
+			'@core'      : 'sugar/core',
+			'@base'      : 'sugar/base',
 			// 控制器目录
-			'@controller' :	'controller',
+			'@controller':	'controller',
 			// 项目目录
-			'@project'    : 'project',
-			'@pages'      : 'project/pages',
-			'@modules'    : 'project/modules',
+			'@project'   : 'project',
+			'@pages'     : 'project/pages',
+			'@modules'   : 'project/modules',
 			// 其他目录
-			'@boot'       : 'boot',
-			'@plugins'    : 'plugins'
+			'@boot'      : 'boot',
+			'@plugins'   : 'plugins'
 		},
 		'alias': {
 			'app'    : '@core/app.js',
 			'util'   : '@core/util.js',
-			'jquery' : '@dist/jquery/jquery-2.1.4.min.js'
+			'jquery' : '@sugar/jquery/jquery-2.1.4.min.js'
 		},
 		'map': [
 			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=2.0']
@@ -102,7 +102,7 @@
 
 
 	// 浏览器特性判断
-	sea.use('/blog/dist/base/character', function(b) {
+	sea.use('/blog/sugar/base/character', function(b) {
 		if (b.j()) {
 			return false;
 		}
