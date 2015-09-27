@@ -10,10 +10,10 @@ define(function(require, exports) {
 	var HasLink = app.Container.extend({
 		init: function(config) {
 			config = app.cover(config, {
-				'class'   : 'M-pagerHasLink',
+				'class'   : 'M-pager',
 				// 最多显示的项数
 				'max'     : 5,
-				'template': 'project/template/modules/pagerHasLink.html',
+				'template': 'project/template/modules/pager.html',
 				'vModel'  : {
 					// 页码数组
 					'pages'      : [],
@@ -116,7 +116,7 @@ define(function(require, exports) {
 	var NoLink = HasLink.extend({
 		init: function(config) {
 			config = app.cover(config, {
-				'class': 'M-pagerNoLink'
+				'class': 'M-pager M-pagerNoLink'
 			});
 			this.Super('init', arguments);
 		},

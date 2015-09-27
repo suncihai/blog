@@ -345,7 +345,6 @@ define(function(require, exports, module) {
 
 	/**
 	 * Messager 消息类（实现模块间通信）
-	 * 消息的冒泡/广播方式都先触发消息接收事件函数，再将消息逐层上/下发
 	 * 默认接收消息onMessage, 默认全部发送完毕回调onMessageSendOut
 	 */
 	function Messager() {
@@ -1436,6 +1435,11 @@ define(function(require, exports, module) {
 			if (util.isFunc(this.afterDestroy)) {
 				this.afterDestroy();
 			}
+
+			// 向父模块通知已销毁
+			if (silent) {
+				this.fire('subModuleDestroy');
+			}
 		},
 
 		/**
@@ -1635,7 +1639,7 @@ define(function(require, exports, module) {
 				this._loadTemplate();
 			}
 			else {
-				this.render();
+				this._render();
 			}
 		},
 
@@ -1657,7 +1661,7 @@ define(function(require, exports, module) {
 					util.error(err);
 				}
 				self.setConfig('html', text);
-				self.render();
+				self._render();
 				Sync(1);
 			});
 		},
@@ -1682,7 +1686,7 @@ define(function(require, exports, module) {
 		/**
 		 * 渲染视图容器的布局、初始化vm
 		 */
-		render: function() {
+		_render: function() {
 			// 判断是否已创建过
 			if (this.$ready) {
 				return this;

@@ -1,69 +1,62 @@
 .M-pager{
-	// 带链接
-	&HasLink{
-		position: relative;
-		width: @blogWidth;
-		.center;
-		padding: 2.5em 0;
-		&List{
+	position: relative;
+	width: @blogWidth;
+	.center;
+	padding: 2.5em 0;
+	&List{
+		display: inline-block;
+		> li{
 			display: inline-block;
-			> li{
-				display: inline-block;
-			}
-			&Item{
-				box-sizing: border-box;
-				position: relative;
-				margin-right: -1px;
-				display: inline-block;
-				width: 2.5em;
-				height: 2em;
-				line-height: 2em;
-				text-align: center;
-				border: 1px solid #A8DFDB;
-				background: #FAFAFA;
-				color: #22B6AB;
-				cursor: pointer;
-				font-size: 2rem;
-				vertical-align: middle;
-				transition: background 220ms cubic-bezier(0.42, 0, 0.58, 1);
-				&:hover{
-					background: #A8DFDB;
-					color: #FFF;
-				}
-				// 上一页
-				&.prev{
-					right: -4px;
-				}
-				&.next{
-					left: -5px;
-				}
-				// 激活选项
-				&.act{
-					margin: 0px;
-					border: none;
-					background: none;
-					color: #22B6AB;
-					cursor: default;
-				}
-				// 省略选项
-				&.omit{
-					border: none;
-					background: none;
-					color: #A39A9A;
-					cursor: default;
-				}
-			}
 		}
-		&Info{
-			position: absolute;
-			right: 0;
-			top: 50%;
-			transform: translateY(-50%);
+		&Item{
+			box-sizing: border-box;
+			position: relative;
+			margin-right: -1px;
+			display: inline-block;
+			width: 2.5em;
+			height: 2em;
+			line-height: 2em;
+			text-align: center;
+			border: 1px solid #A8DFDB;
+			background: #FAFAFA;
 			color: #22B6AB;
+			cursor: pointer;
+			font-size: 2rem;
+			vertical-align: middle;
+			transition: background 220ms cubic-bezier(0.42, 0, 0.58, 1);
+			&:hover{
+				background: #A8DFDB;
+				color: #FFF;
+			}
+			// 上一页
+			&.prev{
+				right: -4px;
+			}
+			&.next{
+				left: -5px;
+			}
+			// 激活选项
+			&.act{
+				margin: 0px;
+				border: none;
+				background: none;
+				color: #22B6AB;
+				cursor: default;
+			}
+			// 省略选项
+			&.omit{
+				border: none;
+				background: none;
+				color: #A39A9A;
+				cursor: default;
+			}
 		}
 	}
-	// 不带链接
-	&NoLink{
-		//
+	&Info{
+		position: absolute;
+		right: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		color: #22B6AB;
 	}
 }
