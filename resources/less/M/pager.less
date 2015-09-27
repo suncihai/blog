@@ -1,6 +1,7 @@
 .M-pager{
 	// 带链接
 	&HasLink{
+		position: relative;
 		width: @blogWidth;
 		.center;
 		padding: 2.5em 0;
@@ -52,6 +53,13 @@
 					cursor: default;
 				}
 			}
+		}
+		&Info{
+			position: absolute;
+			right: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #22B6AB;
 		}
 	}
 	// 不带链接

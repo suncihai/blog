@@ -1,7 +1,7 @@
 <!-- 页码 -->
 <ul class="M-pagerHasLinkList">
 	<!-- 上一页 -->
-	<li>
+	<li v-show="showPrev">
 		<a class="M-pagerHasLinkListItem prev" title="上一页" v-on="click: vmClickPrev">
 			<i class="fa fa-angle-left"/>
 		</a>
@@ -12,12 +12,11 @@
 		</a>
 	</li>
 	<!-- 下一页 -->
-	<li>
+	<li v-show="showNext">
 		<a class="M-pagerHasLinkListItem next" title="下一页" v-on="click: vmClickNext">
 			<i class="fa fa-angle-right"/>
 		</a>
 	</li>
 </ul>
 <!-- 分页信息 -->
-<span class="M-pagerHasLinkInfo">
-</span>
+<span class="M-pagerHasLinkInfo" v-text="info"></span>

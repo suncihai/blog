@@ -27,6 +27,10 @@ define(function(require, exports, module) {
 			this.$id = 0;
 			// 请求数据状态锁
 			this.$dataReady = false;
+			// document缓存
+			this.$doc = $(document);
+			// 滚动条是否到达评论区
+			this.$reach = false;
 			this.Super('init', arguments);
 		},
 
@@ -34,7 +38,8 @@ define(function(require, exports, module) {
 		 * 布局视图初始化完成
 		 */
 		viewReady: function() {
-			//
+			// 创建子模块
+			this.createTplModules();
 		},
 
 		/**
@@ -103,7 +108,44 @@ define(function(require, exports, module) {
 				util.error(err);
 				return false;
 			}
+
 			this.setContent(data.result);
+
+			var doc = this.$doc;
+			var dHeight = doc.height();
+			var cHeight = util.getClientHeight();
+			var comment = this.getChild('comment');
+
+			if (dHeight <= cHeight && comment) {
+				this.$reach = true;
+				comment.load(this.$id);
+			}
+			else {
+				this.bind(doc, 'scroll.loadComment', this.eventScrolling);
+			}
+		},
+
+		/**
+		 * 页面滚动事件
+		 */
+		eventScrolling: function(evt) {
+			var comment = this.getChild('comment');
+			var commentDom = this.getDOM('.P-articleComments');
+
+			// 滚动条距离顶部距离
+			var sTop = this.$doc.scrollTop();
+			// 评论区距离顶部距离
+			var oTop = commentDom.offset().top;
+			// 可视区高度
+			var cHeight = util.getClientHeight();
+			// 滚动目标差值
+			var dTop = Math.floor((oTop - sTop) * 1.15);
+
+			// 滚动条到达评论区域
+			if (dTop < cHeight && !this.$reach && comment) {
+				this.$reach = true;
+				comment.load(this.$id);
+			}
 		},
 
 		/**

@@ -17,6 +17,12 @@ define(function(require, exports) {
 				'vModel'  : {
 					// 页码数组
 					'pages'      : [],
+					// 分页信息
+					'info'       : '',
+					// 是否显示上一页按钮
+					'showPrev'   : true,
+					// 是否显示下一页按钮
+					'showNext'   : true,
 					// 点击上一页
 					'vmClickPrev': this.eventClickPrev,
 					// 点击下一页
@@ -49,7 +55,6 @@ define(function(require, exports) {
 			}
 			return false;
 		},
-
 
 		/**
 		 * 设置/更新分页信息
@@ -96,14 +101,19 @@ define(function(require, exports) {
 				});
 			});
 
-			this.vm.set('pages', results);
+			this.vm.set({
+				'pages'   : results,
+				'info'    : T('第 {1} 页，共 {2} 页', page, pages),
+				'showPrev': page !== 1,
+				'showNext': page !== pages
+			});
 		}
 	});
 	exports.hasLink = HasLink;
 
 
 	// 无连接的分页方式(通过消息监听分页)
-	var NoLink = app.Container.extend({
+	var NoLink = HasLink.extend({
 		init: function(config) {
 			config = app.cover(config, {
 				'class': 'M-pagerNoLink'

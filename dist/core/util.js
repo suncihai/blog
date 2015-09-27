@@ -133,7 +133,7 @@ define(function(require, util) {
 
 	// 多语言转换函数，若未定义则原样返回
 	LANG = !isFunc(WIN && WIN.T) ? function(text) {
-		return text;
+		return util.templateReplace.apply(this, arguments);
 	} : WIN.T;
 
 	/**

@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 
 	// 多语言转换函数，若未定义则原样返回
 	var LANG = !util.isFunc(WIN && WIN.T) ? function(text) {
-		return text;
+		return util.templateReplace.apply(this, arguments);
 	} : WIN.T;
 
 
@@ -39,6 +39,24 @@ define(function(require, exports, module) {
 		return pointer;
 	}
 
+	/**
+	 * 对继承的子类方法挂载Super
+	 * @param   {Function}  Super   [Super函数]
+	 * @param   {Mix}       method  [子类属性或者方法]
+	 * @return  {Mix}               [result]
+	 */
+	function bindSuper(Super, method) {
+		if (util.isFunc(method)) {
+			return function() {
+				this.Super = Super;
+				return method.apply(this, arguments);
+			};
+		}
+		else {
+			return method;
+		}
+	}
+
 	/*
 	 * Root 根函数，实现类式继承
 	 * @param  {Object} proto [新原型对象]
@@ -49,6 +67,18 @@ define(function(require, exports, module) {
 		var parent = this.prototype;
 
 		/**
+		 * 子类对父类的调用
+		 * @param {String} method [调用的父类方法]
+		 * @param {Object} args   [调用参数]
+		 */
+		function Super(method, args) {
+			var func = parent[method];
+			if (util.isFunc(func)) {
+				return func.apply(this, args);
+			}
+		}
+
+		/**
 		 * 返回(继承后)的类
 		 * @param {Object} config [类生成实例的配置]
 		 */
@@ -57,19 +87,7 @@ define(function(require, exports, module) {
 
 		for (var property in proto) {
 			if (util.has(property, proto)) {
-				classProto[property] = proto[property];
-			}
-		}
-
-		/**
-		 * 子类对父类的调用
-		 * @param {String} method [调用父类的方法]
-		 * @param {Object} args   [传入的参数数组]
-		 */
-		classProto.Super = function(method, args) {
-			var func = parent[method];
-			if (util.isFunc(func)) {
-				func.apply(this, args);
+				classProto[property] = bindSuper(Super, proto[property]);
 			}
 		}
 
@@ -81,10 +99,10 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * 模块配置参数覆盖
+	 * 模块配置参数合并、覆盖
 	 * @param  {Object} child  [子类模块配置参数]
 	 * @param  {Object} parent [父类模块配置参数]
-	 * @return {Object}        [覆盖后的配置参数]
+	 * @return {Object}        [合并后的配置参数]
 	 */
 	function cover(child, parent) {
 		if (!util.isObject(child)) {
@@ -99,7 +117,7 @@ define(function(require, exports, module) {
 
 
 	/**
-	 * appConfig 设置/读取配置对象
+	 * 设置/读取配置对象
 	 * @param  {Object} cData  [配置对象，不存在则读取app.init方法导入的系统配置]
 	 * @param  {String} name   [配置名称, 使用/分隔层次]
 	 * @param  {Mix}    value  [不设为读取配置信息, null为删除配置, 其他为设置值]
@@ -410,7 +428,7 @@ define(function(require, exports, module) {
 		 * @param  {Object}   context  [执行环境]
 		 * @return {Boolean}           [result]
 		 */
-		_notifySend: function(msg, callback, context) {
+		_notifySender: function(msg, callback, context) {
 			// callback为null时触发默认事件
 			if (!callback) {
 				callback = context.onMessageSendOut;
@@ -498,7 +516,7 @@ define(function(require, exports, module) {
 				receiver = receiver.getParent();
 			}
 
-			this._notifySend(msg, callback, context);
+			this._notifySender(msg, callback, context);
 		},
 
 		/**
@@ -535,7 +553,7 @@ define(function(require, exports, module) {
 				receivers.push.apply(receivers, receiver.getChilds(true));
 			}
 
-			this._notifySend(msg, callback, context);
+			this._notifySender(msg, callback, context);
 		},
 
 		/**
@@ -601,7 +619,7 @@ define(function(require, exports, module) {
 
 			this._trigger(receiver, msg);
 
-			this._notifySend(msg, callback, context);
+			this._notifySender(msg, callback, context);
 		},
 
 		/**
@@ -800,6 +818,7 @@ define(function(require, exports, module) {
 			var result = null, error = null;
 			if (data && data.success) {
 				try {
+					// 进行多语言转换
 					result = JSON.parse(LANG(JSON.stringify(data)));
 				}
 				catch (e) {
@@ -898,8 +917,7 @@ define(function(require, exports, module) {
 			}
 
 			jquery.ajax({
-				'url'     : uri,
-				'data'    : param,
+				'url'     : uri + util.parse(param),
 				'type'    : 'GET',
 				'dataType': 'text',
 				'success' : _fnSuccess,
@@ -1064,20 +1082,19 @@ define(function(require, exports, module) {
 	 * @param  {Object}  context   [回调函数执行环境]
 	 * @param  {Array}   args      [callback回调参数]
 	 *
-	 *   Sync(null)                   : 回调计数开始
-	 *   Sync(true)                   : 回调计数结束
+	 *   Sync(0)                      : 回调计数开始
+	 *   Sync(1)                      : 回调计数结束
 	 *   Sync(callback, context, args): 放入回调队列
 	 *
 	 */
 	function Sync(callback, context, args) {
 		var sync, cb, ct, ags;
-
 		// 回调计数开始
-		if (callback === null) {
+		if (callback === 0) {
 			syncCount++;
 		}
 		// 回调计数结束（已完成全部异步请求）
-		else if (callback === true) {
+		else if (callback === 1) {
 			syncCount--;
 
 			// 依次从最后的回调开始处理，防止访问未创建完成的模块
@@ -1257,7 +1274,7 @@ define(function(require, exports, module) {
 
 			// 异步加载模块
 			var self = this, args = null;
-			Sync(null);
+			Sync(0);
 			require.async(path, function(Class) {
 				// 取导出点
 				if (Class && expt) {
@@ -1270,7 +1287,7 @@ define(function(require, exports, module) {
 					Sync(callback, self, args);
 					args[0] = self.create(name, Class, config);
 				}
-				Sync(true);
+				Sync(1);
 			});
 
 			return this;
@@ -1300,7 +1317,7 @@ define(function(require, exports, module) {
 				}
 			});
 
-			Sync(null);
+			Sync(0);
 			require.async(pathArray, function() {
 				var args = util.argumentsToArray(arguments);
 				var retMods = [], mod, name, expt, config, child;
@@ -1325,7 +1342,7 @@ define(function(require, exports, module) {
 						retMods.push(child);
 					}
 				});
-				Sync(true);
+				Sync(1);
 			});
 		},
 
@@ -1628,9 +1645,12 @@ define(function(require, exports, module) {
 		_loadTemplate: function() {
 			var self = this;
 			var c = this.getConfig();
-			var uri = c.template, param = c.tplParam;
-			// 拉取模板文本
-			Sync(null);
+			var uri = c.template;
+			var param = util.extend(c.tplParam, {
+				'ts': util.random()
+			});
+			// 拉取模板
+			Sync(0);
 			ajax.load(uri, param, function(err, text) {
 				if (err) {
 					text = err.code + ' ' + err.message + ': ' + uri;
@@ -1638,7 +1658,7 @@ define(function(require, exports, module) {
 				}
 				self.setConfig('html', text);
 				self.render();
-				Sync(true);
+				Sync(1);
 			});
 		},
 
