@@ -3,24 +3,23 @@
 	var config = {
 		'base': '/blog/',
 		'paths': {
-			// 核心目录
+			// sugar框架目录
 			'@sugar'     : 'sugar',
-			'@core'      : 'sugar/core',
-			'@base'      : 'sugar/base',
 			// 控制器目录
 			'@controller':	'controller',
 			// 项目目录
 			'@project'   : 'project',
-			'@pages'     : 'project/pages',
-			'@modules'   : 'project/modules',
+				'@common' : 'project/common',
+				'@pages'  : 'project/pages',
+				'@modules': 'project/modules',
 			// 其他目录
 			'@boot'      : 'boot',
 			'@plugins'   : 'plugins'
 		},
 		'alias': {
-			'app'    : '@core/app.js',
-			'util'   : '@core/util.js',
-			'jquery' : '@sugar/jquery/jquery-2.1.4.min.js'
+			'app'   : '@sugar/core/app.js',
+			'util'  : '@sugar/core/util.js',
+			'jquery': '@sugar/jquery/jquery.min.js'
 		},
 		'map': [
 			// [/^(.*\.(?:css|js))(.*)$/i, '$1?v=2.0']
@@ -58,7 +57,7 @@
 		function() {
 			// 配置以及语言包
 			sea.config(config);
-			sea.use(['@base/language'], appInit);
+			sea.use(['@common/language'], appInit);
 		},
 		function(language) {
 			// 多语言模块回调
@@ -70,8 +69,8 @@
 			sea.use([
 				'app',
 				'@boot/config',
-				'@base/cookie',
-				'@base/animate',
+				'@common/cookie',
+				'@common/animate',
 				'@plugins/router',
 				'@project/layout'
 			], appInit);
@@ -102,7 +101,7 @@
 
 
 	// 浏览器特性判断
-	sea.use('/blog/sugar/base/character', function(b) {
+	sea.use('/blog/project/common/character', function(b) {
 		if (b.j()) {
 			return false;
 		}

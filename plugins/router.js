@@ -6,7 +6,7 @@ define(function(require, exports) {
 	var LOC = WIN.location;
 	var util = require('util');
 	var c = require('@boot/config');
-	var cookie = require('@base/cookie');
+	var cookie = require('@common/cookie');
 	var action = c.action;
 	var controller = c.controllerPath || '@controller/';
 	// 传递到响应路由控制模块的参数数据
