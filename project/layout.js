@@ -64,7 +64,8 @@ define(function(require, exports) {
 		 * @return  {Object}        [DOM对象]
 		 */
 		getContainer: function(name) {
-			return name ? this.$doms[name] : this.$doms;
+			var dom = this.$doms;
+			return dom && name ? dom[name] : dom;
 		},
 
 		/**

@@ -36,6 +36,17 @@ define(function() {
 			"Stay hungry Stay foolish"
 		],
 
+		// 成对的css3动画
+		pairFrames: [
+			['fadeInDown', 'fadeOutUp'],
+			['rotateInDownLeft', 'rotateOutUpRight'],
+			['lightSpeedIn', 'lightSpeedOut'],
+			['bounceInLeft', 'bounceOutRight'],
+			['fadeInUp', 'fadeOutDown'],
+			['rollIn', 'rollOut'],
+			['rotateIn', 'rotateOut']
+		],
+
 		// 栏目title
 		archiveTitle: {
 			'index': _T('小前端 - tangbc.com'),

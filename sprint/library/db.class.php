@@ -195,14 +195,15 @@ class SQL {
                 // 最终返回的结果
                 $retArray = array(
                     'success' => true,
-                    'result'  => $num === 0 ? null : $itemFormat,
+                    'result'  => $itemFormat,
                     'total'   => $num
                 );
             }
             else {
                 $retArray = array(
-                    'success' => true,
+                    'success' => false,
                     'result'  => null,
+                    'message' => 'No content for '.$artid,
                     'total'   => 0
                 );
             }
@@ -210,6 +211,7 @@ class SQL {
         else {
             $retArray = array(
                 'success' => false,
+                'message' => 'No article record for '.$artid,
                 'result'  => null
             );
         }
@@ -392,7 +394,8 @@ class SQL {
                     'pid'      => $pid,
                     'author'   => $isAdmin ? $this->ADMIN : $item['comment_author'],
                     'url'      => preg_replace('/(http:)/', "", $item['comment_author_url']),
-                    'address'  => $isAdmin ? '' : getCityName($item['comment_author_IP']),
+                    'address'  => '广东广州',
+                    // 'address'  => $isAdmin ? '' : getCityName($item['comment_author_IP']),
                     'date'     => $item['comment_date'],
                     'content'  => htmlspecialchars_decode(postAutoP($item['comment_content'])),
                     'parent'   => $parent,

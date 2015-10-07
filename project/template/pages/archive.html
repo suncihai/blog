@@ -3,7 +3,7 @@
 	<i class="fa fa-spinner animate-spinner-rotate icon"></i>
 </div>
 <!-- 列表页 -->
-<div class="P-archiveList" v-show="!isLoading">
+<div class="P-archiveList" v-show="!isLoading && !showError">
 	<section class="P-archiveListItem" v-repeat="item in archives">
 		<!-- 标题 -->
 		<div class="P-archiveListItemTitle">
@@ -28,4 +28,12 @@
 	</section>
 </div>
 <!-- 分页模块 -->
-<div class="P-archivePager" v-show="!isLoading" m-name="pager" m-module="@project/modules/pager.hasLink"></div>
+<div class="P-archivePager" v-show="!isLoading && showPager" m-name="pager" m-module="@project/modules/pager.hasLink"></div>
+<!-- 错误提示 -->
+<div class="C-commonError animated" v-show="showError" v-class="shake: showError">
+	<div class="emotion">:-(</div>
+	<div class="info">
+		<p>哎呀，抱歉！服务器出错了…… 它说：</p>
+		<p v-text="errorMsg"></p>
+	</div>
+</div>

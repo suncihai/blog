@@ -1,7 +1,9 @@
 .G-frame{
+	position: relative;
 	width: @globalWidth;
 	margin: 0 auto;
 	height: 100%;
+	// 全局主体
 	&Body{
 		position: relative;
 		height: 100%;
@@ -56,5 +58,51 @@
 		&Blank{
 			position: relative;
 		}
+	}
+	// 全局蒙版
+	&Mask{
+		display: none;
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10;
+		background: #000;
+		opacity: .7;
+		// 遮罩淡出动画
+		@-webkit-keyframes maskOut {0% {opacity: .7;} 100% {opacity: 0;}}
+		@keyframes maskOut {0% {opacity: .7;} 100% {opacity: 0;}}
+		&.mask-out{-webkit-animation-name: maskOut; animation-name: maskOut;}
+
+		// 遮罩淡入动画
+		@-webkit-keyframes maskIn {0% {opacity: 0;} 100% {opacity: .7;}}
+		@keyframes maskIn {0% {opacity: 0;} 100% {opacity: .7;}}
+		&.mask-in{-webkit-animation-name: maskIn; animation-name: maskIn;}
+	}
+	// 全局对话框
+	&Dialog{
+		display: none;
+		position: fixed;
+		width: 36em;
+		height: 24em;
+		top: 50%;
+		left: 50%;
+		margin-left: -18em;
+		margin-top: -12em;
+		// transform: translate(-50%, -50%);
+		border: 15px solid rgba(200,200,200,.7);
+		// background: #fff;
+		z-index: 11;
+	}
+	// 全局弹出层
+	&Layer{
+		display: none;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 12;
 	}
 }

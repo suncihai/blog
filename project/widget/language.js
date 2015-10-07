@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 	var WIN = window;
 	var app = require('app');
 	var util = app.util;
-	var cookie = require('@common/cookie');
+	var cookie = require('@widget/cookie');
 
 	function Language() {
 		var self = this;
@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 		this.loadLang = '';
 		// 当前的语言
 		if (cookie.get('lang')) {
-			this.currentLang = cookie.get('lang');
+			this.currentLang = cookie.get('lang') || 'zhCN';
 		}
 		else {
 			cookie.set('lang', defaultLang);

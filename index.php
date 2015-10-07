@@ -2,8 +2,8 @@
 	header("Cache-Control: no-cache, must-revalidate");
 	// 只匹配iPhone和Android客户端
 	$regMatch = '/(iphone|android)/i';
-	$isWap = preg_match( $regMatch, strtolower($_SERVER['HTTP_USER_AGENT']) );
-	if( $isWap ) {
+	$isWap = preg_match($regMatch, strtolower($_SERVER['HTTP_USER_AGENT']));
+	if ($isWap) {
 		// header('HTTP/1.1 301 Moved Permanently');
 		header('Location:http://'.$_SERVER['HTTP_HOST'].'/blog/waproot/');
 		exit();
@@ -17,7 +17,7 @@
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/plugins/sea/sea.js"></script>
 	<script type="text/javascript" src="http://<?php echo $_SERVER['HTTP_HOST']; ?>/blog/boot/init.js?load_time=<?php echo time();?>"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
-	<style name="<?php echo $_COOKIE['hash'];?>">
+	<style type="text/css">
 	noscript{
 		font-family: Arial, 'Microsoft Yahei'; display: block; width: 550px; height: 80px;
 		position: absolute; left: 50%; top: 50%; margin-left: -275px; margin-top: -40px;

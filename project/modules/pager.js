@@ -38,7 +38,9 @@ define(function(require, exports) {
 			this.Super('init', arguments);
 		},
 
-		// 点击上一页
+		/**
+		 * 点击上一页
+		 */
 		eventClickPrev: function() {
 			var page = this.$page;
 			if (page !== 1) {
@@ -47,7 +49,9 @@ define(function(require, exports) {
 			return false;
 		},
 
-		// 点击下一页
+		/**
+		 * 点击下一页
+		 */
 		eventClickNext: function() {
 			var page = this.$page;
 			if (page !== this.$pages) {
@@ -81,25 +85,13 @@ define(function(require, exports) {
 		updatePages: function() {
 			var max = this.getConfig('max');
 			var page = this.$page;
-			var path = this.$path;
 			var pages = this.$pages;
 
 			// 生成页码选项
 			var items = _createPageArray(page, pages, max);
 
-			var results = [];
-			util.each(items, function(item) {
-				results.push({
-					// 页码数字
-					'text'  : item,
-					// 是否激活
-					'isAct' : item === page,
-					// 跳转链接
-					'href'  : item === page || item === '···' ? null : '#' + path + '?page=' + item,
-					// 是否是省略号
-					'isOmit': item === '···'
-				});
-			});
+			// 构建vm数据
+			var results = this.createVmItems(items);
 
 			this.vm.set({
 				'pages'   : results,
@@ -107,6 +99,39 @@ define(function(require, exports) {
 				'showPrev': page !== 1,
 				'showNext': page !== pages
 			});
+		},
+
+		/**
+		 * 根据页码数组构建数据对象
+		 * @param   {Array}  items  [页码数组]
+		 * @return  {Array}         [vm数据对象]
+		 */
+		createVmItems: function(items) {
+			var self = this, result = [];
+			util.each(items, function(item) {
+				result.push({
+					// 页码数字
+					'text'  : item,
+					// 是否激活
+					'isAct' : item === self.$page,
+					// 跳转链接
+					'href'  : item === self.$page || item === '···' ? null : '#' + self.$path + '?page=' + item,
+					// 是否是省略号
+					'isOmit': item === '···'
+				});
+			});
+			return result;
+		},
+
+		/**
+		 * 重置模块为初始状态
+		 */
+		reset: function() {
+			this.$page = 1;
+			this.$pages = 1;
+			this.$path = '';
+			this.vm.reset();
+			return this;
 		}
 	});
 	exports.hasLink = HasLink;
@@ -116,20 +141,78 @@ define(function(require, exports) {
 	var NoLink = HasLink.extend({
 		init: function(config) {
 			config = app.cover(config, {
-				'class': 'M-pager M-pagerNoLink'
+				'class': 'M-pagerNoLink'
 			});
 			this.Super('init', arguments);
 		},
 
+		/**
+		 * 布局视图渲染完毕
+		 */
 		viewReady: function() {
 			var el = this.getDOM();
+
+			// 选项绑定点击事件
+			this.proxy(el.find('.M-pagerList'), 'click', 'a', this.eventPageClick);
+		},
+
+		/**
+		 * 构建无连接的页码数据对象
+		 */
+		createVmItems: function(items) {
+			var self = this, result = [];
+			util.each(items, function(item) {
+				result.push({
+					// 页码数字
+					'text'  : item,
+					// 是否激活
+					'isAct' : item === self.$page,
+					// 是否是省略号
+					'isOmit': item === '···'
+				});
+			});
+			return result;
+		},
+
+		/**
+		 * 选项点击事件，处理数字页码
+		 */
+		eventPageClick: function(evt, elm) {
+			var page = +$(elm).attr('data-id');
+			// 点击有效页码发送消息
+			if (util.isNumber(page) && (page !== this.$page) && (page !== this.$pages)) {
+				this.fire('pageSelected', page);
+			}
+			return false;
+		},
+
+		/**
+		 * 点击上一页
+		 */
+		eventClickPrev: function() {
+			var page = this.$page;
+			if (page !== 1) {
+				this.fire('pageSelected', page - 1);
+			}
+			return false;
+		},
+
+		/**
+		 * 点击下一页
+		 */
+		eventClickNext: function() {
+			var page = this.$page;
+			if (page !== this.$pages) {
+				this.fire('pageSelected', page + 1);
+			}
+			return false;
 		}
 	});
 	exports.noLink = NoLink;
 
 
 	/**
-	 * 更新页码展现格式,增加省略号
+	 * 更新页码展现格式，增加省略号
 	 * @param   {Number}  page   [当前页码]
 	 * @param   {Number}  pages  [总页数]
 	 * @param   {Number}  max    [最大显示项数]

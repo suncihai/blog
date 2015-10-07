@@ -16,7 +16,7 @@ define(function(require, exports) {
 		var isAchive = data.param == null;
 
 		// 页面模块路径
-		var path = isAchive ? '@pages/frontends.base' : '@pages/frontend.base';
+		var path = isAchive ? '@pages/archive.base' : '@pages/article.base';
 
 		// 页面模块名称
 		var name = isAchive ? 'blogArchive' : 'blogArticle';
@@ -27,19 +27,18 @@ define(function(require, exports) {
 		// 切换场景
 		layout.switchScene(name);
 
-		// 获取当前模块，判断是否已经创建过
 		var mod = app.core.get(name);
 
 		// 已经创建过
 		if (mod) {
 			if (isAchive) {
-				mod.setParam({
+				mod.reset().setParam({
 					'page' : data && data.search && +data.search.page || 1,
 					'catid': category[data && data.name]
 				}).load();
 			}
 			else {
-				mod.setParam(data.param).load();
+				mod.reset().setParam(data.param).load();
 			}
 		}
 		else {

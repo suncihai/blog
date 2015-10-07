@@ -6,33 +6,26 @@ define(function(require, exports) {
 	var LOC = WIN.location;
 	var util = require('util');
 	var c = require('@boot/config');
-	var cookie = require('@common/cookie');
+	var cookie = require('@widget/cookie');
 	var action = c.action;
 	var controller = c.controllerPath || '@controller/';
-	// 传递到响应路由控制模块的参数数据
-	var data = {
-		// 页面名称，对应主hash值
-		'name'   : null,
-		// 页面参数
-		'param'  : null,
-		// url参数
-		'search' : null
-	}
 
 
 	function hashChanged() {
 		var hash, ms, cookieSet;
 		hash = LOC.hash.replace(/^[#\/\!]+/, '') || c.defaultPage;
 		ms = formatHash(hash);
-		cookieSet = [ms.name, ms.param, JSON.stringify(ms.search)].join('(^_^)');
+		cookieSet = [ms.name, ms.param, JSON.stringify(ms.search)].join(':(');
 		run(ms.name, ms.param, ms.search);
 		cookie.set('hash', cookieSet);
 		util.scrollTo(0);
 	}
 
+
 	function string2parts(str, pos) {
 		return [str.substr(0, pos), str.substr(pos + 1)];
 	}
+
 
 	/**
 	 * formatHash 格式化hash, 分离出模块名、页面参数和url参数
@@ -47,8 +40,7 @@ define(function(require, exports) {
 		}
 		if (hx && !hw) {
 			ms = string2parts(hash, ix);
-			param = ms[1] === '' ? null :
-				ms[1].charAt(ms[1].length - 1) === '/' ? ms[1] = ms[1].substr(0, ms[1].length - 1) : ms[1];
+			param = ms[1] === '' ? null : ms[1].charAt(ms[1].length - 1) === '/' ? ms[1] = ms[1].substr(0, ms[1].length - 1) : ms[1];
 		}
 		if (!hx && hw) {
 			ms = string2parts(hash, iw);
@@ -69,13 +61,15 @@ define(function(require, exports) {
 			}
 		}
 		name = ms[0];
+
 		return {
-			'ms'     : ms,
-			'name'   : name,
-			'param'  : param,
-			'search' : search
+			'ms'    : ms,
+			'name'  : name,
+			'param' : param,
+			'search': search
 		}
 	}
+
 
 	/**
 	 * formatSearch 格式化url参数为JSON
@@ -97,6 +91,16 @@ define(function(require, exports) {
 		return retJSON;
 	}
 
+
+	// 传递到响应路由控制模块的参数数据
+	var data = {
+		// 页面名称，对应主hash值
+		'name'   : null,
+		// 页面参数
+		'param'  : null,
+		// url参数
+		'search' : null
+	}
 	/**
 	 * run 启用模块
 	 * @param  {type} name   [模块名]
@@ -109,6 +113,7 @@ define(function(require, exports) {
 		data.search = search ? formatSearch(search, 1, true) : null;
 		require.async(controller + name, afterRun);
 	}
+
 
 	/**
 	 * afterRun 加载模块回调
@@ -132,6 +137,7 @@ define(function(require, exports) {
 		}
 	}
 
+
 	exports.start = function() {
 		if ('onhashchange' in WIN) {
 			WIN.addEventListener('hashchange', hashChanged, false);
@@ -141,6 +147,7 @@ define(function(require, exports) {
 		}
 		hashChanged();
 	}
+
 
 	/**
 	 * go 手动切换路由

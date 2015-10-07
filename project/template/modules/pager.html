@@ -7,7 +7,7 @@
 		</a>
 	</li>
 	<li v-repeat="page in pages">
-		<a v-attr="href: page.href" v-class="M-pagerListItem: true, act: page.isAct, omit: page.isOmit">
+		<a v-attr="href: page.href, data-id: page.text" v-class="M-pagerListItem: true, act: page.isAct, omit: page.isOmit">
 			{{page.text}}
 		</a>
 	</li>

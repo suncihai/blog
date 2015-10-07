@@ -1,7 +1,7 @@
 <!-- 标题、添加按钮 -->
 <header class="M-commentHead">
-	<h2 class="M-commentHeadTitle">评论</h2>
-	<span class="M-commentHeadAdd" title="添加评论">
+	<h2 class="M-commentHeadTitle" v-text="title"></h2>
+	<span class="M-commentHeadAdd" title="添加评论" v-on="click: vmClickAdd">
 		<i class="fa fa-edit"></i>
 	</span>
 </header>
@@ -13,22 +13,21 @@
 <article class="M-commentList" v-show="!isLoading">
 	<section v-repeat="item in comments">
 		<header>
-			<b class="floor" v-text="item.floor"></b> :
-			<b class="nick" v-text="item.nickName"></b>
+			<a class="nick" v-text="item.nickName" v-attr="href: item.url, target: item.url ? '_blank' : null"></a>
 			<span class="address" v-text="item.address"></span>
-			<span class="time" v-attr="title: item.date" v-text="item.date"></span>
-			<div class="op">
-				<span class="reply" title="回复TA"><i class="fa fa-reply"/></span> :
-			</div>
+			<span class="time" v-text="item.date"></span>
+			<!-- <div class="op">
+				<span class="reply" title="回复TA"><i class="fa fa-reply"/></span>
+			</div> -->
 		</header>
 		<article v-html="item.content"></article>
 	</section>
 </article>
 <!-- 评论分页 -->
-<div class="M-commentPager" v-show="!isLoading" m-name="pager" m-module="@project/modules/pager.noLink"/>
+<div class="M-commentPager" v-show="!isLoading && showPager" m-name="pager" m-module="@project/modules/pager.noLink"/>
 <!-- 沙发 -->
-<div class="M-commentEmpty" v-show="!isLoading && isEmpty">
-	<div class="M-commentEmptyWrap">
+<div class="M-commentEmpty" v-show="!isLoading && isEmpty && !isRefresh">
+	<div class="M-commentEmptyWrap" title="点击添加评论" v-on="click: vmClickAdd">
 		<div class="M-commentEmptyLeftHand"/>
 		<div class="M-commentEmptyRightHand"/>
 		<div class="M-commentEmptyCushion"/>
@@ -36,5 +35,9 @@
 		<div class="M-commentEmptyFootRight"/>
 		<div class="M-commentEmptyFootBack"/>
 	</div>
-	<div class=M-commentEmptyTxt>有空沙发</div>
+</div>
+<!-- 刷新重试 -->
+<div class="M-commentRefresh animated" v-show="isRefresh" v-on="click: vmClickRefresh" v-class="shake: isRefresh">
+	<i class="fa fa-info-circle mr3 icon"></i>
+	加载失败，点击重试
 </div>

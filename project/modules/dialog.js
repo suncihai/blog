@@ -1,186 +1,235 @@
 /**
- * [弹窗模块]
+ * [对话框基础模块]
  */
 define(function(require, exports) {
-	var $ = require('jquery');
 	var app = require('app');
-	var util = require('util');
-	var layout = require('layout');
-	var DIALOG = layout.getDOM('DIALOG');
-	var MASK = layout.getDOM('MASK');
+	var util = app.util;
+	var $ = app.jquery;
 
-	// 弹出层对话框
-	var Dialog = {
+	var layout = app.core.get('layout');
+	// 全局蒙版
+	var MASK = layout.getContainer('MASK');
+	// 对话框容器
+	var DIALOG = layout.getContainer('DIALOG');
+
+	var Dialog = app.Container.extend({
 		init: function(config) {
-			var frame = null;
-			if (config) {
-				this.update(config);
-			}
-			// 显示状态
+			config = app.cover(config, {
+				'target'  : DIALOG,
+				'class'   : 'M-dialog',
+				'template': 'project/template/modules/dialog.html',
+				'vModel'  : {
+					// 对话框标题
+					'title'       : config.title || T('系统提示'),
+					// 点击关闭对话框
+					'vmClickClose': this.eventClickClose
+				},
+
+				// 自定义对话框宽度(单位em)
+				'width'   : 0,
+				// 自定义对话框高度(单位em)
+				'height'  : 0,
+				// 对话框内容类型 module/layout
+				'type'    : 'module',
+				// 对话框内容的模块
+				'module'  : null,
+				// 模块参数配置
+				'config'  : null,
+				// 对话框内容的字符串布局
+				'layout'  : '',
+				// 是否随机展示动画
+				'random'  : false,
+				// 异步创建内容完成时是否发送消息
+				'silent'  : true
+			});
+			// 是否为显示状态
 			this.$show = false;
-			// 动画是否随机展示
-			this.$isRandom = false;
-			// 动画集合(随机展示用)
-			this.$frames = [
-				['rollIn', 'rollOut'],
-				['bounceInLeft', 'bounceOutRight'],
-				['lightSpeedIn', 'lightSpeedOut'],
-				['fadeInUp', 'fadeOutDown'],
-				['fadeInDown', 'fadeOutUp'],
-				['rotateInDownLeft', 'rotateOutUpRight'],
-				['rotateIn', 'rotateOut']
-			];
-			frame = this.getPairFrame(this.$isRandom);
+
+			// 一对打开关闭动画
+			var frame = this.getPairFrame(config.random);
 			// DIALOG打开动画
-			this.$inFrame = frame['in'];
+			this.$inFrame = frame.show;
 			// DIALOG关闭动画
-			this.$outFrame = frame.out;
-			this.build();
-			return this;
+			this.$outFrame = frame.hide;
+			this.Super('init', arguments);
 		},
 
-		// 返回弹窗的主体DOM
-		getBody: function() {
-			return this.$doms.body;
-		},
-
-		// 根据配置的宽高，更新弹窗的位置
-		// config配置：{width: xx, height: yy}, 单位em
-		update: function(config) {
-			if (util.isObject(config)) {
-				var w = config.width, h = config.height;
-				var ml = -(w / 2) + 'em', mt = -(h / 2 + 2) + 'em';
-				if (w) {
-					DIALOG.css({
-						'width': w + 'em',
-						'margin-left': ml
-					});
-				}
-				if (h) {
-					DIALOG.css({
-						'height': h + 'em',
-						'margin-top': mt
-					});
-				}
+		/**
+		 * 获取一对显示/隐藏动画
+		 */
+		getPairFrame: function(random) {
+			var frames = app.config('pairFrames');
+			var show = 0, hide = 1, len = frames.length;
+			var resArr = random ? frames[util.random(0, len - 1)] : frames[0];
+			return {
+				'show': resArr[show],
+				'hide': resArr[hide]
 			}
 		},
 
-		// 设置对话框的标题
-		setTitle: function(txt) {
-			this.$doms.title.text(txt || '');
+		viewReady: function() {
+			var self = this;
+			var c = this.getConfig();
+			var el = this.getDOM();
+
+			// DOM缓存
+			this.$doms = {
+				'body' : el.find('.M-dialogBody'),
+				'close': el.find('.M-dialogHeadClose')
+			}
+
+			// 创建对话框内容模块
+			var isAsync = false;
+			var name = util.guid('widget_dialog_');
+			var config = util.extend({
+				'target': this.$doms.body
+			}, c.config);
+
+			// 内容为模块
+			if (c.type === 'module') {
+				// 异步创建
+				if (util.isString(c.module)) {
+					isAsync = true;
+					this.createAsync(name, c.module, config, function() {
+						self.fire('dialogBuilded');
+					});
+				}
+				// 同步创建
+				else if (util.isFunc(c.module)) {
+					this.create(name, c.module, config);
+				}
+			}
+			// 内容为字符串
+			else if (c.type === 'layout') {
+				this.$doms.body.html(c.layout);
+			}
+
+			if (!isAsync) {
+				this.updatePosition();
+			}
+
+			// 对话框关闭按钮事件
+			this.bind(this.$doms.close, 'click mouseenter mouseleave', this.eventClose);
+		},
+
+		/**
+		 * 对话框内容异步创建完成
+		 */
+		onDialogBuilded: function() {
+			this.updatePosition();
+			if (this.getConfig('silent')) {
+				return false;
+			}
+		},
+
+		/**
+		 * 更新对话框位置
+		 * @return  {[type]}  [description]
+		 */
+		updatePosition: function() {
+			var c = this.getConfig();
+			var width = c.width;
+			var height = c.height;
+
+			if (width && height) {
+				DIALOG.css({
+					'width'      : width + 'em',
+					'height'     : height + 'em',
+					'margin-left': (width / -2) + 'em',
+					'margin-top' : (height / -2) + 'em'
+				});
+			}
+		},
+
+		/**
+		 * 设置对话框标题
+		 */
+		setTitle: function(text) {
+			this.vm.set('title', text || this.getConfig('title'));
 			return this;
 		},
 
-		// 显示遮罩以及对话框
+		/**
+		 * 关闭按钮事件
+		 */
+		eventClose: function(evt, elm) {
+			switch (evt.type) {
+				case 'click':
+					this.hide();
+				break;
+				case 'mouseenter':
+					if (this.$show) {
+						$(elm).removeClass('rotateCloseBack').addClass('rotateCloseForward');
+					}
+				break;
+				case 'mouseleave':
+					if (this.$show) {
+						$(elm).removeClass('rotateCloseForward').addClass('rotateCloseBack');
+					}
+				break;
+			}
+			return false;
+		},
+
+		/**
+		 * 显示对话框
+		 */
 		show: function() {
 			var self = this;
-			self.$show = true;
+			this.$show = true;
 			MASK.show();
-			app.animate.play(MASK, 'maskIn', 'fast', function(){
+			app.animate.play(MASK, 'mask-in', 'fast', function() {
 				DIALOG.show();
 				app.animate.play(DIALOG, self.$inFrame);
 			});
-			return self;
+			return this;
 		},
 
-		// 隐藏遮罩以及对话框
-		// cb: 隐藏动画结束后的回调函数 ct: 执行上下文
-		hide: function(cb, ct) {
+		/**
+		 * 隐藏对话框
+		 */
+		hide: function() {
 			var self = this;
-			self.$show = false;
-			app.animate.play(DIALOG, self.$outFrame, function() {
+			this.$show = false;
+			this.$doms.close.removeClass('rotateCloseBack rotateCloseForward');
+			app.animate.play(DIALOG, this.$outFrame, function() {
 				DIALOG.hide();
-				app.animate.play(MASK, 'maskOut', 'fast', function() {
+				app.animate.play(MASK, 'mask-out', 'fast', function() {
 					MASK.hide();
-					app.messager.fire('dialogClosed');
-					// 执行回调
-					if (util.isFunc(cb)) {
-						cb.call(ct || window);
-					}
+					self.reset().fire('dialogClosed');
 				});
 			});
-			return self;
+			return this;
 		},
 
-		// 创建对话框
-		build: function() {
-			if (this.$ready) {
-				this.show();
-				return this.getBody();
-			}
-			var dom = $([
-				'<div class="M-dialog">',
-					'<div class="M-dialogHead">',
-						'<h2 class="M-dialogHeadTitle"/>',
-						'<div class="M-dialogHeadClose animated">',
-							'<div class="M-dialogHeadCloseLine"/>',
-							'<div class="M-dialogHeadCloseLine"/>',
-						'</div>',
-					'</div>',
-					'<div class="M-dialogBody"/>',
-				'</div>'
-			].join(''));
-
-			dom.appendTo(DIALOG);
-
-			this.$doms = {
-				'title': $('.M-dialogHeadTitle', dom),
-				'close': $('.M-dialogHeadClose', dom),
-				'body':  $('.M-dialogBody', dom)
-			}
-
-			this.$ready = true;
-
-			// 绑定关闭对话框事件
-			app.event.bind(this.$doms.close, 'click', this.eventCloseDialog, this);
-			app.event.hover(this.$doms.close, this.eventCloseEnter, this.eventCloseOut, this);
-			// 监听自身对话框关闭消息
-			app.messager.on('dialogClosed', this.onDailaogClosed, this);
-		},
-
-		eventCloseEnter: function() {
-			if (this.$show) {
-				this.$doms.close.removeClass('rotateCloseBack').addClass('rotateCloseForward');
-			}
-			return false;
-		},
-
-		eventCloseOut: function() {
-			if (this.$show) {
-				this.$doms.close.removeClass('rotateCloseForward').addClass('rotateCloseBack');
-			}
-			return false;
-		},
-
-		// 点击关闭对话框
-		eventCloseDialog: function() {
-			var self = this;
-			self.hide();
-			self.$doms.close.removeClass('rotateCloseForward rotateCloseBack');
-			return false;
-		},
-
-		// 获取一对打开/关闭对话框的动画
-		getPairFrame: function(isRandom) {
-			var frames = this.$frames;
-			var len = frames.length;
-			var resArr = isRandom ? frames[util.random(0, len - 1)] : frames[0];
-			return {
-				'in'  : resArr[0],
-				'out' : resArr[1]
-			}
-		},
-
-		// 对话框关闭消息
-		onDailaogClosed: function() {
+		/**
+		 * 自身关闭消息
+		 */
+		onDialogClosed: function() {
 			var frame = null;
-			if (this.$isRandom) {
+			var c = this.getConfig();
+
+			if (c.random) {
 				frame = this.getPairFrame(true);
-				this.$inFrame = frame['in'];
-				this.$outFrame = frame.out;
+				this.$inFrame = frame.show;
+				this.$outFrame = frame.hide;
 			}
-			return false;
+		},
+
+		/**
+		 * 重置模块为初始状态
+		 */
+		reset: function() {
+			var chs = this.getChilds(true);
+			util.each(chs, function(child) {
+				if (util.isFunc(child.reset)) {
+					child.reset();
+				}
+			});
+
+			this.vm.reset();
+			return this;
 		}
-	}
-	exports.base = $.extend(true, {}, Dialog);
+	});
+	exports.base = Dialog;
 });

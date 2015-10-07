@@ -22,8 +22,8 @@
 			cursor: pointer;
 			-webkit-transform-oringin: 50% 50%;
 			transform-oringin: 50% 50%;
-			-webkit-transform: rotate(0deg) scale(0.5);
-			transform: rotate(0deg) scale(0.5);
+			-webkit-transform: rotate(0deg) scale(.5);
+			transform: rotate(0deg) scale(.5);
 			&Line{
 				position: absolute;
 				top: -5px;
@@ -46,10 +46,11 @@
 		}
 	}
 	&Body{
-		padding: 1.5em;
+		padding: 1em;
 	}
 }
-// 关闭按钮旋转动画
+
+// 关闭按钮顺时针旋转动画
 .rotateCloseForward{
 	-webkit-animation-name: rotateCloseForward;
 	animation-name: rotateCloseForward;
@@ -76,7 +77,7 @@
 		transform: rotate(360deg) scale(0.5);
 	}
 }
-// 反过来
+// 关闭按钮逆时针旋转动画
 .rotateCloseBack{
 	-webkit-animation-name: rotateCloseBack;
 	animation-name: rotateCloseBack;

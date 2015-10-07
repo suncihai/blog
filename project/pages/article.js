@@ -5,11 +5,9 @@ define(function(require, exports, module) {
 	var app = require('app');
 	var util = app.util;
 	var $ = app.jquery;
+
 	// 代码高亮插件
 	var prism = require('@plugins/prism/prism');
-
-	// 请求地址
-	var api = app.config('api/showarticle');
 
 	var Article = app.Container.extend({
 		init: function(config) {
@@ -20,7 +18,11 @@ define(function(require, exports, module) {
 					// 是否显示加载状态
 					'isLoading': true,
 					// 文章内容(html)
-					'content'  : ''
+					'content'  : '',
+					// 是否显示错误提示
+					'showError': false,
+					// 错误提示信息
+					'errorMsg' : ''
 				}
 			});
 			// 文章id
@@ -91,8 +93,15 @@ define(function(require, exports, module) {
 			var param = {
 				'artid': this.$id
 			};
-			app.ajax.get(api, param, this.afterDataBack, this);
+			app.ajax.get(app.config('api/showarticle'), param, this.delayData, this);
 			return this;
+		},
+
+		/**
+		 * 延迟展现
+		 */
+		delayData: function() {
+			this.setTimeout('afterDataBack', app.config('delay'), arguments);
 		},
 
 		/**
@@ -102,21 +111,30 @@ define(function(require, exports, module) {
 		 */
 		afterDataBack: function(err, data) {
 			this.$dataReady = true;
-			this.setTimeout('hideLoading', app.config('delay'));
+			this.hideLoading();
 
 			if (err) {
 				util.error(err);
+				app.tooltip.setTip({
+					'arrow'  : false,
+					'type'   : 'warning',
+					'content': err.message
+				});
+				this.vm.set({
+					'showError': true,
+					'errorMsg' : err.message
+				});
 				return false;
 			}
 
 			this.setContent(data.result);
 
 			var doc = this.$doc;
-			var dHeight = doc.height();
+			var dHeight = doc.find('body').height();
 			var cHeight = util.getClientHeight();
 			var comment = this.getChild('comment');
 
-			if (dHeight <= cHeight && comment) {
+			if (dHeight < cHeight && comment) {
 				this.$reach = true;
 				comment.load(this.$id);
 			}
@@ -149,6 +167,14 @@ define(function(require, exports, module) {
 		},
 
 		/**
+		 * 评论数据拉取完毕消息，来自评论列表模块的冒泡消息
+		 */
+		onCommentDataLoaded: function() {
+			this.unbind(this.$doc, 'scroll.loadComment');
+			return false;
+		},
+
+		/**
 		 * 设置数据
 		 */
 		setContent: function(result) {
@@ -158,6 +184,9 @@ define(function(require, exports, module) {
 			var comments = result.comments;
 
 			this.vm.set('content', content);
+
+			// 更改标题
+			this.notify('layout', 'changeTitle', title);
 
 			this.setTimeout('renderHighLighter');
 
@@ -187,6 +216,24 @@ define(function(require, exports, module) {
 				pre.empty().html('<code class="language-'+ type +'">' + tmp + '</code>');
 			}
 			prism.highlightAll();
+		},
+
+		/**
+		 * 重置模块为初始状态
+		 */
+		reset: function() {
+			var chs = this.getChilds(true);
+			util.each(chs, function(child) {
+				if (util.isFunc(child.reset)) {
+					child.reset();
+				}
+			});
+
+			this.$id = 0;
+			this.$reach = false;
+			this.$dataReady = false;
+			this.vm.reset();
+			return this;
 		}
 	});
 	exports.base = Article;

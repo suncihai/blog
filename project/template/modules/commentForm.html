@@ -1,0 +1,11 @@
+<textarea v-model="content" class="M-commentFormText" placeholder="[必填] 评论内容~"></textarea>
+<input v-model="nick" type="text" class="M-commentFormNick" placeholder="[必填] 您的昵称，不超过16个字符。"/>
+<input v-model="link" type="text" class="M-commentFormLink" placeholder="[选填] 您的网址(如:www.tangbc.com)，链接会加在您的昵称上。"/>
+<input v-model="contact" v-show="hasContact" type="text" class="M-commentFormContact" placeholder="[选填] 联系方式(比如Email,QQ,微信)"/>
+<div class="M-commentFormFooter">
+	<input v-model="code" class="M-commentFormFooterCode" placeholder="输入验证码"/>
+	<img class="M-commentFormFooterPic" title="点击更换验证码" v-attr="src: codeSrc" v-on="click: vmClickChange"/>
+	<span class="M-commentFormFooterTips"/>
+	<button class="M-commentFormFooterSubmit" v-class="pushing: isPushing, success: isSuccess, error: isError" v-on="click: vmClickSubmit" v-html="putText"></button>
+	<button class="M-commentFormFooterReset" v-on="click: vmClickReset">重置</button>
+</div>
