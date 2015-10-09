@@ -38,6 +38,7 @@ define(function(require, exports) {
 						'blogBanner' : dom.find('.G-frameBodyBlogBanner'),
 						'blogArchive': dom.find('.G-frameBodyBlogArchive'),
 						'blogArticle': dom.find('.G-frameBodyBlogArticle'),
+						'blogSearch' : dom.find('.G-frameBodyBlogSearch'),
 						'blogFooter' : dom.find('.G-frameBodyBlogFooter'),
 					// 空白页容器
 					'blank': dom.find('.G-frameBodyBlank'),
@@ -87,11 +88,20 @@ define(function(require, exports) {
 					doms.blog.show().siblings().hide();
 					doms.blogArchive.show();
 					doms.blogArticle.hide();
+					doms.blogSearch.hide();
 				break;
 				// 博客文章页
 				case 'blogArticle':
 					doms.blog.show().siblings().hide();
 					doms.blogArticle.show();
+					doms.blogArchive.hide();
+					doms.blogSearch.hide();
+				break;
+				// 博客搜索结果页
+				case 'blogSearch':
+					doms.blog.show().siblings().hide();
+					doms.blogSearch.show();
+					doms.blogArticle.hide();
 					doms.blogArchive.hide();
 				break;
 			}

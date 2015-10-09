@@ -20,6 +20,7 @@ define(function(require, exports, module) {
 					'navs': []
 				}
 			});
+			this.$doc = $(document);
 			this.Super('init', arguments);
 		},
 
@@ -45,7 +46,7 @@ define(function(require, exports, module) {
 			};
 
 			// 点击搜索按钮
-			this.bind(this.$doms.button, 'click', this.eventClickButton);
+			this.proxy(this.$doms.search, 'click.search', this.eventClickSearch);
 
 			// 启用headroom插件
 			var target = c.target;
@@ -67,11 +68,75 @@ define(function(require, exports, module) {
 			return navs;
 		},
 
-		// 点击搜索框
-		eventClickButton: function(evt, elm) {
-			$(elm).toggleClass('act');
-			var act = $(elm).hasClass('act');
+		/**
+		 * 点击搜索框
+		 */
+		eventClickSearch: function(evt, elm) {
+			var doc = this.$doc;
+			var input = this.$doms.input;
+			var val = input.val();
+
+			this.$doms.button.addClass('act');
+			this.$timeStamp = evt.timeStamp;
+
+			// 点击空白处收起INPUT
+			this.bind(doc, 'click.blank', this.eventClickBlank);
+			// 按下回车键响应搜索操作
+			this.bind(doc, 'keydown.search', this.eventKeydown);
+
+			input.show().removeClass('inputInit').addClass('inputReady');
+
+			if (!val) {
+				input.focus();
+			}
+			else {
+				if (evt.target.tagName !== 'INPUT') {
+					this.searching(val);
+				}
+			}
 			return false;
+		},
+
+		/**
+		 * 跳转到搜索页面
+		 */
+		searching: function(val) {
+			app.controller.go('search?word=' + val);
+		},
+
+		/**
+		 * 响应回车键搜索
+		 */
+		eventKeydown: function(evt) {
+			var val = this.$doms.input.val();
+			if (evt.keyCode === 13) {
+				if (val) {
+					this.searching(val);
+				}
+			}
+		},
+
+		/**
+		 * 点击空白处隐藏INPUT
+		 */
+		eventClickBlank: function(evt) {
+			if (this.$timeStamp !== evt.timeStamp) {
+				this.hideSearchInput();
+			}
+			return false;
+		},
+
+		/**
+		 * 隐藏搜索框，解除事件绑定
+		 */
+		hideSearchInput: function() {
+			var doc = this.$doc;
+			this.$doms.button.removeClass('act');
+			this.$doms.input.val('').addClass('inputInit').removeClass('inputReady');
+
+			// 解除绑定
+			this.unbind(doc, 'click.blank');
+			this.unbind(doc, 'keydown.search');
 		},
 
 		/**

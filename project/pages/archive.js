@@ -122,9 +122,10 @@ define(function(require, exports, module) {
 			}
 
 			this.$dataReady = false;
+			this.showLoading();
+
 			param = param || this.$param;
 
-			this.showLoading();
 			app.ajax.get(app.config('api/listarchives'), param, this.delayData, this);
 			return this;
 		},
@@ -176,6 +177,7 @@ define(function(require, exports, module) {
 				});
 			}
 
+			// 更新标题
 			var routerName = this.$router && this.$router.name;
 			var title = catNameMap[routerName] + ' - ' + T('第{1}页', page);
 			this.notify('layout', 'changeTitle', title);
