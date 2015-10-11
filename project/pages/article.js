@@ -13,7 +13,7 @@ define(function(require, exports, module) {
 		init: function(config) {
 			config = app.cover(config, {
 				'class'   : 'P-article',
-				'template': 'project/template/pages/article.html',
+				'template': 'template/pages/article.html',
 				'vModel'  : {
 					// 是否显示加载状态
 					'isLoading': true,

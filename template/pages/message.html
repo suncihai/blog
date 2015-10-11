@@ -1,0 +1,18 @@
+<!-- 左侧 留言列表/表单 -->
+<div class="P-messageLeft">
+	<!-- 选项卡切换 -->
+	<ul class="P-messageLeftTab">
+		<li data-type="list" v-class="act: tabType==='list'">留言列表</li>
+		<li data-type="form" v-class="act: tabType==='form'">我要留言</li>
+	</ul>
+	<!-- 留言列表 -->
+	<div class="P-messageLeftList" v-show="tabType==='list'">
+		留言列表
+	</div>
+	<!-- 留言表单 -->
+	<div class="P-messageLeftForm" v-show="tabType==='form'">
+		留言表单
+	</div>
+</div>
+<!-- 右侧 其他信息 -->
+<div class="P-messageRight"></div>

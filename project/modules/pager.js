@@ -13,7 +13,7 @@ define(function(require, exports) {
 				'class'   : 'M-pager',
 				// 最多显示的项数
 				'max'     : 5,
-				'template': 'project/template/modules/pager.html',
+				'template': 'template/modules/pager.html',
 				'vModel'  : {
 					// 页码数组
 					'pages'      : [],

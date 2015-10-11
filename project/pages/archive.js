@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 		init: function(config) {
 			config = app.cover(config, {
 				'class'   : 'P-archive',
-				'template': 'project/template/pages/archive.html',
+				'template': 'template/pages/archive.html',
 				'vModel'  : {
 					// 显示加载
 					'isLoading': true,

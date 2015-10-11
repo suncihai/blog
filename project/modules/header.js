@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 			config = app.cover(config, {
 				'class'   : 'M-header',
 				'tag'     : 'header',
-				'template': 'project/template/modules/header.html',
+				'template': 'template/modules/header.html',
 				'vModel'  : {
 					// logo文字
 					'logo': '<TANGBC/>',
@@ -101,6 +101,15 @@ define(function(require, exports, module) {
 		 * 跳转到搜索页面
 		 */
 		searching: function(val) {
+			if (val.length <= 1) {
+				app.tooltip.setTip({
+					'arrow'  : false,
+					'tyoe'   : 'warning',
+					'content': T('搜索内容不能少于两个字符~')
+				});
+				return false;
+			}
+
 			app.controller.go('search?word=' + val);
 		},
 
@@ -123,7 +132,6 @@ define(function(require, exports, module) {
 			if (this.$timeStamp !== evt.timeStamp) {
 				this.hideSearchInput();
 			}
-			return false;
 		},
 
 		/**

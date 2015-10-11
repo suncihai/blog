@@ -9,7 +9,7 @@ define(function(require, exports) {
 		init: function(config) {
 			config = app.cover(config, {
 				'class'   : 'P-search',
-				'template': 'project/template/pages/search.html',
+				'template': 'template/pages/search.html',
 				'vModel'  : {
 					// 是否显示加载状态
 					'isLoading': true,

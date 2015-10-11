@@ -8,7 +8,7 @@ define(function(require, exports) {
 		init: function(config) {
 			config = app.cover(config, {
 				'class'   : 'M-banner',
-				'template': 'project/template/modules/banner.html',
+				'template': 'template/modules/banner.html',
 				'vModel'  : {
 					// 是否是栏目banner
 					'isAchive': true,

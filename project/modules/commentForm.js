@@ -14,7 +14,7 @@ define(function(require, exports) {
 		init: function(config) {
 			config = app.cover(config, {
 				'class'      : 'M-commentForm',
-				'template'   : 'project/template/modules/commentForm.html',
+				'template'   : 'template/modules/commentForm.html',
 				// 是否有联系方式
 				'hasContact' : false,
 				'vModel'     : {

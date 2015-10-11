@@ -8,7 +8,7 @@ define(function(require, exports, module) {
 		init: function(config) {
 			config = app.cover(config, {
 				'class'   : 'M-footer',
-				'template': 'project/template/modules/footer.html',
+				'template': 'template/modules/footer.html',
 				'vModel'  : {
 					// copyright
 					'copy': app.config('copyright')

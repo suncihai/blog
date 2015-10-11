@@ -16,7 +16,7 @@ define(function(require, exports) {
 		init: function(config) {
 			config = app.cover(config, {
 				'class'   : 'M-comment',
-				'template': 'project/template/modules/commentList.html',
+				'template': 'template/modules/commentList.html',
 				'vModel'  : {
 					// 头部标题
 					'title'         : T('评论'),

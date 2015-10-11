@@ -17,7 +17,7 @@ define(function(require, exports) {
 			config = app.cover(config, {
 				'target'  : DIALOG,
 				'class'   : 'M-dialog',
-				'template': 'project/template/modules/dialog.html',
+				'template': 'template/modules/dialog.html',
 				'vModel'  : {
 					// 对话框标题
 					'title'       : config.title || T('系统提示'),

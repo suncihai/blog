@@ -11,7 +11,7 @@ define(function(require, exports) {
 			config = app.cover(config, {
 				'class'   : 'G-frame',
 				'tag'     : 'div',
-				'template': 'project/template/layout.html'
+				'template': 'template/layout.html'
 			});
 			this.Super('init', arguments);
 		},
@@ -39,6 +39,7 @@ define(function(require, exports) {
 						'blogArchive': dom.find('.G-frameBodyBlogArchive'),
 						'blogArticle': dom.find('.G-frameBodyBlogArticle'),
 						'blogSearch' : dom.find('.G-frameBodyBlogSearch'),
+						'blogMessage': dom.find('.G-frameBodyBlogMessage'),
 						'blogFooter' : dom.find('.G-frameBodyBlogFooter'),
 					// 空白页容器
 					'blank': dom.find('.G-frameBodyBlank'),
@@ -83,24 +84,35 @@ define(function(require, exports) {
 				case 'blank':
 					doms[scene].show().siblings().hide();
 				break;
-				// 博客栏目页
+				// 博客栏目页面
 				case 'blogArchive':
 					doms.blog.show().siblings().hide();
 					doms.blogArchive.show();
 					doms.blogArticle.hide();
 					doms.blogSearch.hide();
+					doms.blogMessage.hide();
 				break;
-				// 博客文章页
+				// 博客文章页面
 				case 'blogArticle':
 					doms.blog.show().siblings().hide();
 					doms.blogArticle.show();
 					doms.blogArchive.hide();
 					doms.blogSearch.hide();
+					doms.blogMessage.hide();
 				break;
-				// 博客搜索结果页
+				// 博客搜索结果页面
 				case 'blogSearch':
 					doms.blog.show().siblings().hide();
 					doms.blogSearch.show();
+					doms.blogArticle.hide();
+					doms.blogArchive.hide();
+					doms.blogMessage.hide();
+				break;
+				// 博客留言板页面
+				case 'blogMessage':
+					doms.blog.show().siblings().hide();
+					doms.blogMessage.show();
+					doms.blogSearch.hide();
 					doms.blogArticle.hide();
 					doms.blogArchive.hide();
 				break;
