@@ -7,7 +7,6 @@ define(function(require, exports) {
 	var $ = app.jquery;
 	var tooltip = app.tooltip;
 
-	var api = app.config('api');
 	// 初始请求参数
 	var iparam = app.config('commentParam');
 
@@ -15,9 +14,19 @@ define(function(require, exports) {
 	var CommentList = app.Container.extend({
 		init: function(config) {
 			config = app.cover(config, {
-				'class'   : 'M-comment',
-				'template': 'template/modules/commentList.html',
-				'vModel'  : {
+				'class'    : 'M-comment',
+				'template' : 'template/modules/commentList.html',
+				// 评论/留言拉取地址
+				'listUrl'  : '',
+				// 是否有头部
+				'hasHeader': false,
+				// 是否有沙发
+				'hasEmpty' : false,
+				'vModel'   : {
+					// 是否有头部
+					'hasHeader'     : config.hasHeader,
+					// 是否有沙发
+					'hasEmpty'      : config.hasEmpty,
 					// 头部标题
 					'title'         : T('评论'),
 					// 是否显示加载状态
@@ -47,17 +56,21 @@ define(function(require, exports) {
 		 * 布局视图初始化完成
 		 */
 		viewReady: function() {
+			var c = this.getConfig();
+
 			// 创建子模块（分页器）
 			this.createTplModules();
 
 			// 创建评论弹窗模块
-			this.createAsync('dialog', '@modules/dialog.base', {
-				'width' : 35,
-				'height': 22.4,
-				'type'  : 'module',
-				'module': '@modules/commentForm.base',
-				'title' : T('添加评论')
-			});
+			if (c.hasHeader) {
+				this.createAsync('dialog', '@modules/dialog.base', {
+					'width' : 35,
+					'height': 22.4,
+					'type'  : 'module',
+					'module': '@modules/commentForm.base',
+					'title' : T('添加评论')
+				});
+			}
 		},
 
 		/**
@@ -87,7 +100,7 @@ define(function(require, exports) {
 		},
 
 		/**
-		 * 评论添加成功，隐藏对话框，来自评论表单的冒泡消息
+		 * 评论添加成功，隐藏对话框，来自评论表单的冒泡消息，hasHeader==false时不触发
 		 */
 		onCommentSubmited: function(ev) {
 			var dialog = this.getChild('dialog');
@@ -123,7 +136,7 @@ define(function(require, exports) {
 				'artid': artid
 			});
 
-			app.ajax.get(api.listcomment, param, this.delayData, this);
+			app.ajax.get(this.getConfig('listUrl'), param, this.delayData, this);
 		},
 
 		/**

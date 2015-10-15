@@ -41,7 +41,13 @@ define(function(require, exports, module) {
 		 */
 		viewReady: function() {
 			// 创建子模块
-			this.createTplModules();
+			this.createTplModules({
+				'comment': {
+					'listUrl'  : app.config('api/listcomment'),
+					'hasHeader': true,
+					'hasEmpty' : true
+				}
+			});
 		},
 
 		/**

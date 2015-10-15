@@ -6,13 +6,9 @@
 		<li data-type="form" v-class="act: tabType==='form'">我要留言</li>
 	</ul>
 	<!-- 留言列表 -->
-	<div class="P-messageLeftList" v-show="tabType==='list'">
-		留言列表
-	</div>
+	<div class="P-messageLeftList" v-show="tabType==='list'" m-name="list" m-module="@modules/commentList.base"></div>
 	<!-- 留言表单 -->
-	<div class="P-messageLeftForm" v-show="tabType==='form'">
-		留言表单
-	</div>
+	<div class="P-messageLeftForm" v-show="tabType==='form'" m-name="form" m-module="@modules/commentForm.base"></div>
 </div>
 <!-- 右侧 其他信息 -->
 <div class="P-messageRight"></div>

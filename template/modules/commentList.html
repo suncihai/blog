@@ -1,5 +1,5 @@
 <!-- 标题、添加按钮 -->
-<header class="M-commentHead">
+<header class="M-commentHead" v-if="hasHeader">
 	<h2 class="M-commentHeadTitle" v-text="title"></h2>
 	<span class="M-commentHeadAdd" title="添加评论" v-on="click: vmClickAdd">
 		<i class="fa fa-edit"></i>
@@ -26,7 +26,7 @@
 <!-- 评论分页 -->
 <div class="M-commentPager" v-show="!isLoading && showPager" m-name="pager" m-module="@project/modules/pager.noLink"/>
 <!-- 沙发 -->
-<div class="M-commentEmpty" v-show="!isLoading && isEmpty && !isRefresh">
+<div class="M-commentEmpty" v-if="hasEmpty" v-show="!isLoading && isEmpty && !isRefresh">
 	<div class="M-commentEmptyWrap" title="点击添加评论" v-on="click: vmClickAdd">
 		<div class="M-commentEmptyLeftHand"/>
 		<div class="M-commentEmptyRightHand"/>
