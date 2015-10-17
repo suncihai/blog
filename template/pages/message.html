@@ -2,8 +2,8 @@
 <div class="P-messageLeft">
 	<!-- 选项卡切换 -->
 	<ul class="P-messageLeftTab">
-		<li data-type="list" v-class="act: tabType==='list'">留言列表</li>
-		<li data-type="form" v-class="act: tabType==='form'">我要留言</li>
+		<li data-type="list" v-class="act: tabType==='list'">{% 留言列表 %}</li>
+		<li data-type="form" v-class="act: tabType==='form'">{% 我要留言 %}</li>
 	</ul>
 	<!-- 留言列表 -->
 	<div class="P-messageLeftList" v-show="tabType==='list'" m-name="list" m-module="@modules/commentList.base"></div>
@@ -14,23 +14,23 @@
 <div class="P-messageRight">
 	<!-- 关于我 -->
 	<dl class="P-messageRightItem">
-		<dt># 关于我</dt>
+		<dt># {% 关于我 %}</dt>
 		<dd>
-			一个小小的前端开发工程师，目前就职于<a href="http://www.sunteng.com/" target="_blank" class="company">广州舜飞信息科技有限公司</a>，热爱前端、运动(尤其羽毛球和乒乓球)和关注NBA。
+			{% 一个小小的前端开发工程师，目前就职于<a href="http://www.sunteng.com/" target="_blank" class="company">广州舜飞信息科技有限公司</a>，热爱前端、运动(尤其羽毛球和乒乓球)和关注NBA。 %}
 		</dd>
 	</dl>
 	<!-- 联系方式 -->
 	<dl class="P-messageRightItem">
-		<dt># 联系方式</dt>
+		<dt># {% 联系方式 %}</dt>
 		<dd>
 			<span class="contact-item">
-				<i class="fa fa-weibo mr3"></i>- <a href="http://weibo.com/u/2753264742/" target="_blank">唐朝的TANG</a>
+				<i class="fa fa-weibo mr3"></i>- <a href="http://weibo.com/u/2753264742/" target="_blank">{% 唐朝的TANG %}</a>
 			</span>
 			<span class="contact-item">
 				<i class="fa fa-envelope mr3"></i>- <a href="mailto:tangbichang@sunteng.com">tangbichang@sunteng.com</a>
 			</span>
 			<span class="contact-item">
-				<i class="fa fa-qq mr3"></i>- 40519806（请注明详细信息~）
+				<i class="fa fa-qq mr3"></i>- 40519806{% （请注明详细信息~） %}
 			</span>
 		</dd>
 	</dl>

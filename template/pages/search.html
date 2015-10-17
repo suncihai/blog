@@ -11,11 +11,11 @@
 		</h2>
 		<p class="P-searchListItemBrief" v-html="item.brief"></p>
 		<div class="P-searchListItemInfo">
-			<span>分类：{{item.achive}}</span>
+			<span>{% 分类： %}{{item.achive}}</span>
 			 /
-			<span>评论数：{{item.comments}}</span>
+			<span>{% 评论数： %}{{item.comments}}</span>
 			 /
-			<span>发布时间：{{item.date}}</span>
+			<span>{{ 发布时间： }}{{item.date}}</span>
 		</div>
 	</section>
 </div>
@@ -25,7 +25,7 @@
 <div class="C-commonError animated" v-show="showError" v-class="shake: showError">
 	<div class="emotion">:-(</div>
 	<div class="info">
-		<p>哎呀，抱歉！服务器出错了…… 它说：</p>
+		<p>{% 哎呀，抱歉！服务器出错了…… 它说： %}</p>
 		<p v-text="errorMsg"></p>
 	</div>
 </div>

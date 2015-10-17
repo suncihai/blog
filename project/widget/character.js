@@ -19,7 +19,7 @@ define(function(require, exports) {
 		if ('-ms-' + prop in oDiv.style) {
 			return true;
 		}
-		while(len--) {
+		while (len--) {
 			if (browsers[len] + prop in oDiv.style) {
 				return true;
 			}
@@ -34,7 +34,7 @@ define(function(require, exports) {
 		arr = hash.split('/');
 		len = arr.length;
 
-		switch(len) {
+		switch (len) {
 			case 1: aid = null; break;
 			case 2: aid = arr[1]; break;
 			default: aid = arr[2] === '' ? arr[1] : null;

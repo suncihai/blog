@@ -32,8 +32,8 @@ define(function(require, exports) {
 		}
 
 		if (util.isString(type) && util.isFunc(remove)) {
-			callback = remove;
 			context = callback;
+			callback = remove;
 			remove = false;
 		}
 
@@ -52,7 +52,9 @@ define(function(require, exports) {
 		var animateType = typeMap[type] || typeMap['middle'];
 		var animateCls = animateType + ' ' + keyframe;
 
-		// 动画结束后的回调
+		/**
+		 * 动画结束后的回调
+		 */
 		function cbAnimateEnd() {
 			// 默认结束后移除class
 			if (!remove) {
@@ -67,10 +69,9 @@ define(function(require, exports) {
 			}
 		}
 
-		/*
-		 * 处理动画结束事件
-		 * again: 是否是二次执行, 子节点冒泡后不应重复添加animateCls
-		 * (在Chrome浏览器下，重复添加classname会触发两次原有的addClass事件)
+		/**
+		 * 处理动画结束事件，(在Chrome浏览器下，重复添加classname会触发两次原有的addClass)
+		 * @param   {Boolean}  again  [是否是二次执行, 子节点冒泡后不应重复添加animateCls]
 		 */
 		function handleAnimateEndEvent(again) {
 			$elm.addClass(again ? '' : animateCls).one(

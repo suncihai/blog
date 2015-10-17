@@ -20,6 +20,13 @@ define(function() {
 		// 页脚文字
 		copyright: 'Copyright ©2012-2015 TANGBC.COM',
 
+		// 多语言
+		lang: {
+			'zhCN': _T('简体中文'),
+			'zhHK': _T('繁体中文'),
+			'enUS': _T('英文')
+		},
+
 		// 导航
 		navs: [
 			// {'name': _T('首页'), 'link': '#index'},

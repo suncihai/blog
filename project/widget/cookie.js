@@ -16,6 +16,7 @@ define(function(require, exports) {
 	// 写入cookie
 	exports.set = function(key, value, options) {
 		options = util.extend({}, defaults, options);
+
 		if (util.isNumber(options.expires)) {
 			var days = options.expires;
 			var t = options.expires = new Date();

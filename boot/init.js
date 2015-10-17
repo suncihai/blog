@@ -76,6 +76,9 @@
 			], APPINIT);
 		},
 		function(app, sysConfig, cookie, animate, router) {
+			// 翻译配置文件中的多语言字段
+			lang.translateJSON(sysConfig);
+
 			// 将系统配置和基础模块挂载到app下
 			var common = {
 				'lang'      : lang,
@@ -83,6 +86,8 @@
 				'animate'   : animate,
 				'controller': router
 			};
+
+			// 配置框架全局参数
 			app.init({
 				// 系统配置数据
 				'data'   : sysConfig,
