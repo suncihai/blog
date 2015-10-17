@@ -37,7 +37,7 @@
 			}
 		}
 		&List{
-			min-height: 5em;
+			min-height: 14em;
 			padding-top: 1.5em;
 		}
 		&Form{
@@ -46,34 +46,34 @@
 	}
 	// 右侧 其他信息
 	&Right{
+		float: right;
 		display: inline-block;
 		box-sizing: border-box;
 		vertical-align: top;
-		padding: 2.4em 0 0 2em;
-		width: 35%;
-		height: 100px;
-		.infoBox{
-			width: 100%;
-			border: 1px solid #f3f3f3;
-			background: #f8f8f8;
-			padding-bottom: 1.5em;
-			.title{
-				padding: 1em 0 .5em 1em;
-				font-weight: normal;
-				font-size: 1.8rem;
-				color: #22B6AB;
+		padding: 2em 0 1em 1em;
+		width: 34%;
+		&Item{
+			margin-bottom: 1em;
+			a{
+				color: @defaultColor;
 			}
-			ul{
-				padding-left: 1.5em;
-				list-style-type: circle;
-				list-style-position: inside;
-				li{
-					padding: .2em 0;
+			.company{
+				text-decoration: underline;
+				&:hover{
+					color: @defaultAnchorHover;
 				}
 			}
-			.item{
-				padding: 1em 1.5em 0 1.2em;
-				color: #22B6AB;
+			.contact-item{
+				display: block;
+				padding-bottom: .5em;
+			}
+			dt{
+				background: rgba(34, 182, 171, 0.08);
+				padding: .5em 1em;
+			}
+			dd{
+				padding: 1em;
+				line-height: 150%;
 			}
 		}
 	}

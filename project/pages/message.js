@@ -26,10 +26,12 @@ define(function(require, exports) {
 			// 创建子模块
 			this.createTplModules({
 				'form': {
-					'hasContact': true
+					'hasContact': true,
+					'saveUrl': app.config('api/addmessage')
 				},
 				'list': {
 					'listUrl': app.config('api/listmessage'),
+					'isGreen': true,
 					'css'    : {
 						'width': '100%'
 					}
@@ -66,6 +68,9 @@ define(function(require, exports) {
 		updateBanner: function() {
 			var text = '<span class="fts30">' + T('可以随意发表：无聊的、建议的、拍砖的、批评的……') + '<span>';
 			this.notify('layout.blogBanner', 'updateQuotations', text);
+
+			// 更新标题
+			this.notify('layout', 'changeTitle', T('给我留言'));
 		},
 
 		/**
@@ -81,6 +86,27 @@ define(function(require, exports) {
 				list.load();
 			}
 			return false;
+		},
+
+		/**
+		 * 留言添加成功消息，来自评论表单的冒泡消息
+		 */
+		onCommentSubmited: function() {
+			var chs = this.getChilds();
+			this.vm.set('tabType', 'list');
+
+			chs.form.reset();
+			chs.list.load();
+			return false;
+		},
+
+		/**
+		 * 重新加载留言数据
+		 */
+		reloadList: function() {
+			var list = this.getChild('list');
+			list.load();
+			return this;
 		},
 
 		/**

@@ -19,7 +19,7 @@ define(function(require, exports) {
 
 		// 已经创建过
 		if (mod) {
-			mod.reset();
+			mod.reset().reloadList();
 		}
 		else {
 			app.core.createAsync(name, '@pages/message.base', {

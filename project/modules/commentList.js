@@ -22,6 +22,8 @@ define(function(require, exports) {
 				'hasHeader': false,
 				// 是否有沙发
 				'hasEmpty' : false,
+				// loading图标是否是绿色
+				'isGreen'  : false,
 				'vModel'   : {
 					// 是否有头部
 					'hasHeader'     : config.hasHeader,
@@ -31,6 +33,8 @@ define(function(require, exports) {
 					'title'         : T('评论'),
 					// 是否显示加载状态
 					'isLoading'     : false,
+					// loading图标的颜色
+					'isGreen'       : config.isGreen,
 					// 评论数是否为0
 					'isEmpty'       : true,
 					// 是否显示分页器
@@ -67,8 +71,11 @@ define(function(require, exports) {
 					'width' : 35,
 					'height': 22.4,
 					'type'  : 'module',
+					'title' : T('添加评论'),
 					'module': '@modules/commentForm.base',
-					'title' : T('添加评论')
+					'config': {
+						'saveUrl': app.config('api/addcomment')
+					}
 				});
 			}
 		},

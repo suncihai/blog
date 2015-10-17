@@ -15,6 +15,8 @@ define(function(require, exports) {
 			config = app.cover(config, {
 				'class'      : 'M-commentForm',
 				'template'   : 'template/modules/commentForm.html',
+				// 评论/留言保存地址
+				'saveUrl'    : '',
 				// 是否有联系方式
 				'hasContact' : false,
 				'vModel'     : {
@@ -163,7 +165,7 @@ define(function(require, exports) {
 			if (this.validate(data)) {
 				this.$pushing = true;
 				this.setSubmitStatus('pushing');
-				app.ajax.post(api.addcomment, data, this.afterDataBack, this);
+				app.ajax.post(this.getConfig('saveUrl'), data, this.afterDataBack, this);
 			}
 		},
 

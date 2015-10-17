@@ -7,7 +7,7 @@
 </header>
 <!-- 评论加载 -->
 <div class="M-commentLoading" v-show="isLoading">
-	<i class="fa fa-spinner animate-spinner-rotate icon"></i>
+	<i class="fa fa-spinner animate-spinner-rotate" v-class="icon-brown: !isGreen, icon-green: isGreen"></i>
 </div>
 <!-- 评论列表 -->
 <article class="M-commentList" v-show="!isLoading">
