@@ -180,7 +180,7 @@ define(function(require, exports) {
 		eventPageClick: function(evt, elm) {
 			var page = +$(elm).attr('data-id');
 			// 点击有效页码发送消息
-			if (util.isNumber(page) && (page !== this.$page) && (page !== this.$pages)) {
+			if (util.isNumber(page) && (page !== this.$page)) {
 				this.fire('pageSelected', page);
 			}
 			return false;

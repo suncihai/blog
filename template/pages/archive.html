@@ -14,7 +14,7 @@
 		<!-- 摘要&缩略图 -->
 		<article>
 			<p class="abstract" v-html="item.content"></p>
-			<span class="cover" v-html="item.cover"></span>
+			<span class="cover" v-if="item.cover" v-html="item.cover"></span>
 		</article>
 		<!-- 其他信息 -->
 		<div class="P-archiveListItemInfo">

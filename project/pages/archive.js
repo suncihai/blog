@@ -207,7 +207,7 @@ define(function(require, exports, module) {
 
 			this.vm.set('archives', archives);
 
-			this.showThumb();
+			this.setTimeout('showThumb');
 		},
 
 		/**

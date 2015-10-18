@@ -56,17 +56,17 @@
 	var lang = null, controller = null;
 	var stepFunc = [
 		function() {
-			// 配置以及加载语言包模块
+			// seajs全局配置参数、加载语言包模块
 			sea.config(config);
 			sea.use(['@widget/language'], APPINIT);
 		},
 		function(language) {
-			// 多语言模块回调
+			// 初始化多语言
 			lang = language;
 			lang.load(APPINIT);
 		},
 		function() {
-			// 加载基础模块
+			// 加载依赖基础模块
 			sea.use([
 				'app',
 				'@boot/config',
@@ -80,7 +80,7 @@
 			lang.translateJSON(sysConfig);
 
 			// 将系统配置和基础模块挂载到app下
-			var common = {
+			var commons = {
 				'lang'      : lang,
 				'cookie'    : cookie,
 				'animate'   : animate,
@@ -90,16 +90,20 @@
 			// 配置框架全局参数
 			app.init({
 				// 系统配置数据
-				'data'   : sysConfig,
+				'data'       : sysConfig,
 				// ajax最大同时请求数
-				'maxQuery': 7,
+				'maxQuery'   : 7,
 				// ajax响应超时时间
-				'timeout' : 9288,
+				'timeout'    : 9288,
+				// ajax返回数据格式
+				'dataType'   : 'json',
+				// ajax数据内容格式
+				'contentType': 'application/json; charset=UTF-8',
 				// 视图模板文件的子模块标记名称
-				'mName'   : 'm-name',
+				'mName'      : 'm-name',
 				// 视图模块文件的子模块标记路径
-				'mModule' : 'm-module'
-			}, common);
+				'mModule'    : 'm-module'
+			}, commons);
 
 			// app是否作为全局变量调试
 			if (app.config('debug')) {

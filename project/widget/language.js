@@ -6,24 +6,26 @@ define(function(require, exports, module) {
 	var WIN = window;
 	var util = require('util');
 	var jquery = require('jquery');
+	var config = require('@boot/config');
 	var cookie = require('@widget/cookie');
 
 	function Language() {
 		var self = this;
-		var defaultLang = 'zhCN';
+		var cLang = cookie.get('lang');
+		var dLang = config.defaultLang || 'zhCN';
 
 		// 默认语言
-		this.defaultLang = defaultLang;
+		this.defaultLang = dLang;
 		// 正在加载的语言
-		this.loadLang = '';
+		this.loadLang = null;
 
 		// 当前的语言
-		if (cookie.get('lang')) {
-			this.currentLang = cookie.get('lang') || 'zhCN';
+		if (cLang) {
+			this.currentLang = cLang;
 		}
 		else {
-			cookie.set('lang', defaultLang);
-			this.currentLang = defaultLang;
+			cookie.set('lang', dLang);
+			this.currentLang = dLang;
 		}
 
 		// 语言翻译对象(语言包)
@@ -36,19 +38,20 @@ define(function(require, exports, module) {
 		this.callback = null;
 
 		/**
-		 * 全局多语言标记函数，可进行模板替换
+		 * 全局多语言标记函数，支持模板替换
 		 * @param  {String}  text  [需要翻译的文字]
 		 */
 		this.T = WIN.T = function(text /*, replaceN ... */) {
-			// 对非默认进行转换
+			var langPackage = self.langPackage;
+			// 对非默认语言进行转换
 			if (!self.isDefault()) {
 				// 方法转换
-				if (self.langPackage && self.langPackage.func) {
-					text = self.langPackage.func.call(self, text);
+				if (langPackage && langPackage.func) {
+					text = langPackage.func.call(self, text);
 				}
 				// 语言包装换
-				else if (self.langPackage && self.langPackage.hasOwnProperty(text)) {
-					text = self.langPackage[text];
+				else if (langPackage && langPackage.hasOwnProperty(text)) {
+					text = langPackage[text];
 				}
 			}
 
@@ -84,11 +87,13 @@ define(function(require, exports, module) {
 				this.callback = lang;
 				lang = this.currentLang;
 			}
+
 			if (lang === this.defaultLang) {
 				this.langPackage = null;
 				this.callback(null);
 				return false;
 			}
+
 			this.loadLang = lang;
 
 			if (!this.isDefault()) {
@@ -116,7 +121,7 @@ define(function(require, exports, module) {
 			}
 			else {
 				error = util.extend({
-					'message': 'The server returns invalid',
+					'message': 'Language package load failure!',
 					'code'   : 200,
 					'success': false
 				}, data);
@@ -162,7 +167,7 @@ define(function(require, exports, module) {
 
 			// 加载失败
 			if (!result) {
-				util.error(T('语言包{1}加载失败！', this.loadLang));
+				util.error('Language package load failure: ' + this.loadLang);
 				this.currentLang = this.defaultLang;
 				cookie.set('lang', this.defaultLang);
 				return false;
@@ -175,8 +180,8 @@ define(function(require, exports, module) {
 
 			// 缓存转换方法
 			if (transPath && transFunc) {
-				require.async(transPath, function(module) {
-					var func =  module[transFunc];
+				require.async(transPath, function(translate) {
+					var func =  translate[transFunc];
 					if (func && util.isFunc(func)) {
 						self.langPackage.func = func;
 					}
@@ -204,15 +209,15 @@ define(function(require, exports, module) {
 			}
 
 			util.each(json, function(value, key) {
-				// 字段为字符串，直接翻译
+				// 字段值类型为字符串，直接翻译
 				if (util.isString(value)) {
 					json[key] = self.T(value);
 				}
-				// 字段为数组
+				// 字段值类型为数组
 				else if (util.isArray(value)) {
 					json[key] = self.translateArrary(value);
 				}
-				// 字段为对象
+				// 字段值类型为对象
 				else if (util.isObject(value)) {
 					json[key] = self.translateJSON(value);
 				}

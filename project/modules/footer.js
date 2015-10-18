@@ -84,6 +84,12 @@ define(function(require, exports, module) {
 		 */
 		eventSelectLang: function(evt, elm) {
 			var lang = $(elm).attr('data-type');
+			this.hideSelect();
+
+			if (lang === this.vm.get('lang')) {
+				return false;
+			}
+
 			this.changeLang(lang);
 			return false;
 		},
@@ -93,13 +99,6 @@ define(function(require, exports, module) {
 		 * @param   {String}  lang  [语言字段]
 		 */
 		changeLang: function(lang) {
-			this.hideSelect();
-
-			// 没有改变
-			if (lang === this.vm.get('lang')) {
-				return false;
-			}
-
 			if (!util.has(lang, app.config('lang'))) {
 				app.tooltip.setTip({
 					'arrow'  : false,
