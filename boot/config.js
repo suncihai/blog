@@ -97,25 +97,25 @@ define(function() {
 		// 数据接口
 		api: {
 			// 搜索
-			'search'      : '/blog/sprint/api/search/query.php',
+			'search'      : '/blog/wheat/api/search/query.php',
 			// 获取标题列表
-			'listtitle'   : '/blog/sprint/api/listtitle/query.php',
+			'listtitle'   : '/blog/wheat/api/listtitle/query.php',
 			// 获取评论列表
-			'listcomment' : '/blog/sprint/api/listcomment/query.php',
+			'listcomment' : '/blog/wheat/api/listcomment/query.php',
 			// 添加一条评论
-			'addcomment'  : '/blog/sprint/api/addcomment/query.php',
+			'addcomment'  : '/blog/wheat/api/addcomment/query.php',
 			// 获取留言列表
-			'listmessage' : '/blog/sprint/api/listmessage/query.php',
+			'listmessage' : '/blog/wheat/api/listmessage/query.php',
 			// 添加一条留言
-			'addmessage'  : '/blog/sprint/api/addmessage/query.php',
+			'addmessage'  : '/blog/wheat/api/addmessage/query.php',
 			// 验证码校验
-			'verifycode'  : '/blog/sprint/api/verifycode/query.php',
+			'verifycode'  : '/blog/wheat/api/verifycode/query.php',
 			// 获取验证码
-			'getthecode'  : '/blog/sprint/api/getthecode/query.php',
+			'getthecode'  : '/blog/wheat/api/getthecode/query.php',
 			// 获取一篇博客
-			'showarticle' : '/blog/sprint/api/showarticle/query.php',
+			'showarticle' : '/blog/wheat/api/showarticle/query.php',
 			// 获取博客列表
-			'listarchives': '/blog/sprint/api/listarchives/query.php'
+			'listarchives': '/blog/wheat/api/listarchives/query.php'
 		},
 
 		// 延迟展示(毫秒)

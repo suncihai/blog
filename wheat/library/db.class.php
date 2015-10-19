@@ -365,51 +365,65 @@ class SQL {
             'user_id'
         );
         $_fields = implode(", ", $_fieldArr);
-        // 限制条件(只返回已批准的评论)
-        $_where = "comment_approved=1 AND comment_post_ID=$artid";
+
+        // 限制条件(返回已批准、非回复的评论)
+        $_where = "comment_approved=1 AND comment_post_ID=$artid AND comment_parent=0";
+
         // 评论总数
         $resQueryAll = $this->query("SELECT comment_ID FROM wp_comments WHERE $_where");
         $total = $resQueryAll['total'];
-        $sort = 'DESC'; // 默认按最新
-        if ($date === -1) {
-            $sort = 'ASC';
-        }
-        // 排序方式
+
+        // 排序默认按最新
+        $sort = $date === -1 ? 'ASC' : 'DESC';
         $_order = "ORDER BY comment_date $sort";
+
         // 分页起点
         $start = ($page - 1) * $limit;
+
         $resQueryList = $this->query("SELECT $_fields FROM wp_comments WHERE $_where $_order LIMIT $start, $limit");
+
         if ($resQueryList['success']) {
             $itemArray = array();
+
             foreach ($resQueryList['items'] as $key => $item) {
-                // 查找该评论的父评论(如果有)
-                $pid = intval($item['comment_parent']);
-                $parent = $this->getParentComment($pid);
+                // 评论id
+                $cid = intval($item['comment_ID']);
+
+                // 回复的所有评论
+                $replies = $this->getReplyComments($cid);
 
                 // 是否是管理员回复
                 $isAdmin = intval($item['user_id']) === 1;
+
                 // 字段转化
                 $itemFormat = array(
-                    'id'       => intval($item['comment_ID']),
-                    'pid'      => $pid,
+                    'id'       => $cid,
+                    'pid'      => intval($item['comment_parent']),
                     'author'   => $isAdmin ? $this->ADMIN : $item['comment_author'],
                     'url'      => preg_replace('/(http:)/', "", $item['comment_author_url']),
                     'address'  => '广东广州',
                     // 'address'  => $isAdmin ? '' : getCityName($item['comment_author_IP']),
                     'date'     => $item['comment_date'],
                     'content'  => htmlspecialchars_decode(postAutoP($item['comment_content'])),
-                    'parent'   => $parent,
+                    'replies'  => $replies,
                     'admin'    => $isAdmin,
                     'passed'   => true
                 );
                 array_push($itemArray, $itemFormat);
             }
+
+            // 数据格式
             $resArray = array(
-                'items' => $itemArray,               // 选项数组
-                'total' => $total,                   // 总条数
-                'pages' => ceil($total / $limit),  // 总页数
-                'page'  => intval($page)           // 当前第几页
+                // 选项数组
+                'items' => $itemArray,
+                // 总条数
+                'total' => $total,
+                // 总页数
+                'pages' => ceil($total / $limit),
+                // 当前第几页
+                'page'  => intval($page)
             );
+
             // 最终返回的结果
             $retArray = array(
                 'success' => true,
@@ -457,6 +471,69 @@ class SQL {
         }
 
         return $parent;
+    }
+
+    /**
+     * getReplyComments 获取回复于当前评论的所有评论
+     * @param   [type]  $cid  [当前评论id]
+     */
+    private function getReplyComments($cid) {
+        if (!$cid) {
+            return null;
+        }
+
+        // 查询字段
+        $_fieldArr = array(
+            'comment_ID',
+            'comment_date',
+            'comment_author',
+            // 'comment_author_email',
+            // 'comment_agent',
+            'comment_author_IP',
+            "comment_author_url",
+            'comment_content',
+            'comment_parent',
+            'user_id'
+        );
+        $_fields = implode(", ", $_fieldArr);
+
+        $resQuery = $this->query("SELECT $_fields FROM wp_comments WHERE comment_parent=$cid");
+
+        // 总结果数
+        $total = $resQuery['total'];
+
+        // 查询成功
+        if ($resQuery['success']) {
+            $itemArray = array();
+
+            foreach ($resQuery['items'] as $key => $item) {
+                // 是否是管理员回复
+                $isAdmin = intval($item['user_id']) === 1;
+                // 返回的字段
+                $itemFormat = array(
+                    'id'       => intval($item['comment_ID']),
+                    'pid'      => $cid,
+                    'author'   => $isAdmin ? $this->ADMIN : $item['comment_author'],
+                    'url'      => preg_replace('/(http:)/', "", $item['comment_author_url']),
+                    'address'  => '广东广州',
+                    // 'address'  => $isAdmin ? '' : getCityName($item['comment_author_IP']),
+                    'date'     => $item['comment_date'],
+                    'content'  => htmlspecialchars_decode(postAutoP($item['comment_content'])),
+                    'admin'    => $isAdmin,
+                    'passed'   => true
+                );
+                array_push($itemArray, $itemFormat);
+            }
+
+            // 最终返回的结果
+            $resArray = $itemArray;
+        }
+        // 查询失败
+        else {
+            $resArray = null;
+        }
+
+        return $resArray;
     }
 
     /**
