@@ -515,7 +515,6 @@ class SQL {
                     'pid'      => $cid,
                     'author'   => $isAdmin ? $this->ADMIN : $item['comment_author'],
                     'url'      => preg_replace('/(http:)/', "", $item['comment_author_url']),
-                    'address'  => '广东广州',
                     // 'address'  => $isAdmin ? '' : getCityName($item['comment_author_IP']),
                     'date'     => $item['comment_date'],
                     'content'  => htmlspecialchars_decode(postAutoP($item['comment_content'])),

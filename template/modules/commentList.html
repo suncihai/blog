@@ -2,7 +2,7 @@
 <header class="M-commentHead" v-if="hasHeader">
 	<h2 class="M-commentHeadTitle" v-text="title"></h2>
 	<span class="M-commentHeadAdd" title="{% 添加评论 %}" v-on="click: vmClickAdd">
-		<i class="fa fa-edit"></i>
+		<i class="fa fa-pencil"></i>
 	</span>
 </header>
 <!-- 评论加载 -->
@@ -12,6 +12,7 @@
 <!-- 评论列表 -->
 <article class="M-commentList" v-show="!isLoading">
 	<section v-repeat="item in comments">
+		<!-- 头部 -->
 		<header>
 			<a class="nick" v-text="item.nickName" v-attr="href: item.url, target: item.url ? '_blank' : null"></a>
 			<span class="address" v-text="item.address"></span>
@@ -20,7 +21,23 @@
 				<span class="reply" title="{% 回复TA %}"><i class="fa fa-reply"/></span>
 			</div> -->
 		</header>
+		<!-- 评论内容 -->
 		<article v-html="item.content"></article>
+		<!-- 回复内容 -->
+		<footer>
+			<dl v-repeat="reply in item.replies">
+				<dt>
+					<a class="reply-nick"
+						v-class="admin: reply.isAdmin"
+						v-text="reply.nickName"
+						v-attr="href: reply.url, target: reply.url ? '_blank' : null">
+					</a>
+					<span class="ml3">{% 回复： %}</span>
+					<span class="reply-time" v-text="reply.date"></span>
+				</dt>
+				<dd v-html="reply.content"></dd>
+			</dl>
+		</footer>
 	</section>
 </article>
 <!-- 评论分页 -->

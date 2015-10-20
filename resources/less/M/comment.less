@@ -102,6 +102,7 @@
 				}
 				.time{
 					color: #938E8E;
+					float: right;
 				}
 				.op{
 					float: right;
@@ -119,6 +120,34 @@
 				padding: .6em 1em;
 				line-height: 150%;
 				font-family: @zhFontFamily;
+			}
+			// 回复
+			footer{
+				font-size: 1.3rem;
+				font-style: italic;
+				.reply-nick{
+					color: #22B6AB;
+					&.admin{
+						color: @defaultAnchorHover;
+					}
+				}
+				.reply-time{
+					float: right;
+				}
+				dt{
+					color: #666;
+					padding: .5em;
+				}
+				dl{
+					color: #999;
+					margin: 0 1em 1em;
+					border-radius: 2px;
+					border: 1px dotted #E2E2E2;
+					background: #FCFCFC;
+					dd{
+						padding: 0 0.5em .5em;
+					}
+				}
 			}
 		}
 	}

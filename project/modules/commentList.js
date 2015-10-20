@@ -213,12 +213,27 @@ define(function(require, exports) {
 		setList: function(items) {
 			var comments = [];
 			util.each(items, function(item) {
+				// 评论回复
+				var replies = [];
+				if (util.isArray(item.replies)) {
+					util.each(item.replies, function(reply) {
+						replies.push({
+							'nickName': reply.author,
+							'url'     : reply.url ? ('//' + reply.url) : null,
+							'date'    : util.prettyDate(reply.date),
+							'content' : reply.content,
+							'isAdmin' : reply.admin
+						});
+					});
+				}
+
 				comments.push({
 					'nickName': item.author,
 					'address' : item.address,
 					'url'     : item.url ? ('//' + item.url) : null,
 					'date'    : util.prettyDate(item.date),
-					'content' : item.content
+					'content' : item.content,
+					'replies' : replies
 				});
 			});
 			this.vm.set('comments', comments);
