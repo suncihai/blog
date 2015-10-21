@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * 数据增查操作类
  */
@@ -45,16 +45,19 @@ class SQL {
         $result = mysql_query($sql, $this->conn);
         // 查询成功
         if ($result) {
-            // 非INSERT语句返回结果items和总数
+            // 非INSERT语句返回结果items和总数total
             if (!$insert) {
                 // 选项数组集合
                 $itemArray = array();
+
                 while ($assoc = mysql_fetch_assoc($result)) {
                     array_push($itemArray, $assoc);
                 }
+
                 // 结果行数
                 $total = mysql_num_rows($result);
                 mysql_free_result($result);
+
                 // 结果
                 $resultObject = array(
                     'items'   => $itemArray,
@@ -74,7 +77,6 @@ class SQL {
         else {
             // 非INSERT语句
             if (!$insert) {
-                // 结果
                 $resultObject = array(
                     'items'   => null,
                     'total'   => 0,
@@ -84,8 +86,8 @@ class SQL {
             // INSERT语句
             else {
                 $resultObject = array(
-                    'success' => false,
-                    'id'      => 0
+                    'id'      => 0,
+                    'success' => false
                 );
             }
         }
@@ -103,40 +105,50 @@ class SQL {
     public function getArchiveList($catid, $page, $limit, $brief) {
         // 查询$catid栏目下的所有文章ID记录
         $resQueryID = $this->query("SELECT object_id FROM wp_term_relationships WHERE term_taxonomy_id=$catid");
-        $IDArr = array();
+
+        $idArr = array();
         foreach ($resQueryID['items'] as $key => $item) {
-            array_push($IDArr, $item["object_id"]);
+            array_push($idArr, $item["object_id"]);
         }
-        $IDs = implode(",", $IDArr);
+        $ids = implode(",", $idArr);
 
         // 结果排序方式
         $orderBy = 'post_date';
+
         // 查询字段
         $_fields = "ID, post_title, post_date, post_content, comment_count";
+
         // 查询条件(返回正常的文章必须指定post_status和post_type)
-        $_where = "ID in($IDs) AND post_status='publish' AND post_type='post'";
+        $_where = "ID in($ids) AND post_status='publish' AND post_type='post'";
+
         // 排序方式
         $_order = "ORDER BY $orderBy DESC";
+
         // 分页起点
         $start = ($page - 1) * $limit;
 
-        // 查询结果总条数(直接用IDs的结果数会不准确)
+        // 查询结果总条数(直接用ids的结果数会不准确)
         $resQueryAll = $this->query("SELECT ID FROM wp_posts WHERE $_where");
         $total = $resQueryAll['total'];
+
         $resQueryList = $this->query("SELECT $_fields FROM wp_posts WHERE $_where $_order LIMIT $start, $limit");
-        // 转换数据格式
+
+        // 查询成功
         if ($resQueryList['success']) {
             $itemArray = array();
+
             foreach ($resQueryList['items'] as $key => $item) {
+                // 截取文章摘要
                 $abstract = '';
                 if ($brief !== 0) {
-                    // 截取文章摘要
                     $cover = getFirstImg($item['post_content']);
                     $text = $item['post_content'];
                     $text = removeTag($text);
                     $text = fixStripHtmlTags($text);
                     $abstract = mb_substr(strip_tags($text), 0, $brief, 'utf8');
                 }
+
+                // 数据格式化
                 $itemFormat = array(
                     'id'       => intval($item['ID']),
                     'title'    => $item['post_title'],
@@ -145,20 +157,28 @@ class SQL {
                     'comments' => intval($item['comment_count']),
                     'cover'    => $cover
                 );
+
                 array_push($itemArray, $itemFormat);
             }
+
             $resArray = array(
-                'items' => $itemArray,               // 选项数组
-                'total' => intval($total),         // 总条数
-                'pages' => ceil($total / $limit),  // 总页数
-                'page'  => intval($page)           // 当前第几页
+                // 选项数组
+                'items' => $itemArray,
+                // 总条数
+                'total' => intval($total),
+                // 总页数
+                'pages' => ceil($total / $limit),
+                // 当前第几页
+                'page'  => intval($page)
             );
-            // 最终返回的结果
+
+            // 返回的结果
             $retArray = array(
                 'success' => true,
                 'result'  => $resArray
             );
         }
+        // 查询失败
         else {
             $retArray = array(
                 'success' => false,
@@ -176,29 +196,37 @@ class SQL {
     public function getArticle($artid) {
         // 查询字段
         $fields = "post_title, post_date, post_content, comment_count";
+
         // 查询条件
         $filter = "LIMIT 1";
-        // 执行查询操作
+
         $resQueryArticle = $this->query("SELECT $fields FROM wp_posts WHERE ID = $artid $filter");
+
         // 结果数
         $num = $resQueryArticle['total'];
+
+        // 查询成功
         if ($num == 1) {
             $article = $resQueryArticle['items'][0];
+
             // 只返回内容不为空的数据
             if ($article['post_content'] != '') {
+                // 数据格式化
                 $itemFormat = array(
                     'title'    => $article['post_title'],
                     'date'     => $article['post_date'],
                     'comments' => intval($article['comment_count']),
                     'content'  => postAutoP($article['post_content'])
                 );
-                // 最终返回的结果
+
+                // 返回的结果
                 $retArray = array(
                     'success' => true,
                     'result'  => $itemFormat,
                     'total'   => $num
                 );
             }
+            // 文章内容为空
             else {
                 $retArray = array(
                     'success' => false,
@@ -208,6 +236,7 @@ class SQL {
                 );
             }
         }
+        // 查询失败
         else {
             $retArray = array(
                 'success' => false,
@@ -227,19 +256,26 @@ class SQL {
     public function getTitleList($type, $amount) {
         // 查询字段
         $fields = "ID, post_title, post_date, comment_count";
+
         // 查询条件
         $where = "post_status='publish' AND post_type='post'";
+
         // 限制条件
         $filter = "ORDER BY post_date DESC LIMIT $amount";
-        // 执行查询
+
         $resQueryList = $this->query("SELECT $fields FROM wp_posts WHERE $where $filter");
+
+        // 查询成功
         if ($resQueryList['success']) {
-            // 选项数组集合
             $itemArray = array();
+
             foreach ($resQueryList['items'] as $key => $item) {
+                // 找到对应的栏目id
                 $ID = $item["ID"];
                 $resQueryID = $this->query("SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$ID LIMIT 1");
                 $archiveID = $resQueryID['items'][0]['term_taxonomy_id'];
+
+                // 数据格式化
                 $itemFormat = array(
                     'id'       => $ID,
                     'archive'  => $archiveID,
@@ -247,18 +283,22 @@ class SQL {
                     'date'     => $item['post_date'],
                     'comments' => $item['comment_count']
                 );
+
                 array_push($itemArray, $itemFormat);
             }
+
             $resultObject = array(
                 'items' => $itemArray,
                 'total' => $resQueryList['total']
             );
-            // 最终返回的结果
+
+            // 返回的结果
             $retArray = array(
                 'success' => true,
                 'result'  => $resultObject
             );
         }
+        // 查询失败
         else {
             $retArray = array(
                 'success' => false,
@@ -276,16 +316,18 @@ class SQL {
     public function filterWord($word) {
         // 查询字段
         $_fields = "ID, post_title, post_date, post_content, comment_count";
+
         // 模糊查询条件
         $_where = "(post_title LIKE '%".$word."%' OR post_content LIKE '%".$word."%') AND post_status='publish' AND post_type='post'";
-        // 执行查询
-        $resQuery = $this->query("SELECT $_fields FROM wp_posts WHERE $_where");
-        if ($resQuery['success']) {
-            // 选项数组集合
-            $itemArray = array();
-            foreach ($resQuery['items'] as $key => $item) {
 
-                // 查询每条文章对应的栏目ID
+        $resQuery = $this->query("SELECT $_fields FROM wp_posts WHERE $_where");
+
+        // 查询成功
+        if ($resQuery['success']) {
+            $itemArray = array();
+
+            foreach ($resQuery['items'] as $key => $item) {
+                // 找到对应的栏目id
                 $artid = $item['ID'];
                 $resQueryTermID = $this->query("SELECT term_taxonomy_id FROM wp_term_relationships WHERE object_id=$artid");
                 $archiveID = $resQueryTermID['items'][0]['term_taxonomy_id'];
@@ -294,8 +336,10 @@ class SQL {
                 $brief = "";
                 $pattern = '/('.$word.')/i';
                 $isMatch = false;
+
                 // 先去掉html标签再进行关键字匹配
                 $content = removeTag($item['post_content']);
+
                 if (preg_match("/(.{100}".$word.".{100})/sui", $content, $matches)) {
                     if (count($matches) !== 0) {
                         $isMatch = true;
@@ -307,9 +351,11 @@ class SQL {
                         $brief = preg_replace($pattern, '<b class="keyword">$1</b>', $brief);
                     }
                 }
+
                 // 标题也加高亮
                 $title = preg_replace($pattern, '<b class="keyword">$1</b>', $item['post_title']);
 
+                // 格式化数据
                 if ($isMatch || ($title !== $item['post_title'])) {
                     $itemFormat = array(
                         'id'       => intval($artid),
@@ -320,19 +366,23 @@ class SQL {
                         'brief'    => htmlspecialchars_decode($brief),
                         'comments' => intval($item['comment_count'])
                     );
+
                     array_push($itemArray, $itemFormat);
                 }
             }
+
             $resArray = array(
                 'items' => $itemArray,               // 选项数组
                 'total' => count($itemArray)       // 总条数
             );
-            // 最终返回的结果
+
+            // 返回的结果
             $retArray = array(
                 'success' => true,
                 'result'  => $resArray
             );
         }
+        // 查询失败
         else {
             $retArray = array(
                 'success' => false,
@@ -382,6 +432,7 @@ class SQL {
 
         $resQueryList = $this->query("SELECT $_fields FROM wp_comments WHERE $_where $_order LIMIT $start, $limit");
 
+        // 查询成功
         if ($resQueryList['success']) {
             $itemArray = array();
 
@@ -395,24 +446,23 @@ class SQL {
                 // 是否是管理员回复
                 $isAdmin = intval($item['user_id']) === 1;
 
-                // 字段转化
+                // 数据格式化
                 $itemFormat = array(
                     'id'       => $cid,
                     'pid'      => intval($item['comment_parent']),
                     'author'   => $isAdmin ? $this->ADMIN : $item['comment_author'],
                     'url'      => preg_replace('/(http:)/', "", $item['comment_author_url']),
-                    'address'  => '广东广州',
-                    // 'address'  => $isAdmin ? '' : getCityName($item['comment_author_IP']),
+                    'address'  => $isAdmin ? '' : getCityName($item['comment_author_IP']),
                     'date'     => $item['comment_date'],
                     'content'  => htmlspecialchars_decode(postAutoP($item['comment_content'])),
                     'replies'  => $replies,
                     'admin'    => $isAdmin,
                     'passed'   => true
                 );
+
                 array_push($itemArray, $itemFormat);
             }
 
-            // 数据格式
             $resArray = array(
                 // 选项数组
                 'items' => $itemArray,
@@ -424,12 +474,13 @@ class SQL {
                 'page'  => intval($page)
             );
 
-            // 最终返回的结果
+            // 返回的结果
             $retArray = array(
                 'success' => true,
                 'result'  => $resArray
             );
         }
+        // 查询失败
         else {
             $retArray = array(
                 'success' => false,
@@ -448,6 +499,7 @@ class SQL {
         if (!$pid) {
             return null;
         }
+
         // 父评论需要字段
         $_fieldArr = array(
             'comment_author',
@@ -456,16 +508,21 @@ class SQL {
             'user_id'
         );
         $_fields = implode(", ", $_fieldArr);
+
         $resQueryParent = $this->query("SELECT $_fields FROM wp_comments WHERE comment_ID=$pid LIMIT 1");
+
+        // 查询成功
         if ($resQueryParent['success']) {
             $parentItem = $resQueryParent['items'][0];
             $isAdmin = intval($parentItem['user_id']) === 1;
+
             $parent = array(
                 'author'  => $isAdmin ? $this->ADMIN : $parentItem['comment_author'],
                 'url'     => preg_replace('/(http:)/', "", $parentItem['comment_author_url']),
                 'content' => htmlspecialchars_decode(postAutoP($parentItem['comment_content']))
             );
         }
+        // 查询失败
         else {
             $parent = null;
         }
@@ -509,13 +566,13 @@ class SQL {
             foreach ($resQuery['items'] as $key => $item) {
                 // 是否是管理员回复
                 $isAdmin = intval($item['user_id']) === 1;
-                // 返回的字段
+
+                // 数据格式化
                 $itemFormat = array(
                     'id'       => intval($item['comment_ID']),
                     'pid'      => $cid,
                     'author'   => $isAdmin ? $this->ADMIN : $item['comment_author'],
                     'url'      => preg_replace('/(http:)/', "", $item['comment_author_url']),
-                    // 'address'  => $isAdmin ? '' : getCityName($item['comment_author_IP']),
                     'date'     => $item['comment_date'],
                     'content'  => htmlspecialchars_decode(postAutoP($item['comment_content'])),
                     'admin'    => $isAdmin,
@@ -524,7 +581,7 @@ class SQL {
                 array_push($itemArray, $itemFormat);
             }
 
-            // 最终返回的结果
+            // 返回的结果
             $resArray = $itemArray;
         }
         // 查询失败
@@ -544,21 +601,29 @@ class SQL {
      * param  [String] $id       [回复时原评论id]
      */
     public function addComment($postid, $content, $author, $link, $id) {
+        // 错误信息
         $resQueryError = '';
+
         // 评论内容
         $content = removeTag($content);
+
         // 评论昵称
         $author = removeTag($author);
+
         // 存储的默认类型: 0待审核, 1通过, spam垃圾评论, trash回收站评论
         $approved = 1;
+
         // 当前时间
         $date = date('Y-m-d H:i:s', time());
         // 当前GMT时间
         $gmtdate = gmdate('Y-m-d H:i:s', time());
+
         // 客户端IP地址
         $ip = getIP();
+
         // 客户端UA
         $useragent = $_SERVER['HTTP_USER_AGENT'];
+
         // 设置的字段
         $fieldArr = array(
             "comment_post_ID",
@@ -587,23 +652,29 @@ class SQL {
         );
         $_sets = implode(",", $fieldArr);
         $_values = implode(",", $valueArr);
-        $sql = "INSERT INTO wp_comments ($_sets) VALUES ($_values)";
-        $resQuery = $this->query($sql, $insert = true);
+
+        $resQuery = $this->query("INSERT INTO wp_comments ($_sets) VALUES ($_values)", $insert = true);
+
+        // 查询成功
         if ($resQuery['success']) {
             // 更新文章comment_count字段
-            $where = "comment_approved=1 AND comment_post_ID=$postid";
+            $where = "comment_approved=1 AND comment_post_ID=$postid AND comment_parent=0";
             $resQueryNum = $this->query("SELECT comment_ID FROM wp_comments WHERE $where");
             $num = $resQueryNum['total'];
-            $sqlUpdate = "UPDATE wp_posts SET comment_count=$num WHERE ID=$postid";
-            $resQueryUpdate = $this->query($sqlUpdate, $insert = true);
+            $resQueryUpdate = $this->query("UPDATE wp_posts SET comment_count=$num WHERE ID=$postid", $insert = true);
 
             // 返回新增的评论数据
             $newId = $resQuery['newid'];
+
             $resQueryNewData = $this->query("SELECT $_sets FROM wp_comments WHERE comment_ID=$newId LIMIT 1");
+
+            // 查询成功
             if ($resQueryNewData['success']) {
                 $newData = $resQueryNewData['items'][0];
                 $pid = intval($newData['comment_parent']);
                 $parent = $this->getParentComment($pid);
+
+                // 数据格式化
                 $resultArr = array(
                     'id'      => $newId,
                     'author'  => $newData['comment_author'],
@@ -623,7 +694,7 @@ class SQL {
         }
         // 数据插入失败
         else {
-            $resQueryError = '提交评论数据失败！';
+            $resQueryError = 'Submit Comment error!';
         }
 
         // 有错误返回错误信息
@@ -639,6 +710,7 @@ class SQL {
                 'result'  => $resultArr
             );
         }
+
         return json_encode($ret);
     }
 
@@ -650,21 +722,29 @@ class SQL {
      * param  [String] $email    [留言者的联系信息]
      */
     public function addMessage($content, $author, $link, $email) {
+        // 错误信息
         $resQueryError = '';
+
         // 留言内容
         $content = removeTag($content);
+
         // 留言昵称
         $author = removeTag($author);
+
         // 存储的默认类型: 0待审核, 1通过, spam垃圾留言, trash回收站留言
         $approved = 1;
+
         // 当前时间
         $date = date('Y-m-d H:i:s', time());
         // 当前GMT时间
         $gmtdate = gmdate('Y-m-d H:i:s', time());
+
         // 客户端IP地址
         $ip = getIP();
+
         // 客户端UA
         $useragent = $_SERVER['HTTP_USER_AGENT'];
+
         // 设置的字段
         $fieldArr = array(
             "comment_post_ID",
@@ -693,14 +773,19 @@ class SQL {
         );
         $_sets = implode(",", $fieldArr);
         $_values = implode(",", $valueArr);
-        $sql = "INSERT INTO wp_comments ($_sets) VALUES ($_values)";
-        $resQuery = $this->query($sql, $insert = true);
+
+        $resQuery = $this->query("INSERT INTO wp_comments ($_sets) VALUES ($_values)", $insert = true);
+
+        // 查询成功
         if ($resQuery['success']) {
             // 返回新增的留言数据
             $newId = $resQuery['newid'];
             $resQueryNewData = $this->query("SELECT $_sets FROM wp_comments WHERE comment_ID=$newId LIMIT 1");
+
             if ($resQueryNewData['success']) {
                 $newData = $resQueryNewData['items'][0];
+
+                // 数据格式化
                 $resultArr = array(
                     'id'      => $newId,
                     'author'  => $newData['comment_author'],
@@ -719,7 +804,7 @@ class SQL {
         }
         // 数据插入失败
         else {
-            $resQueryError = '提交留言数据失败！';
+            $resQueryError = 'Submit message error!';
         }
 
         // 有错误返回错误信息
@@ -735,6 +820,7 @@ class SQL {
                 'result'  => $resultArr
             );
         }
+
         return json_encode($ret);
     }
 }
