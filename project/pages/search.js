@@ -4,6 +4,7 @@
 define(function(require, exports) {
 	var app = require('app');
 	var util = app.util;
+	var prettyDate = require('@widget/prettyDate');
 
 	var Search = app.Container.extend({
 		init: function(config) {
@@ -178,7 +179,7 @@ define(function(require, exports) {
 					'brief'   : item.brief,
 					'achive'  : achive,
 					'comments': item.comments,
-					'date'    : util.prettyDate(item.date)
+					'date'    : prettyDate.format(item.date)
 				});
 			});
 

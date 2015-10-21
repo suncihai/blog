@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 	var app = require('app');
 	var util = app.util;
 	var $ = app.jquery;
+	var prettyDate = require('@widget/prettyDate');
 
 	// 语录集合
 	var quotations = app.config('quotations');
@@ -200,7 +201,7 @@ define(function(require, exports, module) {
 					'title'   : item.title,
 					'content' : item.content,
 					'cover'   : item.cover ? '<img class="lazy-image" data-src="'+ item.cover +'"/>' : '',
-					'date'    : util.prettyDate(item.date),
+					'date'    : prettyDate.format(item.date),
 					'comments': item.comments
 				});
 			});

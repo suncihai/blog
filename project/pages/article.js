@@ -5,6 +5,7 @@ define(function(require, exports, module) {
 	var app = require('app');
 	var util = app.util;
 	var $ = app.jquery;
+	var prettyDate = require('@widget/prettyDate');
 
 	// 代码高亮插件
 	var prism = require('@plugins/prism/prism');
@@ -198,7 +199,7 @@ define(function(require, exports, module) {
 
 			// 通知banner更新显示内容
 			this.notify('layout.blogBanner', 'changeInfo', {
-				'date'    : util.prettyDate(date),
+				'date'    : prettyDate.format(date),
 				'title'   : title,
 				'comments': comments
 			});

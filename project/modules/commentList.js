@@ -6,6 +6,7 @@ define(function(require, exports) {
 	var util = app.util;
 	var $ = app.jquery;
 	var tooltip = app.tooltip;
+	var prettyDate = require('@widget/prettyDate');
 
 	// 初始请求参数
 	var iparam = app.config('commentParam');
@@ -220,7 +221,7 @@ define(function(require, exports) {
 						replies.push({
 							'nickName': reply.author,
 							'url'     : reply.url ? ('//' + reply.url) : null,
-							'date'    : util.prettyDate(reply.date),
+							'date'    : prettyDate.format(reply.date),
 							'content' : reply.content,
 							'isAdmin' : reply.admin
 						});
@@ -231,7 +232,7 @@ define(function(require, exports) {
 					'nickName': item.author,
 					'address' : item.address,
 					'url'     : item.url ? ('//' + item.url) : null,
-					'date'    : util.prettyDate(item.date),
+					'date'    : prettyDate.format(item.date),
 					'content' : item.content,
 					'replies' : replies
 				});
