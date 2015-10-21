@@ -2,19 +2,19 @@
  * [对话框基础模块]
  */
 define(function(require, exports) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 
-	var layout = app.core.get('layout');
+	var layout = sugar.core.get('layout');
 	// 全局蒙版
 	var MASK = layout.getContainer('MASK');
 	// 对话框容器
 	var DIALOG = layout.getContainer('DIALOG');
 
-	var Dialog = app.Container.extend({
+	var Dialog = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'target'  : DIALOG,
 				'class'   : 'M-dialog',
 				'template': 'template/modules/dialog.html',
@@ -58,7 +58,7 @@ define(function(require, exports) {
 		 * 获取一对显示/隐藏动画
 		 */
 		getPairFrame: function(random) {
-			var frames = app.config('pairFrames');
+			var frames = sugar.config('pairFrames');
 			var show = 0, hide = 1, len = frames.length;
 			var resArr = random ? frames[util.random(0, len - 1)] : frames[0];
 			return {
@@ -178,9 +178,9 @@ define(function(require, exports) {
 			var self = this;
 			this.$show = true;
 			MASK.show();
-			app.animate.play(MASK, 'mask-in', 'fast', function() {
+			sugar.animate.play(MASK, 'mask-in', 'fast', function() {
 				DIALOG.show();
-				app.animate.play(DIALOG, self.$inFrame);
+				sugar.animate.play(DIALOG, self.$inFrame);
 			});
 			return this;
 		},
@@ -192,9 +192,9 @@ define(function(require, exports) {
 			var self = this;
 			this.$show = false;
 			this.$doms.close.removeClass('rotateCloseBack rotateCloseForward');
-			app.animate.play(DIALOG, this.$outFrame, function() {
+			sugar.animate.play(DIALOG, this.$outFrame, function() {
 				DIALOG.hide();
-				app.animate.play(MASK, 'mask-out', 'fast', function() {
+				sugar.animate.play(MASK, 'mask-out', 'fast', function() {
 					MASK.hide();
 					self.reset().fire('dialogClosed');
 				});

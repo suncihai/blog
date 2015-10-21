@@ -2,19 +2,18 @@
  * [评论/留言列表模块]
  */
 define(function(require, exports) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
-	var tooltip = app.tooltip;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var tooltip = sugar.tooltip;
 	var prettyDate = require('@widget/prettyDate');
 
 	// 初始请求参数
-	var iparam = app.config('commentParam');
+	var iparam = sugar.config('commentParam');
 
 	// 评论列表基础模块
-	var CommentList = app.Container.extend({
+	var CommentList = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'    : 'M-comment',
 				'template' : 'template/modules/commentList.html',
 				// 评论/留言拉取地址
@@ -75,7 +74,7 @@ define(function(require, exports) {
 					'title' : T('添加评论'),
 					'module': '@modules/commentForm.base',
 					'config': {
-						'saveUrl': app.config('api/addcomment')
+						'saveUrl': sugar.config('api/addcomment')
 					}
 				});
 			}
@@ -144,7 +143,7 @@ define(function(require, exports) {
 				'artid': artid
 			});
 
-			app.ajax.get(this.getConfig('listUrl'), param, this.delayData, this);
+			sugar.ajax.get(this.getConfig('listUrl'), param, this.delayData, this);
 		},
 
 		/**

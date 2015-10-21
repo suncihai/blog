@@ -2,13 +2,13 @@
  * [搜索结果页面]
  */
 define(function(require, exports) {
-	var app = require('app');
-	var util = app.util;
+	var sugar = require('sugar');
+	var util = sugar.util;
 	var prettyDate = require('@widget/prettyDate');
 
-	var Search = app.Container.extend({
+	var Search = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'P-search',
 				'template': 'template/pages/search.html',
 				'vModel'  : {
@@ -102,7 +102,7 @@ define(function(require, exports) {
 			this.showLoading();
 
 			if (word) {
-				app.ajax.get(app.config('api/search'), {
+				sugar.ajax.get(sugar.config('api/search'), {
 					'word': word
 				}, this.delayData, this);
 			}
@@ -126,7 +126,7 @@ define(function(require, exports) {
 
 			if (err) {
 				util.error(err);
-				app.tooltip.setTip({
+				sugar.tooltip.setTip({
 					'arrow'  : false,
 					'type'   : 'warning',
 					'content': err.message
@@ -166,7 +166,7 @@ define(function(require, exports) {
 		setSearchList: function(items) {
 			var searchs = [];
 			var achive;
-			var category = app.config('category');
+			var category = sugar.config('category');
 
 			util.each(items, function(item, index) {
 				// 栏目

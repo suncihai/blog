@@ -2,14 +2,14 @@
  * [头部模块(LOGO、导航、搜索框)]
  */
 define(function(require, exports, module) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 	var headRoom = require('@plugins/headroom/headroom');
 
-	var Header = app.Container.extend({
+	var Header = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'M-header',
 				'tag'     : 'header',
 				'template': 'template/modules/header.html',
@@ -28,12 +28,11 @@ define(function(require, exports, module) {
 		 * 布局视图初始化完成
 		 */
 		viewReady: function() {
-			var vm = this.vm.$;
 			var el = this.getDOM();
 			var c = this.getConfig();
 
 			// 创建导航vm数据
-			var items = app.config('navs') || [];
+			var items = sugar.config('navs') || [];
 			var navs = this.createVmItems(items);
 			this.vm.set('navs', navs);
 
@@ -102,7 +101,7 @@ define(function(require, exports, module) {
 		 */
 		searching: function(val) {
 			if (val.length <= 1) {
-				app.tooltip.setTip({
+				sugar.tooltip.setTip({
 					'arrow'  : false,
 					'tyoe'   : 'warning',
 					'content': T('搜索内容不能少于两个字符~')
@@ -110,7 +109,7 @@ define(function(require, exports, module) {
 				return false;
 			}
 
-			app.controller.go('search?word=' + val);
+			sugar.controller.go('search?word=' + val);
 		},
 
 		/**

@@ -2,11 +2,10 @@
  * 路由响应模块：文章页和栏目页
  */
 define(function(require, exports) {
-	var app = require('app');
-	var util = app.util;
-	var layout = app.core.get('layout');
+	var sugar = require('sugar');
+	var layout = sugar.core.get('layout');
 	// 栏目数据库id
-	var category = app.config('category');
+	var category = sugar.config('category');
 
 	/**
 	 * @param   {Object}  data  [路由参数]
@@ -27,7 +26,7 @@ define(function(require, exports) {
 		// 切换场景
 		layout.switchScene(name);
 
-		var mod = app.core.get(name);
+		var mod = sugar.core.get(name);
 
 		// 已经创建过
 		if (mod) {
@@ -42,7 +41,7 @@ define(function(require, exports) {
 			}
 		}
 		else {
-			mod = app.core.createAsync(name, path, {
+			mod = sugar.core.createAsync(name, path, {
 				'target': target
 			}, function(md) {
 				md.saveRouter(data);
@@ -50,6 +49,6 @@ define(function(require, exports) {
 		}
 
 		// 更新导航激活
-		app.core.notify('layout.blogHeader', 'updateNav', data.name);
+		sugar.core.notify('layout.blogHeader', 'updateNav', data.name);
 	}
 });

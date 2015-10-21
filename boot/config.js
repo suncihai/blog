@@ -2,10 +2,16 @@
  * [系统配置信息]
  */
 define(function() {
+	/**
+	 * 配置文件语言标记
+	 */
+	function _T(text) {
+		return text;
+	}
 
 	return {
 
-		// 是否将app暴露为全局变量
+		// 是否将suagr模块暴露为全局变量
 		debug: true,
 
 		// 默认页面

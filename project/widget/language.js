@@ -46,7 +46,7 @@ define(function(require, exports, module) {
 			// 对非默认语言进行转换
 			if (!self.isDefault()) {
 				// 方法转换
-				if (langPackage && langPackage.func) {
+				if (langPackage && util.isFunc(langPackage.func)) {
 					text = langPackage.func.call(self, text);
 				}
 				// 语言包装换
@@ -81,8 +81,6 @@ define(function(require, exports, module) {
 		 * @param  {String}  lang  [需要加载的语言类型]
 		 */
 		this.load = function(lang) {
-			var self = this;
-
 			if (util.isFunc(lang)) {
 				this.callback = lang;
 				lang = this.currentLang;

@@ -3,7 +3,7 @@
  */
 define(function(require, exports, module) {
 	var $ = require('jquery');
-	var app = require('app');
+	var sugar = require('sugar');
 	var layout = require('layout');
 
 	var NotFound = {
@@ -91,11 +91,11 @@ define(function(require, exports, module) {
 			rightPart.appendTo(this.$doms.right);
 
 			// 绑定返回上一页
-			app.event.bind($('.back', rightPart), 'click', this.goToBack, this);
+			sugar.event.bind($('.back', rightPart), 'click', this.goToBack, this);
 		},
 
 		goToBack: function() {
-			app.controller.go(-1);
+			sugar.controller.go(-1);
 			return false;
 		}
 	}

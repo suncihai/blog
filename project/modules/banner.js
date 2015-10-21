@@ -2,11 +2,11 @@
  * [博客Banner模块]
  */
 define(function(require, exports) {
-	var app = require('app');
+	var sugar = require('sugar');
 
-	var Banner = app.Container.extend({
+	var Banner = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'M-banner',
 				'template': 'template/modules/banner.html',
 				'vModel'  : {

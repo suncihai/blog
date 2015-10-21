@@ -2,11 +2,11 @@
  * [悬浮提示框插件]
  */
 define(function(require, exports, module) {
-	var app = require('app');
-	var $ = app.jquery;
-	var util = app.util;
+	var sugar = require('sugar');
+	var $ = sugar.jquery;
+	var util = sugar.util;
 
-	var layout = app.core.get('layout');
+	var layout = sugar.core.get('layout');
 	var LAYER = layout.getContainer('LAYER');
 
 
@@ -65,11 +65,11 @@ define(function(require, exports, module) {
 		},
 
 		getConfig: function(name) {
-			return app.config(this.config, name);
+			return sugar.config(this.config, name);
 		},
 
 		setConfig: function(name, value) {
-			return app.config(this.config, name, value);
+			return sugar.config(this.config, name, value);
 		},
 
 		/**
@@ -229,7 +229,7 @@ define(function(require, exports, module) {
 
 			LAYER.show();
 			this.$status = 'show';
-			app.animate.play(this.$doms.body, 'fadeIn', 'fast');
+			sugar.animate.play(this.$doms.body, 'fadeIn', 'fast');
 
 			// 触发隐藏tooltip事件
 			doc.bind('click.other', this.eventTriggerHide.bind(this));
@@ -258,7 +258,7 @@ define(function(require, exports, module) {
 			doc.unbind('scroll.other');
 			doc.unbind('keydown.other');
 
-			app.animate.play(this.$doms.body, 'fadeOut', 'fast', function() {
+			sugar.animate.play(this.$doms.body, 'fadeOut', 'fast', function() {
 				self.$status = 'hide';
 				LAYER.hide();
 			});

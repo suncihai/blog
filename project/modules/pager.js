@@ -2,14 +2,14 @@
  * [分页模块]
  */
 define(function(require, exports) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 
 	// 带链接的分页(通过url参数分页)
-	var HasLink = app.Container.extend({
+	var HasLink = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'M-pager',
 				// 最多显示的项数
 				'max'     : 5,
@@ -44,7 +44,7 @@ define(function(require, exports) {
 		eventClickPrev: function() {
 			var page = this.$page;
 			if (page !== 1) {
-				app.controller.go(this.$path + '?page=' + (page - 1));
+				sugar.controller.go(this.$path + '?page=' + (page - 1));
 			}
 			return false;
 		},
@@ -55,7 +55,7 @@ define(function(require, exports) {
 		eventClickNext: function() {
 			var page = this.$page;
 			if (page !== this.$pages) {
-				app.controller.go(this.$path + '?page=' + (page + 1));
+				sugar.controller.go(this.$path + '?page=' + (page + 1));
 			}
 			return false;
 		},
@@ -140,7 +140,7 @@ define(function(require, exports) {
 	// 无连接的分页方式(通过消息监听分页)
 	var NoLink = HasLink.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class': 'M-pagerNoLink'
 			});
 			this.Super('init', arguments);

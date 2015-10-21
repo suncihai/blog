@@ -17,7 +17,7 @@
 			'@plugins'   : 'plugins'
 		},
 		'alias': {
-			'app'   : '@sugar/core/app.js',
+			'sugar' : '@sugar/core/sugar.js',
 			'util'  : '@sugar/core/util.js',
 			'jquery': '@sugar/jquery/jquery.min.js'
 		},
@@ -35,14 +35,6 @@
 
 
 	/**
-	 * 配置文件中的语言标记
-	 */
-	win._T = function(text) {
-		return text;
-	};
-
-
-	/**
 	 * APPINIT 初始化配置
 	 */
 	var i = 0;
@@ -53,7 +45,7 @@
 		}
 	};
 
-	var lang = null, controller = null;
+	var _sugar = null, lang = null, controller = null;
 	var stepFunc = [
 		function() {
 			// seajs全局配置参数、加载语言包模块
@@ -66,20 +58,20 @@
 			lang.load(APPINIT);
 		},
 		function() {
-			// 加载依赖基础模块
+			// 加载项目依赖的基础模块
 			sea.use([
-				'app',
+				'sugar',
 				'@boot/config',
 				'@widget/cookie',
 				'@widget/animate',
 				'@plugins/router'
 			], APPINIT);
 		},
-		function(app, sysConfig, cookie, animate, router) {
+		function(sugar, sysConfig, cookie, animate, router) {
 			// 翻译配置文件中的多语言字段
 			lang.translateJSON(sysConfig);
 
-			// 将系统配置和基础模块挂载到app下
+			// 将系统配置和基础模块挂载到suagr下
 			var commons = {
 				'lang'      : lang,
 				'cookie'    : cookie,
@@ -88,7 +80,7 @@
 			};
 
 			// 配置框架全局参数
-			app.init({
+			sugar.init({
 				// 系统配置数据
 				'data'       : sysConfig,
 				// ajax最大同时请求数
@@ -105,16 +97,17 @@
 				'mModule'    : 'm-module'
 			}, commons);
 
-			// app是否作为全局变量调试
-			if (app.config('debug')) {
-				win.app = app;
+			// sugar是否作为全局变量调试
+			if (sugar.config('debug')) {
+				win.sugar = sugar;
 			}
 
+			_sugar = sugar;
 			controller = router;
 
 			// 创建整体布局layout模块
-			app.core.createAsync('layout', '@project/layout.base', {
-				'target': app.jquery('body').empty()
+			sugar.core.createAsync('layout', '@project/layout.base', {
+				'target': sugar.jquery('body').empty()
 			}, APPINIT);
 		},
 		function() {
@@ -123,8 +116,8 @@
 
 			// 系统悬浮提示模块
 			sea.use('@modules/tooltip', function(tp) {
-				if (!app.tooltip) {
-					app.tooltip = tp;
+				if (!_sugar.tooltip) {
+					_sugar.tooltip = tp;
 				}
 			});
 		}

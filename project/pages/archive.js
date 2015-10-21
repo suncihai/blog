@@ -2,19 +2,19 @@
  * [栏目页面]
  */
 define(function(require, exports, module) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 	var prettyDate = require('@widget/prettyDate');
 
 	// 语录集合
-	var quotations = app.config('quotations');
+	var quotations = sugar.config('quotations');
 	// 更改标题
-	var catNameMap = app.config('archiveTitle');
+	var catNameMap = sugar.config('archiveTitle');
 
-	var Achives = app.Container.extend({
+	var Achives = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'P-archive',
 				'template': 'template/pages/archive.html',
 				'vModel'  : {
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
 				}
 			});
 			// 动态请求参数，随着分页数据变化
-			this.$param = util.copy(app.config('archiveParam'));
+			this.$param = util.copy(sugar.config('archiveParam'));
 			// 请求数据状态锁
 			this.$dataReady = false;
 			this.Super('init', arguments);
@@ -41,8 +41,6 @@ define(function(require, exports, module) {
 		 * 布局视图渲染完成
 		 */
 		viewReady: function() {
-			var c = this.getConfig();
-
 			// 创建子模块
 			this.createTplModules();
 
@@ -74,7 +72,7 @@ define(function(require, exports, module) {
 		 */
 		saveRouter: function(data) {
 			// 栏目数据库id
-			var category = app.config('category');
+			var category = sugar.config('category');
 
 			this.$router = data;
 			// 栏目id
@@ -111,8 +109,6 @@ define(function(require, exports, module) {
 		 */
 		load: function(param) {
 			var router = this.$router;
-			// 路由名称
-			var name = router && router.name;
 			// 检查路由参数
 			var search = router && router.search;
 
@@ -127,7 +123,7 @@ define(function(require, exports, module) {
 
 			param = param || this.$param;
 
-			app.ajax.get(app.config('api/listarchives'), param, this.delayData, this);
+			sugar.ajax.get(sugar.config('api/listarchives'), param, this.delayData, this);
 			return this;
 		},
 
@@ -135,7 +131,7 @@ define(function(require, exports, module) {
 		 * 延迟展现
 		 */
 		delayData: function() {
-			this.setTimeout('afterDataBack', app.config('delay'), arguments);
+			this.setTimeout('afterDataBack', sugar.config('delay'), arguments);
 		},
 
 		/**
@@ -149,7 +145,7 @@ define(function(require, exports, module) {
 
 			if (err) {
 				util.error(err);
-				app.tooltip.setTip({
+				sugar.tooltip.setTip({
 					'arrow'  : false,
 					'type'   : 'warning',
 					'content': err.message

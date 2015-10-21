@@ -2,13 +2,13 @@
  * [留言页面]
  */
 define(function(require, exports) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 
-	var Message = app.Container.extend({
+	var Message = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'P-message',
 				'template': 'template/pages/message.html',
 				'vModel'  : {
@@ -27,10 +27,10 @@ define(function(require, exports) {
 			this.createTplModules({
 				'form': {
 					'hasContact': true,
-					'saveUrl': app.config('api/addmessage')
+					'saveUrl': sugar.config('api/addmessage')
 				},
 				'list': {
-					'listUrl': app.config('api/listmessage'),
+					'listUrl': sugar.config('api/listmessage'),
 					'isGreen': true,
 					'css'    : {
 						'width': '100%'

@@ -2,13 +2,13 @@
  * 全局基础布局模块，定义系统通用布局
  */
 define(function(require, exports) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 
-	var Layout = app.Container.extend({
+	var Layout = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'G-frame',
 				'tag'     : 'div',
 				'template': 'template/layout.html'

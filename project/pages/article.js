@@ -2,17 +2,17 @@
  * [文章页面]
  */
 define(function(require, exports, module) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 	var prettyDate = require('@widget/prettyDate');
 
 	// 代码高亮插件
 	var prism = require('@plugins/prism/prism');
 
-	var Article = app.Container.extend({
+	var Article = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'P-article',
 				'template': 'template/pages/article.html',
 				'vModel'  : {
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
 			// 创建子模块
 			this.createTplModules({
 				'comment': {
-					'listUrl'  : app.config('api/listcomment'),
+					'listUrl'  : sugar.config('api/listcomment'),
 					'hasHeader': true,
 					'hasEmpty' : true
 				}
@@ -100,7 +100,7 @@ define(function(require, exports, module) {
 			var param = {
 				'artid': this.$id
 			};
-			app.ajax.get(app.config('api/showarticle'), param, this.delayData, this);
+			sugar.ajax.get(sugar.config('api/showarticle'), param, this.delayData, this);
 			return this;
 		},
 
@@ -108,7 +108,7 @@ define(function(require, exports, module) {
 		 * 延迟展现
 		 */
 		delayData: function() {
-			this.setTimeout('afterDataBack', app.config('delay'), arguments);
+			this.setTimeout('afterDataBack', sugar.config('delay'), arguments);
 		},
 
 		/**
@@ -122,7 +122,7 @@ define(function(require, exports, module) {
 
 			if (err) {
 				util.error(err);
-				app.tooltip.setTip({
+				sugar.tooltip.setTip({
 					'arrow'  : false,
 					'type'   : 'warning',
 					'content': err.message

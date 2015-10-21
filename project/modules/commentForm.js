@@ -2,17 +2,17 @@
  * [评论/留言表单模块]
  */
 define(function(require, exports) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
-	var tooltip = app.tooltip;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
+	var tooltip = sugar.tooltip;
 
-	var api = app.config('api');
+	var api = sugar.config('api');
 
 	// 评论表单
-	var CommentForm = app.Container.extend({
+	var CommentForm = sugar.Container.extend({
 		init: function(config) {
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'      : 'M-commentForm',
 				'template'   : 'template/modules/commentForm.html',
 				// 评论/留言保存地址
@@ -70,8 +70,8 @@ define(function(require, exports) {
 		 */
 		setCookieValue: function() {
 			var vm = this.vm.$;
-			var link = app.cookie.get('userlink');
-			var nickName = app.cookie.get('usernickname');
+			var link = sugar.cookie.get('userlink');
+			var nickName = sugar.cookie.get('usernickname');
 			if (link) {
 				vm.link = link;
 			}
@@ -117,7 +117,7 @@ define(function(require, exports) {
 			this.setTimeout(function() {
 				vm.codeSrc = api.getthecode + '?ts=' + (evt.timeStamp || util.random());
 			}, 500);
-			app.animate.play(elm, 'flipOutY');
+			sugar.animate.play(elm, 'flipOutY');
 			return false;
 		},
 
@@ -165,7 +165,7 @@ define(function(require, exports) {
 			if (this.validate(data)) {
 				this.$pushing = true;
 				this.setSubmitStatus('pushing');
-				app.ajax.post(this.getConfig('saveUrl'), data, this.afterDataBack, this);
+				sugar.ajax.post(this.getConfig('saveUrl'), data, this.afterDataBack, this);
 			}
 		},
 
@@ -207,15 +207,15 @@ define(function(require, exports) {
 			});
 
 			// 更新cookie
-			var clink = app.cookie.get('userlink');
-			var cname = app.cookie.get('usernickname');
+			var clink = sugar.cookie.get('userlink');
+			var cname = sugar.cookie.get('usernickname');
 			var url = result.url;
 			var author = result.author;
 			if (!clink || (clink !== url)) {
-				app.cookie.set('userlink', url);
+				sugar.cookie.set('userlink', url);
 			}
 			if (!cname || (cname !== author)) {
-				app.cookie.set('usernickname', author);
+				sugar.cookie.set('usernickname', author);
 			}
 
 			// 发消息通知已添加成功

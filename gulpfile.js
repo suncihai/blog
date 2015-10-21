@@ -18,9 +18,9 @@ var lessFiles = [
 var jsFiles = [
 	'boot/*.js',
 	'controller/*.js',
+	'project/*.js',
 	'project/**/*.js',
-	'dist/base/*.js',
-	'dist/core/*.js',
+	'sugar/core/*.js',
 	'plugins/router.js',
 	'project/**/*.js',
 	'project/*.js'
@@ -78,13 +78,13 @@ gulp.task('jshint', function() {
 // gulp start 开启任务监听
 gulp.task('start', function() {
 	// 初始化时开启一次
-	// gulp.run('compile', 'jshint');
+	gulp.run('compile', 'jshint');
 	gulp.run('compile');
 
 	// 监听js文件变化
-	// gulp.watch(jsFiles, function() {
-	// 	gulp.run('jshint');
-	// });
+	gulp.watch(jsFiles, function() {
+		gulp.run('jshint');
+	});
 
 	// 监听less文件变化
 	gulp.watch(lessFiles, function() {

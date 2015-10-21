@@ -2,27 +2,27 @@
  * [页脚模块]
  */
 define(function(require, exports, module) {
-	var app = require('app');
-	var util = app.util;
-	var $ = app.jquery;
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 
-	var Footer = app.Container.extend({
+	var Footer = sugar.Container.extend({
 		init: function(config) {
 			// 默认的语言
-			var lang = app.cookie.get('lang') || 'zhCN';
+			var lang = sugar.cookie.get('lang') || 'zhCN';
 
-			config = app.cover(config, {
+			config = sugar.cover(config, {
 				'class'   : 'M-footer',
 				'template': 'template/modules/footer.html',
 				'vModel'  : {
 					// copyright
-					'copy'       : app.config('copyright'),
+					'copy'       : sugar.config('copyright'),
 					// 多语言选项
 					'langs'      : [],
 					// 当前所选语言字段
 					'lang'       : lang,
 					// 当前所选语言名称
-					'langText'   : app.config('lang/' + lang),
+					'langText'   : sugar.config('lang/' + lang),
 					// 点击弹出语言选择下拉
 					'vmClickLang': this.eventClickLang
 				}
@@ -55,7 +55,7 @@ define(function(require, exports, module) {
 		 */
 		setLangs: function() {
 			var langs = [];
-			var langMap = app.config('lang');
+			var langMap = sugar.config('lang');
 
 			util.each(langMap, function(text, type) {
 				langs.push({
@@ -99,8 +99,8 @@ define(function(require, exports, module) {
 		 * @param   {String}  lang  [语言字段]
 		 */
 		changeLang: function(lang) {
-			if (!util.has(lang, app.config('lang'))) {
-				app.tooltip.setTip({
+			if (!util.has(lang, sugar.config('lang'))) {
+				sugar.tooltip.setTip({
 					'arrow'  : false,
 					'type'   : 'warning',
 					'content': T('不存在的语言：{1}', String(lang))
@@ -110,10 +110,10 @@ define(function(require, exports, module) {
 
 			this.vm.set({
 				'lang'    : lang,
-				'langText': app.config('lang/' + lang)
+				'langText': sugar.config('lang/' + lang)
 			});
 
-			app.lang.setLang(lang, true);
+			sugar.lang.setLang(lang, true);
 		},
 
 		/**
@@ -129,7 +129,7 @@ define(function(require, exports, module) {
 		 * 显示多语言下拉框
 		 */
 		showSelect: function() {
-			app.animate.play(this.$doms.select.show(), 'zoomIn', 'fast');
+			sugar.animate.play(this.$doms.select.show(), 'zoomIn', 'fast');
 			return this;
 		},
 
@@ -137,7 +137,7 @@ define(function(require, exports, module) {
 		 * 隐藏多语言下拉框
 		 */
 		hideSelect: function() {
-			app.animate.play(this.$doms.select, 'zoomOut', 'fast', function() {
+			sugar.animate.play(this.$doms.select, 'zoomOut', 'fast', function() {
 				this.$doms.select.hide();
 				this.unbind(this.$doc, 'click.blank');
 			}, this);
