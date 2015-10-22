@@ -122,7 +122,7 @@ define(function(require, exports) {
 	function afterRun(module) {
 		// 404
 		if (!module) {
-			util.error('404 - 找不到该页面: ' + data.name);
+			util.error('404 - Module Not Found: [' + data.name + '] in ' + controller);
 			require.async(controller + '404', afterRun);
 			return false;
 		}
@@ -132,7 +132,7 @@ define(function(require, exports) {
 				module[action](data);
 			}
 			else {
-				util.error('路由控制文件' + controller + data.name + '.js' + '的' + action + '方法调用错误！');
+				util.error('The controller file: ' + controller + data.name + '.js' + ' has no function exports of [' + action + ']');
 			}
 		}
 	}
