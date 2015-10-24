@@ -46,7 +46,7 @@
 		"[必填] 您的昵称，不超过16个字符。": "[required] your nickname, no more than 16 characters.",
 		"[选填] 您的网址(如:www.tangbc.com)，链接会加在您的昵称上。": "[optional] your web site (such as: www.tangbc.com), the link will be added to your nickname.",
 		"[选填] 联系方式(比如Email、QQ、微信，不会被公开)": "[optional] contact (such as Email, QQ, WeChat, will not be public)",
-		"输入验证码": "Input verification code",
+		"输入验证码": "Code here",
 		"点击更换验证码": "Click Replace verification code",
 		"重置": "Reset",
 		"回复TA": "Reply he/she",
@@ -80,6 +80,17 @@
 		"今年{1}月{2}日": "{1} - {2}, this year",
 		"去年{1}月{2}日": "{1} - {2}, last year",
 		"{1}年{2}月{3}日": "{2} - {3}, {1}",
-		"没有结果，换个关键词试试~": "No result, change the keyword try ~"
+		"没有结果，换个关键词试试~": "No result, change the keyword try ~",
+		"博主": "Blogger",
+		"评论id必须为数字~": "id must be a number ~",
+		"评论内容或昵称不能为空~": "Comment content or nickname cannot be empty ~",
+		"评论内容不要超过150个字符哟~": "Comment content not more than 150 characters ~",
+		"昵称不能为纯数字哦~": "The nickname can't be pure number ~",
+		"昵称太长了吧？请在16个字符以内哟~": "The nickname is too long, Please in 16 characters or less ~",
+		"留言内容或昵称不能为空~": "Message content or nickname can not be empty ~",
+		"留言内容不要超过200个字符哟~": "Message content not more than 200 characters ~",
+		"关键词内容错误，请尝试去掉不必要的字符~": "Key words error, please try to remove unnecessary characters ~",
+		"还未读取验证码！": "Still not read the verification code!",
+		"验证码错误！": "Verification code error!"
 	}
 }
