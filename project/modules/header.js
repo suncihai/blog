@@ -45,7 +45,7 @@ define(function(require, exports, module) {
 			};
 
 			// 点击搜索按钮
-			this.proxy(this.$doms.search, 'click.search', this.eventClickSearch);
+			this.proxy(this.$doms.search, 'mouseup.search', this.eventMouseupSearch);
 
 			// 启用headroom插件
 			var target = c.target;
@@ -70,7 +70,7 @@ define(function(require, exports, module) {
 		/**
 		 * 点击搜索框
 		 */
-		eventClickSearch: function(evt, elm) {
+		eventMouseupSearch: function(evt, elm) {
 			var doc = this.$doc;
 			var input = this.$doms.input;
 			var val = input.val();

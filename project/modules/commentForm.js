@@ -4,7 +4,6 @@
 define(function(require, exports) {
 	var sugar = require('sugar');
 	var util = sugar.util;
-	var $ = sugar.jquery;
 	var tooltip = sugar.tooltip;
 
 	var api = sugar.config('api');
@@ -59,8 +58,12 @@ define(function(require, exports) {
 			this.$doms = {
 				'text': el.find('.M-commentFormText'),
 				'nick': el.find('.M-commentFormNick'),
-				'code': el.find('.M-commentFormFooterCode')
+				'code': el.find('.M-commentFormFooterCode'),
+				'img' : el.find('.M-commentFormFooterPic')
 			}
+
+			// 验证码获得焦点时改变
+			this.bind(this.$doms.code, 'focus', this.eventFoucsCode);
 
 			this.setCookieValue();
 		},
@@ -109,15 +112,23 @@ define(function(require, exports) {
 		},
 
 		/**
+		 * 验证码获得焦点
+		 */
+		eventFoucsCode: function() {
+			this.eventClickImage({
+				'timeStamp': util.random()
+			});
+		},
+
+		/**
 		 * 点击更换验证码
 		 */
 		eventClickImage: function(evt) {
 			var vm = this.vm.$;
-			var elm = $(evt.target);
 			this.setTimeout(function() {
-				vm.codeSrc = api.getthecode + '?ts=' + (evt.timeStamp || util.random());
+				vm.codeSrc = api.getthecode + '?ts=' + evt.timeStamp;
 			}, 500);
-			sugar.animate.play(elm, 'flipOutY');
+			sugar.animate.play(this.$doms.img, 'flipOutY');
 			return false;
 		},
 

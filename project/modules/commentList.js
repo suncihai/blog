@@ -218,7 +218,7 @@ define(function(require, exports) {
 				if (util.isArray(item.replies)) {
 					util.each(item.replies, function(reply) {
 						replies.push({
-							'nickName': reply.author,
+							'nickName': T(reply.author),
 							'url'     : reply.url ? ('//' + reply.url) : null,
 							'date'    : prettyDate.format(reply.date),
 							'content' : reply.content,
