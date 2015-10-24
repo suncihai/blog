@@ -148,12 +148,12 @@ define(function(require, exports, module) {
 				sugar.tooltip.setTip({
 					'arrow'  : false,
 					'type'   : 'warning',
-					'content': err.message
+					'content': T(err.message)
 				});
 				this.vm.set({
 					'showPager': false,
 					'showError': true,
-					'errorMsg' : err.message
+					'errorMsg' : T(err.message)
 				});
 				return false;
 			}

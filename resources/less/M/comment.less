@@ -120,6 +120,7 @@
 				padding: .6em 1em;
 				line-height: 150%;
 				font-family: @zhFontFamily;
+				.text-justify;
 			}
 			// 回复
 			footer{
@@ -146,6 +147,7 @@
 					background: #FCFCFC;
 					dd{
 						padding: 0 0.5em .5em;
+						.text-justify;
 					}
 				}
 			}
@@ -288,6 +290,8 @@
 				background: #0d8454;
 				color: #FFF;
 				.textLoading{
+					position: relative;
+					top: -.9em;
 					display: inline-block;
 					width: 1em;
 					@keyframes LoadEllipsis {

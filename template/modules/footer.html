@@ -1,7 +1,7 @@
 <div class="M-footerCopy" v-text="copy"/>
 <!-- 多语言切换 -->
 <div class="M-footerLang">
-	<div class="M-footerLangText" v-on="click: vmClickLang">{{langText}}<i class="fa fa-angle-down icon"></i></div>
+	<div class="M-footerLangText" title="{% 切换显示语言 %}" v-on="click: vmClickLang">{{langText}}<i class="fa fa-angle-down icon"></i></div>
 	<ul class="M-footerLangSelect">
 		<li v-repeat="item in langs">
 			<a v-attr="data-type: item.type" v-class="act: lang===item.type">

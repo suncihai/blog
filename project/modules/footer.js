@@ -75,7 +75,7 @@ define(function(require, exports, module) {
 			this.showSelect();
 
 			// 监听空白点击
-			this.bind(this.$doc, 'click.blank', 'eventClickBlank');
+			this.bind(this.$doc, 'mouseup.blank_lang', 'eventClickBlank');
 			return false;
 		},
 
@@ -139,7 +139,7 @@ define(function(require, exports, module) {
 		hideSelect: function() {
 			sugar.animate.play(this.$doms.select, 'zoomOut', 'fast', function() {
 				this.$doms.select.hide();
-				this.unbind(this.$doc, 'click.blank');
+				this.unbind(this.$doc, 'mouseup.blank_lang');
 			}, this);
 			return this;
 		},

@@ -189,7 +189,7 @@ define(function(require, exports) {
 				tooltip.setTip({
 					'arrow'  : false,
 					'type'   : 'warning',
-					'content': err.message
+					'content': T(err.message)
 				});
 				// 重置验证码
 				this.vm.set('codeSrc', api.getthecode + '?ts' + util.random());

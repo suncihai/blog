@@ -129,20 +129,34 @@ define(function(require, exports) {
 				sugar.tooltip.setTip({
 					'arrow'  : false,
 					'type'   : 'warning',
-					'content': err.message
+					'content': T(err.message)
 				});
 				this.vm.set({
 					'showPager': false,
 					'showError': true,
-					'errorMsg' : err.message
+					'errorMsg' : T(err.message)
 				});
 				return false;
 			}
 
 			var result = data.result;
+			var items = result.items;
+
+			var text = T("搜到与「{1}」相关的结果共{2}条：", this.$word, result.total);
+			this.updateBanner(text);
+
+			// 没有搜索结果
+			if (items.length === 0) {
+				this.vm.set({
+					'showPager': false,
+					'showError': true,
+					'errorMsg' : T('没有结果，换个关键词试试~')
+				});
+				return false;
+			}
 
 			// 构建列表
-			this.setSearchList(result.items);
+			this.setSearchList(items);
 
 			// 更新分页信息
 			var pager = this.getChild('pager');
@@ -154,9 +168,6 @@ define(function(require, exports) {
 					'pages': pages
 				});
 			}
-
-			var text = T("搜到与「{1}」相关的结果共{2}条：", this.$word, result.total);
-			this.updateBanner(text);
 		},
 
 		/**

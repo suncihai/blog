@@ -9,6 +9,10 @@ define(function(require, exports, module) {
 	var config = require('@boot/config');
 	var cookie = require('@widget/cookie');
 
+	// 语言包路径
+	var basePath = 'lang';
+	var loc = WIN.location;
+
 	function Language() {
 		var self = this;
 		var cLang = cookie.get('lang');
@@ -72,7 +76,7 @@ define(function(require, exports, module) {
 			cookie.set('lang', lang);
 
 			if (reload) {
-				WIN.location.reload();
+				loc.reload();
 			}
 		};
 
@@ -96,7 +100,7 @@ define(function(require, exports, module) {
 
 			if (!this.isDefault()) {
 				jquery.ajax({
-					'url'        : 'lang/' + lang + '/translate.json',
+					'url'        : basePath + '/' + lang + '/translate.json',
 					'type'       : 'GET',
 					'dataType'   : 'json',
 					'contentType': 'application/json; charset=UTF-8',
@@ -168,6 +172,7 @@ define(function(require, exports, module) {
 				util.error('Language package load failure: ' + this.loadLang);
 				this.currentLang = this.defaultLang;
 				cookie.set('lang', this.defaultLang);
+				jquery('body').addClass(this.defaultLang);
 				return false;
 			}
 
@@ -175,7 +180,9 @@ define(function(require, exports, module) {
 			var transFunc = result[this.langPackageFunc];
 
 			this.currentLang = this.loadLang;
+			jquery('body').addClass(this.currentLang);
 
+			var cssPath = basePath + '/' + this.currentLang;
 			// 缓存转换方法
 			if (transPath && transFunc) {
 				require.async(transPath, function(translate) {
@@ -184,6 +191,15 @@ define(function(require, exports, module) {
 						self.langPackage.func = func;
 					}
 				});
+			}
+			// 加载语言适应的CSS文件
+			else {
+				jquery('<link/>').attr({
+					'charset': 'utf-8',
+					'rel'    : 'stylesheet',
+					'id'     : 'language_style',
+					'href'   : cssPath + '/' + this.currentLang + '.css'
+				}).appendTo(jquery('head'));
 			}
 		};
 

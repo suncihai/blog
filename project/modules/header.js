@@ -79,7 +79,7 @@ define(function(require, exports, module) {
 			this.$timeStamp = evt.timeStamp;
 
 			// 点击空白处收起INPUT
-			this.bind(doc, 'click.blank', this.eventClickBlank);
+			this.bind(doc, 'mouseup.blank_search', this.eventClickBlank);
 			// 按下回车键响应搜索操作
 			this.bind(doc, 'keydown.search', this.eventKeydown);
 
@@ -142,7 +142,7 @@ define(function(require, exports, module) {
 			this.$doms.input.val('').addClass('inputInit').removeClass('inputReady');
 
 			// 解除绑定
-			this.unbind(doc, 'click.blank');
+			this.unbind(doc, 'click.blank_search');
 			this.unbind(doc, 'keydown.search');
 		},
 

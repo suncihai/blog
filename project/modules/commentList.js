@@ -168,7 +168,7 @@ define(function(require, exports) {
 				tooltip.setTip({
 					'arrow'  : false,
 					'type'   : 'warning',
-					'content': err.message
+					'content': T(err.message)
 				});
 				this.vm.set('isRefresh', true);
 				return false;
