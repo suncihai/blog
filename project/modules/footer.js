@@ -2,139 +2,170 @@
  * [页脚模块]
  */
 define(function(require, exports, module) {
-	var app = require('app');
-	// var c = app.getConfig();
-	var $ = require('jquery');
-	var util = require('util');
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 
-	var Footer = {
-		// 初始化方法
-		init: function(config, callback) {
-			this.$config = config || {};
-			this.callback = callback;
-			this.build();
+	var Footer = sugar.Container.extend({
+		init: function(config) {
+			// 默认的语言
+			var lang = sugar.cookie.get('lang') || 'zhCN';
+
+			config = sugar.cover(config, {
+				'class'   : 'M-footer',
+				'template': 'template/modules/footer.html',
+				'vModel'  : {
+					// copyright
+					'copy'       : sugar.config('copyright'),
+					// 多语言选项
+					'langs'      : [],
+					// 当前所选语言字段
+					'lang'       : lang,
+					// 当前所选语言名称
+					'langText'   : sugar.config('lang/' + lang),
+					// 点击弹出语言选择下拉
+					'vmClickLang': this.eventClickLang
+				}
+			});
+			this.$doc = $(document);
+			this.Super('init', arguments);
 		},
 
-		// 创建页脚, target: 配置中页脚创建的目标DOM
-		build: function() {
-			var config = this.$config;
-			var target = config['target'];
+		/**
+		 * 布局视图渲染完成
+		 */
+		viewReady: function() {
+			var el = this.getDOM();
+			var c = this.getConfig();
 
-			// DOM结构
-			var foot = $([
-				'<div class="blogWidth center">',
-					'<div class="M-footer">',
-						'<div class="M-footerCopy">'+ config.content +'</div>',
-						// 多语言切换
-						'<div class="M-footerLang">',
-							'<ul class="ulLang"/>',
-						'</div>',
-						// 图标信息
-						'<div class="M-footerInfo">',
-							'<a class="M-footerInfoSource" href="https://github.com/tangbc/blog" title="'+ T('本站源码') +'" target="_blank">',
-								'<i class="fa fa-github"/>',
-							'</a>',
-						'</div>',
-					'</div>',
-				'</div>'
-			].join(''));
-			foot.appendTo(target.hide());
+			// 设置可选的语言数组
+			this.setLangs();
 
-			// 切换列表
-			this.$lang = {
-				'zhCN': '<li class="cn" data-type="zhCN" title="'+ T('简体') +'"></li>',
-				'zhHK': '<li class="hk" data-type="zhHK" title="'+ T('繁体') +'"></li>',
-				'enUS': '<li class="us" data-type="enUS" title="'+ T('英文') +'"></li>'
+			this.$doms = {
+				'wraper': c.target,
+				'select': el.find('.M-footerLangSelect')
 			};
 
-			// DOM缓存
-			this.$doms = {
-				'lang': foot.find('.ulLang')
-			}
-
-			// 设置语言的默认状态
-			this.setLangStatus();
-
-			var cssStyle = config.css;
-			if (cssStyle) {
-				foot.css(cssStyle);
-			}
-
-			// 创建完成后回调
-			if (util.isFunc(this.callback)) {
-				this.callback();
-			}
+			// 绑定语言选择事件
+			this.proxy(this.$doms.select, 'click', 'a', 'eventSelectLang');
 		},
 
-		// 设置语言的默认状态
-		setLangStatus: function() {
-			var clang = app.cookie.get('lang');
-			var dom = this.$doms.lang;
-			// 语言数组
-			var langs = [this.$lang[clang]];
-			// 排列语言顺序,选中的在中间
-			for (var la in this.$lang) {
-				var tlang = this.$lang[la];
-				if (la !== clang) {
-					switch (langs.length) {
-						case 1:
-							langs.unshift(tlang);
-						break;
-						case 2:
-							langs.push(tlang);
-						break;
-					}
-				}
-			}
+		/**
+		 * 设置可选的语言下拉数据
+		 */
+		setLangs: function() {
+			var langs = [];
+			var langMap = sugar.config('lang');
 
-			dom.append(langs.join(''))
-				.find('li[data-type="'+ clang +'"]')
-				.show()
-				.siblings('li')
-				.hide();
+			util.each(langMap, function(text, type) {
+				langs.push({
+					'type': type,
+					'text': text
+				});
+			});
 
-			// 绑定事件
-			app.event.proxy(dom, 'click', 'li', this.eventSwitchLang, this);
+			this.vm.set('langs', langs);
 		},
 
-		eventSwitchLang: function(evt, elm) {
-			var lang = $(elm).attr('data-type');
+		/**
+		 * 点击弹出语言选择下拉
+		 */
+		eventClickLang: function(evt) {
 			this.$timeStamp = evt.timeStamp;
+			this.showSelect();
 
-			// 点击空白处收起语言选择
-			app.event.bind($(document), 'click.blank', this.eventClickBlank, this);
+			// 监听空白点击
+			this.bind(this.$doc, 'mouseup.blank_lang', 'eventClickBlank');
+			return false;
+		},
 
-			if (lang === app.cookie.get('lang')) {
-				this.$doms.lang.find('li').fadeIn();
+		/**
+		 * 下拉菜单语言点击事件
+		 */
+		eventSelectLang: function(evt, elm) {
+			var lang = $(elm).attr('data-type');
+			this.hideSelect();
+
+			if (lang === this.vm.get('lang')) {
 				return false;
 			}
-			else {
-				app.cookie.set('lang', lang);
-				app.lang.load(lang);
-				window.location.reload();
-			}
+
+			this.changeLang(lang);
 			return false;
 		},
 
+		/**
+		 * 设置语言
+		 * @param   {String}  lang  [语言字段]
+		 */
+		changeLang: function(lang) {
+			if (!util.has(lang, sugar.config('lang'))) {
+				sugar.tooltip.setTip({
+					'arrow'  : false,
+					'type'   : 'warning',
+					'content': T('不存在的语言：{1}', String(lang))
+				});
+				return false;
+			}
+
+			this.vm.set({
+				'lang'    : lang,
+				'langText': sugar.config('lang/' + lang)
+			});
+
+			sugar.lang.setLang(lang, true);
+		},
+
+		/**
+		 * 空白点击事件
+		 */
 		eventClickBlank: function(evt) {
-			var clang = app.cookie.get('lang');
-			var dom = this.$doms.lang;
-
 			if (evt.timeStamp !== this.$timeStamp) {
-				dom.find('li[data-type="'+ clang +'"]').show().siblings('li').fadeOut();
-				// 解除绑定
-				app.event.unbind($(document), 'click.blank');
+				this.hideSelect();
 			}
-			return false;
 		},
 
-		show: function() {
-			this.$config.target.show();
+		/**
+		 * 显示多语言下拉框
+		 */
+		showSelect: function() {
+			sugar.animate.play(this.$doms.select.show(), 'zoomIn', 'fast');
+			return this;
 		},
 
+		/**
+		 * 隐藏多语言下拉框
+		 */
+		hideSelect: function() {
+			sugar.animate.play(this.$doms.select, 'zoomOut', 'fast', function() {
+				this.$doms.select.hide();
+				this.unbind(this.$doc, 'mouseup.blank_lang');
+			}, this);
+			return this;
+		},
+
+		// 显示页脚
 		hide: function() {
-			this.$config.target.hide();
+			this.$doms.wraper.hide();
+			return this;
+		},
+
+		// 隐藏页脚
+		show: function() {
+			this.$doms.wraper.show();
+			return this;
+		},
+
+		// 消息控制页脚的显示隐藏
+		onSwitchFooter: function(ev) {
+			var param = ev.param;
+			if (param) {
+				this.show();
+			}
+			else {
+				this.hide();
+			}
 		}
-	}
-	module.exports = Footer;
+	});
+	exports.base = Footer;
 });

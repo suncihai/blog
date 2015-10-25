@@ -1,0 +1,26 @@
+<!-- 公共面包屑 -->
+<div class="M-bannerCrumbs"/>
+<!-- 列表banner -->
+<div class="M-bannerArchive" v-show="isAchive">
+	<div class="content" v-html="content"/>
+</div>
+<!-- 内容banner -->
+<div class="M-bannerArticle" v-show="!isAchive">
+	<div class="content">
+		<h1 class="title" v-text="title"/>
+		<div class="info">
+			<!-- 发布时间 -->
+			<span title="{% 发布时间 %}">
+				<i class="fa fa-calendar mr3"></i>
+				<span class="time" v-text="time"/>
+			</span>
+			<!-- 标签 -->
+			<span class="tag ml1 mr1"/>
+			<!-- 评论数 -->
+			<span title="{% 评论数 %}">
+				<i class="fa fa-comments mr3"></i>
+				<span class="comments" v-text="comments"/>
+			</span>
+		</div>
+	</div>
+</div>

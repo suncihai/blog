@@ -2,342 +2,289 @@
  * [分页模块]
  */
 define(function(require, exports) {
-	var $ = require('jquery');
-	var util = require('util');
-	var app = require('app');
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var $ = sugar.jquery;
 
-	// 无连接的分页方式(通过消息监听分页)
-	var PagerNoLink = {
-		/*
-		 * config配置参数：
-		 * name：分页器模块名称
-		 * target：分页器创建目标DOM
-		 * max：分页器初始选项最多显示个数
-		 * class：额外class(用于写不同样式的CSS)
-		 * showInfo：是否显示分页信息
-		 */
+	// 带链接的分页(通过url参数分页)
+	var HasLink = sugar.Container.extend({
 		init: function(config) {
-			this.$config = config;
-			this.$name = config.name;
-			this.$param = {}, // 当前页page, 总页数pages, 总条数total
-			this.$max = config.max || 7; // 最多显示选项条数
-			this.$showInfo = !!config.showInfo;
-			this.$class = config.class || '';
-			this.build();
-			return this;
+			config = sugar.cover(config, {
+				'class'   : 'M-pager',
+				// 最多显示的项数
+				'max'     : 5,
+				'template': 'template/modules/pager.html',
+				'vModel'  : {
+					// 页码数组
+					'pages'      : [],
+					// 分页信息
+					'info'       : '',
+					// 是否显示上一页按钮
+					'showPrev'   : true,
+					// 是否显示下一页按钮
+					'showNext'   : true,
+					// 点击上一页
+					'vmClickPrev': this.eventClickPrev,
+					// 点击下一页
+					'vmClickNext': this.eventClickNext
+				}
+			});
+			// 当前页码
+			this.$page = 1;
+			// 总页数
+			this.$pages = 1;
+			// 跳转路径名称
+			this.$path = '';
+			this.Super('init', arguments);
 		},
 
+		/**
+		 * 点击上一页
+		 */
+		eventClickPrev: function() {
+			var page = this.$page;
+			if (page !== 1) {
+				sugar.controller.go(this.$path + '?page=' + (page - 1));
+			}
+			return false;
+		},
+
+		/**
+		 * 点击下一页
+		 */
+		eventClickNext: function() {
+			var page = this.$page;
+			if (page !== this.$pages) {
+				sugar.controller.go(this.$path + '?page=' + (page + 1));
+			}
+			return false;
+		},
+
+		/**
+		 * 设置/更新分页信息
+		 * @param  {Object}  param  [包括页码和总页数的对象]
+		 */
 		setParam: function(param) {
-			this.$param = param;
-			// 重新生成页码
-			this.empty().buildPager();
-		},
-
-		// 创建分页器
-		build: function() {
-			var config = this.$config;
-			var dom = config.target;  // 分页器的添加位置
-
-			// 分页器HTML结构
-			var html = [
-				'<div class="M-pager '+ this.$class +'">',
-					'<a class="M-pagerPN M-pagerPrev" title="'+ T('上一页') +'">',
-						'<i class="fa fa-angle-left"/>',
-					'</a>',
-					'<div class="M-pagerList"/>',
-					'<a class="M-pagerPN M-pagerNext" title="'+ T('下一页') +'">',
-						'<i class="fa fa-angle-right"/>',
-					'</a>',
-					'<div class="M-pagerInfo"/>',
-				'</div>'
-			].join('');
-			$(html).appendTo(dom);
-
-			// dom缓存
-			var doms = this.$doms = {
-				'prev': $('.M-pagerPrev', dom),
-				'list': $('.M-pagerList', dom),
-				'next': $('.M-pagerNext', dom),
-				'info': $('.M-pagerInfo', dom)
+			if (!util.isObject(param)) {
+				util.error('page param must be an Object: ', param);
+				return false;
 			}
 
-			if (!this.$showInfo) {
-				this.$doms.info.hide();
+			this.$path = param.path;
+			this.$page = param.page;
+			this.$pages = param.pages;
+
+			if (this.$page && this.$pages) {
+				this.updatePages();
 			}
-
-			doms.prev.attr('value', '<');
-			doms.next.attr('value', '>');
-
-			// 翻页点击事件
-			app.event.bind(doms.prev, 'click', this.eventClickPreview, this);
-			app.event.bind(doms.next, 'click', this.eventClickNext, this);
-
-			// 页码点击事件
-			app.event.proxy($('.M-pager'), 'click', 'a.M-pagerItem', this.eventClickPage, this);
 		},
 
-		// 创建页码选项
-		buildPager: function() {
-			var param = this.$param;
-			var doms = this.$doms;
+		/**
+		 * 更新页码
+		 */
+		updatePages: function() {
+			var max = this.getConfig('max');
+			var page = this.$page;
+			var pages = this.$pages;
 
-			// 分页信息
-			var pages = param.pages; // 总页数
-			var page = param.page; // 当前页
-			var items = this.makePageArray(page, pages);
+			// 生成页码选项
+			var items = _createPageArray(page, pages, max);
 
-			// 构建总条数
-			doms.info.html('<span class="total lsp2">['+ T('共{1}页，{2}条记录', pages, param.total) +']</span>');
+			// 构建vm数据
+			var results = this.createVmItems(items);
 
-			// 构建页码
-			util.each(items, function(num) {
-				var item;
-				if (num === '...') {
-					item = '<span class="M-pagerItem M-pagerOmit" title="'+ T('已隐藏部分页码') +'">···</span>';
-				}
-				else {
-					item = '<a class="M-pagerItem" data-id="'+ num +'">'+ num +'</a>';
-				}
-				$(item).appendTo(doms.list);
+			this.vm.set({
+				'pages'   : results,
+				'info'    : T('第 {1} 页，共 {2} 页', page, pages),
+				'showPrev': page !== 1,
+				'showNext': page !== pages
 			});
+		},
 
-			// 激活当前页码
-			this.checkStatus(page, items);
+		/**
+		 * 根据页码数组构建数据对象
+		 * @param   {Array}  items  [页码数组]
+		 * @return  {Array}         [vm数据对象]
+		 */
+		createVmItems: function(items) {
+			var self = this, result = [];
+			util.each(items, function(item) {
+				result.push({
+					// 页码数字
+					'text'  : item,
+					// 是否激活
+					'isAct' : item === self.$page,
+					// 跳转链接
+					'href'  : item === self.$page || item === '···' ? null : '#' + self.$path + '?page=' + item,
+					// 是否是省略号
+					'isOmit': item === '···'
+				});
+			});
+			return result;
+		},
 
-			if (pages <= 1) {
-				doms.prev.hide();
-				doms.list.hide();
-				doms.next.hide();
-			}
+		/**
+		 * 重置模块为初始状态
+		 */
+		reset: function() {
+			this.$page = 1;
+			this.$pages = 1;
+			this.$path = '';
+			this.vm.reset();
 			return this;
-		},
-
-		// 生成页码数组[1,2,3,4,5,'...']
-		makePageArray: function(page, all) {
-			var retArr = [], i;
-			var max = this.$max; // 初始选项显示个数
-			// 不需要隐藏选项
-			if (all <= max) {
-				for (i = 1; i < all + 1; i++) {
-					retArr.push(i);
-				}
-			}
-			// 需要隐藏选项
-			else {
-				var tmpArr = this.formatPage(page);
-				if (!tmpArr) {
-					for (i = 1; i < max + 1; i++) {
-						retArr.push(i);
-					}
-					retArr.push('...');
-				}
-				else {
-					retArr = tmpArr;
-				}
-			}
-			return retArr;
-		},
-
-		// 更新页码展现格式,增加省略号
-		formatPage: function(page) {
-			var max = this.$max; // 初始选项显示个数
-			var pages = this.$param.pages; // 总页数
-			var fontArr = [1,2,'...']; // 前面的页码选项(保留第1页)
-			var backArr = ['...']; // 后面的页码选项
-			var retArr = null;
-			// 激活的页码小于max的不作处理
-			if (page < max) {
-				return false;
-			}
-			// 激活页码大于等于max的做截断: 12...456...
-			// 非特殊情况截断：激活页前后有两页
-			var diff = pages - page; // 当前页与总页的差值
-			switch(diff) {
-				// 最后一页
-				case 0:
-					backArr = [page - 3, page - 2, page - 1, page];
-				break;
-				// 倒数第一页
-				case 1:
-					backArr = [page - 2, page - 1, page, page + 1];
-				break;
-				// 倒数第二页
-				case 2:
-					backArr = [page - 2, page - 1, page, page + 1, page + 2];
-				break;
-				default:
-					backArr = [page - 2, page - 1, page, page + 1, page + 2].concat(backArr);
-			}
-			retArr = fontArr.concat(backArr);
-			return retArr;
-		},
-
-		// 激活页码
-		checkStatus: function(page, items) {
-			var self = this;
-			// 激活当前页码
-			util.each(items, function(item, idx) {
-				if (item === page) {
-					$('.M-pagerItem', self.$doms.list).eq(idx).addClass('M-pagerAct');
-					return false;
-				}
-			});
-
-			// 第一页和最后一页隐藏上下切换按钮
-			// var pages = +self.$config.pages;
-			// page === 1 && self.$doms.prev.hide();
-			// page === pages && self.$doms.next.hide();
-		},
-
-		// 清空DOM
-		empty: function() {
-			this.$doms.list.empty();
-			return this;
-		},
-
-		// 点击下一页
-		eventClickNext: function(evt, elm) {
-			var id = this.$param.page + 1;
-			var pages = this.$param.pages;
-			if (id <= 0 || id > pages) {
-				return false;
-			}
-			app.messager.fire('pagerSelected', {
-				'page': id,
-				'name': this.$name
-			});
-		},
-
-		// 点击上一页
-		eventClickPreview: function(evt, elm) {
-			var id = this.$param.page - 1;
-			var pages = this.$param.pages;
-			if (id <= 0 || id > pages) {
-				return false;
-			}
-			app.messager.fire('pagerSelected', {
-				'page': id,
-				'name': this.$name
-			});
-		},
-
-		// 点击页码
-		eventClickPage: function(evt, elm) {
-			var id = +$(elm).attr('data-id');
-			var page = this.$param.page;
-			if (id === page) {
-				return false;
-			}
-			$(elm).addClass('M-pagerAct').siblings('.M-pagerItem').removeClass('M-pagerAct');
-			app.messager.fire('pagerSelected', {
-				'page': id,
-				'name': this.$name
-			});
-		}
-	}
-	exports.pagerNoLink = $.extend(true, {}, PagerNoLink);
-
-
-	// 有链接的分页方式(通过url参数分页)
-	var PagerHasLink = $.extend(true, PagerNoLink, {
-		// 创建分页器
-		build: function() {
-			var config = this.$config;
-			var dom = config.target;  // 分页器的添加位置
-
-			// 分页器HTML结构
-			var html = [
-				'<div class="M-pager '+ this.$class +'">',
-					'<a class="M-pagerPN M-pagerPrev" title="'+ T('上一页') +'">',
-						'<i class="fa fa-angle-left"/>',
-					'</a>',
-					'<div class="M-pagerList"/>',
-					'<a class="M-pagerPN M-pagerNext" title="'+ T('下一页') +'">',
-						'<i class="fa fa-angle-right"/>',
-					'</a>',
-					'<div class="M-pagerInfo"/>',
-				'</div>'
-			].join('');
-			$(html).appendTo(dom);
-
-			// dom缓存
-			var doms = this.$doms = {
-				'prev': $('.M-pagerPrev', dom),
-				'list': $('.M-pagerList', dom),
-				'next': $('.M-pagerNext', dom),
-				'info': $('.M-pagerInfo', dom)
-			}
-
-			if (!this.$showInfo) {
-				this.$doms.info.hide();
-			}
-
-			doms.prev.attr('value', '<');
-			doms.next.attr('value', '>');
-
-			// 翻页点击事件
-			app.event.bind(doms.prev, 'click', this.eventClickPreview, this);
-			app.event.bind(doms.next, 'click', this.eventClickNext, this);
-		},
-
-		// 创建页码选项
-		buildPager: function() {
-			var param = this.$param;
-			var doms = this.$doms;
-			var link = this.$param.link;
-
-			// 分页信息
-			var pages = param.pages; // 总页数
-			var page = param.page; // 当前页
-			var items = this.makePageArray(page, pages);
-
-			// 构建总条数
-			doms.info.html('<span class="total lsp2">['+ T('共{1}页，{2}条记录', pages, param.total) +']</span>');
-
-
-			// 构建页码
-			util.each(items, function(num) {
-				var item, href;
-				if (num === '...') {
-					item = '<span class="M-pagerItem M-pagerOmit" title="'+ T('已隐藏部分页码') +'">···</span>';
-				}
-				else {
-					href = page === num ? '' : 'href=#'+ link +'?page=' + num;
-					item = '<a '+ href +' class="M-pagerItem">'+ num +'</a>';
-				}
-				$(item).appendTo(doms.list);
-			});
-
-			// 激活当前页码
-			this.checkStatus(page, items);
-
-			if (pages <= 1) {
-				doms.prev.hide();
-				doms.list.hide();
-				doms.next.hide();
-			}
-			return this;
-		},
-
-		// 点击下一页
-		eventClickNext: function(evt, elm) {
-			var id = this.$param.page + 1;
-			var pages = this.$param.pages;
-			if (id <= 0 || id > pages) {
-				return false;
-			}
-			app.controller.go(this.$param.link + '?page=' + id);
-		},
-
-		// 点击上一页
-		eventClickPreview: function(evt, elm) {
-			var id = this.$param.page - 1;
-			var pages = this.$param.pages;
-			if (id <= 0 || id > pages) {
-				return false;
-			}
-			app.controller.go(this.$param.link + '?page=' + id);
 		}
 	});
-	exports.pagerHasLink = $.extend(true, {}, PagerHasLink);
+	exports.hasLink = HasLink;
+
+
+	// 无连接的分页方式(通过消息监听分页)
+	var NoLink = HasLink.extend({
+		init: function(config) {
+			config = sugar.cover(config, {
+				'class': 'M-pagerNoLink'
+			});
+			this.Super('init', arguments);
+		},
+
+		/**
+		 * 布局视图渲染完毕
+		 */
+		viewReady: function() {
+			var el = this.getDOM();
+
+			// 选项绑定点击事件
+			this.proxy(el.find('.M-pagerList'), 'click', 'a', this.eventPageClick);
+		},
+
+		/**
+		 * 构建无连接的页码数据对象
+		 */
+		createVmItems: function(items) {
+			var self = this, result = [];
+			util.each(items, function(item) {
+				result.push({
+					// 页码数字
+					'text'  : item,
+					// 是否激活
+					'isAct' : item === self.$page,
+					// 是否是省略号
+					'isOmit': item === '···'
+				});
+			});
+			return result;
+		},
+
+		/**
+		 * 选项点击事件，处理数字页码
+		 */
+		eventPageClick: function(evt, elm) {
+			var page = +$(elm).attr('data-id');
+			// 点击有效页码发送消息
+			if (util.isNumber(page) && (page !== this.$page)) {
+				this.fire('pageSelected', page);
+			}
+			return false;
+		},
+
+		/**
+		 * 点击上一页
+		 */
+		eventClickPrev: function() {
+			var page = this.$page;
+			if (page !== 1) {
+				this.fire('pageSelected', page - 1);
+			}
+			return false;
+		},
+
+		/**
+		 * 点击下一页
+		 */
+		eventClickNext: function() {
+			var page = this.$page;
+			if (page !== this.$pages) {
+				this.fire('pageSelected', page + 1);
+			}
+			return false;
+		}
+	});
+	exports.noLink = NoLink;
+
+
+	/**
+	 * 更新页码展现格式，增加省略号
+	 * @param   {Number}  page   [当前页码]
+	 * @param   {Number}  pages  [总页数]
+	 * @param   {Number}  max    [最大显示项数]
+	 * @return  {Array}          [结果数组]
+	 */
+	function _formatPage(page, pages, max) {
+		// 前面的页码选项(保留第1,2页)
+		var fontArr = [1,2,'···'];
+		// 后面的页码选项
+		var backArr = ['···'];
+		var retArr = null;
+
+		// 激活的页码小于max的不作处理
+		if (page < max) {
+			return false;
+		}
+
+		// 激活页码大于等于max的做截断: 12...456...
+		// 非特殊情况截断：激活页前后有两页
+
+		// 当前页与总页的差值
+		var diff = pages - page;
+		switch(diff) {
+			// 最后一页
+			case 0:
+				backArr = [page - 3, page - 2, page - 1, page];
+			break;
+			// 倒数第一页
+			case 1:
+				backArr = [page - 2, page - 1, page, page + 1];
+			break;
+			// 倒数第二页
+			case 2:
+				backArr = [page - 2, page - 1, page, page + 1, page + 2];
+			break;
+			default:
+				backArr = [page - 2, page - 1, page, page + 1, page + 2].concat(backArr);
+		}
+
+		retArr = fontArr.concat(backArr);
+
+		return retArr;
+	}
+
+	/**
+	 * 生成页码数组[1,2,3,4,5,'...']
+	 * @param   {Number}  page   [当前页码]
+	 * @param   {Number}  pages  [总页数]
+	 * @param   {Number}  max    [最大显示项数]
+	 * @return  {Array}          [结果数组]
+	 */
+	function _createPageArray(page, pages, max) {
+		var retArr = [], i, tmpArr;
+		// 不需要隐藏选项
+		if (pages <= max) {
+			for (i = 1; i < pages + 1; i++) {
+				retArr.push(i);
+			}
+		}
+		// 需要隐藏选项
+		else {
+			tmpArr = _formatPage(page, pages, max);
+			if (!tmpArr) {
+				for (i = 1; i < max + 1; i++) {
+					retArr.push(i);
+				}
+				retArr.push('···');
+			}
+			else {
+				retArr = tmpArr;
+			}
+		}
+		return retArr;
+	}
 });

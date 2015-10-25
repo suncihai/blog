@@ -1,163 +1,219 @@
 /**
  * [搜索结果页面]
  */
-define(function(require, exports, module) {
-	var app = require('app');
-	var c = app.getConfig();
-	var $ = require('jquery');
-	var util = require('util');
+define(function(require, exports) {
+	var sugar = require('sugar');
+	var util = sugar.util;
+	var prettyDate = require('@widget/prettyDate');
 
-	var banner = require('@modules/banner');
-	var layout = require('layout');
-	var loading = require('@modules/loading').base;
-
-	var SearchResult = {
-		init: function(data) {
-			this.$data = data;
-			this.$dom = data.dom;
-			this.$word = data.search && data.search.word;
-			this.$renderWord = this.$word || '';
-			layout.hideFooter().updateNav();
-			this.build();
-		},
-
-		build: function() {
-
-			// 设置标题
-			layout.setTitle(T('{1}_搜索结果', (this.$word || "")));
-
-			var bannerTxt = T('正在搜索有关「{1}」的文章记录', this.$renderWord) + ' ……';
-			// banner设置
-			banner.setData({
-				'type': 'archive',
-				'content': '<h1 class="bannerTxt fts30">'+ bannerTxt +'</h1>'
-			})
-			// .setCrumbs(this.$title, '');
-
-			this.$doms = {
-				listBox: $('<div class="P-search-list"/>').appendTo(this.$dom).hide()
-			}
-
-			// 数据加载之前显示loading
-			this.loading = loading.init({
-			'target': this.$dom,
-			'width':  this.$dom.width(),
-				'size': 25,
-				'class': 'center mt2',
-				'autoHide': true
-			});
-
-			// 加载数据
-			this.load();
-		},
-
-		hide: function() {
-			this.$doms.listBox.hide();
-		},
-
-		show: function() {
-			this.$doms.listBox.show();
-		},
-
-		showLoading: function() {
-			this.loading.show();
-			this.hide();
-		},
-
-		hideLoading: function() {
-			this.loading.hide();
-			this.show();
-		},
-
-		// 拉取数据
-		load: function() {
-			var api = c.api;
-			layout.hideFooter();
-			this.showLoading();
-			app.data.get(api.search, {'word': this.$word}, this.onData, this);
-		},
-
-		// 拉取数据回调
-		onData: function(err, res) {
-			var self = this;
-			var dom = self.$data.dom;
-			var errCls = 'noData animated bounce';
-			var dataError = T('拉取数据似乎出了点问题~');
-			if (err) {
-				util.error(T('拉取数据失败！状态: {1}, 错误信息: {2}', err.status, err.message));
-				if (err.status === 'timeout') {
-					dom.html('<div class="'+ errCls +'">'+ T('请求超时，请按F5刷新重试~') +'</div>');
+	var Search = sugar.Container.extend({
+		init: function(config) {
+			config = sugar.cover(config, {
+				'class'   : 'P-search',
+				'template': 'template/pages/search.html',
+				'vModel'  : {
+					// 是否显示加载状态
+					'isLoading': true,
+					// 搜索结构vm数据
+					'searchs'  : [],
+					// 是否显示分页
+					'showPager': false,
+					// 是否显示错误信息
+					'showError': false,
+					// 错误提示信息
+					'errorMsg' : ''
 				}
+			});
+			// 搜索关键词
+			this.$word = '';
+			// 数据状态锁
+			this.$dateReady = false;
+			this.Super('init', arguments);
+		},
+
+		/**
+		 * 视图渲染完毕
+		 */
+		viewReady: function() {
+			// 创建子模块 分页器
+			this.createTplModules();
+		},
+
+		/**
+		 * 显示加载状态并隐藏页脚
+		 */
+		showLoading: function() {
+			this.vm.set('isLoading', true);
+			this.notify('layout.blogFooter', 'switchFooter', false);
+			return this;
+		},
+
+		/**
+		 * 隐藏加载状态并显示页脚
+		 */
+		hideLoading: function() {
+			this.vm.set('isLoading', false);
+			this.notify('layout.blogFooter', 'switchFooter', true);
+			return this;
+		},
+
+		/**
+		 * 保存路由参数
+		 */
+		saveRouter: function(data) {
+			this.$router = data;
+			this.$word = data.search && data.search.word;
+			this.updateBanner().load();
+			return this;
+		},
+
+		/**
+		 * 设置搜索参数
+		 * @param  {Object}  search  [搜索参数]
+		 */
+		setParam: function(search) {
+			this.$word = search && search.word;
+			this.updateBanner();
+			return this;
+		},
+
+		/**
+		 * 更新banner
+		 */
+		updateBanner: function(text) {
+			var word = this.$word;
+			text = text || T('正在搜索有关「{1}」的文章记录', word) + ' ……';
+
+			// 更新标题
+			this.notify('layout', 'changeTitle', T('{1}_搜索结果', word));
+
+			// 向banner模块发消息
+			this.notify('layout.blogBanner', 'updateQuotations', text);
+			return this;
+		},
+
+		/**
+		 * 拉取搜索结果数据
+		 */
+		load: function() {
+			var word = this.$word;
+
+			this.$dateReady = false;
+			this.showLoading();
+
+			if (word) {
+				sugar.ajax.get(sugar.config('api/search'), {
+					'word': word
+				}, this.delayData, this);
+			}
+		},
+
+		/**
+		 * 延迟展现
+		 */
+		delayData: function() {
+			this.setTimeout('afterDataBack', 2000, arguments);
+		},
+
+		/**
+		 * 请求数据回调
+		 * @param   {Object}  err   [请求错误信息]
+		 * @param   {Object}  data  [请求成功信息]
+		 */
+		afterDataBack: function(err, data) {
+			this.$dataReady = true;
+			this.hideLoading();
+
+			if (err) {
+				util.error(err);
+				sugar.tooltip.setTip({
+					'arrow'  : false,
+					'type'   : 'warning',
+					'content': T(err.message)
+				});
+				this.vm.set({
+					'showPager': false,
+					'showError': true,
+					'errorMsg' : T(err.message)
+				});
 				return false;
 			}
-			if (!res.success) {
-				if (res.message) {
-					dataError = res.message;
-				}
-				dom.html('<div class="'+ errCls +'">'+ dataError +'</div>');
-				return;
-			}
-			var info = self.$info = res.result;
-			if (util.isEmpty(info)) {
-				dom.html('<div class="'+ errCls +'">'+ T('无数据') +'</div>');
-				return;
-			}
-			// 创建列表
-			self.buildArchives(info);
 
-			var bannerTxt = T("搜到与「{1}」相关的结果共{2}条：", this.$renderWord, (info.total || 0));
+			var result = data.result;
+			var items = result.items;
 
-			// 隐藏loading
-			setTimeout(function() {
-				self.hideLoading();
-				layout.showFooter();
-				banner.setData({
-					'type': 'archive',
-					'content': '<h1 class="bannerTxt fts30 animated shake">'+ bannerTxt +'</h1>'
+			var text = T("搜到与「{1}」相关的结果共{2}条：", this.$word, result.total);
+			this.updateBanner(text);
+
+			// 没有搜索结果
+			if (items.length === 0) {
+				this.vm.set({
+					'showPager': false,
+					'showError': true,
+					'errorMsg' : T('没有结果，换个关键词试试~')
 				});
-			}, c.delay);
+				return false;
+			}
+
+			// 构建列表
+			this.setSearchList(items);
+
+			// 更新分页信息
+			var pager = this.getChild('pager');
+			var pages = result.pages;
+			if (pager && pages > 1) {
+				this.vm.set('showPager', true);
+				pager.setParam({
+					'page' : result.page,
+					'pages': pages
+				});
+			}
 		},
 
-		// 创建
-		buildArchives: function(info) {
-			// 先清空之前的列表
-			this.$doms.listBox.empty();
+		/**
+		 * 构建搜索结果列表
+		 * @param  {Array}  items  [搜索结果数据]
+		 */
+		setSearchList: function(items) {
+			var searchs = [];
+			var achive;
+			var category = sugar.config('category');
 
-			if (util.isEmpty(info.items)) {
-				this.$doms.listBox.html('<div class="fts20 pt2 pb2 animated fadeIn">(╯_╰)'+ T('抱歉没有搜到相关内容！') +'</div>');
-			}
-			else {
-				util.each(info.items, this.buildItems, this);
-			}
+			util.each(items, function(item, index) {
+				// 栏目
+				achive = util.getKey(item.catId, category);
+
+				searchs.push({
+					'index'   : '#' + (index + 1),
+					'anchor'  : '#' + achive + '/' + item.id,
+					'title'   : item.title,
+					'brief'   : item.brief,
+					'achive'  : achive,
+					'comments': item.comments,
+					'date'    : prettyDate.format(item.date)
+				});
+			});
+
+			this.vm.set('searchs', searchs);
 		},
 
-		// 循环生成列表
-		buildItems: function(item, idx) {
-			var sections = [];
-			// var str = item.date.slice(0, 10);
-			// var arr = str.split('-');
-			// var year = arr[0];
-			// var mouth = +arr[1];
-			// var day = +arr[2];
-			var date = util.prettyDate(item.date);
-			var catName = util.getKeyName(item.catId, c.category);
-			var anchor = catName + '/' + item.id; // 超链接地址
-			var brief = item.brief === '' ? '<a class="tdef tdl" href="#'+ anchor +'">'+ T('请进入内页查看') +'</a>' : item.brief + ' ……';
-			sections.push([
-				'<section class="section">',
-					'<a href="#'+ anchor +'" title="'+ item.tips +'" class="title">'+ item.title +'</a>',
-					'<p class="brief">'+ brief + '</p>',
-					'<div class="info">',
-						'<span class="tag">' + T('分类：') + c.archiveTitle[catName] || T('未知分类') + '</span>',
-						' / ',
-						'<span class="tag">' + T('评论数：') + item.comments +'</span>',
-						' / ',
-						'<span class="tag">' + T('发布时间：') + date +'</span>',
-					'</div>',
-				'</section>'
-			].join(''));
-			this.$doms.listBox.append(sections.join(''));
+		/**
+		 * 重置模块为初始状态
+		 */
+		reset: function() {
+			var chs = this.getChilds(true);
+			util.each(chs, function(child) {
+				if (util.isFunc(child.reset)) {
+					child.reset();
+				}
+			});
+
+			this.$word = '';
+			this.$dateReady = false;
+
+			this.vm.reset();
+			return this;
 		}
-	}
-	module.exports = SearchResult;
+	});
+	exports.base = Search;
 });

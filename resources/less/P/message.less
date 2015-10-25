@@ -1,180 +1,86 @@
-.M-message{
+.P-message{
 	width: @blogWidth;
 	.center;
-	// 选项卡相关样式
-	.tabHead{
-		height: 2.5em;
-		line-height: 2.5em;
-		border-bottom: 3px solid #DDD;
-		z-index: 0;
-		// background: #FAFAFA;
-		li{
-			display: inline-block;
-			position: relative;
-			top: -.2em;
-			margin-right: 1em;
-			padding: 0.2em .8em 0 .8em;
-			height: 100%;
-			line-height: 2.9em;
-			border-bottom: 3px solid #DDD;
-			cursor: pointer;
-			color: #aaa;
-			transition: all 220ms cubic-bezier(0.42,0,.58,1);
-			&:hover{
-				border-color: #26CABD;
-				color: #26CABD;
-			}
-			&.act{
-				border-color: #22B6AB;
-				color: #22B6AB;
-				background: #f8f8f8;
-			}
-		}
-	}
-	.tabBody{}
-	.tabCont{
-		display: none;
-	}
-	.tabCont:nth-child(2){
-		display: block;
-	}
-	// 左侧
-	&Main{
+	// 左侧 留言列表/表单
+	&Left{
 		display: inline-block;
-		box-sizing: border-box;
-		width: 65%;
-		padding-bottom: 4em;
-		// 留言列表
-		&List{
-			min-height: 5em;
-			padding-top: 1.5em;
-			// 评论列表宽度
-			&Width{
-				width: 100%;
+	    box-sizing: border-box;
+	    width: 65%;
+	    padding-bottom: 4em;
+		&Tab{
+			height: 2.5em;
+			line-height: 2.5em;
+			border-bottom: 3px solid #DDD;
+			z-index: 0;
+			// background: #FAFAFA;
+			li{
+				display: inline-block;
+				position: relative;
+				top: -.2em;
+				margin-right: 1em;
+				padding: 0.2em .8em 0 .8em;
+				height: 100%;
+				line-height: 2.9em;
+				border-bottom: 3px solid #DDD;
+				cursor: pointer;
+				color: #aaa;
+				transition: all 220ms cubic-bezier(0.42,0,.58,1);
+				&:hover{
+					border-color: #26CABD;
+					color: #26CABD;
+				}
+				&.act{
+					border-color: #22B6AB;
+					color: #22B6AB;
+					background: #f8f8f8;
+				}
 			}
 		}
-		// 留言表单
+		&List{
+			min-height: 14em;
+			padding-top: 1.5em;
+		}
 		&Form{
 			padding-top: 1.5em;
-			.compent{
-				.db;
-				width: 100%;
-				padding: .5em;
-				margin-top: 1.5em;
-				box-sizing: border-box;
-			}
-			input,textarea{
-				border: 1px solid #DDD;
-				border-radius: 2px;
-				background: #FFF;
-				outline: none;
-				line-height: 1.5;
-				font-size: 1.4rem;
-				transition: all linear .5s;
-			}
-			input:focus,textarea:focus{
-				background: #F7FDFD;
-				box-shadow: 1px 1px 8px #EEE, -1px -1px 8px #EEE;
-			}
-			// 评论内容表单
-			.textarea{
-				.compent;
-				height: 7em;
-				resize: none;
-			}
-			// 名称
-			.nick{
-				.compent;
-			}
-			// 网址
-			.url{
-				.compent;
-			}
-			// 联系方式
-			.contact{
-				.compent;
-			}
-			.footer{
-				margin-top: 1.3em;
-				button{
-					float: right;
-					padding: .5em 1em;
-					// background: #FFF;
-					border: none;
-					cursor: pointer;
-					outline: none;
-					opacity: 1;
-					transition: all 218ms cubic-bezier(0.42,0,.58,1);
-				}
-			}
-			// 验证码输入
-			.code{
-				.compent;
-				float: left;
-				margin-top: 0;
-				width: 6.5em;
-			}
-			.image{
-				float: left;
-				width: 90px;
-				height: 35px;
-				margin-left: 1em;
-				cursor: pointer;
-				border-radius: 2px;
-			}
-			.tips{
-				font-size: 1.4rem;
-				color: #0D8454;
-				line-height: 2.5;
-				margin-left: 1em;
-			}
-			.reset{
-				background: #FFF;
-				color: #0080C0;
-				&:hover{
-					background: #f4f4f4;
-				}
-			}
-			.submit{
-				margin-left: .5em;
-				background: #0d8454;
-				color: #FFF;
-				&:hover{
-					opacity: .8;
-				}
-			}
 		}
 	}
-	// 右侧
-	&Info{
+	// 右侧 其他信息
+	&Right{
+		float: right;
 		display: inline-block;
 		box-sizing: border-box;
 		vertical-align: top;
-		padding: 2.4em 0 0 2em;
-		width: 35%;
-		height: 100px;
-		.infoBox{
-			width: 100%;
-			border: 1px solid #f3f3f3;
-			background: #f8f8f8;
-			padding-bottom: 1.5em;
-			.title{
-				padding: 1em 0 .5em 1em;
-				font-weight: normal;
-				font-size: 1.8rem;
-				color: #22B6AB;
+		padding: 1.5em 0 1em 1em;
+		width: 34%;
+		&Item{
+			margin-bottom: 1em;
+			a{
+				color: @defaultColor;
 			}
-			ul{
-				padding-left: 1.5em;
-				list-style-type: circle;
-				list-style-position: inside;
-				li{
-					padding: .2em 0;
+			.company{
+				text-decoration: underline;
+				&:hover{
+					color: @defaultAnchorHover;
 				}
 			}
-			.item{
-				padding: 1em 1.5em 0 1.2em;
-				color: #22B6AB;
+			.contact-item{
+				display: block;
+				padding-bottom: .5em;
+				i{
+					color: #555;
+				}
+			}
+			dt{
+				padding: .5em 1em;
+				// font-weight: bold;
+				background: rgba(34, 182, 171, 0.08);
+			}
+			dd{
+				.text-justify;
+				display: inline-block;
+				padding: 1em;
+				line-height: 150%;
+				background: #fcfcfc;
 			}
 		}
 	}

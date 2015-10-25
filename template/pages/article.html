@@ -1,0 +1,19 @@
+<!-- 加载状态蒙版 -->
+<div class="C-commonLoading" v-show="isLoading">
+	<i class="fa fa-spinner animate-spinner-rotate icon"></i>
+</div>
+<!-- 内容区域 -->
+<div class="P-articleContent" v-show="!isLoading && !showError">
+	<!-- 正文 -->
+	<article class="P-articleContentMain" v-html="content"></article>
+</div>
+<!-- 评论模块 -->
+<div class="P-articleComments" v-show="!isLoading && !showError" m-name="comment" m-module="@project/modules/commentList.base"></div>
+<!-- 错误提示 -->
+<div class="C-commonError animated" v-show="showError" v-class="shake: showError">
+	<div class="emotion">:-(</div>
+	<div class="info">
+		<p>{% 哎呀，抱歉！服务器出错了…… 它说： %}</p>
+		<p v-text="errorMsg"></p>
+	</div>
+</div>

@@ -2,7 +2,19 @@
 	width: @blogWidth;
 	position: relative;
 	.center;
-	margin-bottom: 3.5em;
+	margin-bottom: 2em;
+	&Loading{
+		.center;
+		text-align: center;
+		.icon-brown{
+			font-size: 3rem;
+			color: #BF6868;
+		}
+		.icon-green{
+			font-size: 3rem;
+			color: #22B6AB;
+		}
+	}
 	&Line{
 		width: 100%;
 		position: relative;
@@ -19,17 +31,16 @@
 			left: -.5em;
 			padding: 0 .5em;
 			display: inline-block;
-			font-size: 2rem;
+			font-size: 1.8rem;
 			font-weight: normal;
 			color: #a52a2a;
 			z-index: 3;
-			background: #fff;
 		}
 		&Add{
 			float: right;
 			left: 0.15em;
 			color: #C3652A;
-			font-size: 2.6rem;
+			font-size: 2.4rem;
 			z-index: 3;
 			cursor: pointer;
 		}
@@ -56,92 +67,88 @@
 			background-color: #E4E2E2;
 			z-index: -1;
 		}
-	}
-
-	// 每一条评论
-	&Issuse{
-		margin-bottom: 1.5em;
-		border-radius: 2px;
-		background: #fff;
-		color: #666;
-		z-index: 1;
-		border: 1px solid #E4E2E2;
-		// box-shadow: 1px 1px 3px #EEE, -1px -1px 3px #EEE;
-		transition: all 218ms cubic-bezier(0.42,0,.58,1);
-		&:hover{
-			color: #333;
-			border-color: #CCC;
-			box-shadow: 2px 2px 5px #EEE, -2px -2px 5px #EEE;
-		}
-		// 评论信息的头部，包括昵称和时间
-		&Head{
-			padding: .6em .5em;
-			background: rgba(247,247,247,.75);
-			border-bottom: 1px solid #efefef;
-			&Floor{
-				margin-right: .8em;
-				color: #aaa;
-				// font-size: 2.0rem;
-				font-weight: normal;
+		// 每一条评论
+		section{
+			margin-bottom: 1.5em;
+			border-radius: 2px;
+			background: #fff;
+			color: #666;
+			z-index: 1;
+			font-size: 1.4rem;
+			border: 1px solid #E4E2E2;
+			// box-shadow: 1px 1px 3px #EEE, -1px -1px 3px #EEE;
+			transition: all 218ms cubic-bezier(0.42,0,.58,1);
+			&:hover{
+				color: #333;
+				border-color: #CCC;
+				box-shadow: 2px 2px 5px #EEE, -2px -2px 5px #EEE;
 			}
-			&Nick{
-				font-weight: normal;
-				color:#a52a2a;
-				// font-style: italic;
-				&Admin{
-					color: #FF8000;
-					font-weight: bold;
-				}
-			}
-			&Address{
-				margin: 0 1em;
-				color: #999;
-				font-size: 1.4rem;
-			}
-			&Time{
-				color: #938E8E;
-				font-size: 1.4rem;
-			}
-			&Op{
-				float: right;
-				display: none;
-				font-size: 1.5rem;
-				padding-right: 1em;
-				.op{
-					display: inline-block;
-					cursor: pointer;
-					color: #96A6A5;
-				}
-			}
-		}
-		// 评论正文
-		&Content{
-			padding: .6em 1em;
-			line-height: 150%;
-			font-family: @zhFontFamily;
-			// 父评论
-			&Parent{
-				//
-				&Head{
-					padding-bottom: .5em;
-					color: #D0AC74;
-					&Title{
-						// text-decoration: underline;
-					}
-					.nick{
-						margin: 0 .3em;
-						color: @defaultAnchor;
-					}
-				}
-				&Content{
-					padding: .5em;
-					// border-radius: 2px;
-					color: #999;
-					margin-bottom: .8em;
-					font-size: 1.5rem;
+			// 评论信息的头部，包括昵称和时间
+			header{
+				padding: .6em .5em;
+				background: rgba(247,247,247,.75);
+				border-bottom: 1px solid #efefef;
+				.nick{
+					font-weight: normal;
+					color: #333;
 					font-style: italic;
-					background: #F8F8F8;
-					border-left: 5px solid #eee;
+				}
+				.nick[href]{
+					color: #22B6AB;
+				}
+				.address{
+					margin: 0 1em;
+					color: #999;
+				}
+				.time{
+					color: #938E8E;
+					float: right;
+				}
+				.op{
+					float: right;
+					// display: none;
+					font-size: 1.5rem;
+					padding-right: 1em;
+					.reply{
+						cursor: pointer;
+						color: #999;
+					}
+				}
+			}
+			// 评论正文
+			article{
+				padding: .6em 1em;
+				line-height: 150%;
+				font-family: @zhFontFamily;
+				.text-justify;
+			}
+			// 回复
+			footer{
+				font-size: 1.3rem;
+				font-style: italic;
+				.reply-nick{
+					color: #22B6AB;
+					&.admin{
+						color: @defaultAnchorHover;
+					}
+				}
+				.reply-time{
+					float: right;
+				}
+				dt{
+					color: #666;
+					padding: .5em;
+				}
+				dl{
+					color: #999;
+					margin: 0 1em 1em;
+					border-radius: 2px;
+					border: 1px dotted #E2E2E2;
+					background: #FCFCFC;
+					dd{
+						padding: 0 0.5em .5em;
+						.text-justify;
+					}
 				}
 			}
 		}
@@ -150,7 +157,7 @@
 	// 没有评论
 	&Empty{
 		position: relative;
-		top: -1.5em;
+		top: -1em;
 		&Wrap{
 			position: relative;
 			.center;
@@ -163,10 +170,6 @@
 		&Wrap > div{
 			position: absolute;
 			background: #E4E4E4;
-		}
-		&Txt{
-			color: #B3B3B3;
-			text-align: center;
 		}
 		&LeftHand{
 			left: 1em;
@@ -232,11 +235,10 @@
 		position: relative;
 		input,textarea{
 			border: 1px solid #DDD;
-			border-radius: 2px;
+			border-radius: 1px;
 			background: #FFF;
 			outline: none;
 			line-height: 1.5;
-			font-size: 1.4rem;
 			transition: all linear .5s;
 		}
 		input:focus,textarea:focus{
@@ -244,7 +246,7 @@
 			box-shadow: 1px 1px 8px #EEE, -1px -1px 8px #EEE;
 		}
 		.compent{
-			.db;
+			display: block;
 			width: 100%;
 			box-sizing: border-box;
 		}
@@ -287,8 +289,36 @@
 				margin-left: .5em;
 				background: #0d8454;
 				color: #FFF;
-				&:hover,.pushing{
+				.textLoading{
+					position: relative;
+					top: -.9em;
+					display: inline-block;
+					width: 1em;
+					@keyframes LoadEllipsis {
+					    from {width: 0em;}
+					    to {width: 1em;}
+					}
+					i{
+						position: absolute;
+						top: 90%;
+						display: block;
+						overflow: hidden;
+						animation: LoadEllipsis 1.5s infinite;
+					}
+				}
+				&:hover{
 					opacity: .8;
+				}
+				&.pushing{
+					opacity: 0.6;
+					cursor: default;
+				}
+				&.success{
+					background: #31BF31;
+					cursor: default;
+				}
+				&.error{
+					background: #F35555;
 				}
 			}
 			&Code{
@@ -318,9 +348,9 @@
 	}
 
 	// 错误信息
-	&Error{
+	&Refresh{
+		color: @warningColor;
 		cursor: pointer;
 		text-align: center;
-		.warning;
 	}
 }

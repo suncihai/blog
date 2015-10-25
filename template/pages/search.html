@@ -1,0 +1,31 @@
+<!-- 加载状态蒙版 -->
+<div class="C-commonLoading" v-show="isLoading">
+	<i class="fa fa-spinner animate-spinner-rotate icon"></i>
+</div>
+<!-- 搜索结果列表 -->
+<div class="P-searchList" v-show="!isLoading && !showError">
+	<section class="P-searchListItem" v-repeat="item in searchs">
+		<h2 class="P-searchListItemTitle">
+			<span v-text="item.index"></span>
+			<a v-attr="href: item.anchor" v-html="item.title"></a>
+		</h2>
+		<p class="P-searchListItemBrief" v-html="item.brief"></p>
+		<div class="P-searchListItemInfo">
+			<span>{% 分类： %}{{item.achive}}</span>
+			 /
+			<span>{% 评论数： %}{{item.comments}}</span>
+			 /
+			<span>{% 发布时间： %}{{item.date}}</span>
+		</div>
+	</section>
+</div>
+<!-- 分页模块 -->
+<!-- <div class="P-searchPager" v-show="!isLoading && showPager" m-name="pager" m-module="@project/modules/pager.noLink"></div> -->
+<!-- 错误提示 -->
+<div class="C-commonError animated" v-show="showError" v-class="shake: showError">
+	<div class="emotion">:-(</div>
+	<div class="info">
+		<p>{% 哎呀，抱歉！服务器出错了…… 它说： %}</p>
+		<p v-text="errorMsg"></p>
+	</div>
+</div>

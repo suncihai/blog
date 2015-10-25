@@ -1,0 +1,39 @@
+<!-- 加载状态蒙版 -->
+<div class="C-commonLoading" v-show="isLoading">
+	<i class="fa fa-spinner animate-spinner-rotate icon"></i>
+</div>
+<!-- 列表页 -->
+<div class="P-archiveList" v-show="!isLoading && !showError">
+	<section class="P-archiveListItem" v-repeat="item in archives">
+		<!-- 标题 -->
+		<div class="P-archiveListItemTitle">
+			<h2>
+				<a v-attr="href: item.href, title: item.title" class="title" v-text="item.title"></a>
+			</h2>
+		</div>
+		<!-- 摘要&缩略图 -->
+		<article>
+			<p class="abstract" v-html="item.content"></p>
+			<span class="cover" v-if="item.cover" v-html="item.cover"></span>
+		</article>
+		<!-- 其他信息 -->
+		<div class="P-archiveListItemInfo">
+			<span class="tag" title="{% 发布时间 %}">
+				<i class="fa fa-calendar mr3"></i>{{item.date}}
+			</span>
+			<span class="tag mr2 ml2" title="{% 评论数 %}">
+				<i class="fa fa-comments mr3"></i>{{item.comments}}
+			</span>
+		</div>
+	</section>
+</div>
+<!-- 分页模块 -->
+<div class="P-archivePager" v-show="!isLoading && showPager" m-name="pager" m-module="@project/modules/pager.hasLink"></div>
+<!-- 错误提示 -->
+<div class="C-commonError animated" v-show="showError" v-class="shake: showError">
+	<div class="emotion">:-(</div>
+	<div class="info">
+		<p>{% 哎呀，抱歉！服务器出错了…… 它说： %}</p>
+		<p v-text="errorMsg"></p>
+	</div>
+</div>

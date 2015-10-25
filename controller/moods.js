@@ -1,14 +1,10 @@
+/**
+ * 路由响应模块：随便写写，与栏目页一致
+ */
 define(function(require, exports) {
-	exports.onRun = function(data, view) {
-		var type = data.param == null ? 'frontends' : 'frontend';
+	var archiveRouter = require('@controller/frontends');
 
-		data.dom = view.createBlog({
-			'container': data.name,
-			'pageid': data.param // 存在param时为文章页,否则为栏目页
-		});
-
-		require.async('@pages/' + type, function(mod) {
-			mod.init(data);
-		});
+	exports.onRun = function(data) {
+		archiveRouter.onRun.call(this, data);
 	}
 });
