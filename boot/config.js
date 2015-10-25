@@ -14,14 +14,25 @@ define(function() {
 		// 是否将suagr模块暴露为全局变量
 		debug: true,
 
-		// 默认页面
-		defaultPage: 'frontends',
+		// 默认路由
+		defaultRouter: 'frontends',
 
 		// 默认控制器目录
 		controllerPath: '@controller/',
 
 		// 控制器的调用方法
 		action: 'onRun',
+
+		// 路由参数存储cookie的分隔符
+		hashString: ':(',
+
+		// 规定合法的路由以及允许参数，除此之外都切到404
+		validRouter: {
+			'moods'    : [],
+			'message'  : [],
+			'frontends': ['page'],
+			'search'   : ['word']
+		},
 
 		// 页脚文字
 		copyright: 'Copyright ©2012-2015 TANGBC.COM',
@@ -64,7 +75,6 @@ define(function() {
 
 		// 栏目title
 		archiveTitle: {
-			'index'    : _T('小前端 - tangbc.com'),
 			'frontends': _T('前端那些事'),
 			'moods'    : _T('随便写写'),
 			'message'  : _T('给我留言')

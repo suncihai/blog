@@ -13,7 +13,7 @@ define(function(require, exports) {
 				'template': 'template/pages/message.html',
 				'vModel'  : {
 					// 选项卡默认选择激活选项
-					'tabType'   : 'list'
+					'tabType'   : 'form'
 				}
 			});
 			this.Super('init', arguments);

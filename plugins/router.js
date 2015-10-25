@@ -7,28 +7,56 @@ define(function(require, exports) {
 	var util = require('util');
 	var c = require('@boot/config');
 	var cookie = require('@widget/cookie');
+
+	// 控制器调用方法
 	var action = c.action;
-	var controller = c.controllerPath || '@controller/';
+	// 默认路由
+	var controller = c.controllerPath;
+	// 合法路由
+	var validRouter = c.validRouter;
 
 
-	function hashChanged() {
-		var hash, ms, cookieSet;
-		hash = LOC.hash.replace(/^[#\/\!]+/, '') || c.defaultPage;
-		ms = formatHash(hash);
-		cookieSet = [ms.name, ms.param, JSON.stringify(ms.search)].join(':(');
-		run(ms.name, ms.param, ms.search);
-		cookie.set('hash', cookieSet);
+	/**
+	 * hash变化响应函数
+	 * @param   {Object}  hashEvt  [hashChange事件对象]
+	 */
+	function hashChanged(hashEvt) {
+		var hash = LOC.hash.replace(/^[#\/\!]+/, '') || c.defaultRouter;
+
+		// 分离hash值
+		var ms = formatHash(hash);
+		var name = ms.name;
+		var param = ms.param;
+		var search = ms.search;
+
+		// 路由参数检测
+		if (!validateHashParam(name, param, search)) {
+			name = 404;
+		}
+
+		// 记录cookie
+		// cookie.set('newUrl', hashEvt.newUrl);
+		// cookie.set('oldUrl', hashEvt.oldUrl);
+		cookie.set('hash', [name, param, JSON.stringify(search)].join(c.hashString));
+
+		run(name, param, search);
 		util.scrollTo(0);
 	}
 
 
+	/**
+	 * 按指定位置分割字符串为数组
+	 * @param   {Sting}   str  [分割的字符串]
+	 * @param   {Number}  pos  [分割位置]
+	 * @return  {Array}        [结果数组]
+	 */
 	function string2parts(str, pos) {
 		return [str.substr(0, pos), str.substr(pos + 1)];
 	}
 
 
 	/**
-	 * formatHash 格式化hash, 分离出模块名、页面参数和url参数
+	 * formatHash 格式化hash, 分离出模块名name、页面参数param和url参数
 	 * @param  {String}  hash    [hash值]
 	 */
 	function formatHash(hash) {
@@ -92,6 +120,45 @@ define(function(require, exports) {
 	}
 
 
+	/**
+	 * 路由检测（页面参数param必须是数字）
+	 * @param   {String}   name   [路由模块]
+	 * @param   {String}   param  [页面参数]
+	 * @param   {String}   hashs  [查询参数]
+	 * @return  {Boolean}         [是否合法]
+	 */
+	function validateHashParam(name, param, search) {
+		var valid = false;
+		var searchs = null;
+
+		// 路由模块是否合法
+		var router = validRouter[name];
+		if (!router) {
+			return false;
+		}
+
+		// 合法的查询参数
+		var vSearchs = router || [];
+
+		// 检测路由参数
+		if (param) {
+			valid = !isNaN(+param);
+		}
+		else {
+			// 检测查询参数
+			if (search) {
+				searchs = search.split('=');
+				valid = vSearchs.indexOf(searchs[0]) !== -1;
+			}
+			else {
+				valid = true;
+			}
+		}
+
+		return valid;
+	}
+
+
 	// 传递到响应路由控制模块的参数数据
 	var data = {
 		// 页面名称，对应主hash值
@@ -101,11 +168,12 @@ define(function(require, exports) {
 		// url参数
 		'search' : null
 	}
+
 	/**
 	 * run 启用模块
-	 * @param  {type} name   [模块名]
-	 * @param  {type} param  [页面参数]
-	 * @param  {type} search [url参数]
+	 * @param  {String} name   [模块名]
+	 * @param  {Number} param  [页面参数]
+	 * @param  {Object} search [url参数]
 	 */
 	function run(name, param, search) {
 		data.name = name;
@@ -117,19 +185,19 @@ define(function(require, exports) {
 
 	/**
 	 * afterRun 加载模块回调
-	 * @param  {type} module [模块]
+	 * @param  {Object} _module [模块]
 	 */
-	function afterRun(module) {
+	function afterRun(_module) {
 		// 404
-		if (!module) {
+		if (!_module) {
 			util.error('404 - Module Not Found: [' + data.name + '] in ' + controller);
 			require.async(controller + '404', afterRun);
 			return false;
 		}
 		else {
-			if (module[action] && util.isFunc(module[action])) {
+			if (_module[action] && util.isFunc(_module[action])) {
 				// 传递路由参数数据
-				module[action](data);
+				_module[action](data);
 			}
 			else {
 				util.error('The controller file: ' + controller + data.name + '.js' + ' has no function exports of [' + action + ']');
@@ -137,20 +205,26 @@ define(function(require, exports) {
 		}
 	}
 
-
+	/**
+	 * 启用路由监听事件
+	 */
 	exports.start = function() {
 		if ('onhashchange' in WIN) {
 			WIN.addEventListener('hashchange', hashChanged, false);
 		}
 		else {
-			WIN.onhashchange = hashChanged;
+			util.error('Your fucking-browser is Out!');
+			setInterval(function() {
+				hashchanged();
+			}, 100);
 		}
+
 		hashChanged();
 	}
 
 
 	/**
-	 * go 手动切换路由
+	 * go 切换路由
 	 * @param  {Mix} uri [路由地址/-1返回上一页]
 	 */
 	exports.go = function(uri) {
