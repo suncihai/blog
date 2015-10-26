@@ -6,7 +6,7 @@
 为了更彻底的实现模块和组件化，所以决定改版重构，编写sugar框架。
 利用两个多月的“课余时间”，约50条commits，改版重构终于初步完成了。
 
-整个项目的所有视图模块组件都是通过继承sugar的Container类来实现的，sugar是一个封装了jQuery和<a href="https://github.com/vuejs/vue" target="_blank">Vue.js</a>（视图层mvvm库）的、轻量级的、快速构建模块化和组件化项目的一个javascript框架，关于sugar框架更具体的介绍和用法可以看<a href="https://github.com/tangbc/suagr" target="_blank">这里</a>。
+整个项目的所有视图模块组件都是通过继承sugar的Container类来实现的，sugar是一个封装了jQuery和<a href="https://github.com/vuejs/vue" target="_blank">Vue.js</a>（视图层mvvm库）的、轻量级的、快速构建模块化和组件化项目的一个javascript框架，关于sugar框架更具体的介绍和用法可以看<a href="https://github.com/tangbc/sugar" target="_blank">这里</a>。
 
 整个项目实现了基本的博客功能：分类列表页、文章内容页、评论和留言板。全项目模块化的流程也很方便的维护与后期拓展，也很易于与第三方类库结合起来使用，比如代码高亮插件prism、CSS3动画库animate.css和导航插件headroom。
 
