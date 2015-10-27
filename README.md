@@ -10,7 +10,7 @@
 
 整个项目实现了基本的博客功能：分类列表页、文章内容页、评论和留言板。全项目模块化的流程也很方便的维护与后期拓展，也很易于与第三方类库结合起来使用，比如代码高亮插件prism、CSS3动画库animate.css和导航插件headroom。
 
-另外，在`project/widget`文件夹下我自己也开发了多语言langugae模块、CSS3动画处理模块和cookie操作模块。
+另外，在`project/widget`文件夹下我自己也开发了多语言languge模块、CSS3动画处理模块和cookie操作模块。
 
 虽说我的博客只是一个功能很简单的一个单页应用，但是通过利用sugar进行模块化开发，整个项目的设计流程、解决方案和架构我觉得对于中大型应用也是可以适用的。
 
@@ -40,7 +40,7 @@
  **`package.json`** 依赖的nodejs包
  
 # 三、学习、交流和使用
-拉取本项目代码到您的电脑：
+拉取代码：
 
 1. 克隆项目 `git clone https://github.com/tangbc/blog.git`
 2. 初始化子库sugar `git submdule init`
