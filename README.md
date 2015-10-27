@@ -1,9 +1,9 @@
 # blog
-我的博客 <a href="http://www.tangbc.com/blog/" target="_blank">www.tangbc.com/blog</a> 前后端源代码，一个以<a href="https://github.com/tangbc/suagr" target="_blank">sugar</a>框架为核心构建的单页面应用。
+我的博客 <a href="http://www.tangbc.com/blog/" target="_blank">www.tangbc.com/blog</a> 前后端源代码，一个以<a href="https://github.com/tangbc/sugar" target="_blank">sugar</a>框架为核心构建的单页面应用。
 
 # 一、简单介绍
 今年（2015）八月之前，我的博客只是一个形式单一、利用模块加载器实现的简单单页应用，代码和模块的复用率和可维护性都很低。
-为了更彻底的实现模块和组件化，所以决定改版重构，编写sugar框架。
+为了更彻底的实现模块和增加开发的便捷性，所以决定改版重构，编写sugar框架。
 利用两个多月的“课余时间”，约50条commits，改版重构终于初步完成了。
 
 整个项目的所有视图模块组件都是通过继承sugar的Container类来实现的，sugar是一个封装了jQuery和<a href="https://github.com/vuejs/vue" target="_blank">Vue.js</a>（视图层mvvm库）的、轻量级的、快速构建模块化和组件化项目的一个javascript框架，关于sugar框架更具体的介绍和用法可以看<a href="https://github.com/tangbc/sugar" target="_blank">这里</a>。
@@ -31,7 +31,7 @@
  
  **`template`** 模板文件目录，存放所有页面以及模块组件的html布局模板文件
  
- **`wheat`** 数据库配置、接口文件（根据WordPress数据库，利用世界上最好的语言php写的数据查询接口）
+ **`wheat`** 后端数据配置、API（根据WordPress数据库，用世界上最好的语言php写的数据查询接口）
 
  **`index.php`** 主页入口文件
 
