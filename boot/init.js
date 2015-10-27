@@ -17,8 +17,8 @@
 			'@plugins'   : 'plugins'
 		},
 		'alias': {
-			'sugar' : '@sugar/core/sugar.js',
-			'util'  : '@sugar/core/util.js',
+			'sugar' : '@sugar/sugar.js',
+			'util'  : '@sugar/util.js',
 			'jquery': '@sugar/jquery/jquery.min.js'
 		},
 		'map': [
