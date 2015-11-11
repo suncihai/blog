@@ -1,20 +1,20 @@
 <!-- 标题、添加按钮 -->
 <header class="M-commentHead" v-if="hasHeader">
 	<h2 class="M-commentHeadTitle" v-text="title"></h2>
-	<span class="M-commentHeadAdd" title="{% 添加评论 %}" v-on="click: vmClickAdd">
+	<span class="M-commentHeadAdd" title="{% 添加评论 %}" v-on:click="vmClickAdd">
 		<i class="fa fa-pencil"></i>
 	</span>
 </header>
 <!-- 评论加载 -->
 <div class="M-commentLoading" v-show="isLoading">
-	<i class="fa fa-spinner animate-spinner-rotate" v-class="icon-brown: !isGreen, icon-green: isGreen"></i>
+	<i class="fa fa-spinner animate-spinner-rotate" v-bind:class="{'icon-brown': !isGreen, 'icon-green': isGreen}"></i>
 </div>
 <!-- 评论列表 -->
 <article class="M-commentList" v-show="!isLoading">
-	<section v-repeat="item in comments">
+	<section v-for="item in comments">
 		<!-- 头部 -->
 		<header>
-			<a class="nick" v-text="item.nickName" v-attr="href: item.url, target: item.url ? '_blank' : null"></a>
+			<a class="nick" v-text="item.nickName" v-bind="{href: item.url, target: item.url ? '_blank' : null}"></a>
 			<span class="address" v-text="item.address"></span>
 			<span class="time" v-text="item.date"></span>
 			<!-- <div class="op">
@@ -25,12 +25,12 @@
 		<article v-html="item.content"></article>
 		<!-- 回复内容 -->
 		<footer>
-			<dl v-repeat="reply in item.replies">
+			<dl v-for="reply in item.replies">
 				<dt>
 					<a class="reply-nick"
-						v-class="admin: reply.isAdmin"
+						v-bind:class="{admin: reply.isAdmin}"
 						v-text="reply.nickName"
-						v-attr="href: reply.url, target: reply.url ? '_blank' : null">
+						v-bind="{href: reply.url, target: reply.url ? '_blank' : null}">
 					</a>
 					<span class="ml3">{% 回复： %}</span>
 					<span class="reply-time" v-text="reply.date"></span>
@@ -44,7 +44,7 @@
 <div class="M-commentPager" v-show="!isLoading && showPager" m-name="pager" m-module="@project/modules/pager.noLink"/>
 <!-- 沙发 -->
 <div class="M-commentEmpty" v-if="hasEmpty" v-show="!isLoading && isEmpty && !isRefresh">
-	<div class="M-commentEmptyWrap" title="{% 点击添加评论 %}" v-on="click: vmClickAdd">
+	<div class="M-commentEmptyWrap" title="{% 点击添加评论 %}" v-on:click="vmClickAdd">
 		<div class="M-commentEmptyLeftHand"/>
 		<div class="M-commentEmptyRightHand"/>
 		<div class="M-commentEmptyCushion"/>
@@ -54,7 +54,7 @@
 	</div>
 </div>
 <!-- 刷新重试 -->
-<div class="M-commentRefresh animated" v-show="isRefresh" v-on="click: vmClickRefresh" v-class="shake: isRefresh">
+<div class="M-commentRefresh animated" v-show="isRefresh" v-on:click="vmClickRefresh" v-bind:class="{shake: isRefresh}">
 	<i class="fa fa-info-circle mr3 icon"></i>
 	{% 加载失败，点击重试 %}
 </div>

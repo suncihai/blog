@@ -2,8 +2,8 @@
 <div class="P-messageLeft">
 	<!-- 选项卡切换 -->
 	<ul class="P-messageLeftTab">
-		<li data-type="list" v-class="act: tabType==='list'">{% 留言列表 %}</li>
-		<li data-type="form" v-class="act: tabType==='form'">{% 我要留言 %}</li>
+		<li data-type="list" v-bind:class="{act: tabType==='list'}">{% 留言列表 %}</li>
+		<li data-type="form" v-bind:class="{act: tabType==='form'}">{% 我要留言 %}</li>
 	</ul>
 	<!-- 留言列表 -->
 	<div class="P-messageLeftList" v-show="tabType==='list'" m-name="list" m-module="@modules/commentList.base"></div>

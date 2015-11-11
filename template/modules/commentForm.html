@@ -4,8 +4,8 @@
 <input v-model="contact" v-show="hasContact" type="text" class="M-commentFormContact" placeholder="{% [选填] 联系方式(比如Email、QQ、微信，不会被公开) %}"/>
 <div class="M-commentFormFooter">
 	<input v-model="code" class="M-commentFormFooterCode" placeholder="{% 输入验证码 %}"/>
-	<img class="M-commentFormFooterPic" title="{% 点击更换验证码 %}" v-attr="src: codeSrc" v-on="click: vmClickChange"/>
+	<img class="M-commentFormFooterPic" title="{% 点击更换验证码 %}" v-bind="{src: codeSrc}" v-on:click="vmClickChange"/>
 	<span class="M-commentFormFooterTips"/>
-	<button class="M-commentFormFooterSubmit" v-class="pushing: isPushing, success: isSuccess, error: isError" v-on="click: vmClickSubmit" v-html="putText"></button>
-	<button class="M-commentFormFooterReset" v-on="click: vmClickReset">{% 重置 %}</button>
+	<button class="M-commentFormFooterSubmit" v-bind:class="{pushing: isPushing, success: isSuccess, error: isError}" v-on:click="vmClickSubmit" v-html="putText"></button>
+	<button class="M-commentFormFooterReset" v-on:click="vmClickReset">{% 重置 %}</button>
 </div>

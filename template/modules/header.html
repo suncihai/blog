@@ -5,8 +5,8 @@
 <!-- 导航 -->
 <div class="M-headerNav">
 	<ul>
-		<li v-repeat="nav in navs">
-			<a v-attr="href: nav.link" v-text="nav.text" v-class="act: nav.act"></a>
+		<li v-for="nav in navs">
+			<a v-bind="{href: nav.link}" v-text="nav.text" v-bind:class="{act: nav.act}"></a>
 		</li>
 	</ul>
 </div>
