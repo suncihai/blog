@@ -43,9 +43,6 @@ define(function(require, exports, module) {
 		viewReady: function() {
 			// 创建子模块
 			this.createTplModules();
-
-			// 更新banner内容
-			this.updateBanner();
 		},
 
 		/**
@@ -67,16 +64,27 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 在路由响应之后，保存路由参数
+		 * 保存路由参数
 		 * @param  {Object}  data  [路由参数]
 		 */
 		saveRouter: function(data) {
 			// 栏目数据库id
 			var category = sugar.config('category');
 
+			// 路由数据
 			this.$router = data;
-			// 栏目id
-			this.$param.catid = category[data && data.name];
+			// 路由名称
+			this.$routerName = data && data.name;
+
+			// 列表请求参数
+			this.setParam({
+				'page' : data && data.search && +data.search.page || 1,
+				'catid': category[this.$routerName]
+			});
+
+			// 更新banner内容
+			this.updateBanner();
+
 			// 加载列表数据
 			this.load();
 			return this;
@@ -86,6 +94,7 @@ define(function(require, exports, module) {
 		 * 更新banner
 		 */
 		updateBanner: function() {
+			console.log(this.$param, this.$routerName);
 			// 向banner模块发消息
 			var n = quotations.length - 1;
 			var qts = quotations[util.random(0, n)];
@@ -93,35 +102,41 @@ define(function(require, exports, module) {
 		},
 
 		/**
-		 * 更新请求参数，在路由模块调用
+		 * 设置请求参数
 		 * @param  {Object}   param    [新参数]
 		 * @param  {Boolean}  replace  [是否替换当前参数]
 		 */
 		setParam: function(param, replace) {
 			this.$param = replace ? param : util.extend(this.$param, param);
-			this.updateBanner();
 			return this;
 		},
 
 		/**
-		 * 拉取列表数据
-		 * @param   {Object}  param  [请求参数]
+		 * 获取请求参数
 		 */
-		load: function(param) {
+		getParam: function() {
+			return this.$param;
+		},
+
+		/**
+		 * 拉取列表数据
+		 */
+		load: function() {
 			var router = this.$router;
 			// 检查路由参数
 			var search = router && router.search;
 
+			// 获取请求参数
+			var param = this.getParam();
+
 			if (search) {
-				this.$param = util.extend(this.$param, {
+				param = util.extend(param, {
 					'page': +search.page
 				});
 			}
 
 			this.$dataReady = false;
 			this.showLoading();
-
-			param = param || this.$param;
 
 			sugar.ajax.get(sugar.config('api/listarchives'), param, this.delayData, this);
 			return this;
@@ -142,6 +157,9 @@ define(function(require, exports, module) {
 		afterDataBack: function(err, data) {
 			this.$dataReady = true;
 			this.hideLoading();
+
+			// 路由名称
+			var routerName = this.$routerName;
 
 			if (err) {
 				util.error(err);
@@ -170,12 +188,11 @@ define(function(require, exports, module) {
 				pager.setParam({
 					'page' : page,
 					'pages': result.pages,
-					'path' : this.$router && this.$router.name
+					'path' : routerName
 				});
 			}
 
 			// 更新标题
-			var routerName = this.$router && this.$router.name;
 			var title = catNameMap[routerName] + ' - ' + T('第{1}页', page);
 			this.notify('layout', 'changeTitle', title);
 		},
@@ -187,7 +204,7 @@ define(function(require, exports, module) {
 		setList: function(items) {
 			var archives = [];
 			// 路由名称
-			var routerName = this.$router && this.$router.name;
+			var routerName = this.$routerName;
 
 			// 数据结构转化
 			util.each(items, function(item) {

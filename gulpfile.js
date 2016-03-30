@@ -20,10 +20,10 @@ var jsFiles = [
 	'controller/*.js',
 	'project/*.js',
 	'project/**/*.js',
-	'sugar/core/*.js',
 	'plugins/router.js',
 	'project/**/*.js',
-	'project/*.js'
+	'project/*.js',
+	'sugar/*.js'
 ];
 // js语法检测配置
 var jshintConfig = {

@@ -31,17 +31,14 @@ define(function(require, exports) {
 		// 已经创建过
 		if (mod) {
 			if (isAchive) {
-				mod.reset().setParam({
-					'page' : data && data.search && +data.search.page || 1,
-					'catid': category[data && data.name]
-				}).load();
+				mod.reset().saveRouter(data);
 			}
 			else {
 				mod.reset().setParam(data.param).load();
 			}
 		}
 		else {
-			mod = sugar.core.createAsync(name, path, {
+			sugar.core.createAsync(name, path, {
 				'target': target
 			}, function(md) {
 				md.saveRouter(data);

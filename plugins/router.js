@@ -124,7 +124,7 @@ define(function(require, exports) {
 	 * 路由检测（页面参数param必须是数字）
 	 * @param   {String}   name   [路由模块]
 	 * @param   {String}   param  [页面参数]
-	 * @param   {String}   hashs  [查询参数]
+	 * @param   {String}   search [查询参数]
 	 * @return  {Boolean}         [是否合法]
 	 */
 	function validateHashParam(name, param, search) {
@@ -162,11 +162,11 @@ define(function(require, exports) {
 	// 传递到响应路由控制模块的参数数据
 	var data = {
 		// 页面名称，对应主hash值
-		'name'   : null,
+		'name'  : null,
 		// 页面参数
-		'param'  : null,
+		'param' : null,
 		// url参数
-		'search' : null
+		'search': null
 	}
 
 	/**
@@ -214,9 +214,6 @@ define(function(require, exports) {
 		}
 		else {
 			util.error('Your fucking-browser is Out!');
-			setInterval(function() {
-				hashchanged();
-			}, 100);
 		}
 
 		hashChanged();

@@ -21,12 +21,12 @@ define(function(require, exports) {
 		// 是否已创建
 		var mod = sugar.core.get(name);
 
-		// 如果存在，则销毁
+		// 如果存在，先销毁再创建
 		if (mod) {
 			mod.destroy();
 		}
 
-		mod = sugar.core.createAsync(name, '@pages/404.base', {
+		sugar.core.createAsync(name, '@pages/404.base', {
 			'target': blank
 		});
 	}

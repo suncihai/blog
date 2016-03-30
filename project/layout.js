@@ -20,9 +20,6 @@ define(function(require, exports) {
 		 * 布局视图渲染完成
 		 */
 		viewReady: function() {
-			// DOM缓存
-			this.$doc = $(document);
-
 			var dom = this.getDOM();
 			this.$doms = {
 				// 全局布局主体
@@ -123,7 +120,7 @@ define(function(require, exports) {
 		onChangeTitle: function(ev) {
 			var title = ev.param;
 			if (util.isString(title)) {
-				this.$doc.attr('title', title);
+				$(document).attr('title', title);
 			}
 		}
 	});
