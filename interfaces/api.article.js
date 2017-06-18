@@ -1,0 +1,67 @@
+let db = require('./db')
+let axios = require('axios')
+let common = require('./common')
+let config = require('../config')
+
+function getArticle (alias) {
+    return new Promise(function (resolve, reject) {
+        let connection = db.createConnection()
+        let QUERY_ARTICLE = 'SELECT ID, post_title, post_date, post_content, comment_count ' +
+                            'FROM wp_posts WHERE ' + 'post_name = ' + connection.escape(alias) +
+                            ' AND post_status=\'publish\'' +
+                            ' AND post_type=\'post\' LIMIT 1'
+
+        connection.query(QUERY_ARTICLE, function (error, result) {
+            connection.end()
+
+            if (error) {
+                reject(error)
+                throw error
+            }
+
+            let article = result && result[0]
+
+            if (article) {
+                article.post_id = article.ID
+                article.post_date = common.toChineseDate(article.post_date)
+                article.post_summary = common.getChineseWord(article.post_content, 136)
+
+                resolve(article)
+            } else {
+                resolve(null)
+            }
+        })
+    })
+}
+
+function getAutopArticle (article) {
+    if (!article) {
+        return null
+    }
+
+    return axios.post(config.POST_AUTOP_API, {
+        post: article && article.post_content
+    }).then(function (response) {
+        if (response.data.result) {
+            article.post_content = response.data.result
+        } else {
+            article.post_content = 'No data return'
+        }
+        return article
+    }).catch(function (err) {
+        // If autop api doesn't work
+        // also return the unp article.
+        article.post_content = JSON.stringify(err)
+        return article
+    })
+}
+
+module.exports = function (query) {
+    return new Promise(function (resolve, reject) {
+        getArticle(query.alias).then(getAutopArticle).then(function (result) {
+            resolve(result)
+        }).catch(function (err) {
+            reject(err)
+        })
+    })
+}

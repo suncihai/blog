@@ -1,0 +1,7 @@
+{
+    "user": "root",
+    "host": "localhost",
+    "password": "123456",
+    "database": "tangbc",
+    "timezone": "prc"
+}
