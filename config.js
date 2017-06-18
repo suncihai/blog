@@ -21,8 +21,8 @@ module.exports = {
 
     // Category id of wordpress
     CATEGORY: {
-        ARTICLE: 1,
-        ESSAY: 24
+        ARTICLE: 1, // 14
+        ESSAY: 24, // 15
     },
 
     COMMENT_PAGE_ID: 2,
