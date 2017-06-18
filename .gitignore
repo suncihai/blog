@@ -1,6 +1,7 @@
-*.sublimePRJ
-*.sublime-workspace
-*.sublime-project
+.next
+.DS_Store
 node_modules
-doc
-temp
+npm-debug.log
+interfaces/db-product.json
+interfaces/test.js
+interfaces/test-http.js
