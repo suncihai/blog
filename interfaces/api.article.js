@@ -39,21 +39,20 @@ function getAutopArticle (article) {
         return null
     }
 
-    return axios.post(config.POST_AUTOP_API, {
-        post: article && article.post_content
-    }).then(function (response) {
-        if (response.data.result) {
-            article.post_content = response.data.result
-        } else {
-            article.post_content = 'No data return'
-        }
+    try {
+        return axios.post(config.POST_AUTOP_API, {
+            post: article && article.post_content
+        }).then(function (response) {
+            if (response.data.result) {
+                article.post_content = response.data.result
+            } else {
+                article.post_content = 'No data return'
+            }
+            return article
+        }).catch(function () {})
+    } catch (e) {
         return article
-    }).catch(function (err) {
-        // If autop api doesn't work
-        // also return the unp article.
-        article.post_content = JSON.stringify(err)
-        return article
-    })
+    }
 }
 
 module.exports = function (query) {

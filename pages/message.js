@@ -11,11 +11,11 @@ import CommentList from '../components/CommentList'
 import CommentForm from '../components/CommentForm'
 
 const COPY = {
-    TITLE: '留言板, 给我留言',
+    TITLE: '给我留言',
     KEYWORDS: '留言板, 唐比昌',
     DESCRIPTION: '给唐比昌留言吧！',
     COMMENT_TYPE: '留言',
-    PAGE_INFO: '无聊的、建议的、拍砖的、批评的…… 都在这说吧~'
+    PAGE_INFO: '无聊的、建议的、拍砖的、批评的、交换友链的…… 都在这说吧~'
 }
 
 const PageBrief = (props) => (
@@ -68,7 +68,7 @@ export default class extends React.Component {
 
                         <div className="pageins">{ COPY.PAGE_INFO }</div>
 
-                         <CommentForm typeName={ COPY.COMMENT_TYPE } articleId={ 2 } />
+                         <CommentForm typeName={ COPY.COMMENT_TYPE } articleId={ CPI } />
 
                          <CommentList
                             toLoad={ true }

@@ -163,7 +163,6 @@ export default class CommentList extends React.Component {
                         margin-top: 0;
                         padding: 10px;
                         background: #fffbdb;
-                        border: 1px dashed #dadada;
                         border-radius: 2px;
                         font-size: 1.4rem;
                         color: #666;

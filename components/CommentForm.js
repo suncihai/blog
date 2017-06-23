@@ -14,10 +14,12 @@ const getCopy = (typeName) => {
             CONTENT: {
                 LABEL: typeName +'内容：',
                 DESC: '除了广告和敏感话题言论之外，可以畅所欲言。',
+                PLACEHOLDER: '300 个字符以内'
             },
             NAME: {
                 LABEL: '昵称：',
                 DESC: '为自己起个简短易记的名字。',
+                PLACEHOLDER: '20 个字符以内'
             },
             EMAIL: {
                 LABEL: '电子邮件：',
@@ -156,6 +158,7 @@ export default class CommentForm extends React.Component {
                                             id="content"
                                             value={ this.state.content }
                                             disabled={ this.state.pending }
+                                            placeholder={ COPY.FORM.CONTENT.PLACEHOLDER }
                                             onChange={ (e) => this.eventSetValue(e, 'content') }
                                             className="input textarea">
                                         </textarea>
@@ -171,6 +174,7 @@ export default class CommentForm extends React.Component {
                                             id="author"
                                             value={ this.state.author }
                                             disabled={ this.state.pending }
+                                            placeholder={ COPY.FORM.NAME.PLACEHOLDER }
                                             onChange={ (e) => this.eventSetValue(e, 'author') }
                                             type="text" className="input"
                                         />

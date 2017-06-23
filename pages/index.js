@@ -32,6 +32,7 @@ export default class extends React.Component {
         return {
             brief: '',
             navActive: '',
+            title: COPY.TITLE,
 
             hasTitle: false,
             titles: [],
@@ -46,7 +47,7 @@ export default class extends React.Component {
         return (
             <div className="blog center">
                 <DocumentHead
-                    title={ COPY.TITLE }
+                    title={ this.props.title }
                     keywords={ COPY.KEYWORDS }
                     description={ COPY.DESCRIPTION }
                 />

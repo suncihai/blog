@@ -4,6 +4,7 @@ import config from '../config'
 import { getApi, errorCatch } from '../common'
 
 const COPY = {
+    TITLE: '我的随笔',
     TEXT: '心情日志，与技术无关'
 }
 
@@ -19,6 +20,7 @@ export default class EssayList extends Index {
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
         return {
             brief: COPY.TEXT,
+            title: COPY.TITLE,
             navActive: 'essay',
 
             hasTitle: true,

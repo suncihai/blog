@@ -6,6 +6,9 @@ export default () => (
     <div className="global-foot center">
         <div className="foot-line"></div>
         <div className="foot-text center">{ COPY.TEXT }</div>
+        <div hidden>
+            <script src="https://s19.cnzz.com/z_stat.php?id=5606127&web_id=5606127" charSet="utf-8" type="text/javascript"></script>
+        </div>
 
         <style jsx>{`
             .foot-line {

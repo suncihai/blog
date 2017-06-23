@@ -4,11 +4,18 @@ import { createPostLink } from '../common'
 const COPY = {
     ABOUT: {
         TITLE: '关于我',
-        TEXT: '一个小小的前端开发工程师，目前就职于 WPS，热爱前端、设计、运动(尤其羽毛球和乒乓球)和关注 NBA。'
+        MAIN: 'Hi~ 我叫唐比昌，从事前端开发 3 个年头，无聊的时候喜欢写点东西/想法，但是水平不咋地。' +
+            '目前就职于 WPS，热爱前端开发、羽毛球和 NBA 金州勇士队。',
+        STATEMENT: '除特别说明外，本站所有文章均为本人原创，内容仅代表个人观点，如需转载请注明出处，谢谢合作 :-)'
     },
     CONTACT: {
-        TITLE: '联系方式'
+        TITLE: '社交媒体'
     },
+    FLINK: {
+        TITLE: '友情链接：',
+        NOTYET: '（欢迎同行技术博客交换友链）'
+    },
+    COMMENTED: '评论了',
     LATEST: '最新：',
     SOURCE: '博客源代码',
     ICP: '桂 ICP 备 12002316 号'
@@ -25,16 +32,41 @@ const TAB_TYPE = {
     }
 }
 
+const CONTACTS = [
+    {
+        NAME: 'Github',
+        ICON: '/static/images/contact-github.svg',
+        LINK: 'https://github.com/tangbc'
+    },
+    {
+        NAME: 'Zhihu',
+        ICON: '/static/images/contact-zhihu.svg',
+        LINK: 'https://www.zhihu.com/people/tangbc'
+    },
+    {
+        NAME: 'Segmentfault',
+        ICON: '/static/images/contact-sf.svg',
+        LINK: 'https://segmentfault.com/u/tbc0921'
+    },
+    {
+        NAME: 'Gmail',
+        ICON: '/static/images/contact-gmail.svg',
+        LINK: 'mailto:tangbc921@gmail.com'
+    }
+]
+
+const FRIEND_LINKS = []
+
 const ArticleList = (titles) => (
     <ul className="ul-clear-list">
-        {titles.map((article, index) => {
+        { titles.map((article, index) => {
             return (
                 <li className="title-name" key={ article.ID }>
                     <span className="title-index constantia">{ index + 1 }. </span>
                     <a className="title-link" title={ article.post_title } href={ /article/ + article.post_name }>{ article.post_title }</a>
                 </li>
             )
-        })}
+        }) }
 
         <style jsx>{`
             .title-name {
@@ -59,17 +91,17 @@ const getCommentShort = comment => {
 }
 const CommentList = (comments) => (
     <ul className="ul-clear-list">
-        {comments.map((comment, index) => {
+        { comments.map((comment, index) => {
             return (
                 <li className="list" key={ comment.comment_ID }>
                     <span className="author">{ comment.comment_author }</span>
-                    <span> 评论了 </span>
+                    <span> { COPY.COMMENTED } </span>
                     <a className="link" href={ createPostLink(comment.post_name) }>{ comment.post_title }</a>
                     <span>：</span>
                     <span className="content">{ getCommentShort(comment.comment_content) }</span>
                 </li>
             )
-        })}
+        }) }
 
         <style jsx>{`
             .list {
@@ -161,7 +193,10 @@ export default class CommonAside extends React.Component {
                         <div className="item-head">
                             <h3 className="item-head-title">{ COPY.ABOUT.TITLE }</h3>
                         </div>
-                        <div className="item-content">{ COPY.ABOUT.TEXT }</div>
+                        <div className="item-content">
+                            <p>{ COPY.ABOUT.MAIN }</p>
+                            <p className="site-statement">{ COPY.ABOUT.STATEMENT }</p>
+                        </div>
                     </div>
                     <div className="contact center">
                         <div className="item-head">
@@ -169,26 +204,15 @@ export default class CommonAside extends React.Component {
                         </div>
                         <div className="item-content">
                             <ul className="contact-list">
-                                <li className="contact-list-item">
-                                    <a rel="nofollow noopener" href="https://github.com/tangbc">
-                                        <img src="/static/images/contact-github.svg" alt="Contact-Github" />
-                                    </a>
-                                </li>
-                                <li className="contact-list-item">
-                                    <a rel="nofollow noopener" href="https://www.zhihu.com/people/tangbc">
-                                        <img src="/static/images/contact-zhihu.svg" alt="Contact-zhihu" />
-                                    </a>
-                                </li>
-                                <li className="contact-list-item">
-                                    <a rel="nofollow noopener" href="https://segmentfault.com/u/tbc0921">
-                                        <img src="/static/images/contact-sf.svg" alt="Contact-Segmentfault" />
-                                    </a>
-                                </li>
-                                <li className="contact-list-item">
-                                    <a href="mailto:tangbc921@gmail.com">
-                                        <img src="/static/images/contact-gmail.svg" alt="Contact-Gmail" />
-                                    </a>
-                                </li>
+                            { CONTACTS.map(contact => {
+                                return (
+                                    <li className="contact-list-item" key={ contact.NAME }>
+                                        <a rel="nofollow noopener" href={ contact.LINK }>
+                                            <img src={ contact.ICON } alt={ contact.NAME } />
+                                        </a>
+                                    </li>
+                                )
+                            }) }
                             </ul>
                         </div>
                     </div>
@@ -205,6 +229,20 @@ export default class CommonAside extends React.Component {
                         </div>
                     </div>
                     <div className="foot center">
+                        <div className="friend-link">
+                            <div className="friend-link-head">{ COPY.FLINK.TITLE }</div>
+                            { FRIEND_LINKS.length ?
+                                <ul className="friend-link-content">
+                                { FRIEND_LINKS.map(flink => {
+                                    return (
+                                        <li key={ flink.LINK }>
+                                            <a className="friend-link-item" href={ flink.LINK } target="_blank">{ flink.TITLE }</a>
+                                        </li>
+                                    )
+                                }) }
+                                </ul> : COPY.FLINK.NOTYET
+                            }
+                        </div>
                         <div className="footnote">
                             <span>Powered by</span>
                             <a rel="nofollow noopener" href="https://github.com/zeit/next.js"> Next.js </a>
@@ -219,7 +257,10 @@ export default class CommonAside extends React.Component {
                     .about, .contact, .recent, .foot {
                         padding-bottom: 30px;
                     }
-
+                    .site-statement {
+                        font-style: italic;
+                        font-weight: 500;
+                    }
                     .contact-list {
                         margin: 0;
                         padding: 0;
@@ -253,11 +294,20 @@ export default class CommonAside extends React.Component {
                     .foot {
                         color: #9b9b9b;
                         font-size: 1.3rem;
+                    }
+                    .footnote {
                         text-decoration: underline;
                     }
-                    .foot a {
+                    .footnote a {
                         color: #9b9b9b;
                         text-decoration: underline;
+                    }
+                    .friend-link {
+                        padding-bottom: 30px;
+                    }
+                    .friend-link-item {
+                        color: #9b9b9b;
+                        text-decoration: none;
                     }
 
                     .item-head {

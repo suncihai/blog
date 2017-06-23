@@ -35,7 +35,7 @@ export default class extends React.Component {
     static async getInitialProps ({ query, res }) {
         let resTitle = await axios.get(getApi('titles?limit='+ LTC)).catch(errorCatch)
         let resComment = await axios.get(getApi('latestcomments?limit='+ LCC)).catch(errorCatch)
-        let resArticle = await axios.get(getApi('article?alias=' + query.alias)).catch(errorCatch)
+        let resArticle = await axios.get(getApi('article?alias='+ query.alias)).catch(errorCatch)
 
         if (!resArticle.data) {
             res.statusCode = 404
