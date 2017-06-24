@@ -4,6 +4,29 @@ module.exports = {
     // All the api and pages are serverd in.
     LISTEN_PORT: 4000,
 
+    // Product config data
+    CATEGORY: {
+        ARTICLE: 14,
+        ESSAY: 15,
+        COMMENT_PAGE: 539,
+    },
+    HOST: 'https://www.tangbc.com',
+
+    /* ----- Development config data ----- */
+    // CATEGORY: {
+    //     ARTICLE: 1,
+    //     ESSAY: 24,
+    //     COMMENT_PAGE: 2
+    // },
+    // HOST: 'http://localhost:4000',
+    /* ----- Should disable if production ----- */
+
+    // Latest titles count aside
+    LATEST_TITLE_COUNT: 9,
+
+    // Latest comment count aside
+    LATEST_COMMENT_COUNT: 6,
+
     // The article data query from Wordpress database doesn't have paragraph(<p></p>)
     // So we must add paragraph(<p></p>) by others ways or do ourselves. We can referred to
     // 1. WordPress: wp-includes/formatting.php wpautop() Line 245 (offical usage)
@@ -16,25 +39,5 @@ module.exports = {
     // Mysql socket path.
     // The path to a unix domain socket to connect to.
     // See https://github.com/mysqljs/mysql#connection-options
-    MYSQL_SOCKET_PATH: '/Applications/MAMP/tmp/mysql/mysql.sock',
-
-    // Latest titles count aside
-    LATEST_TITLE_COUNT: 9,
-
-    // Latest comment count aside
-    LATEST_COMMENT_COUNT: 6,
-
-    // Product data
-    CATEGORY: {
-        ARTICLE: 14,
-        ESSAY: 15,
-        COMMENT_PAGE: 539,
-    },
-
-    // Development data
-    // CATEGORY: {
-    //     ARTICLE: 1,
-    //     ESSAY: 24,
-    //     COMMENT_PAGE: 2
-    // }
+    MYSQL_SOCKET_PATH: '/Applications/MAMP/tmp/mysql/mysql.sock'
 }

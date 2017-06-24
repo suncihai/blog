@@ -1,7 +1,7 @@
 import config from '../config'
 
 export const getApi = path => {
-    return `http://localhost:${config.LISTEN_PORT}/api/${path}`
+    return `${config.HOST}/api/${path}`
 }
 
 export const errorCatch = err => {

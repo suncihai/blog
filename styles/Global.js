@@ -93,7 +93,11 @@ export default () => (
         }
         .article-content img {
             border-radius: 2px;
-            border: 1px dashed #9b9b9b;
+            max-width: 100%;
+            transition: 500ms ease-out;
+        }
+        .article-content img:hover {
+            transform: scale(1.02);
         }
         .article-content blockquote {
             background: #f8f8f8;
