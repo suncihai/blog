@@ -18,22 +18,6 @@ const COPY = {
     PAGE_INFO: '无聊的、建议的、拍砖的、批评的、交换友链的…… 都在这说吧~'
 }
 
-const PageBrief = (props) => (
-    <div className="list-head">
-        { props.children }
-
-        <style jsx>{`
-            .list-head {
-                padding: 15px;
-                margin-bottom: 30px;
-                border-radius: 2px;
-                background: #f0f8ff;
-                border-left: 5px solid #b4cfff;
-            }
-        `}</style>
-    </div>
-)
-
 const LTC = config.LATEST_TITLE_COUNT
 const LCC = config.LATEST_COMMENT_COUNT
 const CPI = config.CATEGORY.COMMENT_PAGE
