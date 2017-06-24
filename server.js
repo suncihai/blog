@@ -21,6 +21,7 @@ const handleArticleRoute = (req, res, pathname, parsedUrl) => {
     ; [ , , alias] = pathname.split(/^(\/article\/)(.*)\/$/)
 
     if (alias) {
+        alias = encodeURIComponent(alias)
         app.render(req, res, '/article', { alias })
     } else {
         defaultRender(req, res, parsedUrl)
@@ -48,7 +49,7 @@ app.prepare().then(() => {
         let parsedUrl = url.parse(req.url, true)
         let { pathname, query } = parsedUrl
 
-        if (/^(\/article\/\w)/.test(pathname)) {
+        if (/^(\/article\/)/.test(pathname)) {
             handleArticleRoute(req, res, pathname, parsedUrl)
         } else if (/^(\/api\/\w)/.test(pathname)) {
             handleApiRoute(req, res, pathname, query)

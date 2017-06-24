@@ -1,5 +1,8 @@
 let db = require('./db')
 let axios = require('axios')
+let config = require('../config')
+
+const SHOW_LOCAL = config.REQUEST_COMMENT_LOCAL
 
 const UNKNOWN_AREA = '\u672a\u77e5\u5730\u533a'
 const QUERY_IP_API = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip='
@@ -26,6 +29,7 @@ const formatComments = async comments => {
         if (comment.comment_parent) {
             let answer = {
                 id: comment.comment_ID,
+                date: comment.comment_date,
                 author: comment.comment_author,
                 content: comment.comment_content
             }
@@ -49,7 +53,11 @@ const formatComments = async comments => {
     for (let j = 0; j < orignals.length; j++) {
         let orignal = orignals[j]
         orignal.answers = answerMap[orignal.id] || []
-        orignal.local = await getLocalByIp(orignal.local)
+        if (SHOW_LOCAL) {
+            orignal.local = await getLocalByIp(orignal.local)
+        } else {
+            orignal.local = ''
+        }
     }
 
     return orignals

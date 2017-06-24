@@ -27,6 +27,9 @@ module.exports = {
     // Latest comment count aside
     LATEST_COMMENT_COUNT: 6,
 
+    // Is requesting comment author local by ip
+    REQUEST_COMMENT_LOCAL: true,
+
     // The article data query from Wordpress database doesn't have paragraph(<p></p>)
     // So we must add paragraph(<p></p>) by others ways or do ourselves. We can referred to
     // 1. WordPress: wp-includes/formatting.php wpautop() Line 245 (offical usage)

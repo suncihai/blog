@@ -57,7 +57,7 @@ export default class extends React.Component {
                          <CommentList
                             toLoad={ true }
                             articleId={ CPI }
-                            sortType={ 1 }
+                            sortType={ -1 }
                             typeName={ COPY.COMMENT_TYPE }
                         />
                     </div>

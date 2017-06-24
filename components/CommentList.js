@@ -7,7 +7,7 @@ import CommonLoading from './CommonLoading'
 
 const getCopy = (typeName) => {
     return {
-        REPLY: '回复：',
+        REPLY: ' 回复于 ',
         EMPTY: typeName +'空空如也',
         ERROR: typeName +'加载失败'
     }
@@ -88,7 +88,8 @@ export default class CommentList extends React.Component {
                                 { comment.answers.map((answer) => (
                                     <div className="answer" key={ answer.id }>
                                         <div className="answer-name">
-                                            <a href="/">{ answer.author }</a> { COPY.REPLY }
+                                            <a href="/">{ answer.author }</a>
+                                            { COPY.REPLY + prettyDate(answer.date)  }
                                         </div>
                                         <div className="answer-body">{ answer.content }</div>
                                     </div>
@@ -165,6 +166,7 @@ export default class CommentList extends React.Component {
                     }
                     .answer-name {
                         font-style: italic;
+                        color: #a9a9a9;
                     }
                 `}</style>
             </div>

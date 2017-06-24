@@ -4,6 +4,7 @@ import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
 
 import config from '../config'
+import error_404 from '../error_404'
 import { getApi, errorCatch, prettyDate } from '../common'
 
 import DocumentHead from '../components/DocumentHead'
@@ -39,7 +40,7 @@ export default class extends React.Component {
 
         if (!resArticle.data) {
             res.statusCode = 404
-            res.end('404 Not found')
+            res.end(error_404)
             return
         }
 
@@ -55,7 +56,7 @@ export default class extends React.Component {
         super(props)
         this.state = {
             reached: false,
-            sortType: SORT_TYPE.ASC
+            sortType: SORT_TYPE.DESC
         }
     }
 
@@ -124,6 +125,7 @@ export default class extends React.Component {
                                 <a href="#add-comment" className="comment-add">{ COPY.ADD_COMMENT }</a>
                                 <select
                                     className="comment-sort"
+                                    value={ this.state.sortType }
                                     onChange={ this.onSortTypeChange.bind(this) }
                                 >
                                     <option value={ SORT_TYPE.ASC }>{ COPY.EARLY_COMMENT }</option>
@@ -151,6 +153,7 @@ export default class extends React.Component {
                     .article-title {
                         font-weight: 300;
                         line-height: 150%;
+                        font-size: 2.8rem;
                     }
                     .article-info {
                         color: #808080;
