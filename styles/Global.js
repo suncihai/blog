@@ -52,8 +52,8 @@ export default () => (
         }
         .global-foot {
             width: 85%;
-            height: 50px;
-            line-height: 50px;
+            height: 85px;
+            line-height: 85px;
         }
         .global-body {
             width: 85%;

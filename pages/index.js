@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import config from '../config'
-import { getApi, errorCatch, createPostLink } from '../common'
+import { getApi, errorCatch, createPostLink, prettyDate } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
@@ -71,7 +71,7 @@ export default class extends React.Component {
                                     { item.no_digest ? '' : ' [...]' }
                                 </div>
                                 <div className="article-more">
-                                    <span className="article-publish constantia">{ item.post_date }</span>
+                                    <span className="article-publish constantia">{ prettyDate(item.post_date) }</span>
                                     { item.no_digest ? '' : <a href={ createPostLink(item.post_name) }> { COPY.CONTINUE }</a> }
                                 </div>
                                 { item.post_thumbnail ? <img className="article-thumbnail" src={ item.post_thumbnail }/> : '' }

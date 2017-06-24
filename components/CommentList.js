@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 
-import { getApi } from '../common'
+import { getApi, prettyDate } from '../common'
 import CommonLoading from './CommonLoading'
 
 
@@ -11,6 +11,11 @@ const getCopy = (typeName) => {
         EMPTY: typeName +'空空如也',
         ERROR: typeName +'加载失败'
     }
+}
+
+const regURL = /^(http|https):\/\//
+const getCommentHref = url => {
+    return url ? (regURL.test(url) ? url : '//' + url) : 'javascript:void(0)'
 }
 
 export default class CommentList extends React.Component {
@@ -58,13 +63,6 @@ export default class CommentList extends React.Component {
         })
     }
 
-    eventClickAuthor (evt) {
-        let url = evt.target.dataset.url
-        if (url) {
-            window.open('//' + url)
-        }
-    }
-
     render () {
         const comments = this.state.comments
         const COPY = getCopy(this.props.typeName)
@@ -76,12 +74,13 @@ export default class CommentList extends React.Component {
                         <div className="comment-item" key={ comment.id }>
                             <div className="comment-head">
                                 <span className="comment-index constantia">#{ index + 1 }</span>
-                                <span className="comment-author"
-                                    data-url={ comment.url }
-                                    onClick={ this.eventClickAuthor.bind(this) }
-                                >{ comment.author }</span>
+                                <a className="comment-author"
+                                    target="_blank"
+                                    rel="nofollow noopener noreferrer"
+                                    href={ getCommentHref(comment.url) }
+                                >{ comment.author }</a>
                                 <span className="comment-local">{ comment.local }</span>
-                                <span className="comment-date">{ comment.date }</span>
+                                <span className="comment-date">{ prettyDate(comment.date) }</span>
                             </div>
                             <div className="comment-body">{ comment.content }</div>
                             { comment.answers.length ?
@@ -135,11 +134,8 @@ export default class CommentList extends React.Component {
                         cursor: pointer;
                         text-decoration: underline;
                     }
-                    .comment-author[data-url=''] {
+                    .comment-author[href='javascript:void(0)'] {
                         cursor: text;
-                        text-decoration: none;
-                    }
-                    .comment-author[data-url='']:hover {
                         text-decoration: none;
                     }
                     .comment-local {

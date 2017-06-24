@@ -1,5 +1,4 @@
 let db = require('./db')
-let common = require('./common')
 
 function getLatestComments (limit) {
     return new Promise(function (resolve, reject) {
@@ -60,7 +59,7 @@ function getCommentedArticleTitle (comments) {
                 let t = titleMap[comment.comment_post_ID]
                 comment.post_name = t.name
                 comment.post_title = t.title
-                comment.comment_date = common.toChineseDate(comment.comment_date)
+                comment.comment_date = comment.comment_date
                 return comment
             })
 

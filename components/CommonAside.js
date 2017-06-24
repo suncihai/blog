@@ -4,16 +4,16 @@ import { createPostLink } from '../common'
 const COPY = {
     ABOUT: {
         TITLE: '关于我',
-        MAIN: 'Hi~ 我叫唐比昌，从事前端开发 3 个年头，无聊的时候喜欢写点东西/想法，但是水平不咋地。' +
+        MAIN: 'Hi~ 我叫唐比昌，14 年毕业于桂林电子科技大学，无聊的时候喜欢写点东西，但是水平不咋地。' +
             '目前就职于 WPS，热爱前端开发、羽毛球和 NBA 金州勇士队。',
         STATEMENT: '除特别说明外，本站所有文章均为本人原创，内容仅代表个人观点，如需转载请注明出处，谢谢合作 :-)'
     },
     CONTACT: {
-        TITLE: '社交媒体'
+        TITLE: '联系方式'
     },
     FLINK: {
         TITLE: '友情链接：',
-        NOTYET: '（欢迎同行技术博客交换友链）'
+        NOTYET: '（欢迎同行博客交换友链~）'
     },
     COMMENTED: '评论了',
     LATEST: '最新：',
@@ -236,7 +236,12 @@ export default class CommonAside extends React.Component {
                                 { FRIEND_LINKS.map(flink => {
                                     return (
                                         <li key={ flink.LINK }>
-                                            <a className="friend-link-item" href={ flink.LINK } target="_blank">{ flink.TITLE }</a>
+                                            <a
+                                                target="_blank"
+                                                href={ flink.LINK }
+                                                rel="noopener noreferrer"
+                                                className="friend-link-item"
+                                            >{ flink.TITLE }</a>
                                         </li>
                                     )
                                 }) }
@@ -245,14 +250,15 @@ export default class CommonAside extends React.Component {
                         </div>
                         <div className="footnote">
                             <span>Powered by</span>
-                            <a rel="nofollow noopener" href="https://github.com/zeit/next.js"> Next.js </a>
-                            <a rel="nofollow noopener" href="https://github.com/tangbc/blog">{ COPY.SOURCE }</a>
+                            <a rel="nofollow noopener noreferrer" href="https://github.com/zeit/next.js"> next.js </a>
+                            <a rel="nofollow noopener noreferrer" href="https://github.com/tangbc/blog">{ COPY.SOURCE }</a>
                             <br />
                             <span>© { (new Date).getFullYear() } TANG - </span>
                             <a rel="nofollow noopener" href="http://www.miitbeian.gov.cn">{ COPY.ICP }</a>
                         </div>
                     </div>
                 </div>
+
                 <style jsx>{`
                     .about, .contact, .recent, .foot {
                         padding-bottom: 30px;

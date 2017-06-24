@@ -1,5 +1,5 @@
 const COPY = {
-    TEXT: '我是有底线的'
+    TEXT: '别往下看了，我就是底线~'
 }
 
 export default () => (
@@ -20,7 +20,7 @@ export default () => (
                 border-top: 1px solid #eee;
             }
             .foot-text {
-                width: 100px;
+                width: 150px;
                 user-select: none;
                 background: #fff;
                 text-align: center;

@@ -23,7 +23,6 @@ function getArticle (alias) {
 
             if (article) {
                 article.post_id = article.ID
-                article.post_date = common.toChineseDate(article.post_date)
                 article.post_summary = common.getChineseWord(article.post_content, 136)
 
                 resolve(article)

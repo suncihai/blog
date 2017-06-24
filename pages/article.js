@@ -4,7 +4,7 @@ import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
 
 import config from '../config'
-import { getApi, errorCatch } from '../common'
+import { getApi, errorCatch, prettyDate } from '../common'
 
 import DocumentHead from '../components/DocumentHead'
 import CommonHead from '../components/CommonHead'
@@ -106,7 +106,7 @@ export default class extends React.Component {
                         <div className="article">
                             <h1 className="article-title">{ article.post_title }</h1>
                             <div className="article-info constantia">
-                                <span className="article-date">{ article.post_date }</span>
+                                <span className="article-date">{ prettyDate(article.post_date) }</span>
                                 <span className="article-comments">
                                     <i className="global-comments-icon"></i>{ article.comment_count }
                                 </span>

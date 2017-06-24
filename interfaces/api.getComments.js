@@ -1,6 +1,5 @@
 let db = require('./db')
 let axios = require('axios')
-let common = require('./common')
 
 const UNKNOWN_AREA = '\u672a\u77e5\u5730\u533a'
 const QUERY_IP_API = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip='
@@ -42,7 +41,7 @@ const formatComments = async comments => {
                 url: comment.comment_author_url,
                 local: comment.comment_author_IP,
                 content: comment.comment_content,
-                date: common.toChineseDate(comment.comment_date),
+                date: comment.comment_date,
             })
         }
     }

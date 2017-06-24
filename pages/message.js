@@ -34,9 +34,9 @@ const PageBrief = (props) => (
     </div>
 )
 
-const CPI = config.COMMENT_PAGE_ID
 const LTC = config.LATEST_TITLE_COUNT
 const LCC = config.LATEST_COMMENT_COUNT
+const CPI = config.CATEGORY.COMMENT_PAGE
 
 export default class extends React.Component {
 

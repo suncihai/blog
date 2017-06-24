@@ -24,15 +24,16 @@ module.exports = {
     // Latest comment count aside
     LATEST_COMMENT_COUNT: 6,
 
-    CATEGORY: {
-        ARTICLE: 1,
-        ESSAY: 24,
-    },
-
+    // Development data
     // CATEGORY: {
-    //     ARTICLE: 14,
-    //     ESSAY: 15,
+    //     ARTICLE: 1,
+    //     ESSAY: 24,
+    //     COMMENT_PAGE: 2
     // },
 
-    COMMENT_PAGE_ID: 2,
+    CATEGORY: {
+        ARTICLE: 14,
+        ESSAY: 15,
+        COMMENT_PAGE: 539,
+    }
 }

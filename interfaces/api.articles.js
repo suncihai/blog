@@ -51,7 +51,6 @@ function getArticleList (ids) {
             results.map(function (article) {
                 let pureContent = common.removeHTMLTag(article.post_content)
 
-                article.post_date = common.toChineseDate(article.post_date)
                 article.no_digest = article.post_content.length <= DIGEST_LIMIT
                 article.post_thumbnail = common.getThumbnail(article.post_content)
                 article.post_summary = common.getPostDesc(pureContent, DIGEST_LIMIT)

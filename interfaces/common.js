@@ -1,12 +1,6 @@
 
 module.exports = {
 
-    toChineseDate: function (str) {
-        let year, month, day
-        [year, month, day] = str.split(' ')[0].split('-')
-        return `${year} 年 ${parseInt(month)} 月 ${parseInt(day)} 日`
-    },
-
     removeHTMLTag (post) {
         return post.replace(/<(?:.|\n)*?>/gm, '')
     },
