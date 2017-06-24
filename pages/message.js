@@ -66,10 +66,6 @@ export default class extends React.Component {
                 </div>
 
                 <CommonFoot />
-
-                <style jsx>{`
-
-                `}</style>
             </div>
         )
     }
