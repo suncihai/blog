@@ -181,7 +181,15 @@ export default class extends React.Component {
                         top: 0;
                         font-size: 1.4rem;
                         text-decoration: underline;
-                        transition: none;
+                        transition: background 500ms ease-out;
+                        background: rgba(100, 149, 237, .7);
+                        color: #fbf7f0;
+                        text-decoration: none;
+                        padding: 0 10px;
+                        border-radius: 2px;
+                    }
+                    .comment-add:hover {
+                        background: rgba(100, 149, 237, 1);
                     }
                     .comment-sort {
                         position: absolute;
