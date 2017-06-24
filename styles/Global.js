@@ -91,6 +91,16 @@ export default () => (
             font-size: 1.4rem;
             border-radius: 2px;
         }
+        .article-content h2 {
+            padding-top: 1em;
+            padding-bottom: .5em;
+            border-bottom: 1px dashed #c3c3c3;
+        }
+        .article-content h3 {
+            padding-top: .8em;
+            padding-bottom: .4em;
+            border-bottom: 1px dashed #e3e3e3;
+        }
         .article-content img {
             border-radius: 2px;
             max-width: 100%;
