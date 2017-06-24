@@ -6,7 +6,7 @@ const config = require('./config')
 const apis = require('./interfaces')
 
 const app = next({
-    dev: process.env.NODE_ENV !== 'production'
+    dev: process.env.NODE_ENV === 'development'
 })
 const defaultRender = app.getRequestHandler()
 
