@@ -1,11 +1,13 @@
 let db = require('./db')
+let config = require('../config')
+let cpi = config.CATEGORY.COMMENT_PAGE
 
 function getLatestComments (limit) {
     return new Promise(function (resolve, reject) {
         let connection = db.createConnection()
         let QUERY_COMMENTS = 'SELECT comment_ID, comment_author, comment_post_ID, comment_date, comment_content ' +
                             'FROM wp_comments ' +
-                            'WHERE comment_post_ID != 2 AND user_id != 1 AND comment_approved=1 ' +
+                            'WHERE comment_post_ID != ' + cpi + ' AND user_id != 1 AND comment_approved=1 ' +
                             'ORDER BY comment_date DESC LIMIT ' + connection.escape(limit)
 
         connection.query(QUERY_COMMENTS, function (error, results) {
