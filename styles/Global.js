@@ -94,11 +94,15 @@ export default () => (
         .article-content h2 {
             padding-top: 1em;
             padding-bottom: .5em;
+            font-weight: 400;
+            font-size: 2.4rem;
             border-bottom: 1px dashed #c3c3c3;
         }
         .article-content h3 {
             padding-top: .8em;
             padding-bottom: .4em;
+            font-weight: 400;
+            font-size: 2rem;
             border-bottom: 1px dashed #e3e3e3;
         }
         .article-content img {
