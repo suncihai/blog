@@ -1,5 +1,10 @@
 import React from 'react'
-import { createPostLink } from '../common'
+import axios from 'axios'
+
+import config from '../config'
+import { getApi, createPostLink } from '../common'
+
+import CommonLoading from './CommonLoading'
 
 const COPY = {
     ABOUT: {
@@ -57,7 +62,7 @@ const CONTACTS = [
 
 const FRIEND_LINKS = []
 
-const ArticleList = (titles = []) => (
+const TitleList = (titles = []) => (
     <ul className="ul-clear-list">
         { titles.map((article, index) => {
             return (
@@ -124,12 +129,26 @@ const CommentList = (comments = []) => (
     </ul>
 )
 
+const API_TITLES = getApi('titles?limit='+ config.LATEST_TITLE_COUNT)
+const API_COMMENTS = getApi('latestcomments?limit='+ config.LATEST_COMMENT_COUNT)
+
 export default class CommonAside extends React.Component {
 
     constructor (props) {
         super(props)
         this.state = {
+            titles: [],
+            comments: [],
+            error: '',
             tabType: TAB_TYPE.ARTICLE.TYPE
+        }
+    }
+
+    componentWillMount () {
+        if (!this.props.hasTitle) {
+            this.setState({
+                tabType: TAB_TYPE.COMMENT.TYPE
+            })
         }
     }
 
@@ -158,23 +177,50 @@ export default class CommonAside extends React.Component {
         )
     }
 
-    componentWillMount () {
-        if (!this.props.hasTitle) {
+    loadTitleList () {
+        axios.get(API_TITLES).then(res => {
             this.setState({
-                tabType: TAB_TYPE.COMMENT.TYPE
+                titles: res.data
             })
-        }
+        }).catch(this.loadError.bind(this))
+    }
+
+    loadCommentList () {
+        axios.get(API_COMMENTS).then(res => {
+            this.setState({
+                comments: res.data
+            })
+        }).catch(this.loadError.bind(this))
+    }
+
+    loadError (err) {
+        this.setState({
+            error: err.message
+        })
     }
 
     getTabContent () {
-        const { comments, hasTitle, titles } = this.props
+        const hasTitle = this.props.hasTitle
+        const { tabType, comments, titles, error } = this.state
+
+        let slot = <CommonLoading />
+        if (hasTitle && tabType === TAB_TYPE.ARTICLE.TYPE) {
+            if (!titles.length && !error) {
+                this.loadTitleList()
+            } else {
+                slot = TitleList(titles)
+            }
+        } else {
+            if (!comments.length && !error) {
+                this.loadCommentList()
+            } else {
+                slot = CommentList(comments)
+            }
+        }
 
         return (
             <div className="tab-content-item">
-                {
-                    hasTitle && this.state.tabType === TAB_TYPE.ARTICLE.TYPE ?
-                    ArticleList(titles) : CommentList(comments)
-                }
+                { error ? error : slot }
 
                 <style jsx>{`
                     .tab-content-item {
@@ -216,7 +262,7 @@ export default class CommonAside extends React.Component {
                             </ul>
                         </div>
                     </div>
-                    {/* <div className="recent center">
+                    <div className="recent center">
                         <div className="item-content recent-content">
                             <div className="tab-head">
                                 <div className="tab-head-inst">{ COPY.LATEST }</div>
@@ -227,7 +273,7 @@ export default class CommonAside extends React.Component {
                                 { this.getTabContent() }
                             </div>
                         </div>
-                    </div> */}
+                    </div>
                     <div className="foot center">
                         <div className="friend-link">
                             <div className="friend-link-head">{ COPY.FLINK.TITLE }</div>
