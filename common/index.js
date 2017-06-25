@@ -70,7 +70,7 @@ export const prettyDate = dateString => {
         return '今年 ' + (month + 1) + ' 月 ' + day + ' 日'
     }
     if (date.getFullYear() - 1 == year) {
-        return '去年 '+ (month + 1) + ' 月' + day + ' 日'
+        return '去年 '+ (month + 1) + ' 月 ' + day + ' 日'
     }
 
     return year + ' 年 ' + (month + 1) + ' 月 ' + day + ' 日'
