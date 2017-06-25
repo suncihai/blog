@@ -36,7 +36,7 @@ export default () => (
 
         .blog {
             width: 100%;
-            line-height: 160%;
+            line-height: 170%;
             min-width: 1000px;
             font-weight: normal;
         }

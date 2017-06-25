@@ -133,11 +133,9 @@ export default class CommentList extends React.Component {
                         color: #a52a2a;
                         font-weight: 500;
                         cursor: pointer;
-                        text-decoration: underline;
                     }
                     .comment-author[href='javascript:void(0)'] {
                         cursor: text;
-                        text-decoration: none;
                     }
                     .comment-local {
                         margin-left: 10px;
