@@ -40,7 +40,7 @@ if (
         COMMENT_PAGE: 2
     }
 
-    siteConfig.HOST = 'http://localhost:4000'
+    siteConfig.HOST = 'http://localhost:' + siteConfig.LISTEN_PORT
 
     // The path to a unix domain socket to connect to.
     // See https://github.com/mysqljs/mysql#connection-options
