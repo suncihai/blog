@@ -120,9 +120,9 @@ export default class extends React.Component {
                         color: #808080;
                     }
                     .article-thumbnail {
-                        max-width: 300px;
+                        max-width: 100%;
                         margin-top: 15px;
-                        border: 1px dashed #eee;
+                        border-radius: 2px;
                     }
                 `}</style>
             </div>

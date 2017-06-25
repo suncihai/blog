@@ -3,6 +3,8 @@ let axios = require('axios')
 let common = require('./common')
 let config = require('../config')
 
+const SUMMARY_LIMIT = config.SUMMARY_LENGTH
+
 function getArticle (alias) {
     return new Promise(function (resolve, reject) {
         let connection = db.createConnection()
@@ -20,10 +22,11 @@ function getArticle (alias) {
             }
 
             let article = result && result[0]
+            let prueContent = common.removeHTMLTag(article.post_content)
 
             if (article) {
                 article.post_id = article.ID
-                article.post_summary = common.getChineseWord(article.post_content, 136)
+                article.post_summary = common.getPostDesc(prueContent, SUMMARY_LIMIT)
 
                 resolve(article)
             } else {

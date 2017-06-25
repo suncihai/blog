@@ -10,6 +10,9 @@ let siteConfig = {
     },
     HOST: 'https://www.tangbc.com',
 
+    // Article summary words.
+    SUMMARY_LENGTH: 150,
+
     // Latest titles count aside.
     LATEST_TITLE_COUNT: 9,
 
