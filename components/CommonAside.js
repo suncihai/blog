@@ -144,6 +144,13 @@ export default class CommonAside extends React.Component {
         }
     }
 
+    componentDidMount () {
+        if (this.props.hasTitle) {
+            this.loadTitleList()
+        }
+        this.loadCommentList()
+    }
+
     componentWillMount () {
         if (!this.props.hasTitle) {
             this.setState({
@@ -204,18 +211,10 @@ export default class CommonAside extends React.Component {
         const { tabType, comments, titles, error } = this.state
 
         let slot = <CommonLoading />
-        if (hasTitle && tabType === TAB_TYPE.ARTICLE.TYPE) {
-            if (!titles.length && !error) {
-                this.loadTitleList()
-            } else {
-                slot = TitleList(titles)
-            }
-        } else {
-            if (!comments.length && !error) {
-                this.loadCommentList()
-            } else {
-                slot = CommentList(comments)
-            }
+        if (hasTitle && tabType === TAB_TYPE.ARTICLE.TYPE && titles.length) {
+            slot = TitleList(titles)
+        } else if (comments.length) {
+            slot = CommentList(comments)
         }
 
         return (
