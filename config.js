@@ -1,10 +1,8 @@
-
-module.exports = {
+let siteConfig = {
     // Listen port for blog server.
-    // All the api and pages are serverd in.
     LISTEN_PORT: 4000,
 
-    // Product config data
+    // Product config data.
     CATEGORY: {
         ARTICLE: 14,
         ESSAY: 15,
@@ -12,22 +10,13 @@ module.exports = {
     },
     HOST: 'https://www.tangbc.com',
 
-    /* ----- Development config data ----- */
-    // CATEGORY: {
-    //     ARTICLE: 1,
-    //     ESSAY: 24,
-    //     COMMENT_PAGE: 2
-    // },
-    // HOST: 'http://localhost:4000',
-    /* ----- Should disable if production ----- */
-
-    // Latest titles count aside
+    // Latest titles count aside.
     LATEST_TITLE_COUNT: 9,
 
-    // Latest comment count aside
+    // Latest comment count aside.
     LATEST_COMMENT_COUNT: 6,
 
-    // Is requesting comment author local by ip
+    // Is requesting comment author local by ip.
     REQUEST_COMMENT_LOCAL: true,
 
     // The article data query from Wordpress database doesn't have paragraph(<p></p>)
@@ -38,9 +27,24 @@ module.exports = {
     // 3. Mine: I just copied the Wordpress's offical implementation and deploied on my server.
     //    Method: POST, param: { post: 'the article data query from Wordpress...' }
     POST_AUTOP_API: 'https://api.tangbc.com/autop/',
+}
 
-    // Mysql socket path.
+// For local development database
+if (
+    typeof process !== 'undefined' &&
+    process.env.NODE_ENV === 'development'
+) {
+    siteConfig.CATEGORY = {
+        ARTICLE: 1,
+        ESSAY: 24,
+        COMMENT_PAGE: 2
+    }
+
+    siteConfig.HOST = 'http://localhost:4000'
+
     // The path to a unix domain socket to connect to.
     // See https://github.com/mysqljs/mysql#connection-options
-    MYSQL_SOCKET_PATH: '/Applications/MAMP/tmp/mysql/mysql.sock'
+    siteConfig.MYSQL_SOCKET_PATH = '/Applications/MAMP/tmp/mysql/mysql.sock'
 }
+
+module.exports = siteConfig
