@@ -18,19 +18,13 @@ const COPY = {
     PAGE_INFO: '无聊的、建议的、拍砖的、批评的、交换友链的…… 都在这说吧~'
 }
 
-const LTC = config.LATEST_TITLE_COUNT
-const LCC = config.LATEST_COMMENT_COUNT
 const CPI = config.CATEGORY.COMMENT_PAGE
 
 export default class extends React.Component {
 
-    static async getInitialProps () {
-        let resTitle = await axios.get(getApi('titles?limit='+ LTC)).catch(errorCatch)
-        let resComment = await axios.get(getApi('latestcomments?limit='+ LCC)).catch(errorCatch)
+    static getInitialProps () {
         return {
-            hasTitle: true,
-            titles: resTitle.data || [],
-            comments: resComment.data || [],
+            hasTitle: true
         }
     }
 
@@ -62,7 +56,7 @@ export default class extends React.Component {
                         />
                     </div>
 
-                    <CommonAside hasTitle={ hasTitle } titles={ titles } comments={ comments } />
+                    <CommonAside hasTitle={ hasTitle } />
                 </div>
 
                 <CommonFoot />

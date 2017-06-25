@@ -4,7 +4,7 @@ import { createPostLink } from '../common'
 const COPY = {
     ABOUT: {
         TITLE: '关于我',
-        MAIN: 'Hi~ 我叫唐比昌，14 年毕业于桂林电子科技大学，无聊的时候喜欢写点东西，但是水平不咋地。' +
+        MAIN: '我叫唐比昌，14 年毕业于桂林电子科技大学，无聊的时候喜欢写点东西，但是水平不咋地。' +
             '目前就职于 WPS，热爱前端开发、羽毛球和 NBA 金州勇士队。',
         STATEMENT: '除特别说明外，本站所有文章均为本人原创，内容仅代表个人观点，如需转载请注明出处，谢谢合作 :-)'
     },
@@ -57,7 +57,7 @@ const CONTACTS = [
 
 const FRIEND_LINKS = []
 
-const ArticleList = (titles) => (
+const ArticleList = (titles = []) => (
     <ul className="ul-clear-list">
         { titles.map((article, index) => {
             return (
@@ -89,7 +89,7 @@ const getCommentShort = comment => {
     }
     return comment
 }
-const CommentList = (comments) => (
+const CommentList = (comments = []) => (
     <ul className="ul-clear-list">
         { comments.map((comment, index) => {
             return (
@@ -216,7 +216,7 @@ export default class CommonAside extends React.Component {
                             </ul>
                         </div>
                     </div>
-                    <div className="recent center">
+                    {/* <div className="recent center">
                         <div className="item-content recent-content">
                             <div className="tab-head">
                                 <div className="tab-head-inst">{ COPY.LATEST }</div>
@@ -227,7 +227,7 @@ export default class CommonAside extends React.Component {
                                 { this.getTabContent() }
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="foot center">
                         <div className="friend-link">
                             <div className="friend-link-head">{ COPY.FLINK.TITLE }</div>

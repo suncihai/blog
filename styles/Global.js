@@ -123,7 +123,7 @@ export default () => (
             padding: 0 0.5rem;
             border-radius: 3px;
             display: inline-block;
-            background: #f3f4f4;
+            background: #ffe4b5;
         }
         .constantia {
             font-style: italic;

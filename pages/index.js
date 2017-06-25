@@ -22,12 +22,10 @@ const PageBrief = (props) => (
 )
 
 const CID = config.CATEGORY.ARTICLE
-const LCC = config.LATEST_COMMENT_COUNT
 
 export default class extends React.Component {
 
     static async getInitialProps () {
-        let resComment = await axios.get(getApi('latestcomments?limit='+ LCC)).catch(errorCatch)
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
         return {
             brief: '',
@@ -35,14 +33,12 @@ export default class extends React.Component {
             title: COPY.TITLE,
 
             hasTitle: false,
-            titles: [],
-            comments: resComment.data || [],
             articles: resArticle.data || [],
         }
     }
 
     render () {
-        const { brief, articles, hasTitle, titles, comments } = this.props
+        const { brief, articles, hasTitle } = this.props
 
         return (
             <div className="blog center">
@@ -80,7 +76,7 @@ export default class extends React.Component {
                         </div>
                     </div>
 
-                    <CommonAside hasTitle={ hasTitle } titles={ titles } comments={ comments } />
+                    <CommonAside hasTitle={ hasTitle } />
                 </div>
 
                 <CommonFoot />

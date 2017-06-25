@@ -28,14 +28,9 @@ const COPY = {
     COMMENT_TYPE: '评论',
 }
 
-const LTC = config.LATEST_TITLE_COUNT
-const LCC = config.LATEST_COMMENT_COUNT
-
 export default class extends React.Component {
 
     static async getInitialProps ({ query, res }) {
-        let resTitle = await axios.get(getApi('titles?limit='+ LTC)).catch(errorCatch)
-        let resComment = await axios.get(getApi('latestcomments?limit='+ LCC)).catch(errorCatch)
         let resArticle = await axios.get(getApi('article?alias='+ query.alias)).catch(errorCatch)
 
         if (!resArticle.data) {
@@ -46,8 +41,6 @@ export default class extends React.Component {
 
         return {
             hasTitle: true,
-            titles: resTitle.data || [],
-            comments: resComment.data || [],
             article: resArticle.data
         }
     }
@@ -91,7 +84,7 @@ export default class extends React.Component {
     }
 
     render () {
-        const { article, hasTitle, titles, comments } = this.props
+        const { article, hasTitle } = this.props
 
         return (
             <div className="blog">
@@ -144,7 +137,7 @@ export default class extends React.Component {
                         </div>
                     </div>
 
-                    <CommonAside hasTitle={ hasTitle } titles={ titles } comments={ comments } />
+                    <CommonAside hasTitle={ hasTitle } />
                 </div>
 
                 <CommonFoot />
