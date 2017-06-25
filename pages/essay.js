@@ -9,14 +9,10 @@ const COPY = {
 }
 
 const CID = config.CATEGORY.ESSAY
-const LTC = config.LATEST_TITLE_COUNT
-const LCC = config.LATEST_COMMENT_COUNT
 
 export default class EssayList extends Index {
 
     static async getInitialProps () {
-        let resTitle = await axios.get(getApi('titles?limit='+ LTC)).catch(errorCatch)
-        let resComment = await axios.get(getApi('latestcomments?limit='+ LCC)).catch(errorCatch)
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
         return {
             brief: COPY.TEXT,
@@ -24,8 +20,6 @@ export default class EssayList extends Index {
             navActive: 'essay',
 
             hasTitle: true,
-            titles: resTitle.data || [],
-            comments: resComment.data || [],
             articles: resArticle.data || [],
         }
     }
