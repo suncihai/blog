@@ -1,6 +1,10 @@
 
 module.exports = {
 
+    isNumeric (number) {
+        return !isNaN(parseFloat(number)) && isFinite(number)
+    },
+
     removeHTMLTag (post) {
         return post.replace(/<(?:.|\n)*?>/gm, '')
     },

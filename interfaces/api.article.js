@@ -22,11 +22,9 @@ function getArticle (alias) {
             }
 
             let article = result && result[0]
-            let prueContent = common.removeHTMLTag(article.post_content)
-
             if (article) {
                 article.post_id = article.ID
-                article.post_summary = common.getPostDesc(prueContent, SUMMARY_LIMIT)
+                article.post_summary = common.getPostDesc(common.removeHTMLTag(article.post_content), SUMMARY_LIMIT)
 
                 resolve(article)
             } else {
