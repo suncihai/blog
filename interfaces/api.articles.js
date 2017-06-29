@@ -6,9 +6,10 @@ const SUMMARY_LIMIT = config.SUMMARY_LENGTH
 
 function getArticleIds (category_id) {
     return new Promise(function (resolve, reject) {
+        let categoryId = common.isNumeric(category_id) ? category_id : 0
         let connection = db.createConnection()
         let QUERY_ARTICLE_IDS = 'SELECT object_id FROM wp_term_relationships ' +
-                                'WHERE term_taxonomy_id = ' + connection.escape(category_id)
+                                'WHERE term_taxonomy_id = ' + categoryId
 
         connection.query(QUERY_ARTICLE_IDS, function (error, results) {
             connection.end()

@@ -23,4 +23,6 @@ export default class EssayList extends Index {
             articles: resArticle.data || [],
         }
     }
+
+    componentDidMount () {}
 }

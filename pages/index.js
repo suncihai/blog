@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import config from '../config'
+import ReactDOM from 'react-dom'
 import { getApi, errorCatch, createPostLink, prettyDate } from '../common'
 
 import CommonHead from '../components/CommonHead'
@@ -37,6 +38,18 @@ export default class extends React.Component {
         }
     }
 
+    componentDidMount () {
+        let node = ReactDOM.findDOMNode(this)
+        let imgNodes = node.querySelectorAll('img')
+        for (let i = 0; i < imgNodes.length; i++) {
+            let img = imgNodes[i]
+            if (img.dataset.src) {
+                img.setAttribute('src', img.dataset.src)
+                img.removeAttribute('data-src')
+            }
+        }
+    }
+
     render () {
         const { brief, articles, hasTitle } = this.props
 
@@ -70,7 +83,7 @@ export default class extends React.Component {
                                     <span className="article-publish constantia">{ prettyDate(item.post_date) }</span>
                                     { item.no_digest ? '' : <a href={ createPostLink(item.post_name) }> { COPY.CONTINUE }</a> }
                                 </div>
-                                { item.post_thumbnail ? <img className="article-thumbnail" src={ item.post_thumbnail }/> : '' }
+                                { item.post_thumbnail ? <img className="article-thumbnail" data-src={ item.post_thumbnail }/> : '' }
                             </div>
                         )) }
                         </div>
