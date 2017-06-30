@@ -127,7 +127,7 @@ export default () => (
             padding: 0 0.5rem;
             border-radius: 3px;
             display: inline-block;
-            background: #e6e6fa;
+            background: #f0f8ff;
             font-family: 'Roboto Mono', Monaco, courier, monospace;
         }
         .constantia {
