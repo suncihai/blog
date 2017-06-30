@@ -90,6 +90,7 @@ export default () => (
         pre {
             font-size: 1.4rem;
             border-radius: 2px;
+            font-family: 'Roboto Mono', Monaco, courier, monospace;
         }
         .article-content h2 {
             padding-top: 1em;
@@ -123,11 +124,11 @@ export default () => (
             margin: 0.5rem 0;
         }
         .article-content code {
-            margin: 0 0.2rem;
             padding: 0 0.5rem;
             border-radius: 3px;
             display: inline-block;
-            background: #ffe4b5;
+            background: #e6e6fa;
+            font-family: 'Roboto Mono', Monaco, courier, monospace;
         }
         .constantia {
             font-style: italic;
