@@ -90,7 +90,48 @@ export default () => (
         pre {
             font-size: 1.4rem;
             border-radius: 2px;
+            position: relative;
             font-family: 'Roboto Mono', Monaco, courier, monospace;
+        }
+        .hljs.javascript:after {
+            position: absolute;
+            content: 'JS';
+            top: 0;
+            right: .5em;
+            font-weight: bold;
+            font-family: monospace, sans-serif;
+        }
+        .hljs.html:after {
+            position: absolute;
+            content: 'HTML';
+            top: 0;
+            right: .5em;
+            font-weight: bold;
+            font-family: monospace, sans-serif;
+        }
+        .hljs.css:after {
+            position: absolute;
+            content: 'CSS';
+            top: 0;
+            right: .5em;
+            font-weight: bold;
+            font-family: monospace, sans-serif;
+        }
+        .hljs.php:after {
+            position: absolute;
+            content: 'PHP';
+            top: 0;
+            right: .5em;
+            font-weight: bold;
+            font-family: monospace, sans-serif;
+        }
+        .hljs.json:after {
+            position: absolute;
+            content: 'JSON';
+            top: 0;
+            right: .5em;
+            font-weight: bold;
+            font-family: monospace, sans-serif;
         }
         .article-content h2 {
             padding-top: 1em;
