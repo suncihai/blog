@@ -1,18 +1,18 @@
 import Index from './index'
 import axios from 'axios'
 import config from '../config'
-import { getApi, errorCatch } from '../common'
+import { getApi, errorCatch, isMobile } from '../common'
 
 const COPY = {
     TITLE: '我的随笔',
-    TEXT: '心情日志，与技术无关'
+    TEXT: '心情随笔，与技术无关'
 }
 
 const CID = config.CATEGORY.ESSAY
 
 export default class EssayList extends Index {
 
-    static async getInitialProps () {
+    static async getInitialProps ({ req }) {
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
         return {
             brief: COPY.TEXT,
@@ -21,6 +21,7 @@ export default class EssayList extends Index {
 
             hasTitle: true,
             articles: resArticle.data || [],
+            isMobile: isMobile(req.headers)
         }
     }
 

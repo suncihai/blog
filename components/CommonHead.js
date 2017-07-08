@@ -75,6 +75,23 @@ export default class extends React.Component {
                         text-align: center;
                         display: inline-block;
                     }
+
+                    @media (max-width: 1024px) {
+                        .logo {
+                            display: none;
+                        }
+                        .common-head {
+                            width: 100%;
+                        }
+                        .nav {
+                            display: block;
+                            padding: 0;
+                        }
+                        .nav-item {
+                            width: 33%;
+                            padding: 0;
+                        }
+                    }
                 `}</style>
             </div>
         )

@@ -41,6 +41,7 @@ const getCopy = (typeName) => {
 const KLASS = {
     READY: 'ready',
     PENDING: 'pending',
+    DISABLED: 'disabled',
     FAILED: 'failed',
 }
 
@@ -111,7 +112,6 @@ export default class CommentForm extends React.Component {
 
         let klass = KLASS.DISABLED
         let text = COPY.STATUS.READY
-
         if (this.state.pending) {
             klass = KLASS.PENDING
             text = COPY.STATUS.PENDING
@@ -167,7 +167,7 @@ export default class CommentForm extends React.Component {
                                 <tr>
                                     <td className="label">
                                         <label htmlFor="author" className="type">{ COPY.FORM.NAME.LABEL }</label>
-                                        <small className="desc">{ COPY.FORM.NAME.DESC }</small>
+                                        <small className="desc tips">{ COPY.FORM.NAME.DESC }</small>
                                     </td>
                                     <td className="form">
                                         <input
@@ -186,7 +186,7 @@ export default class CommentForm extends React.Component {
                                             { COPY.FORM.EMAIL.LABEL }
                                             <small className="desc">{ COPY.FORM.OPTIONAL }</small>
                                         </label>
-                                        <small className="desc">{ COPY.FORM.EMAIL.DESC }</small>
+                                        <small className="desc tips">{ COPY.FORM.EMAIL.DESC }</small>
                                     </td>
                                     <td className="form">
                                         <input
@@ -204,7 +204,7 @@ export default class CommentForm extends React.Component {
                                             { COPY.FORM.URL.LABEL }
                                             <small className="desc">{ COPY.FORM.OPTIONAL }</small>
                                         </label>
-                                        <small className="desc">{ COPY.FORM.URL.DESC }</small>
+                                        <small className="desc tips">{ COPY.FORM.URL.DESC }</small>
                                     </td>
                                     <td className="form">
                                         <input
@@ -322,6 +322,15 @@ export default class CommentForm extends React.Component {
                     .comment-submit.failed {
                         cursor: default;
                         background: #ea5035;
+                    }
+
+                    @media (max-width: 1024px) {
+                        .comment {
+                            padding: .5em;
+                        }
+                        .tips {
+                            display: none;
+                        }
                     }
                 `}</style>
             </div>

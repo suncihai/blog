@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import config from '../config'
 import ReactDOM from 'react-dom'
-import { getApi, errorCatch, createPostLink, prettyDate } from '../common'
+import { getApi, errorCatch, createPostLink, prettyDate, isMobile } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
@@ -26,7 +26,7 @@ const CID = config.CATEGORY.ARTICLE
 
 export default class extends React.Component {
 
-    static async getInitialProps () {
+    static async getInitialProps ({ req }) {
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
         return {
             brief: '',
@@ -35,6 +35,7 @@ export default class extends React.Component {
 
             hasTitle: false,
             articles: resArticle.data || [],
+            isMobile: isMobile(req.headers)
         }
     }
 
@@ -51,7 +52,7 @@ export default class extends React.Component {
     }
 
     render () {
-        const { brief, articles, hasTitle } = this.props
+        const { brief, articles, hasTitle, isMobile } = this.props
 
         return (
             <div className="blog center">
@@ -71,15 +72,15 @@ export default class extends React.Component {
                             <div className="list-item" key={ item.ID }>
                                 <div className="article-head">
                                     <a className="article-title" href={ createPostLink(item.post_name) }>{ item.post_title }</a>
-                                    <span className="article-comments constantia">
-                                        <i className="global-comments-icon"></i>{ item.comment_count }
-                                    </span>
                                 </div>
                                 <div className="article-digest">
                                     { item.post_summary }
                                     { item.no_digest ? '' : ' [...]' }
                                 </div>
                                 <div className="article-more">
+                                    <span className="article-comments constantia">
+                                        <i className="global-comments-icon"></i>{ item.comment_count }
+                                    </span>
                                     <span className="article-publish constantia">{ prettyDate(item.post_date) }</span>
                                     { item.no_digest ? '' : <a href={ createPostLink(item.post_name) }> { COPY.CONTINUE }</a> }
                                 </div>
@@ -89,14 +90,14 @@ export default class extends React.Component {
                         </div>
                     </div>
 
-                    <CommonAside hasTitle={ hasTitle } />
+                    { isMobile ? '' : <CommonAside hasTitle={ hasTitle } /> }
                 </div>
 
                 <CommonFoot />
 
                 <style jsx>{`
                     .list-item {
-                        padding-bottom: 30px;
+                        padding-bottom: 20px;
                         margin-bottom: 10px;
                         border-bottom: 1px dashed #bbb;
                     }
@@ -107,35 +108,52 @@ export default class extends React.Component {
                         height: 50px;
                         line-height: 50px;
                     }
-                    .article-comments {
-                        position: absolute;
-                        height: 100%;
-                        right: 0;
-                        top: 0;
-                        width: 50px;
-                        text-align: right;
-                        color: #a5a5a5;
-                    }
                     .article-title {
                         font-size: 2.4rem;
                         font-weight: 300;
                     }
                     .article-digest {
                         padding: 15px;
+                        margin-bottom: 15px;
                         background: #fbfbfb;
                     }
                     .article-more {
-                        padding-top: 10px;
                         font-size: 1.4rem;
                     }
                     .article-publish {
                         margin-right: 1em;
                         color: #808080;
                     }
+                    .article-comments {
+                        position: absolute;
+                        height: 100%;
+                        right: 0;
+                        top: -3px;
+                        width: 50px;
+                        text-align: right;
+                        color: #a5a5a5;
+                    }
                     .article-thumbnail {
                         max-width: 100%;
                         margin-top: 15px;
                         border-radius: 2px;
+                    }
+
+                    @media (max-width: 1024px) {
+                        .article-head {
+                            height: auto;
+                            padding: .5em 0;
+                            line-height: 170%
+                        }
+                        .article-title {
+                            font-size: 1.6rem;
+                        }
+                        .article-digest {
+                            padding: .5em;
+                        }
+                        .article-thumbnail {
+                            width: 100%;
+                        }
                     }
                 `}</style>
             </div>

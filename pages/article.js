@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 
 import config from '../config'
 import error_404 from '../error_404'
-import { getApi, errorCatch, prettyDate } from '../common'
+import { getApi, errorCatch, prettyDate, isMobile } from '../common'
 
 import DocumentHead from '../components/DocumentHead'
 import CommonHead from '../components/CommonHead'
@@ -30,7 +30,7 @@ const COPY = {
 
 export default class extends React.Component {
 
-    static async getInitialProps ({ query, res }) {
+    static async getInitialProps ({ query, res, req }) {
         let resArticle = await axios.get(getApi('article?alias='+ query.alias)).catch(errorCatch)
 
         if (!resArticle.data) {
@@ -41,7 +41,8 @@ export default class extends React.Component {
 
         return {
             hasTitle: true,
-            article: resArticle.data
+            article: resArticle.data,
+            isMobile: isMobile(req.headers)
         }
     }
 
@@ -84,7 +85,7 @@ export default class extends React.Component {
     }
 
     render () {
-        const { article, hasTitle } = this.props
+        const { article, hasTitle, isMobile } = this.props
 
         return (
             <div className="blog">
@@ -137,7 +138,7 @@ export default class extends React.Component {
                         </div>
                     </div>
 
-                    <CommonAside hasTitle={ hasTitle } />
+                    { isMobile ? '' : <CommonAside hasTitle={ hasTitle } /> }
                 </div>
 
                 <CommonFoot />
@@ -195,6 +196,22 @@ export default class extends React.Component {
                         outline: none;
                         border-color: #dadada;
                         background: #f7f7f7;
+                    }
+
+                    @media (max-width: 1024px) {
+                        .comment-add {
+                            display: none;
+                        }
+                        .article-title {
+                            font-size: 2rem;
+                        }
+                        .article-content {
+                            margin-top: 20px;
+                            padding-top: 10px;
+                        }
+                        .article-end-line {
+                            margin: 20px 0;
+                        }
                     }
                 `}</style>
             </div>

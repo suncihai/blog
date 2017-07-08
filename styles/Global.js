@@ -37,7 +37,6 @@ export default () => (
         .blog {
             width: 100%;
             line-height: 170%;
-            min-width: 1000px;
             font-weight: normal;
         }
         .global-head {
@@ -150,6 +149,7 @@ export default () => (
         .article-content img {
             border-radius: 2px;
             max-width: 100%;
+            height: auto;
             transition: 500ms ease-out;
         }
         .article-content img:hover {
@@ -181,6 +181,41 @@ export default () => (
             border-radius: 2px;
             background: #f0f8ff;
             border-left: 5px solid #b4cfff;
+        }
+
+        @media (max-width: 1024px) {
+            .global-right {
+                display: none;
+            }
+            body {
+                font-size: 1.4rem;
+            }
+            pre {
+                font-size: 1.2rem;
+            }
+            input, textarea {
+                appearance: none;
+            }
+            .global-head {
+                height: 35px;
+                line-height: 35px;
+                position: absolute;
+            }
+            .global-foot, .global-body, .global-left {
+                width: 100%;
+            }
+            .global-left {
+                padding: 0 .5em;
+                padding-top: 50px;
+                max-width: 1024px;
+            }
+            .pageins {
+                border: none;
+            }
+            .global-foot {
+                height: 45px;
+                line-height: 45px;
+            }
         }
     `}</style>
 )

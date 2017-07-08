@@ -75,3 +75,5 @@ export const prettyDate = dateString => {
 
     return year + ' 年 ' + (month + 1) + ' 月 ' + day + ' 日'
 }
+
+export const isMobile = headers => /iPhone|iPad|iPod|Android/i.test(headers && headers['user-agent'] || '')

@@ -1,7 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
 
-import MobileCSS from '../styles/Global'
 import GlobalCSS from '../styles/Global'
 import NormalizeCSS from '../styles/Normalize'
 
@@ -29,7 +28,6 @@ export default class DocumentHead extends React.Component {
                 </Head>
                 <NormalizeCSS />
                 <GlobalCSS />
-                <MobileCSS />
             </div>
         )
     }
