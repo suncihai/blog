@@ -205,7 +205,7 @@ export default () => (
                 width: 100%;
             }
             .global-left {
-                padding: 0 .5em;
+                padding: 0 1em;
                 padding-top: 50px;
                 max-width: 1024px;
             }

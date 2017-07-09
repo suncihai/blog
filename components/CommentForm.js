@@ -331,6 +331,9 @@ export default class CommentForm extends React.Component {
                         .tips {
                             display: none;
                         }
+                        .form {
+                            padding-left: 0;
+                        }
                     }
                 `}</style>
             </div>
