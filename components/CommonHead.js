@@ -49,6 +49,7 @@ export default class extends React.Component {
                     .common-head {
                         width: 85%;
                         height: 100%;
+                        max-width: 1200px;
                         position: relative;
                     }
                     .head-item {
