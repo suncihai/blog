@@ -1,10 +1,12 @@
 let db = require('./db')
 let common = require('./common')
 let config = require('../config')
+let monitor = require('../monitor')
 
 const SUMMARY_LIMIT = config.SUMMARY_LENGTH
 
 function getArticleIds (category_id) {
+    monitor.start('get article ids')
     return new Promise(function (resolve, reject) {
         let categoryId = common.isNumeric(category_id) ? category_id : 0
         let connection = db.createConnection()
@@ -24,12 +26,14 @@ function getArticleIds (category_id) {
                 ids.push(rowData.object_id)
             })
 
+            monitor.end('get article ids')
             resolve(ids)
         })
     })
 }
 
 function getArticleList (ids) {
+    monitor.start('get article list by ids')
     return new Promise(function (resolve, reject) {
         if (!ids || !ids.length) {
             resolve([])
@@ -62,6 +66,7 @@ function getArticleList (ids) {
                 return article
             })
 
+            monitor.end('get article list by ids')
             resolve(results)
         })
     })

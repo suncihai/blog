@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import config from '../config'
+import monitor from '../monitor'
 import ReactDOM from 'react-dom'
 import { getApi, errorCatch, createPostLink, prettyDate, isMobile } from '../common'
 
@@ -27,7 +28,9 @@ const CID = config.CATEGORY.ARTICLE
 export default class extends React.Component {
 
     static async getInitialProps ({ req }) {
+        monitor.start('get articles in page index')
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
+        monitor.end('get articles in page index')
         return {
             brief: '',
             navActive: '',

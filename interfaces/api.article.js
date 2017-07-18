@@ -2,10 +2,12 @@ let db = require('./db')
 let axios = require('axios')
 let common = require('./common')
 let config = require('../config')
+let monitor = require('../monitor')
 
 const SUMMARY_LIMIT = config.SUMMARY_LENGTH
 
 function getArticle (alias) {
+    monitor.start('get article by alias')
     return new Promise(function (resolve, reject) {
         let connection = db.createConnection()
         let QUERY_ARTICLE = 'SELECT ID, post_title, post_date, post_content, comment_count ' +
@@ -26,6 +28,7 @@ function getArticle (alias) {
                 article.post_id = article.ID
                 article.post_summary = common.getPostDesc(common.removeHTMLTag(article.post_content), SUMMARY_LIMIT)
 
+                monitor.end('get article by alias')
                 resolve(article)
             } else {
                 resolve(null)
@@ -40,6 +43,7 @@ function getAutopArticle (article) {
     }
 
     try {
+        monitor.start('get autop article')
         return axios.post(config.POST_AUTOP_API, {
             post: article && article.post_content
         }).then(function (response) {
@@ -48,6 +52,7 @@ function getAutopArticle (article) {
             } else {
                 article.post_content = 'No data return'
             }
+            monitor.end('get autop article')
             return article
         }).catch(function () {})
     } catch (e) {

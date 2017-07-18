@@ -4,6 +4,7 @@ import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
 
 import config from '../config'
+import monitor from '../monitor'
 import error_404 from '../error_404'
 import { getApi, errorCatch, prettyDate, isMobile } from '../common'
 
@@ -31,7 +32,9 @@ const COPY = {
 export default class extends React.Component {
 
     static async getInitialProps ({ query, res, req }) {
+        monitor.start('get article in page article')
         let resArticle = await axios.get(getApi('article?alias='+ query.alias)).catch(errorCatch)
+        monitor.end('get article in page article')
 
         if (!resArticle.data) {
             res.statusCode = 404
