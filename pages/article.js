@@ -171,11 +171,11 @@ export default class extends React.Component {
                     .article-content {
                         margin-top: 30px;
                         padding-top: 20px;
-                        border-top: 1px dashed;
+                        border-top: 1px dashed #999;
                     }
                     .article-end-line {
                         margin: 30px 0;
-                        border-bottom: 1px dashed;
+                        border-bottom: 1px dashed #999;
                     }
                     .article-comment {
                     }

@@ -105,7 +105,7 @@ export default class extends React.Component {
                     .list-item {
                         padding-bottom: 20px;
                         margin-bottom: 10px;
-                        border-bottom: 1px dashed #bbb;
+                        border-bottom: 1px dashed #999;
                     }
                     .list-item:last-child {
                         border: none;

@@ -199,7 +199,6 @@ export default () => (
             .global-head {
                 height: 35px;
                 line-height: 35px;
-                position: absolute;
             }
             .global-foot, .global-body, .global-left {
                 width: 100%;

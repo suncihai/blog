@@ -3,7 +3,7 @@ import React from 'react'
 const NAVS = [
     {
         href: '',
-        text: '首页'
+        text: '博客首页'
     },
     {
         href: 'essay',
@@ -14,12 +14,13 @@ const NAVS = [
         text: '给我留言'
     },
     // {
-    //     href: '/resume',
+    //     href: 'resume',
     //     text: '个人简历'
     // },
 ]
 
 export default class extends React.Component {
+
     constructor (props) {
         super(props)
     }
