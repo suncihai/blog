@@ -165,10 +165,10 @@ export default () => (
             margin: 0.5rem 0;
         }
         .article-content code {
-            padding: 0 0.5rem;
+            padding: 0 0.2rem;
             border-radius: 3px;
             display: inline-block;
-            background: #f0f8ff;
+            background: #ffebcd;
             font-family: 'Roboto Mono', Monaco, courier, monospace;
         }
         .constantia {

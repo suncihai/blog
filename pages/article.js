@@ -23,7 +23,6 @@ const SORT_TYPE = {
 }
 const COPY = {
     COMMENT_TOTAL: (count) => '共 '+ count +' 条评论',
-    ADD_COMMENT: '我要评论',
     EARLY_COMMENT: '最早评论',
     LATEST_COMMENT: '最新评论',
     COMMENT_TYPE: '评论',
@@ -119,7 +118,6 @@ export default class extends React.Component {
                         <div className="article-comment" ref={ (comment) => { this.commentEl = comment } }>
                             <div className="comment-head">
                                 <span className="comment-total constantia">{ COPY.COMMENT_TOTAL(article.comment_count) }</span>
-                                <a href="#add-comment" className="comment-add">{ COPY.ADD_COMMENT }</a>
                                 <select
                                     className="comment-sort"
                                     value={ this.state.sortType }
@@ -135,7 +133,7 @@ export default class extends React.Component {
                                 sortType={ this.state.sortType }
                                 typeName={ COPY.COMMENT_TYPE }
                             />
-                            <div className="comment-form" id="add-comment">
+                            <div className="comment-form">
                                 <CommentForm typeName={ COPY.COMMENT_TYPE } articleId={ article.post_id } />
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 let db = require('./db')
 let axios = require('axios')
+let autop = require('./autop')
 let common = require('./common')
 let config = require('../config')
 let monitor = require('../monitor')
@@ -25,8 +26,12 @@ function getArticle (alias) {
 
             let article = result && result[0]
             if (article) {
+                let content = article.post_content
+                let clear = common.removeHTMLTag(content)
+
                 article.post_id = article.ID
-                article.post_summary = common.getPostDesc(common.removeHTMLTag(article.post_content), SUMMARY_LIMIT)
+                article.post_content = autop(content, true)
+                article.post_summary = common.getPostDesc(clear, SUMMARY_LIMIT)
 
                 monitor.end('get article by alias')
                 resolve(article)
@@ -37,32 +42,9 @@ function getArticle (alias) {
     })
 }
 
-function getAutopArticle (article) {
-    if (!article) {
-        return null
-    }
-
-    try {
-        monitor.start('get autop article')
-        return axios.post(config.POST_AUTOP_API, {
-            post: article && article.post_content
-        }).then(function (response) {
-            if (response.data.result) {
-                article.post_content = response.data.result
-            } else {
-                article.post_content = 'No data return'
-            }
-            monitor.end('get autop article')
-            return article
-        }).catch(function () {})
-    } catch (e) {
-        return article
-    }
-}
-
 module.exports = function (query) {
     return new Promise(function (resolve, reject) {
-        getArticle(query.alias).then(getAutopArticle).then(function (result) {
+        getArticle(query.alias).then(function (result) {
             resolve(result)
         }).catch(function (err) {
             reject(err)

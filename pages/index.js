@@ -13,8 +13,8 @@ import DocumentHead from '../components/DocumentHead'
 const COPY = {
     TITLE: '前端那些事',
     KEYWORDS: '前端开发, JavaScript, CSS, HTML, 前端博客, 唐比昌',
-    DESCRIPTION: '记录、分享和总结经验是一个程序员成长的好习惯，这是我的个人博客，'+
-                '主要记录一些与前端和移动端开发相关的点点滴滴以及一些生活感悟等，无聊、有空、心情好的时候随便写写~',
+    DESCRIPTION: '记录、分享和总结是一个程序员成长的好习惯，这是我的个人博客，'+
+                '主要记录一些与前端开发相关的心得以及一些生活感悟等，无聊、有空、心情好的时候随便写写~',
     CONTINUE: '继续阅读»',
     PUBLISH: '发表于 ',
 }

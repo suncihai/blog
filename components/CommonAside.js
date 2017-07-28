@@ -8,13 +8,10 @@ import CommonLoading from './CommonLoading'
 
 const COPY = {
     ABOUT: {
-        TITLE: '关于我',
-        MAIN: '网名 TANG，14 年毕业于桂林电子科技大学，无聊的时候喜欢写点东西，但是水平不咋地。' +
-            '目前就职于 WPS，热爱前端开发、羽毛球和 NBA 金州勇士队。',
+        TITLE: '关于',
+        MAIN: '记录、分享和总结是一个程序员成长的好习惯，这是我的个人博客，' +
+            '主要记录一些与前端开发相关的心得以及一些生活感悟等，无聊、有空、心情好的时候随便写写~',
         STATEMENT: '除特别说明外，本站所有文章均为本人原创，内容仅代表个人观点，如需转载请注明出处，谢谢合作 :-)'
-    },
-    CONTACT: {
-        TITLE: '联系方式'
     },
     FLINK: {
         TITLE: '友情链接：',
@@ -36,29 +33,6 @@ const TAB_TYPE = {
         TEXT: '评论'
     }
 }
-
-const CONTACTS = [
-    {
-        NAME: 'Github',
-        ICON: '/static/images/contact-github.svg',
-        LINK: 'https://github.com/tangbc'
-    },
-    {
-        NAME: 'Zhihu',
-        ICON: '/static/images/contact-zhihu.svg',
-        LINK: 'https://www.zhihu.com/people/tangbc'
-    },
-    {
-        NAME: 'Segmentfault',
-        ICON: '/static/images/contact-sf.svg',
-        LINK: 'https://segmentfault.com/u/tbc0921'
-    },
-    {
-        NAME: 'Gmail',
-        ICON: '/static/images/contact-gmail.svg',
-        LINK: 'mailto:tangbc921@gmail.com'
-    }
-]
 
 const FRIEND_LINKS = []
 
@@ -243,24 +217,6 @@ export default class CommonAside extends React.Component {
                             <p className="site-statement">{ COPY.ABOUT.STATEMENT }</p>
                         </div>
                     </div>
-                    <div className="contact center">
-                        <div className="item-head">
-                            <h3 className="item-head-title">{ COPY.CONTACT.TITLE }</h3>
-                        </div>
-                        <div className="item-content">
-                            <ul className="contact-list">
-                            { CONTACTS.map(contact => {
-                                return (
-                                    <li className="contact-list-item" key={ contact.NAME }>
-                                        <a rel="nofollow noopener" href={ contact.LINK }>
-                                            <img src={ contact.ICON } alt={ contact.NAME } />
-                                        </a>
-                                    </li>
-                                )
-                            }) }
-                            </ul>
-                        </div>
-                    </div>
                     <div className="recent center">
                         <div className="item-content recent-content">
                             <div className="tab-head">
@@ -310,7 +266,7 @@ export default class CommonAside extends React.Component {
                     }
                     .site-statement {
                         font-style: italic;
-                        font-weight: 500;
+                        font-weight: bold;
                     }
                     .contact-list {
                         margin: 0;

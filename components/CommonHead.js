@@ -58,7 +58,7 @@ export default class extends React.Component {
                     }
 
                     .logo {
-                        font-size: 2.4rem;
+                        font-size: 2rem;
                     }
                     .site-name, .link {
                         color: #fffaf0;
