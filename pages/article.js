@@ -62,11 +62,10 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
-        setTimeout(() => {
-            this.highlightCode()
-            let node = ReactDOM.findDOMNode(this)
-            imgNodesToRealSrc(node.querySelectorAll('img'))
-        }, 100)
+        this.highlightCode()
+
+        let node = ReactDOM.findDOMNode(this)
+        imgNodesToRealSrc(node.querySelectorAll('img'))
 
         window.addEventListener('scroll', this.onScroll.bind(this))
     }

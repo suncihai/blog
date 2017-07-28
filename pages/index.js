@@ -53,10 +53,8 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
-        setTimeout(() => {
-            let node = ReactDOM.findDOMNode(this)
-            imgNodesToRealSrc(node.querySelectorAll('img'))
-        }, 100)
+        let node = ReactDOM.findDOMNode(this)
+        imgNodesToRealSrc(node.querySelectorAll('img'))
     }
 
     render () {
