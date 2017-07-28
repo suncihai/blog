@@ -25,6 +25,16 @@ const PageBrief = (props) => (
 
 const CID = config.CATEGORY.ARTICLE
 
+export const imgNodesToRealSrc = imgNodes => {
+    for (let i = 0; i < imgNodes.length; i++) {
+        let img = imgNodes[i]
+        if (img.dataset.src) {
+            img.setAttribute('src', img.dataset.src)
+            img.removeAttribute('data-src')
+        }
+    }
+}
+
 export default class extends React.Component {
 
     static async getInitialProps ({ req }) {
@@ -43,15 +53,10 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
-        let node = ReactDOM.findDOMNode(this)
-        let imgNodes = node.querySelectorAll('img')
-        for (let i = 0; i < imgNodes.length; i++) {
-            let img = imgNodes[i]
-            if (img.dataset.src) {
-                img.setAttribute('src', img.dataset.src)
-                img.removeAttribute('data-src')
-            }
-        }
+        setTimeout(() => {
+            let node = ReactDOM.findDOMNode(this)
+            imgNodesToRealSrc(node.querySelectorAll('img'))
+        }, 100)
     }
 
     render () {

@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
+import { imgNodesToRealSrc } from './index'
 
 import config from '../config'
 import monitor from '../monitor'
@@ -26,6 +27,10 @@ const COPY = {
     EARLY_COMMENT: '最早评论',
     LATEST_COMMENT: '最新评论',
     COMMENT_TYPE: '评论',
+}
+
+const killPostImageSrc = post => {
+    return post.replace(/<img([\s\S]*?)src\s*=\s*(['"])([\s\S]*?)\2([^>]*)>/gi,'<img$1data-src=$2$3$2$4>')
 }
 
 export default class extends React.Component {
@@ -57,7 +62,12 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
-        this.highlightCode()
+        setTimeout(() => {
+            this.highlightCode()
+            let node = ReactDOM.findDOMNode(this)
+            imgNodesToRealSrc(node.querySelectorAll('img'))
+        }, 100)
+
         window.addEventListener('scroll', this.onScroll.bind(this))
     }
 
@@ -110,7 +120,7 @@ export default class extends React.Component {
                             </div>
                             <div
                                 className="article-content"
-                                dangerouslySetInnerHTML={{ __html: article.post_content }}
+                                dangerouslySetInnerHTML={{ __html: killPostImageSrc(article.post_content) }}
                             >
                             </div>
                             <div className="article-end-line"></div>
