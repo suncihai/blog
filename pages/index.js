@@ -152,7 +152,7 @@ export default class extends React.Component {
                             line-height: 170%
                         }
                         .article-title {
-                            font-size: 1.6rem;
+                            font-size: 1.8rem;
                         }
                         .article-digest {
                             padding: .5em;

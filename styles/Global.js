@@ -215,6 +215,13 @@ export default () => (
                 height: 45px;
                 line-height: 45px;
             }
+            .hljs.javascript:after,
+            .hljs.html:after,
+            .hljs.css:after,
+            .hljs.php:after,
+            .hljs.json:after {
+                display: none;
+            }
         }
     `}</style>
 )

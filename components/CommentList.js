@@ -15,7 +15,7 @@ const getCopy = (typeName) => {
 
 const regURL = /^(http|https):\/\//
 const getCommentHref = url => {
-    return url ? (regURL.test(url) ? url : '//' + url) : 'javascript:void(0)'
+    return url ? (regURL.test(url) ? url : '//' + url) : 'javascript:;'
 }
 
 export default class CommentList extends React.Component {
@@ -134,7 +134,7 @@ export default class CommentList extends React.Component {
                         font-weight: 500;
                         cursor: pointer;
                     }
-                    .comment-author[href='javascript:void(0)'] {
+                    .comment-author[href='javascript:;'] {
                         cursor: text;
                     }
                     .comment-local {

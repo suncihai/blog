@@ -4,9 +4,9 @@ import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
 import { imgNodesToRealSrc } from './index'
 
+import notFound from '../404'
 import config from '../config'
 import monitor from '../monitor'
-import error_404 from '../error_404'
 import { getApi, errorCatch, prettyDate, isMobile } from '../common'
 
 import DocumentHead from '../components/DocumentHead'
@@ -42,7 +42,7 @@ export default class extends React.Component {
 
         if (!resArticle.data) {
             res.statusCode = 404
-            res.end(error_404)
+            res.end(notFound)
             return
         }
 

@@ -76,6 +76,7 @@ export default class extends React.Component {
                         padding: 0 30px;
                         text-align: center;
                         display: inline-block;
+                        font-weight: bold;
                     }
 
                     @media (max-width: 1024px) {
@@ -92,6 +93,9 @@ export default class extends React.Component {
                         .nav-item {
                             width: 33%;
                             padding: 0;
+                        }
+                        .active {
+                            border-bottom: 1px solid;
                         }
                     }
                 `}</style>
