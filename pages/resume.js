@@ -319,12 +319,10 @@ export default class extends React.Component {
                         table {
                             overflow: auto;
                             display: block;
-                            font-size: 1.4rem;
                         }
                         .resume {
                             border: none;
                             padding: 0 1em;
-                            font-size: 1.6rem;
                         }
                         .resume-padding {
                             height: 60px;
