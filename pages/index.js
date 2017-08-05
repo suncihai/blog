@@ -25,14 +25,21 @@ const PageBrief = (props) => (
 
 const CID = config.CATEGORY.ARTICLE
 
-export const imgNodesToRealSrc = imgNodes => {
-    for (let i = 0; i < imgNodes.length; i++) {
-        let img = imgNodes[i]
-        if (img.dataset.src) {
-            img.setAttribute('src', img.dataset.src)
-            img.removeAttribute('data-src')
-        }
+export const imgNodeToRealSrc = imgNode => {
+    if (imgNode.dataset.src) {
+        imgNode.setAttribute('src', imgNode.dataset.src)
+        imgNode.removeAttribute('data-src')
     }
+}
+
+export const eventClickThumb = e => {
+    let { target } = e
+    let src = target.dataset.src
+    let image = new Image()
+    image.src = src
+    image.setAttribute('class', 'thumbnail')
+    target.parentNode.replaceChild(image, target)
+    sessionStorage.setItem(src, 'stored')
 }
 
 export default class extends React.Component {
@@ -56,8 +63,28 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
+        let { isMobile } = this.props
         let node = ReactDOM.findDOMNode(this)
-        imgNodesToRealSrc(node.querySelectorAll('[data-src]'))
+        let images = node.querySelectorAll('[data-src]')
+
+        for (let i = 0; i < images.length; i++) {
+            let image = images[i]
+            if (isMobile) {
+                let src = image.dataset.src
+                if (sessionStorage.getItem(src)) {
+                    imgNodeToRealSrc(image)
+                } else {
+                    let div = document.createElement('div')
+                    div.setAttribute('data-src', src)
+                    div.setAttribute('class', 'image-with-mobile')
+                    div.textContent = '轻触加载缩略图'
+                    div.addEventListener('click', eventClickThumb)
+                    image.parentNode.replaceChild(div, image)
+                }
+            } else {
+                imgNodeToRealSrc(image)
+            }
+        }
     }
 
     render () {
@@ -146,11 +173,6 @@ export default class extends React.Component {
                         text-align: right;
                         color: #a5a5a5;
                     }
-                    .thumbnail {
-                        max-width: 100%;
-                        margin-top: 15px;
-                        border-radius: 2px;
-                    }
 
                     @media (max-width: 1024px) {
                         .article-head {
@@ -167,6 +189,14 @@ export default class extends React.Component {
                         .article-thumbnail {
                             width: 100%;
                         }
+                    }
+                `}</style>
+
+                <style jsx global>{`
+                    .thumbnail {
+                        max-width: 100%;
+                        margin-top: 15px;
+                        border-radius: 2px;
                     }
                 `}</style>
             </div>

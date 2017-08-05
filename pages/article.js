@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
-import { imgNodesToRealSrc } from './index'
+import { imgNodeToRealSrc, eventClickThumb } from './index'
 
 import notFound from '../404'
 import config from '../config'
@@ -27,8 +27,8 @@ const COPY = {
     COMMENT_TYPE: '评论',
 }
 
-const killPostImageSrc = post => {
-    return post.replace(/<img([\s\S]*?)src\s*=\s*(['"])([\s\S]*?)\2([^>]*)>/gi,'<img$1data-src=$2$3$2$4>')
+const killPostImageSrc = (post, mobile) => {
+    return post.replace(/<img([\s\S]*?)src\s*=\s*(['"])([\s\S]*?)\2([^>]*)>/gi, '<img$1data-src=$2$3$2$4>')
 }
 
 export default class extends React.Component {
@@ -64,8 +64,27 @@ export default class extends React.Component {
     componentDidMount () {
         this.highlightCode()
 
+        let { isMobile } = this.props
         let node = ReactDOM.findDOMNode(this)
-        imgNodesToRealSrc(node.querySelectorAll('[data-src]'))
+        let images = node.querySelectorAll('[data-src]')
+        for (let i = 0; i < images.length; i++) {
+            let image = images[i]
+            if (isMobile) {
+                let src = image.dataset.src
+                if (sessionStorage.getItem(src)) {
+                    imgNodeToRealSrc(image)
+                } else {
+                    let div = document.createElement('div')
+                    div.setAttribute('data-src', src)
+                    div.setAttribute('class', 'image-with-mobile')
+                    div.textContent = '轻触加载图片'
+                    div.addEventListener('click', eventClickThumb)
+                    image.parentNode.replaceChild(div, image)
+                }
+            } else {
+                imgNodeToRealSrc(image)
+            }
+        }
 
         window.addEventListener('scroll', this.onScroll.bind(this))
     }
@@ -119,7 +138,7 @@ export default class extends React.Component {
                             </div>
                             <div
                                 className="article-content"
-                                dangerouslySetInnerHTML={{ __html: killPostImageSrc(article.post_content) }}
+                                dangerouslySetInnerHTML={{ __html: killPostImageSrc(article.post_content, isMobile) }}
                             >
                             </div>
                             <div className="article-end-line"></div>
@@ -225,6 +244,108 @@ export default class extends React.Component {
                         }
                         .article-end-line {
                             margin: 20px 0;
+                        }
+                    }
+                `}</style>
+
+                <style jsx global>{`
+                    pre {
+                        font-size: 1.4rem;
+                        border-radius: 2px;
+                        position: relative;
+                        font-family: 'Roboto Mono', Monaco, courier, monospace;
+                    }
+                    .hljs.javascript:after {
+                        position: absolute;
+                        content: 'JS';
+                        top: 0;
+                        right: .5em;
+                        font-weight: bold;
+                        font-family: monospace, sans-serif;
+                    }
+                    .hljs.html:after {
+                        position: absolute;
+                        content: 'HTML';
+                        top: 0;
+                        right: .5em;
+                        font-weight: bold;
+                        font-family: monospace, sans-serif;
+                    }
+                    .hljs.css:after {
+                        position: absolute;
+                        content: 'CSS';
+                        top: 0;
+                        right: .5em;
+                        font-weight: bold;
+                        font-family: monospace, sans-serif;
+                    }
+                    .hljs.php:after {
+                        position: absolute;
+                        content: 'PHP';
+                        top: 0;
+                        right: .5em;
+                        font-weight: bold;
+                        font-family: monospace, sans-serif;
+                    }
+                    .hljs.json:after {
+                        position: absolute;
+                        content: 'JSON';
+                        top: 0;
+                        right: .5em;
+                        font-weight: bold;
+                        font-family: monospace, sans-serif;
+                    }
+                    .article-content h2 {
+                        padding-top: 1em;
+                        padding-bottom: .5em;
+                        font-weight: 400;
+                        font-size: 2.4rem;
+                        border-bottom: 1px dashed #999;
+                    }
+                    .article-content h3 {
+                        padding-top: .8em;
+                        padding-bottom: .4em;
+                        font-weight: 400;
+                        font-size: 2rem;
+                        border-bottom: 1px dashed #c3c3c3;
+                    }
+                    .article-content img {
+                        border-radius: 2px;
+                        max-width: 100%;
+                        height: auto;
+                        transition: 500ms ease-out;
+                    }
+                    .article-content img:hover {
+                        transform: scale(1.02);
+                    }
+                    .article-content blockquote {
+                        background: #f8f8f8;
+                        margin: 0;
+                        padding: 0.2rem 2rem;
+                        border-left: 5px solid #b4cfff;
+                    }
+                    .article-content ol li, .article-content ul li {
+                        margin: 0.5rem 0;
+                    }
+                    .article-content code {
+                        padding: 0 0.2rem;
+                        border-radius: 3px;
+                        display: inline-block;
+                        background: #eee;
+                        vertical-align: middle;
+                        font-size: 85%;
+                        font-family: 'Roboto Mono', Monaco, courier, monospace;
+                    }
+                `}</style>
+
+                <style jsx global>{`
+                    @media (max-width: 1024px) {
+                        .hljs.javascript:after,
+                        .hljs.html:after,
+                        .hljs.css:after,
+                        .hljs.php:after,
+                        .hljs.json:after {
+                            display: none;
                         }
                     }
                 `}</style>

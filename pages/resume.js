@@ -208,7 +208,7 @@ export default class extends React.Component {
                                 <a data-tip="下载 PDF 简历" className="op-item" href="javascript:;">
                                     <img className="op-img" src="/static/images/pdf.svg" alt="DownloadPDF"/>
                                 </a>
-                                <a data-tip="打印简历" className="op-item" href="javascript:;" onClick={ this.eventPrint.bind(this) }>
+                                <a data-tip="打印简历" onClick={ this.eventPrint.bind(this) } className="op-item" href="javascript:;">
                                     <img className="op-img" src="/static/images/print.svg" alt="PrintResume"/>
                                 </a>
                             </div>
@@ -316,6 +316,9 @@ export default class extends React.Component {
                         animation-duration: 1s;
                     }
                     @media (max-width: 1024px) {
+                        .form h2:first-child {
+                            padding-top: 0;
+                        }
                         table {
                             overflow: auto;
                             display: block;
@@ -325,7 +328,7 @@ export default class extends React.Component {
                             padding: 0 1em;
                         }
                         .resume-padding {
-                            height: 60px;
+                            height: 50px;
                         }
                     }
                 `}</style>

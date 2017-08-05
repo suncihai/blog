@@ -86,93 +86,6 @@ export default () => (
             background-position: center center;
             transform: scale(.5);
         }
-        pre {
-            font-size: 1.4rem;
-            border-radius: 2px;
-            position: relative;
-            font-family: 'Roboto Mono', Monaco, courier, monospace;
-        }
-        .hljs.javascript:after {
-            position: absolute;
-            content: 'JS';
-            top: 0;
-            right: .5em;
-            font-weight: bold;
-            font-family: monospace, sans-serif;
-        }
-        .hljs.html:after {
-            position: absolute;
-            content: 'HTML';
-            top: 0;
-            right: .5em;
-            font-weight: bold;
-            font-family: monospace, sans-serif;
-        }
-        .hljs.css:after {
-            position: absolute;
-            content: 'CSS';
-            top: 0;
-            right: .5em;
-            font-weight: bold;
-            font-family: monospace, sans-serif;
-        }
-        .hljs.php:after {
-            position: absolute;
-            content: 'PHP';
-            top: 0;
-            right: .5em;
-            font-weight: bold;
-            font-family: monospace, sans-serif;
-        }
-        .hljs.json:after {
-            position: absolute;
-            content: 'JSON';
-            top: 0;
-            right: .5em;
-            font-weight: bold;
-            font-family: monospace, sans-serif;
-        }
-        .article-content h2 {
-            padding-top: 1em;
-            padding-bottom: .5em;
-            font-weight: 400;
-            font-size: 2.4rem;
-            border-bottom: 1px dashed #c3c3c3;
-        }
-        .article-content h3 {
-            padding-top: .8em;
-            padding-bottom: .4em;
-            font-weight: 400;
-            font-size: 2rem;
-            border-bottom: 1px dashed #e3e3e3;
-        }
-        .article-content img {
-            border-radius: 2px;
-            max-width: 100%;
-            height: auto;
-            transition: 500ms ease-out;
-        }
-        .article-content img:hover {
-            transform: scale(1.02);
-        }
-        .article-content blockquote {
-            background: #f8f8f8;
-            margin: 0;
-            padding: 0.2rem 2rem;
-            border-left: 5px solid #b4cfff;
-        }
-        .article-content ol li, .article-content ul li {
-            margin: 0.5rem 0;
-        }
-        .article-content code {
-            padding: 0 0.2rem;
-            border-radius: 3px;
-            display: inline-block;
-            background: #eee;
-            vertical-align: middle;
-            font-size: 85%;
-            font-family: 'Roboto Mono', Monaco, courier, monospace;
-        }
         .constantia {
             font-style: italic;
             font-family: Constantia, Georgia;
@@ -197,6 +110,9 @@ export default () => (
             input, textarea {
                 appearance: none;
             }
+            ul, ol {
+                padding-left: 2em;
+            }
             .global-head {
                 height: 35px;
                 line-height: 35px;
@@ -216,12 +132,30 @@ export default () => (
                 height: 45px;
                 line-height: 45px;
             }
-            .hljs.javascript:after,
-            .hljs.html:after,
-            .hljs.css:after,
-            .hljs.php:after,
-            .hljs.json:after {
-                display: none;
+            .image-with-mobile {
+                background: #f5f5f5 url(/static/images/default_image.svg);
+                background-repeat: no-repeat;
+                background-position: center .5em;
+                text-align: center;
+                margin-top: .5em;
+                padding-top: 40px;
+                padding-bottom: .5em;
+                font-size: 1.2rem;
+                font-weight: 200;
+                opacity: 0.5;
+                user-select: none;
+            }
+            .image-with-mobile::after {
+                content: '';
+                width: 200%;
+                height: 200%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                border: 1px solid #aaa;
+                border-radius: 3px;
+                transform: scale(0.5,0.5);
+                transform-origin: top left;
             }
         }
     `}</style>
