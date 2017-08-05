@@ -126,8 +126,9 @@ export default class extends React.Component {
                     .article-digest {
                         padding: 15px;
                         margin-bottom: 15px;
-                        background: #fbfbfb;
+                        background: #f5f5f5;
                         text-align: justify;
+                        word-break: break-all;
                     }
                     .article-more {
                         font-size: 1.4rem;
