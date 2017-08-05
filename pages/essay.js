@@ -1,6 +1,7 @@
 import Index from './index'
 import axios from 'axios'
 import config from '../config'
+import monitor from '../monitor'
 import { getApi, errorCatch, isMobile } from '../common'
 
 const COPY = {
@@ -13,7 +14,12 @@ const CID = config.CATEGORY.ESSAY
 export default class EssayList extends Index {
 
     static async getInitialProps ({ req }) {
+        monitor.start('fetch data in essay')
+
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
+
+        monitor.enddd('fetch data in essay')
+
         return {
             brief: COPY.TEXT,
             title: COPY.TITLE,
@@ -21,7 +27,7 @@ export default class EssayList extends Index {
 
             hasTitle: true,
             articles: resArticle.data || [],
-            isMobile: isMobile(req.headers)
+            isMobile: isMobile(req)
         }
     }
 

@@ -7,7 +7,7 @@ import { imgNodesToRealSrc } from './index'
 import notFound from '../404'
 import config from '../config'
 import monitor from '../monitor'
-import { getApi, errorCatch, prettyDate, isMobile } from '../common'
+import { getApi, errorCatch, prettyDate, isMobile, getClientHeight } from '../common'
 
 import DocumentHead from '../components/DocumentHead'
 import CommonHead from '../components/CommonHead'
@@ -16,8 +16,6 @@ import CommonAside from '../components/CommonAside'
 import CommentList from '../components/CommentList'
 import CommentForm from '../components/CommentForm'
 
-const getClientHeight = () => document.compatMode === 'CSS1Compat' ?
-                            document.documentElement.clientHeight : document.body.clientHeight
 const SORT_TYPE = {
     ASC: 1,
     DESC: -1
@@ -36,9 +34,11 @@ const killPostImageSrc = post => {
 export default class extends React.Component {
 
     static async getInitialProps ({ query, res, req }) {
-        monitor.start('get article in page article')
+        monitor.start('fetch data in apost')
+
         let resArticle = await axios.get(getApi('article?alias='+ query.alias)).catch(errorCatch)
-        monitor.end('get article in page article')
+
+        monitor.enddd('fetch data in apost')
 
         if (!resArticle.data) {
             res.statusCode = 404
@@ -49,7 +49,7 @@ export default class extends React.Component {
         return {
             hasTitle: true,
             article: resArticle.data,
-            isMobile: isMobile(req.headers)
+            isMobile: isMobile(req)
         }
     }
 
@@ -65,7 +65,7 @@ export default class extends React.Component {
         this.highlightCode()
 
         let node = ReactDOM.findDOMNode(this)
-        imgNodesToRealSrc(node.querySelectorAll('img'))
+        imgNodesToRealSrc(node.querySelectorAll('[data-src]'))
 
         window.addEventListener('scroll', this.onScroll.bind(this))
     }
@@ -172,6 +172,7 @@ export default class extends React.Component {
                         margin-top: 30px;
                         padding-top: 20px;
                         border-top: 1px dashed #999;
+                        font-family: Helvetica, Arial;
                     }
                     .article-end-line {
                         margin: 30px 0;

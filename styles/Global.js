@@ -14,12 +14,12 @@ export default () => (
         }
 
         a {
-            color: #1e90ff;
+            color: #1b66b6;
             text-decoration: none;
             transition: color 500ms ease-out;
         }
         a:hover{
-            color: #a52a2a;
+            color: #fabf31;
         }
         div {
             position: relative;
@@ -42,7 +42,7 @@ export default () => (
         .global-head {
             height: 50px;
             line-height: 50px;
-            background: #6495ed;
+            background: #1b66b6;
             position: fixed;
             width: 100%;
             top: 0;
@@ -56,13 +56,13 @@ export default () => (
         }
         .global-body {
             width: 85%;
-            max-width: 1200px;
+            max-width: 1000px;
             overflow: hidden;
         }
         .global-left {
             float: left;
             width: 70%;
-            max-width: 900px;
+            max-width: 700px;
             background: #fff;
             padding-top: 90px;
             padding-right: 30px;
@@ -168,7 +168,9 @@ export default () => (
             padding: 0 0.2rem;
             border-radius: 3px;
             display: inline-block;
-            background: #ffebcd;
+            background: #eee;
+            vertical-align: middle;
+            font-size: 85%;
             font-family: 'Roboto Mono', Monaco, courier, monospace;
         }
         .constantia {
@@ -178,7 +180,6 @@ export default () => (
         .pageins {
             padding: 15px;
             margin-bottom: 30px;
-            border-radius: 2px;
             background: #f0f8ff;
             border-left: 5px solid #b4cfff;
         }

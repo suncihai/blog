@@ -38,9 +38,12 @@ export const imgNodesToRealSrc = imgNodes => {
 export default class extends React.Component {
 
     static async getInitialProps ({ req }) {
-        monitor.start('get articles in page index')
+        monitor.start('fetch data in index')
+
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
-        monitor.end('get articles in page index')
+
+        monitor.enddd('fetch data in index')
+
         return {
             brief: '',
             navActive: '',
@@ -48,13 +51,13 @@ export default class extends React.Component {
 
             hasTitle: false,
             articles: resArticle.data || [],
-            isMobile: isMobile(req.headers)
+            isMobile: isMobile(req)
         }
     }
 
     componentDidMount () {
         let node = ReactDOM.findDOMNode(this)
-        imgNodesToRealSrc(node.querySelectorAll('img'))
+        imgNodesToRealSrc(node.querySelectorAll('[data-src]'))
     }
 
     render () {
@@ -90,7 +93,9 @@ export default class extends React.Component {
                                     <span className="article-publish constantia">{ prettyDate(item.post_date) }</span>
                                     { item.no_digest ? '' : <a href={ createPostLink(item.post_name) }> { COPY.CONTINUE }</a> }
                                 </div>
-                                { item.post_thumbnail ? <img className="article-thumbnail" data-src={ item.post_thumbnail }/> : '' }
+                                <div className="article-thumbnail">
+                                { item.post_thumbnail ? <img className="thumbnail" data-src={ item.post_thumbnail }/> : '' }
+                                </div>
                             </div>
                         )) }
                         </div>
@@ -139,7 +144,7 @@ export default class extends React.Component {
                         text-align: right;
                         color: #a5a5a5;
                     }
-                    .article-thumbnail {
+                    .thumbnail {
                         max-width: 100%;
                         margin-top: 15px;
                         border-radius: 2px;

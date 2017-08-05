@@ -25,7 +25,7 @@ export default class extends React.Component {
     static getInitialProps ({ req }) {
         return {
             hasTitle: true,
-            isMobile: isMobile(req.headers)
+            isMobile: isMobile(req)
         }
     }
 

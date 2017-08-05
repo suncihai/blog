@@ -10,9 +10,9 @@ const app = next({
 })
 const defaultRender = app.getRequestHandler()
 
-
-// For matching `/article/article-alias`
+// For matching `/article/article-alias`.
 const handleArticleRoute = (req, res, pathname, parsedUrl) => {
+    // @todo: handle in Nginx.
     if (pathname[pathname.length - 1] !== '/') {
         pathname = pathname + '/'
     }
@@ -49,19 +49,20 @@ app.prepare().then(() => {
         let parsedUrl = url.parse(req.url, true)
         let { pathname, query } = parsedUrl
 
-        if (/^(\/article\/)/.test(pathname)) {
+        // For a bit fast in index.
+        if (pathname === '/') {
+            defaultRender(req, res, parsedUrl)
+        } else if (/^(\/article\/)/.test(pathname)) {
             handleArticleRoute(req, res, pathname, parsedUrl)
         } else if (/^(\/api\/\w)/.test(pathname)) {
             handleApiRoute(req, res, pathname, query)
         } else {
             defaultRender(req, res, parsedUrl)
         }
-
     }).listen(PORT, (err) => {
         if (err) {
             throw err
         }
         console.log('> Ready on http://localhost:' + PORT)
     })
-
 })

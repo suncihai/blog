@@ -2,21 +2,21 @@ import React from 'react'
 
 const NAVS = [
     {
-        href: '',
+        href: '/',
         text: '博客首页'
     },
     {
-        href: 'essay',
+        href: '/essay',
         text: '我的随笔'
     },
     {
-        href: 'message',
+        href: '/message',
         text: '给我留言'
     },
-    // {
-    //     href: 'resume',
-    //     text: '个人简历'
-    // },
+    {
+        href: '/resume',
+        text: '我的简历'
+    },
 ]
 
 export default class extends React.Component {
@@ -29,15 +29,15 @@ export default class extends React.Component {
         return (
             <div className="global-head">
                 <div className="common-head center">
-                    <div className="logo head-item constantia">
+                    <div className="logo head-item">
                         <a className="site-name" href="/">{ '<TANGBC/>' }</a>
                     </div>
                     <ul className="ul-clear-list head-item nav">
                     { NAVS.map((nav) => (
                         <li className="nav-item" key={ nav.href }>
                             <a
-                                className={ 'link' + (this.props.active === nav.href ? ' active' : '') }
-                                href={ '/' + nav.href }
+                                className={ 'link' + ('/' + this.props.active === nav.href ? ' active' : '') }
+                                href={ nav.href }
                             >
                                 { nav.text }
                             </a>
@@ -50,7 +50,7 @@ export default class extends React.Component {
                     .common-head {
                         width: 85%;
                         height: 100%;
-                        max-width: 1200px;
+                        max-width: 1000px;
                         position: relative;
                     }
                     .head-item {
@@ -60,12 +60,11 @@ export default class extends React.Component {
 
                     .logo {
                         font-size: 2rem;
+                        font-family: Constantia, Georgia;
                     }
-                    .site-name, .link {
-                        color: #fffaf0;
-                    }
-                    .active {
-                        border-bottom: 2px solid;
+                    .site-name {
+                        color: #fabf31;
+                        text-shadow: 0px 0px 1px #f7c346;
                     }
 
                     .nav {
@@ -77,6 +76,12 @@ export default class extends React.Component {
                         text-align: center;
                         display: inline-block;
                         font-weight: bold;
+                    }
+                    .link {
+                        color: #fffaf0;
+                    }
+                    .active {
+                        color: #fabf31;
                     }
 
                     @media (max-width: 1024px) {
@@ -91,11 +96,8 @@ export default class extends React.Component {
                             padding: 0;
                         }
                         .nav-item {
-                            width: 33%;
+                            width: 25%;
                             padding: 0;
-                        }
-                        .active {
-                            border-bottom: 1px solid;
                         }
                     }
                 `}</style>

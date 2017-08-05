@@ -76,4 +76,23 @@ export const prettyDate = dateString => {
     return year + ' 年 ' + (month + 1) + ' 月 ' + day + ' 日'
 }
 
-export const isMobile = headers => /iPhone|iPad|iPod|Android/i.test(headers && headers['user-agent'] || '')
+export const isMobile = req => {
+    return /iPhone|iPad|iPod|Android/i.test((req ? req.headers['user-agent'] : navigator.userAgent) || '')
+}
+
+export const getClientHeight = () => {
+    return document.compatMode === 'CSS1Compat' ?
+        document.documentElement.clientHeight : document.body.clientHeight
+}
+
+export const getDocumentHeight = () => {
+    var body = document.body
+    let html = document.documentElement
+
+    return Math.max(
+        body.scrollHeight,
+        body.offsetHeight,
+        html.scrollHeight,
+        html.offsetHeight
+    )
+}
