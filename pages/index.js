@@ -127,6 +127,7 @@ export default class extends React.Component {
                         padding: 15px;
                         margin-bottom: 15px;
                         background: #fbfbfb;
+                        text-align: justify;
                     }
                     .article-more {
                         font-size: 1.4rem;

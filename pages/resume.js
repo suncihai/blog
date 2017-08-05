@@ -231,6 +231,7 @@ export default class extends React.Component {
                         height: 90px;
                     }
                     .resume-body {
+                        text-align: justify;
                     }
                     .form h2 {
                         padding-top: 0.5em;
@@ -257,6 +258,10 @@ export default class extends React.Component {
                     }
                     .info-value {
                         width: 35%;
+                    }
+                    ul {
+                        padding-left: .5em;
+                        list-style-position: inside;
                     }
                     li {
                         padding: .5em 0;
@@ -314,10 +319,12 @@ export default class extends React.Component {
                         table {
                             overflow: auto;
                             display: block;
+                            font-size: 1.4rem;
                         }
                         .resume {
                             border: none;
                             padding: 0 1em;
+                            font-size: 1.6rem;
                         }
                         .resume-padding {
                             height: 60px;
@@ -329,6 +336,7 @@ export default class extends React.Component {
                     @media print {
                         .pageins,
                         .global-head,
+                        .global-foot,
                         .resume-padding,
                         .resume-aside {
                             display: none;

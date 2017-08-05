@@ -171,6 +171,7 @@ export default class extends React.Component {
                     .article-content {
                         margin-top: 30px;
                         padding-top: 20px;
+                        text-align: justify;
                         border-top: 1px dashed #999;
                         font-family: Helvetica, Arial;
                     }
@@ -219,6 +220,8 @@ export default class extends React.Component {
                         .article-content {
                             margin-top: 20px;
                             padding-top: 10px;
+                            letter-spacing: 1px;
+                            font-size: 1.6rem;
                         }
                         .article-end-line {
                             margin: 20px 0;
