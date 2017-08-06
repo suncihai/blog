@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import ReactTooltip from 'react-tooltip'
 import { isMobile, getDocumentHeight } from '../common'
 
@@ -30,13 +31,19 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
-        if (!this.props.isMobile) {
-            window.addEventListener('scroll', this.onScroll.bind(this))
-        }
+        document.addEventListener('scroll', this.onScroll.bind(this))
     }
 
     onScroll () {
-        let reachShow = window.scrollY / getDocumentHeight() > 0.2
+        let scrollTop = window.scrollY
+
+        if (!this.props.isMobile) {
+            this.toggleAside(scrollTop)
+        }
+    }
+
+    toggleAside (scrollTop) {
+        let reachShow = scrollTop / getDocumentHeight() > 0.2
 
         if (reachShow && !this.state.shown) {
             this.setState({
@@ -76,7 +83,7 @@ export default class extends React.Component {
                             <div className="form">
                                 <h2>职位意向</h2>
                                 <h3>Web 前端开发工程师</h3>
-                                <p>接受的工作地点：广州、深圳、杭州、上海</p>
+                                <p>接受的工作地点：广州 = 深圳 > 杭州 > 上海</p>
                             </div>
 
                             <div className="form">
@@ -149,12 +156,12 @@ export default class extends React.Component {
                             <div className="form">
                                 <h2>工作经历</h2>
 
-                                <h3>舜飞科技（2014 年 7 月 ~ 2017 年 2 月）</h3>
+                                <h3>舜飞科技（2014·07 ~ 2017·02）</h3>
                                 <p>舜飞科技（互联网广告行业，广告的程序化购买服务）是一个有创造力的技术公司，舜飞前端是一个非常融洽的技术团队。</p>
                                 <p>在舜飞两年多的工作中，我主要负责一个叫 SSP (媒体资源管理平台，一个管理中大型站长和媒体主广告位资源的平台系统) 项目的所有前端开发和维护工作，该项目主要服务于互联网广告的投放优化、流量变现和实时竞价（RTB 服务）等。是一个 toB 的中大型单页面应用，系统核心业务部分主要是由大量数据指标报表和复杂表单逻辑组成。平时的工作主要是根据产品迭代下的需求开发，包括前端的业务报表、表单数据模块和一些通用组件的开发，以及和后端开发伙伴进行数据的联调和对接等。这个项目的前端大部分开发工作都是我一个人全权负责的，团队内部人员分配采用的是项目制，但有时也会抽出来帮助其他项目组进行攻坚。</p>
                                 <p>公司所有项目使用的前端框架均是团队自主研发，我也参与了其中的一些模块的标准接口和 API 的设计。另外，前端框架中的 MVVM 部分是由我独自开发和维护的（详见作品介绍），指令绑定名称借鉴了 Vue 的设计风格，大大提升了开发的效率和体验，承载了项目绝大部分表单和页面逻辑的交互实现，并且拥有很好的兼容性、稳定性和使用反馈。</p>
 
-                                <h3>WPS 云文档（2017 年 3 月 ~ ）</h3>
+                                <h3>WPS 云文档（2017· 03 ~ now）</h3>
                                 <p>WPS 云文档是 WPS Office 生态系统中的一个重要项目（Web 版文档管理应用），日平均活跃用户达 1000 万左右，主要处理用户文档的云存储、团队协作办公和文件对外分享等功能。我主要负责项目从 React 到 Vue 的重构工作以及后期维护和迭代开发。</p>
                             </div>
 
@@ -316,6 +323,15 @@ export default class extends React.Component {
                         animation-duration: 1s;
                     }
                     @media (max-width: 1024px) {
+                        .resume-padding {
+                            height: 60px;
+                        }
+                        .form h2 {
+                            font-size: 1.8rem;
+                        }
+                        .form h3 {
+                            font-size: 1.6rem;
+                        }
                         .form h2:first-child {
                             padding-top: 0;
                         }
@@ -326,9 +342,6 @@ export default class extends React.Component {
                         .resume {
                             border: none;
                             padding: 0 1em;
-                        }
-                        .resume-padding {
-                            height: 50px;
                         }
                     }
                 `}</style>
@@ -343,6 +356,9 @@ export default class extends React.Component {
                             display: none;
                         }
                     }
+                    // .global-head {
+                    //     position: relative;
+                    // }
                 `}</style>
             </div>
         )

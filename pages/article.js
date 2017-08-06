@@ -347,6 +347,9 @@ export default class extends React.Component {
                         .hljs.json:after {
                             display: none;
                         }
+                        pre {
+                            font-size: 1.2rem;
+                        }
                     }
                 `}</style>
             </div>

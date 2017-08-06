@@ -8,9 +8,8 @@ import CommonLoading from './CommonLoading'
 
 const COPY = {
     ABOUT: {
-        TITLE: '关于',
-        MAIN: '记录、分享和总结是一个程序员成长的好习惯，这是我的个人博客，' +
-            '主要记录一些与前端开发相关的心得以及一些生活感悟等，无聊、有空、心情好的时候随便写写~',
+        TITLE: '声明',
+        MAIN: '',
         STATEMENT: '除特别说明外，本站所有文章均为本人原创，内容仅代表个人观点，如需转载请注明出处，谢谢合作 :-)'
     },
     FLINK: {

@@ -1,13 +1,40 @@
 import React from 'react'
+import axios from 'axios'
+import { getApi } from '../common'
 
 export default class Error extends React.Component {
 
-    static getInitialProps ({ res, jsonPageRes }) {
+    static getInitialProps ({ req, res, jsonPageRes }) {
+        const url = req ? req.url : ''
         const statusCode = res ? res.statusCode : (jsonPageRes ? jsonPageRes.status : null)
-        return { statusCode }
+
+        let articleId
+        if (url && url.charAt(0) === '/' && url.indexOf('.html') > -1) {
+            [articleId] = url.split('.html')
+            articleId = +articleId.substr(1)
+        }
+
+        return { url, articleId, statusCode }
+    }
+
+    componentWillMount () {
+        let { articleId } = this.props
+        if (articleId) {
+            this.getArticleAlias(articleId)
+        }
+    }
+
+    getArticleAlias (articleId) {
+        axios.get(getApi('alias?article_id=' + articleId)).then((res) => {
+            let alias = res.data
+            if (alias && typeof window !== 'undefined') {
+                window.location.href = '/article/' + alias
+            }
+        }).catch(() => {})
     }
 
     render () {
+        let { url, articleId } = this.props
         let is404 = this.props.statusCode === 404
         let message = is404 ? '您访问的这个页面不存在或被移到了别处' : '似乎出了点差错'
 
@@ -16,6 +43,12 @@ export default class Error extends React.Component {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
                 <div className="error">
                     <div className="title">抱歉，{ message } :-(</div>
+                    {
+                        articleId ?
+                        <div className="check-id">
+                        { `正在尝试跳转到 ${url && url.pathname} 对应的新地址 ……`}
+                        </div> : ''
+                    }
                     <div className="op">
                         {
                             is404 ? '' :

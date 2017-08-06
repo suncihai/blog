@@ -6,4 +6,5 @@ module.exports = {
     addcomment: require('./api.addComment'),
     getcomments: require('./api.getComments'),
     latestcomments: require('./api.latestComments'),
+    alias: require('./api.getArticleAlias'),
 }

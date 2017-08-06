@@ -104,9 +104,6 @@ export default () => (
             body {
                 font-size: 1.4rem;
             }
-            pre {
-                font-size: 1.2rem;
-            }
             input, textarea {
                 appearance: none;
             }

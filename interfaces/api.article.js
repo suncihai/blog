@@ -1,5 +1,4 @@
 let db = require('./db')
-let axios = require('axios')
 let autop = require('./autop')
 let common = require('./common')
 let config = require('../config')
