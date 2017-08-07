@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import ReactTooltip from 'react-tooltip'
+// import oneFixed from '../common/one-fixed'
 import { isMobile, getDocumentHeight } from '../common'
 
 import CommonHead from '../components/CommonHead'
@@ -31,6 +32,10 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
+        // oneFixed({
+        //     elements: 'h2',
+        //     fixedClass: 'fixed-title'
+        // })
         document.addEventListener('scroll', this.onScroll.bind(this))
     }
 
@@ -78,7 +83,7 @@ export default class extends React.Component {
                 <div className="global-body center resume">
                     <div className="resume-padding"></div>
                     <div className="resume-body">
-                        <div className="pageins">{ COPY.PAGE_INFO }</div>
+                        {/*<div className="pageins">{ COPY.PAGE_INFO }</div>*/}
                         <div className="content">
                             <div className="form">
                                 <h2>职位意向</h2>
@@ -235,15 +240,18 @@ export default class extends React.Component {
                         font-family: Helvetica, Arial;
                     }
                     .resume-padding {
-                        height: 90px;
+                        height: 40px;
                     }
                     .resume-body {
                         text-align: justify;
                     }
                     .form h2 {
-                        padding-top: 0.5em;
-                        padding-bottom: 0.4em;
+                        padding: 0.5em 0;
                         border-bottom: 1px dashed #999;
+                        position: relative;
+                        background: #fff;
+                        width: 100%;
+                        margin: 0;
                     }
                     .form h3 {
                         padding: 0 1em;
@@ -252,6 +260,7 @@ export default class extends React.Component {
                     }
                     table {
                         width: 100%;
+                        margin: 1em 0;
                         border-collapse: collapse;
                     }
                     td {
@@ -324,7 +333,7 @@ export default class extends React.Component {
                     }
                     @media (max-width: 1024px) {
                         .resume-padding {
-                            height: 60px;
+                            height: 30px;
                         }
                         .form h2 {
                             font-size: 1.8rem;
@@ -356,9 +365,13 @@ export default class extends React.Component {
                             display: none;
                         }
                     }
-                    // .global-head {
-                    //     position: relative;
-                    // }
+                    .global-head {
+                        position: relative;
+                    }
+                    .fixed-title {
+                        position: fixed !important;
+                        top: 0;
+                    }
                 `}</style>
             </div>
         )

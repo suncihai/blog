@@ -166,6 +166,11 @@ export default class CommentList extends React.Component {
                         font-style: italic;
                         color: #a9a9a9;
                     }
+                    @media (max-width: 320px) {
+                        .comment-date {
+                            display: none;
+                        }
+                    }
                 `}</style>
             </div>
         )
