@@ -137,7 +137,7 @@ export default class extends React.Component {
 
                             <div className="form">
                                 <h2>简单介绍</h2>
-                                <p>性格，谦虚随和慢热型；身材长相，经常被错认为还是个学生；爱好，最爱看的是篮球（NBA）最爱打的是羽毛球。</p>
+                                <p>性格，谦虚随和慢热型；身材长相，经常被错认为是个学生；爱好，最爱看的是篮球（NBA）最爱打的是羽毛球。</p>
                             </div>
 
                             <div className="form">
