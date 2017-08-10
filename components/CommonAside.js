@@ -36,7 +36,7 @@ const TAB_TYPE = {
 const FRIEND_LINKS = [
     {
         TITLE: '兔耳日记',
-        LINK: 'http://tuer.me',
+        LINK: 'http://www.tuer.me',
     }
 ]
 
