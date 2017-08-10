@@ -33,7 +33,12 @@ const TAB_TYPE = {
     }
 }
 
-const FRIEND_LINKS = []
+const FRIEND_LINKS = [
+    {
+        TITLE: '兔耳日记',
+        LINK: 'http://tuer.me',
+    }
+]
 
 const TitleList = (titles = []) => (
     <ul className="ul-clear-list">
