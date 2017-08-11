@@ -2,7 +2,7 @@ import Index from './index'
 import axios from 'axios'
 import config from '../config'
 import monitor from '../monitor'
-import { getApi, errorCatch, isMobile } from '../common'
+import { getApi, errorCatch } from '../common'
 
 const COPY = {
     TITLE: '我的随笔',
@@ -26,8 +26,7 @@ export default class EssayList extends Index {
             navActive: 'essay',
 
             hasTitle: true,
-            articles: resArticle.data || [],
-            isMobile: isMobile(req)
+            articles: resArticle.data || []
         }
     }
 

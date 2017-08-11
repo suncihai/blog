@@ -3,7 +3,7 @@ import axios from 'axios'
 import config from '../config'
 import monitor from '../monitor'
 import ReactDOM from 'react-dom'
-import { getApi, errorCatch, createPostLink, prettyDate, isMobile } from '../common'
+import { getApi, errorCatch, createPostLink, prettyDate } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
@@ -32,16 +32,6 @@ export const imgNodeToRealSrc = imgNode => {
     }
 }
 
-export const eventClickThumb = e => {
-    let { target } = e
-    let src = target.dataset.src
-    let image = new Image()
-    image.src = src
-    image.setAttribute('class', 'thumbnail')
-    target.parentNode.replaceChild(image, target)
-    sessionStorage.setItem(src, 'stored')
-}
-
 export default class extends React.Component {
 
     static async getInitialProps ({ req }) {
@@ -57,38 +47,20 @@ export default class extends React.Component {
             title: COPY.TITLE,
 
             hasTitle: false,
-            articles: resArticle.data || [],
-            isMobile: isMobile(req)
+            articles: resArticle.data || []
         }
     }
 
     componentDidMount () {
-        let { isMobile } = this.props
         let node = ReactDOM.findDOMNode(this)
         let images = node.querySelectorAll('[data-src]')
-
         for (let i = 0; i < images.length; i++) {
-            let image = images[i]
-            if (isMobile) {
-                let src = image.dataset.src
-                if (sessionStorage.getItem(src)) {
-                    imgNodeToRealSrc(image)
-                } else {
-                    let div = document.createElement('div')
-                    div.setAttribute('data-src', src)
-                    div.setAttribute('class', 'image-with-mobile')
-                    div.textContent = '轻触加载缩略图'
-                    div.addEventListener('click', eventClickThumb)
-                    image.parentNode.replaceChild(div, image)
-                }
-            } else {
-                imgNodeToRealSrc(image)
-            }
+            imgNodeToRealSrc(images[i])
         }
     }
 
     render () {
-        const { brief, articles, hasTitle, isMobile } = this.props
+        const { brief, articles, hasTitle } = this.props
 
         return (
             <div className="blog center">
@@ -128,7 +100,7 @@ export default class extends React.Component {
                         </div>
                     </div>
 
-                    { isMobile ? '' : <CommonAside hasTitle={ hasTitle } /> }
+                    <CommonAside hasTitle={ hasTitle } />
                 </div>
 
                 <CommonFoot />

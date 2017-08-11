@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import ReactTooltip from 'react-tooltip'
-// import oneFixed from '../common/one-fixed'
-import { isMobile, getDocumentHeight } from '../common'
+import { getDocumentHeight, isMobile } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
@@ -17,12 +16,6 @@ const COPY = {
 
 export default class extends React.Component {
 
-    static getInitialProps ({ req }) {
-        return {
-            isMobile: isMobile(req)
-        }
-    }
-
     constructor (props) {
         super(props)
         this.state = {
@@ -32,19 +25,13 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
-        // oneFixed({
-        //     elements: 'h2',
-        //     fixedClass: 'fixed-title'
-        // })
-        document.addEventListener('scroll', this.onScroll.bind(this))
+        if (!isMobile()) {
+            document.addEventListener('scroll', this.onScroll.bind(this))
+        }
     }
 
     onScroll () {
-        let scrollTop = window.scrollY
-
-        if (!this.props.isMobile) {
-            this.toggleAside(scrollTop)
-        }
+        this.toggleAside(window.scrollY)
     }
 
     toggleAside (scrollTop) {
@@ -66,7 +53,6 @@ export default class extends React.Component {
     }
 
     render () {
-        let { isMobile } = this.props
         let { shown, showAside } = this.state
         let opclass = `${shown ? 'shown' : ''} ${showAside ? 'fadeInLeft' : 'fadeOutLeft'}`
 
@@ -213,23 +199,20 @@ export default class extends React.Component {
                             </div>
                         </div>
                     </div>
-                    {
-                        isMobile ? '' :
-                        <div className="resume-aside">
-                            <div className={`op animated ${opclass}`}>
-                                <a data-tip="发邮件给我" className="op-item" href="mailto:tangbc921@gmail.com">
-                                    <img className="op-img" src="/static/images/gmail.svg" alt="SendEmail"/>
-                                </a>
-                                <a data-tip="下载 PDF 简历" className="op-item" href="javascript:;">
-                                    <img className="op-img" src="/static/images/pdf.svg" alt="DownloadPDF"/>
-                                </a>
-                                <a data-tip="打印简历" onClick={ this.eventPrint.bind(this) } className="op-item" href="javascript:;">
-                                    <img className="op-img" src="/static/images/print.svg" alt="PrintResume"/>
-                                </a>
-                            </div>
-                            <ReactTooltip place="left" type="dark" effect="solid"/>
+                    <div className="resume-aside">
+                        <div className={`op animated ${opclass}`}>
+                            <a data-tip="发邮件给我" className="op-item" href="mailto:tangbc921@gmail.com">
+                                <img className="op-img" src="/static/images/gmail.svg" alt="SendEmail"/>
+                            </a>
+                            <a data-tip="下载 PDF 简历" className="op-item" href="javascript:;">
+                                <img className="op-img" src="/static/images/pdf.svg" alt="DownloadPDF"/>
+                            </a>
+                            <a data-tip="打印简历" onClick={ this.eventPrint.bind(this) } className="op-item" href="javascript:;">
+                                <img className="op-img" src="/static/images/print.svg" alt="PrintResume"/>
+                            </a>
                         </div>
-                    }
+                        <ReactTooltip place="left" type="dark" effect="solid"/>
+                    </div>
                 </div>
 
                 <CommonFoot />

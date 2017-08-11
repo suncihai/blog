@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import config from '../config'
-import { getApi, errorCatch, createPostLink, isMobile } from '../common'
+import { getApi, errorCatch, createPostLink } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
@@ -24,13 +24,12 @@ export default class extends React.Component {
 
     static getInitialProps ({ req }) {
         return {
-            hasTitle: true,
-            isMobile: isMobile(req)
+            hasTitle: true
         }
     }
 
     render () {
-        const { brief, articles, hasTitle, titles, comments, isMobile } = this.props
+        const { brief, articles, hasTitle, titles, comments } = this.props
 
         return (
             <div className="blog center">
@@ -57,7 +56,7 @@ export default class extends React.Component {
                         />
                     </div>
 
-                    { isMobile ? '' : <CommonAside hasTitle={ hasTitle } /> }
+                    <CommonAside hasTitle={ hasTitle } />
                 </div>
 
                 <CommonFoot />

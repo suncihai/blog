@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 
 import config from '../config'
-import { getApi, createPostLink } from '../common'
+import { getApi, createPostLink, isMobile } from '../common'
 
 import CommonLoading from './CommonLoading'
 
@@ -123,6 +123,10 @@ export default class CommonAside extends React.Component {
     }
 
     componentDidMount () {
+        if (isMobile()) {
+            return
+        }
+
         if (this.props.hasTitle) {
             this.loadTitleList()
         }

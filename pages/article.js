@@ -2,12 +2,12 @@ import React from 'react'
 import axios from 'axios'
 import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
-import { imgNodeToRealSrc, eventClickThumb } from './index'
+import { imgNodeToRealSrc } from './index'
 
 import notFound from '../404'
 import config from '../config'
 import monitor from '../monitor'
-import { getApi, errorCatch, prettyDate, isMobile, getClientHeight } from '../common'
+import { getApi, errorCatch, prettyDate, getClientHeight } from '../common'
 
 import DocumentHead from '../components/DocumentHead'
 import CommonHead from '../components/CommonHead'
@@ -27,7 +27,7 @@ const COPY = {
     COMMENT_TYPE: '评论',
 }
 
-const killPostImageSrc = (post, mobile) => {
+const imageToDatasrc = (post) => {
     return post.replace(/<img([\s\S]*?)src\s*=\s*(['"])([\s\S]*?)\2([^>]*)>/gi, '<img$1data-src=$2$3$2$4>')
 }
 
@@ -48,8 +48,7 @@ export default class extends React.Component {
 
         return {
             hasTitle: true,
-            article: resArticle.data,
-            isMobile: isMobile(req)
+            article: resArticle.data
         }
     }
 
@@ -64,26 +63,10 @@ export default class extends React.Component {
     componentDidMount () {
         this.highlightCode()
 
-        let { isMobile } = this.props
         let node = ReactDOM.findDOMNode(this)
         let images = node.querySelectorAll('[data-src]')
         for (let i = 0; i < images.length; i++) {
-            let image = images[i]
-            if (isMobile) {
-                let src = image.dataset.src
-                if (sessionStorage.getItem(src)) {
-                    imgNodeToRealSrc(image)
-                } else {
-                    let div = document.createElement('div')
-                    div.setAttribute('data-src', src)
-                    div.setAttribute('class', 'image-with-mobile')
-                    div.textContent = '轻触加载图片'
-                    div.addEventListener('click', eventClickThumb)
-                    image.parentNode.replaceChild(div, image)
-                }
-            } else {
-                imgNodeToRealSrc(image)
-            }
+            imgNodeToRealSrc(images[i])
         }
 
         window.addEventListener('scroll', this.onScroll.bind(this))
@@ -115,7 +98,7 @@ export default class extends React.Component {
     }
 
     render () {
-        const { article, hasTitle, isMobile } = this.props
+        const { article, hasTitle } = this.props
 
         return (
             <div className="blog">
@@ -138,7 +121,7 @@ export default class extends React.Component {
                             </div>
                             <div
                                 className="article-content"
-                                dangerouslySetInnerHTML={{ __html: killPostImageSrc(article.post_content, isMobile) }}
+                                dangerouslySetInnerHTML={{ __html: imageToDatasrc(article.post_content) }}
                             >
                             </div>
                             <div className="article-end-line"></div>
@@ -167,7 +150,7 @@ export default class extends React.Component {
                         </div>
                     </div>
 
-                    { isMobile ? '' : <CommonAside hasTitle={ hasTitle } /> }
+                    <CommonAside hasTitle={ hasTitle } />
                 </div>
 
                 <CommonFoot />
