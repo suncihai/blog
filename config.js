@@ -20,7 +20,14 @@ let siteConfig = {
     LATEST_COMMENT_COUNT: 6,
 
     // Is requesting comment author local by ip.
-    REQUEST_COMMENT_LOCAL: true
+    REQUEST_COMMENT_LOCAL: true,
+
+    // The ssr cache max age (hours).
+    // For disable ssr cache, just set to 0.
+    SSR_CACHE_MAX_AGE: 24,
+
+    // The pages of using ssr cache.
+    SSR_CACHE_PAGES: ['/', '/essay', '/message', '/resume']
 }
 
 // For local development database

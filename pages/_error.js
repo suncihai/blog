@@ -94,6 +94,7 @@ export default class Error extends React.Component {
                         color: #ffff00;
                     }
                     .back {
+                        font-size: 1.6rem;
                         padding: 5px 10px;
                         border-radius: 2px;
                         border: 1px solid #fff;

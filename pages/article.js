@@ -223,7 +223,6 @@ export default class extends React.Component {
                             margin-top: 20px;
                             padding-top: 10px;
                             letter-spacing: 1px;
-                            font-size: 1.6rem;
                         }
                         .article-end-line {
                             margin: 20px 0;

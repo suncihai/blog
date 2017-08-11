@@ -11,7 +11,7 @@ Monitor.prototype.start = function (mark) {
 Monitor.prototype.enddd = function (mark) {
     if (typeof this.marks[mark] === 'object') {
         let time = Date.now() - this.marks[mark]['start']
-        console.log(mark +' |' + ' waste: ' + time + ' ms.')
+        console.log(mark +' |' + ' waste: ' + time + ' ms. At' + (new Date).toLocaleString())
     }
 }
 

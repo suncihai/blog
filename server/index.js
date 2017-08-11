@@ -1,14 +1,26 @@
 const url = require('url')
 const http = require('http')
 const next = require('next')
+const path = require('path')
 
-const config = require('./config')
-const apis = require('./interfaces')
+const cfg = require('../config')
+const apis = require('../interfaces')
+const ssrCache = require('./ssrcache')
 
 const app = next({
+    dir: path.resolve(__dirname, '../'),
     dev: process.env.NODE_ENV === 'development'
 })
 const defaultRender = app.getRequestHandler()
+
+// Decide get from cache or re-render page.
+const renderOrFromCache = (req, res, path, query) => {
+    if (cfg.SSR_CACHE_MAX_AGE) {
+        ssrCache(app, req, res, path, query)
+    } else {
+        app.render(req, res, path, query)
+    }
+}
 
 // For matching `/article/article-alias`.
 const handleArticleRoute = (req, res, pathname, parsedUrl) => {
@@ -22,7 +34,7 @@ const handleArticleRoute = (req, res, pathname, parsedUrl) => {
 
     if (alias) {
         alias = encodeURIComponent(alias)
-        app.render(req, res, '/article', { alias })
+        renderOrFromCache(req, res, '/article', { alias })
     } else {
         defaultRender(req, res, parsedUrl)
     }
@@ -40,7 +52,8 @@ const handleApiRoute = async (req, res, pathname, query) => {
     }
 }
 
-const PORT = config.LISTEN_PORT
+const PORT = cfg.LISTEN_PORT
+const CACHE_PAGES = cfg.SSR_CACHE_PAGES
 
 app.prepare().then(() => {
     http.createServer((req, res) => {
@@ -49,9 +62,8 @@ app.prepare().then(() => {
         let parsedUrl = url.parse(req.url, true)
         let { pathname, query } = parsedUrl
 
-        // For a bit fast in index.
-        if (pathname === '/') {
-            defaultRender(req, res, parsedUrl)
+        if (CACHE_PAGES.indexOf(pathname) > -1) {
+            renderOrFromCache(req, res, pathname)
         } else if (/^(\/article\/)/.test(pathname)) {
             handleArticleRoute(req, res, pathname, parsedUrl)
         } else if (/^(\/api\/\w)/.test(pathname)) {

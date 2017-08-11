@@ -75,7 +75,6 @@ export default class extends React.Component {
                         padding: 0 30px;
                         text-align: center;
                         display: inline-block;
-                        font-weight: bold;
                     }
                     .link {
                         color: #fffaf0;
@@ -98,6 +97,7 @@ export default class extends React.Component {
                         .nav-item {
                             width: 25%;
                             padding: 0;
+                            font-size: 1.5rem;
                         }
                     }
                 `}</style>
