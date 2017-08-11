@@ -318,7 +318,7 @@ export default class extends React.Component {
                     .animated {
                         animation-duration: 1s;
                     }
-                    @media (max-width: 1024px) {
+                    @media (max-width: 768px) {
                         .resume-padding {
                             height: 30px;
                         }

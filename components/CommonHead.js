@@ -72,7 +72,7 @@ export default class extends React.Component {
                         display: inline-block;
                     }
                     .nav-item {
-                        padding: 0 30px;
+                        padding: 0 2.4em;
                         text-align: center;
                         display: inline-block;
                     }
@@ -83,7 +83,13 @@ export default class extends React.Component {
                         color: #fabf31;
                     }
 
-                    @media (max-width: 1024px) {
+                    @media (max-width: 880px) {
+                        .nav-item {
+                            padding: 0 1em;
+                        }
+                    }
+
+                    @media (max-width: 768px) {
                         .logo {
                             display: none;
                         }

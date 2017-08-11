@@ -146,7 +146,7 @@ export default class extends React.Component {
                         color: #a5a5a5;
                     }
 
-                    @media (max-width: 1024px) {
+                    @media (max-width: 768px) {
                         .article-head {
                             height: auto;
                             padding: .5em 0;

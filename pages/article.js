@@ -212,7 +212,7 @@ export default class extends React.Component {
                         background: #f7f7f7;
                     }
 
-                    @media (max-width: 1024px) {
+                    @media (max-width: 768px) {
                         .comment-add {
                             display: none;
                         }
@@ -321,7 +321,7 @@ export default class extends React.Component {
                 `}</style>
 
                 <style jsx global>{`
-                    @media (max-width: 1024px) {
+                    @media (max-width: 768px) {
                         .hljs.javascript:after,
                         .hljs.html:after,
                         .hljs.css:after,

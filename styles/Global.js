@@ -97,7 +97,7 @@ export default () => (
             border-left: 5px solid #b4cfff;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 768px) {
             .global-right {
                 display: none;
             }
@@ -120,7 +120,7 @@ export default () => (
             .global-left {
                 padding: 0 1em;
                 padding-top: 50px;
-                max-width: 1024px;
+                max-width: 768px;
             }
             .pageins {
                 border: none;

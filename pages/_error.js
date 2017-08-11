@@ -100,7 +100,7 @@ export default class Error extends React.Component {
                         border: 1px solid #fff;
                     }
 
-                    @media (max-width: 1024px) {
+                    @media (max-width: 768px) {
                         .error {
                             width: 100%;
                             left: 0;

@@ -324,7 +324,7 @@ export default class CommentForm extends React.Component {
                         background: #ea5035;
                     }
 
-                    @media (max-width: 1024px) {
+                    @media (max-width: 768px) {
                         .comment {
                             padding: .5em;
                         }
