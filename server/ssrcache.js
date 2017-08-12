@@ -20,10 +20,11 @@ module.exports = function (nextjs, req, res, path, query) {
     nextjs.renderToHTML(req, res, path, query).then(htmlString => {
         if (htmlString) {
             cache.set(key, htmlString)
+            console.log(`Stored into cache: ${key}`)
+            console.log(`Current of caches: ${cache.keys().length}`)
         }
         res.setHeader('Render-From', 'ssr-first')
         res.end(htmlString)
-        console.log(`Stored into cache: ${key}`)
     }).catch(e => {
         nextjs.renderError(e, req, res, path, query)
     })
