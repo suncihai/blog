@@ -46,7 +46,7 @@ const TitleList = (titles = []) => (
             return (
                 <li className="title-name" key={ article.ID }>
                     <span className="title-index constantia">{ index + 1 }. </span>
-                    <a className="title-link" title={ article.post_title } href={ /article/ + article.post_name }>{ article.post_title }</a>
+                    <a href={ createPostLink(article.post_name) } className="title-link" title={ article.post_title }>{ article.post_title }</a>
                 </li>
             )
         }) }
@@ -79,7 +79,7 @@ const CommentList = (comments = []) => (
                 <li className="list" key={ comment.comment_ID }>
                     <span className="author">{ comment.comment_author }</span>
                     <span> { COPY.COMMENTED } </span>
-                    <a className="link" href={ createPostLink(comment.post_name) }>{ comment.post_title }</a>
+                    <a href={ createPostLink(comment.post_name) } className="link">{ comment.post_title }</a>
                     <span>：</span>
                     <span className="content">{ getCommentShort(comment.comment_content) }</span>
                 </li>
@@ -318,7 +318,7 @@ export default class CommonAside extends React.Component {
                         text-decoration: underline;
                     }
                     .friend-link {
-                        padding-bottom: 30px;
+                        padding-bottom: 10px;
                     }
                     .friend-link-item {
                         color: #9b9b9b;

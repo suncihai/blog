@@ -27,7 +27,14 @@ let siteConfig = {
     SSR_CACHE_MAX_AGE: 24,
 
     // The pages of using ssr cache.
-    SSR_CACHE_PAGES: ['/', '/essay', '/message', '/resume']
+    SSR_CACHE_PAGES: ['/', '/essay', '/message', '/resume'],
+
+    NAVS: [
+        { href: '/', text: '博客首页' },
+        { href: '/essay', text: '我的随笔' },
+        { href: '/message', text: '给我留言' },
+        { href: '/resume', text: '个人简历' }
+    ]
 }
 
 // For local development database

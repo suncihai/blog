@@ -11,7 +11,7 @@ module.exports = function (nextjs, req, res, path, query) {
     let key = decodeURIComponent(req.url)
 
     if (cache.has(key)) {
-        console.log(`----------------------------------- Server from cache: ${key}`)
+        console.log(`Server from cache: ${key}`)
         res.setHeader('Render-From', 'ssr-cache')
         res.end(cache.get(key))
         return
@@ -23,7 +23,7 @@ module.exports = function (nextjs, req, res, path, query) {
         }
         res.setHeader('Render-From', 'ssr-first')
         res.end(htmlString)
-        console.log(`----------------------------------- Stored into cache: ${key}`)
+        console.log(`Stored into cache: ${key}`)
     }).catch(e => {
         nextjs.renderError(e, req, res, path, query)
     })

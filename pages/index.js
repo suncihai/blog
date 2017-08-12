@@ -1,7 +1,6 @@
 import React from 'react'
 import axios from 'axios'
 import config from '../config'
-import monitor from '../monitor'
 import ReactDOM from 'react-dom'
 import { getApi, errorCatch, createPostLink, prettyDate } from '../common'
 
@@ -34,12 +33,8 @@ export const imgNodeToRealSrc = imgNode => {
 
 export default class extends React.Component {
 
-    static async getInitialProps ({ req }) {
-        monitor.start('fetch data in index')
-
+    static async getInitialProps () {
         let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
-
-        monitor.enddd('fetch data in index')
 
         return {
             brief: '',
@@ -79,7 +74,7 @@ export default class extends React.Component {
                         { articles.map((item) => (
                             <div className="list-item" key={ item.ID }>
                                 <div className="article-head">
-                                    <a className="article-title" href={ createPostLink(item.post_name) }>{ item.post_title }</a>
+                                    <a href={ createPostLink(item.post_name) } className="article-title">{ item.post_title }</a>
                                 </div>
                                 <div className="article-digest">
                                     { item.post_summary }
@@ -90,7 +85,9 @@ export default class extends React.Component {
                                         <i className="global-comments-icon"></i>{ item.comment_count }
                                     </span>
                                     <span className="article-publish constantia">{ prettyDate(item.post_date) }</span>
-                                    { item.no_digest ? '' : <a href={ createPostLink(item.post_name) }> { COPY.CONTINUE }</a> }
+                                    { item.no_digest ? '' :
+                                        <a href={ createPostLink(item.post_name) }> { COPY.CONTINUE }</a>
+                                    }
                                 </div>
                                 <div className="article-thumbnail">
                                 { item.post_thumbnail ? <img className="thumbnail" data-src={ item.post_thumbnail }/> : '' }

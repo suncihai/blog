@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import config from '../config'
-import { getApi, errorCatch, createPostLink } from '../common'
+import { getApi, errorCatch } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
@@ -22,7 +22,7 @@ const CPI = config.CATEGORY.COMMENT_PAGE
 
 export default class extends React.Component {
 
-    static getInitialProps ({ req }) {
+    static getInitialProps () {
         return {
             hasTitle: true
         }
