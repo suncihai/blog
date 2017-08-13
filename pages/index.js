@@ -34,7 +34,7 @@ export const imgNodeToRealSrc = imgNode => {
 export default class extends React.Component {
 
     static async getInitialProps () {
-        let resArticle
+        let resArticle = {}
 
         try {
             resArticle = await axios.get(getApi('articles?category_id='+ CID))
