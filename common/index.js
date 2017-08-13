@@ -4,10 +4,6 @@ export const getApi = path => {
     return `${config.HOST}/api/${path}`
 }
 
-export const errorCatch = err => {
-    return err.response ? err.response.status + ' ' + err.response.statusText : err.message
-}
-
 export const createPostLink = post_name => {
     return `/article/${post_name}`
 }

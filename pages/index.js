@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import config from '../config'
 import ReactDOM from 'react-dom'
-import { getApi, errorCatch, createPostLink, prettyDate } from '../common'
+import { getApi, createPostLink, prettyDate } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
@@ -34,7 +34,11 @@ export const imgNodeToRealSrc = imgNode => {
 export default class extends React.Component {
 
     static async getInitialProps () {
-        let resArticle = await axios.get(getApi('articles?category_id='+ CID)).catch(errorCatch)
+        let resArticle
+
+        try {
+            resArticle = await axios.get(getApi('articles?category_id='+ CID))
+        } catch (e) {}
 
         return {
             brief: '',

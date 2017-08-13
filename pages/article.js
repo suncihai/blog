@@ -6,7 +6,7 @@ import { imgNodeToRealSrc } from './index'
 
 import notFound from '../404'
 import config from '../config'
-import { getApi, errorCatch, prettyDate, getClientHeight } from '../common'
+import { getApi, prettyDate, getClientHeight } from '../common'
 
 import DocumentHead from '../components/DocumentHead'
 import CommonHead from '../components/CommonHead'
@@ -33,7 +33,11 @@ const imageToDatasrc = (post) => {
 export default class extends React.Component {
 
     static async getInitialProps ({ query, res }) {
-        let resArticle = await axios.get(getApi('article?alias='+ query.alias)).catch(errorCatch)
+        let resArticle = {}
+
+        try {
+            resArticle = await axios.get(getApi('article?alias='+ query.alias))
+        } catch (e) {}
 
         if (!resArticle.data) {
             res.statusCode = 404

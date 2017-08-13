@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import config from '../config'
-import { getApi, errorCatch } from '../common'
+import { getApi } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
