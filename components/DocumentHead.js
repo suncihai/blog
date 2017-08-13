@@ -3,6 +3,7 @@ import Head from 'next/head'
 
 import GlobalCSS from '../styles/Global'
 import NormalizeCSS from '../styles/Normalize'
+import NprogressCSS from '../styles/Nprogress'
 
 const MAIN_TITLE = ' - 唐比昌的个人博客'
 const DEFAULT_KEYWORDS = '前端开发, JavaScript, CSS, HTML, 前端博客'
@@ -25,9 +26,11 @@ export default class DocumentHead extends React.Component {
                     <meta name="description" content={ description } />
                     <link rel='shortcut icon' type='image/x-icon' href='/static/images/favicon.ico' />
                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+                    <script src="/static/libs/nprogress.js" type="text/javascript"></script>
                 </Head>
                 <NormalizeCSS />
                 <GlobalCSS />
+                <NprogressCSS />
             </div>
         )
     }
