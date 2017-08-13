@@ -24,7 +24,7 @@ let siteConfig = {
 
     // The ssr cache max age (hours).
     // For disable ssr cache, just set to 0.
-    SSR_CACHE_MAX_AGE: 0,
+    SSR_CACHE_MAX_AGE: 24,
 
     // The pages of using ssr cache.
     SSR_CACHE_PAGES: ['/', '/essay', '/message', '/resume'],
