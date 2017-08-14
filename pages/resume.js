@@ -22,16 +22,21 @@ export default class extends React.Component {
             shown: false,
             showAside: false
         }
+        this.onScroll = this.onScroll.bind(this)
     }
 
     componentDidMount () {
-        if (!isMobile()) {
-            document.addEventListener('scroll', this.onScroll.bind(this))
-        }
+        document.addEventListener('scroll', this.onScroll)
+    }
+
+    componentWillUnmount () {
+        document.removeEventListener('scroll', this.onScroll)
     }
 
     onScroll () {
-        this.toggleAside(window.scrollY)
+        if (!isMobile()) {
+            this.toggleAside(window.scrollY)
+        }
     }
 
     toggleAside (scrollTop) {

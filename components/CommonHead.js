@@ -1,5 +1,12 @@
 import React from 'react'
 import config from '../config'
+import Link from 'next/link'
+import NProgress from 'nprogress'
+import Router from 'next/router'
+
+Router.onRouteChangeStart = () => NProgress.start()
+Router.onRouteChangeError = () => NProgress.done()
+Router.onRouteChangeComplete = () => NProgress.done()
 
 export default class extends React.Component {
 
@@ -12,14 +19,18 @@ export default class extends React.Component {
             <div className="global-head">
                 <div className="common-head center">
                     <div className="logo head-item">
-                        <a href="/" className="site-name">{ '<TANGBC/>' }</a>
+                        <Link href="/">
+                            <a className="site-name">{ '<TANGBC/>' }</a>
+                        </Link>
                     </div>
                     <ul className="ul-clear-list head-item nav">
                     { config.NAVS.map((nav) => (
                         <li className="nav-item" key={ nav.href }>
-                            <a href={ nav.href } className={ 'link' + ('/' + this.props.active === nav.href ? ' active' : '') }>
-                                { nav.text }
-                            </a>
+                            <Link href={ nav.href }>
+                                <a className={ 'link' + ('/' + this.props.active === nav.href ? ' active' : '') }>
+                                    { nav.text }
+                                </a>
+                            </Link>
                         </li>
                     )) }
                     </ul>

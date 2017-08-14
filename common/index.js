@@ -8,6 +8,15 @@ export const createPostLink = post_name => {
     return `/article/${post_name}`
 }
 
+export const createLinkObject = post_name => {
+    return {
+        pathname: '/article',
+        query: {
+            alias: encodeURIComponent(post_name)
+        }
+    }
+}
+
 export const rewritePreClass = post => {
     return post.replace(/<pre class=[\"](.*?)[\"]>/g, function (match) {
         let oldClass = match.replace(/<pre class=[\"]|[\"]>/g, '')

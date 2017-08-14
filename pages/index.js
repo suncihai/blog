@@ -1,8 +1,9 @@
 import React from 'react'
 import axios from 'axios'
+import Link from 'next/link'
 import config from '../config'
 import ReactDOM from 'react-dom'
-import { getApi, createPostLink, prettyDate } from '../common'
+import { getApi, createPostLink, createLinkObject, prettyDate } from '../common'
 
 import CommonHead from '../components/CommonHead'
 import CommonFoot from '../components/CommonFoot'
@@ -51,6 +52,14 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
+        this.afterUpdated()
+    }
+
+    componentDidUpdate () {
+        this.afterUpdated()
+    }
+
+    afterUpdated () {
         let node = ReactDOM.findDOMNode(this)
         let images = node.querySelectorAll('[data-src]')
         for (let i = 0; i < images.length; i++) {
@@ -78,7 +87,9 @@ export default class extends React.Component {
                         { articles.map((item) => (
                             <div className="list-item" key={ item.ID }>
                                 <div className="article-head">
-                                    <a href={ createPostLink(item.post_name) } className="article-title">{ item.post_title }</a>
+                                    <Link as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
+                                        <a className="article-title">{ item.post_title }</a>
+                                    </Link>
                                 </div>
                                 <div className="article-digest">
                                     { item.post_summary }
@@ -90,7 +101,9 @@ export default class extends React.Component {
                                     </span>
                                     <span className="article-publish constantia">{ prettyDate(item.post_date) }</span>
                                     { item.no_digest ? '' :
-                                        <a href={ createPostLink(item.post_name) }> { COPY.CONTINUE }</a>
+                                        <Link as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
+                                            <a> { COPY.CONTINUE }</a>
+                                        </Link>
                                     }
                                 </div>
                                 <div className="article-thumbnail">

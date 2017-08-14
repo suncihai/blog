@@ -57,26 +57,48 @@ export default class extends React.Component {
             reached: false,
             sortType: SORT_TYPE.DESC
         }
+        this.onScroll = this.onScroll.bind(this)
     }
 
     componentDidMount () {
-        this.highlightCode()
-
-        let node = ReactDOM.findDOMNode(this)
-        let images = node.querySelectorAll('[data-src]')
-        for (let i = 0; i < images.length; i++) {
-            imgNodeToRealSrc(images[i])
-        }
-
-        window.addEventListener('scroll', this.onScroll.bind(this))
+        this.afterUpdated()
     }
 
-    highlightCode () {
-        let domNode = ReactDOM.findDOMNode(this)
-        let nodes = domNode.querySelectorAll('pre')
-        for (let i = 0; i < nodes.length; i++) {
-            hljs.highlightBlock(nodes[i])
-        }
+    componentWillUnmount () {
+        window.removeEventListener('scroll', this.onScroll)
+    }
+
+    componentDidUpdate () {
+        this.afterUpdated()
+    }
+
+    afterUpdated () {
+        let dom = ReactDOM.findDOMNode(this)
+
+        this.loadImage(dom)
+
+        this.highlightCode(dom)
+
+        this.commentEl = dom.querySelector('.article-comment')
+        window.addEventListener('scroll', this.onScroll)
+    }
+
+    highlightCode (dom) {
+        setTimeout(() => {
+            let nodes = dom.querySelectorAll('pre')
+            for (let i = 0; i < nodes.length; i++) {
+                hljs.highlightBlock(nodes[i])
+            }
+        }, 0)
+    }
+
+    loadImage (dom) {
+        setTimeout(() => {
+            let images = dom.querySelectorAll('[data-src]')
+            for (let i = 0; i < images.length; i++) {
+                imgNodeToRealSrc(images[i])
+            }
+        }, 0)
     }
 
     onScroll () {
@@ -125,7 +147,7 @@ export default class extends React.Component {
                             </div>
                             <div className="article-end-line"></div>
                         </div>
-                        <div className="article-comment" ref={ (comment) => { this.commentEl = comment } }>
+                        <div className="article-comment">
                             <div className="comment-head">
                                 <span className="comment-total constantia">{ COPY.COMMENT_TOTAL(article.comment_count) }</span>
                                 <select

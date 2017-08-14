@@ -1,8 +1,9 @@
 import React from 'react'
 import axios from 'axios'
+import Link from 'next/link'
 
 import config from '../config'
-import { getApi, createPostLink, isMobile } from '../common'
+import { getApi, createPostLink, createLinkObject, isMobile } from '../common'
 
 import CommonLoading from './CommonLoading'
 
@@ -46,7 +47,9 @@ const TitleList = (titles = []) => (
             return (
                 <li className="title-name" key={ article.ID }>
                     <span className="title-index constantia">{ index + 1 }. </span>
-                    <a href={ createPostLink(article.post_name) } className="title-link" title={ article.post_title }>{ article.post_title }</a>
+                    <Link as={ createPostLink(article.post_name) } href={ createLinkObject(article.post_name) }>
+                        <a className="title-link" title={ article.post_title }>{ article.post_title }</a>
+                    </Link>
                 </li>
             )
         }) }
@@ -79,7 +82,9 @@ const CommentList = (comments = []) => (
                 <li className="list" key={ comment.comment_ID }>
                     <span className="author">{ comment.comment_author }</span>
                     <span> { COPY.COMMENTED } </span>
-                    <a href={ createPostLink(comment.post_name) } className="link">{ comment.post_title }</a>
+                    <Link as={ createPostLink(comment.post_name) } href={ createLinkObject(comment.post_name) } >
+                        <a className="link">{ comment.post_title }</a>
+                    </Link>
                     <span>：</span>
                     <span className="content">{ getCommentShort(comment.comment_content) }</span>
                 </li>
