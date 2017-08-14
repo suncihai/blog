@@ -47,21 +47,28 @@ const KLASS = {
 
 const API_ADD_COMMENT = getApi('addcomment')
 
+const INIT_STATE = () => {
+    return {
+        url: '',
+        email: '',
+        author: '',
+        content: '',
+
+        error: '',
+        success: false,
+        pending: false,
+    }
+}
 
 export default class CommentForm extends React.Component {
 
     constructor (props) {
         super(props)
-        this.state = {
-            url: '',
-            email: '',
-            author: '',
-            content: '',
+        this.state = INIT_STATE()
+    }
 
-            error: '',
-            success: false,
-            pending: false,
-        }
+    componentWillReceiveProps (nextProps) {
+        this.setState(INIT_STATE())
     }
 
     eventSetValue (evt, type) {

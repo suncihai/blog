@@ -30,6 +30,13 @@ const imageToDatasrc = (post) => {
     return post.replace(/<img([\s\S]*?)src\s*=\s*(['"])([\s\S]*?)\2([^>]*)>/gi, '<img$1data-src=$2$3$2$4>')
 }
 
+const INIT_STATE = () => {
+    return {
+        reached: false,
+        sortType: SORT_TYPE.DESC
+    }
+}
+
 export default class extends React.Component {
 
     static async getInitialProps ({ query, res }) {
@@ -53,11 +60,12 @@ export default class extends React.Component {
 
     constructor (props) {
         super(props)
-        this.state = {
-            reached: false,
-            sortType: SORT_TYPE.DESC
-        }
+        this.state = INIT_STATE()
         this.onScroll = this.onScroll.bind(this)
+    }
+
+    componentWillReceiveProps (nextProps) {
+        this.setState(INIT_STATE())
     }
 
     componentDidMount () {
