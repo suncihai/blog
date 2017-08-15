@@ -128,6 +128,8 @@ export default class CommonAside extends React.Component {
     }
 
     componentDidMount () {
+        this._isMounted = true
+
         if (isMobile()) {
             return
         }
@@ -136,6 +138,10 @@ export default class CommonAside extends React.Component {
             this.loadTitleList()
         }
         this.loadCommentList()
+    }
+
+    componentWillUnmount () {
+        this._isMounted = false
     }
 
     componentWillMount () {
@@ -173,24 +179,30 @@ export default class CommonAside extends React.Component {
 
     loadTitleList () {
         axios.get(API_TITLES).then(res => {
-            this.setState({
-                titles: res.data
-            })
+            if (this._isMounted) {
+                this.setState({
+                    titles: res.data
+                })
+            }
         }).catch(this.loadError.bind(this))
     }
 
     loadCommentList () {
         axios.get(API_COMMENTS).then(res => {
-            this.setState({
-                comments: res.data
-            })
+            if (this._isMounted) {
+                this.setState({
+                    comments: res.data
+                })
+            }
         }).catch(this.loadError.bind(this))
     }
 
     loadError (err) {
-        this.setState({
-            error: err.message
-        })
+        if (this._isMounted) {
+            this.setState({
+                error: err.message
+            })
+        }
     }
 
     getTabContent () {
