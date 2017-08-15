@@ -88,6 +88,7 @@ export default class Error extends React.Component {
                         font-weight: 200;
                     }
                     .refresh {
+                        font-size: 1.6rem;
                         padding: 5px 10px;
                         border-radius: 2px;
                         border: 1px solid #ffff00;

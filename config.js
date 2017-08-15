@@ -37,7 +37,7 @@ let siteConfig = {
     ]
 }
 
-// For local development database
+// For local development database.
 if (
     typeof process !== 'undefined' &&
     process.env.NODE_ENV === 'development'
