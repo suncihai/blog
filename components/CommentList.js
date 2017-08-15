@@ -30,9 +30,15 @@ export default class CommentList extends React.Component {
     }
 
     componentDidMount () {
+        this._isMounted = true
+
         if (this.props.toLoad) {
             this.loadComments(this.props.articleId, this.props.sortType)
         }
+    }
+
+    componentWillUnmount () {
+        this._isMounted = false
     }
 
     componentWillReceiveProps (nextProps) {
@@ -48,18 +54,23 @@ export default class CommentList extends React.Component {
 
         let url = getApi('getcomments?article_id='+ articleId +'&sort='+ sortType)
 
+        // 防止在请求未返回之前切换路由导致 setState 错误
         axios.get(url).then(res => {
-            this.setState({
-                isLoad: false,
-                comments: res.data,
-                error: ''
-            })
+            if (this._isMounted) {
+                this.setState({
+                    isLoad: false,
+                    comments: res.data,
+                    error: ''
+                })
+            }
         }).catch(err => {
-            this.setState({
-                isLoad: false,
-                comments: [],
-                error: err.message || COPY.ERROR
-            })
+            if (this._isMounted) {
+                this.setState({
+                    isLoad: false,
+                    comments: [],
+                    error: err.message || COPY.ERROR
+                })
+            }
         })
     }
 

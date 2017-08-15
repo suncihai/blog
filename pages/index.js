@@ -52,19 +52,16 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
-        this.afterUpdated()
+        this.loadImage(ReactDOM.findDOMNode(this))
     }
 
-    componentDidUpdate () {
-        this.afterUpdated()
-    }
-
-    afterUpdated () {
-        let node = ReactDOM.findDOMNode(this)
-        let images = node.querySelectorAll('[data-src]')
-        for (let i = 0; i < images.length; i++) {
-            imgNodeToRealSrc(images[i])
-        }
+    loadImage (dom) {
+        setTimeout(() => {
+            let images = dom.querySelectorAll('[data-src]')
+            for (let i = 0; i < images.length; i++) {
+                imgNodeToRealSrc(images[i])
+            }
+        }, 0)
     }
 
     render () {

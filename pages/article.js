@@ -64,31 +64,32 @@ export default class extends React.Component {
         this.onScroll = this.onScroll.bind(this)
     }
 
+    // 单页模式下，从其他文章跳转过来需要重置状态
     componentWillReceiveProps (nextProps) {
         this.setState(INIT_STATE())
     }
 
     componentDidMount () {
-        this.afterUpdated()
+        this.onPageReady()
     }
 
     componentWillUnmount () {
         window.removeEventListener('scroll', this.onScroll)
     }
 
+    // 单页模式下，更新图片和代码块
     componentDidUpdate () {
-        this.afterUpdated()
+        this.onPageReady()
     }
 
-    afterUpdated () {
+    onPageReady () {
         let dom = ReactDOM.findDOMNode(this)
 
         this.loadImage(dom)
-
         this.highlightCode(dom)
 
-        this.commentEl = dom.querySelector('.article-comment')
         window.addEventListener('scroll', this.onScroll)
+        this.commentEl = dom.querySelector('.article-comment')
     }
 
     highlightCode (dom) {
