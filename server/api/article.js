@@ -1,7 +1,7 @@
 let db = require('../db')
 let util = require('../utils')
-let autop = require('..utils/autop')
 let config = require('../../config')
+let autop = require('../utils/autop')
 
 const SUMMARY_LIMIT = config.SUMMARY_LENGTH
 

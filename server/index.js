@@ -28,7 +28,7 @@ const PORT = cfg.LISTEN_PORT
 const CACHE_PAGES = cfg.SSR_CACHE_PAGES
 
 app.prepare().then(() => {
-    http.createServer((req, res) => {
+    http.createServer(async (req, res) => {
         // Be sure to pass `true` as the second argument to `url.parse`.
         // This tells it to parse the query portion of the URL.
         let parsedUrl = url.parse(req.url, true)

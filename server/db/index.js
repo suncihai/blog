@@ -1,7 +1,7 @@
 let mysql = require('mysql')
 
-let config = require('../config')
-let DEV_DB = require('./db-dev.json')
+let config = require('../../config')
+let DEV_DB = require('./development.json')
 
 let isDev = process.env.NODE_ENV !== 'production'
 
