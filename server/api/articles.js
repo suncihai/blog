@@ -1,12 +1,12 @@
-let db = require('./db')
-let common = require('./common')
-let config = require('../config')
+let db = require('../db')
+let util = require('../utils')
+let config = require('../../config')
 
 const SUMMARY_LIMIT = config.SUMMARY_LENGTH
 
 function getArticleIds (category_id) {
     return new Promise(function (resolve, reject) {
-        let categoryId = common.isNumeric(category_id) ? category_id : 0
+        let categoryId = util.isNumeric(category_id) ? category_id : 0
         let connection = db.createConnection()
         let QUERY_ARTICLE_IDS = 'SELECT object_id FROM wp_term_relationships ' +
                                 'WHERE term_taxonomy_id = ' + categoryId
@@ -51,11 +51,11 @@ function getArticleList (ids) {
 
             // Formating fields
             results.map(function (article) {
-                let pureContent = common.removeHTMLTag(article.post_content)
+                let pureContent = util.removeHTMLTag(article.post_content)
 
                 article.no_digest = article.post_content.length <= SUMMARY_LIMIT
-                article.post_thumbnail = common.getThumbnail(article.post_content)
-                article.post_summary = common.getPostDesc(pureContent, SUMMARY_LIMIT)
+                article.post_thumbnail = util.getThumbnail(article.post_content)
+                article.post_summary = util.getPostDesc(pureContent, SUMMARY_LIMIT)
 
                 delete article.post_content
 

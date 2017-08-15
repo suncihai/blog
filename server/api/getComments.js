@@ -1,7 +1,7 @@
-let db = require('./db')
+let db = require('../db')
 let axios = require('axios')
-let common = require('./common')
-let config = require('../config')
+let util = require('../utils')
+let config = require('../../config')
 
 const SHOW_LOCAL = config.REQUEST_COMMENT_LOCAL
 
@@ -74,7 +74,7 @@ const COMMENT_FIELDS = [
 ]
 function getCommentList (article_id, sort) {
     return new Promise(function (resolve, reject) {
-        let postId = common.isNumeric(article_id) ? article_id : 0
+        let postId = util.isNumeric(article_id) ? article_id : 0
         let connection = db.createConnection()
         let QUERY_COMMENTS = 'SELECT ' + COMMENT_FIELDS + ' FROM wp_comments WHERE ' +
                             'comment_approved=1 AND comment_post_ID='+ postId +

@@ -1,9 +1,9 @@
-let db = require('./db')
-let common = require('./common')
+let db = require('../db')
+let util = require('../utils')
 
 function getTitleList (limit) {
     return new Promise(function (resolve, reject) {
-        let LIMIT = common.isNumeric(limit) ? limit : 0
+        let LIMIT = util.isNumeric(limit) ? limit : 0
         let connection = db.createConnection()
         let QUERY_TITLES = 'SELECT ID, post_title, post_name FROM wp_posts ' +
                             'WHERE post_status=\'publish\' AND post_type=\'post\' ' +

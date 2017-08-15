@@ -1,7 +1,7 @@
-let db = require('./db')
-let autop = require('./autop')
-let common = require('./common')
-let config = require('../config')
+let db = require('../db')
+let util = require('../utils')
+let autop = require('..utils/autop')
+let config = require('../../config')
 
 const SUMMARY_LIMIT = config.SUMMARY_LENGTH
 
@@ -24,11 +24,11 @@ function getArticle (alias) {
             let article = result && result[0]
             if (article) {
                 let content = article.post_content
-                let clear = common.removeHTMLTag(content)
+                let clear = util.removeHTMLTag(content)
 
                 article.post_id = article.ID
                 article.post_content = autop(content, true)
-                article.post_summary = common.getPostDesc(clear, SUMMARY_LIMIT)
+                article.post_summary = util.getPostDesc(clear, SUMMARY_LIMIT)
 
                 resolve(article)
             } else {

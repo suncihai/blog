@@ -1,4 +1,4 @@
-let db = require('./db')
+let db = require('../db')
 
 function getAliasByArticleId (article_id) {
     return new Promise(function (resolve, reject) {

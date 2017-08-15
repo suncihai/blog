@@ -1,4 +1,4 @@
-let db = require('./db')
+let db = require('../db')
 
 const validate = data => {
     if (!data.author.length) {

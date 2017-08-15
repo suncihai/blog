@@ -4,7 +4,7 @@ const LruCache = require('lru-cache')
 const hour = 1000 * 60 * 60
 const cache = new LruCache({
     max: 100,
-    maxAge: cfg.SSR_CACHE_MAX_AGE * hour
+    maxAge: cfg.SSR_CACHE * hour
 })
 
 module.exports = function (nextjs, req, res, path, query) {

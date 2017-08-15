@@ -4,8 +4,8 @@ import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
 import { imgNodeToRealSrc } from './index'
 
-import notFound from '../404'
 import config from '../config'
+import notFound from '../common/not-found'
 import { getApi, prettyDate, getClientHeight } from '../common'
 
 import DocumentHead from '../components/DocumentHead'

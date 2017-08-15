@@ -1,11 +1,11 @@
-let db = require('./db')
-let common = require('./common')
-let config = require('../config')
+let db = require('../db')
+let util = require('../utils')
+let config = require('../../config')
 let cpi = config.CATEGORY.COMMENT_PAGE
 
 function getLatestComments (limit) {
     return new Promise(function (resolve, reject) {
-        let LIMIT = common.isNumeric(limit) ? limit : 0
+        let LIMIT = util.isNumeric(limit) ? limit : 0
         let connection = db.createConnection()
         let QUERY_COMMENTS = 'SELECT comment_ID, comment_author, comment_post_ID, comment_date, comment_content ' +
                             'FROM wp_comments ' +

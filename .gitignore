@@ -1,8 +1,7 @@
 .next
+.idea
 .DS_Store
 node_modules
 npm-debug.log
 performance.log
-interfaces/db-product.json
-interfaces/test.js
-interfaces/test-http.js
+server/db/production.json

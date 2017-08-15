@@ -8,6 +8,13 @@ Router.onRouteChangeStart = () => NProgress.start()
 Router.onRouteChangeError = () => NProgress.done()
 Router.onRouteChangeComplete = () => NProgress.done()
 
+const NAVS = [
+    { href: '/', text: '博客首页' },
+    { href: '/essay', text: '我的随笔' },
+    { href: '/message', text: '给我留言' },
+    { href: '/resume', text: '个人简历' }
+]
+
 export default class extends React.Component {
 
     constructor (props) {
@@ -24,7 +31,7 @@ export default class extends React.Component {
                         </Link>
                     </div>
                     <ul className="ul-clear-list head-item nav">
-                    { config.NAVS.map((nav) => (
+                    { NAVS.map((nav) => (
                         <li className="nav-item" key={ nav.href }>
                             <Link href={ nav.href }>
                                 <a className={ 'link' + ('/' + this.props.active === nav.href ? ' active' : '') }>

@@ -22,26 +22,16 @@ let siteConfig = {
     // Is requesting comment author local by ip.
     REQUEST_COMMENT_LOCAL: true,
 
-    // The ssr cache max age (hours).
-    // For disable ssr cache, just set to 0.
-    SSR_CACHE_MAX_AGE: 0,
+    // The ssr cache max-age (hours).
+    // For disable ssr cache, just set 0.
+    SSR_CACHE: 0,
 
-    // The pages of using ssr cache.
-    SSR_CACHE_PAGES: ['/', '/essay', '/message', '/resume'],
-
-    NAVS: [
-        { href: '/', text: '博客首页' },
-        { href: '/essay', text: '我的随笔' },
-        { href: '/message', text: '给我留言' },
-        { href: '/resume', text: '个人简历' }
-    ]
+    // Pages of using ssr cache.
+    SSR_CACHE_PAGES: ['/', '/essay', '/message', '/resume']
 }
 
 // For local development database.
-if (
-    typeof process !== 'undefined' &&
-    process.env.NODE_ENV === 'development'
-) {
+if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
     siteConfig.CATEGORY = {
         ARTICLE: 1,
         ESSAY: 24,
