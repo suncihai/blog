@@ -9,7 +9,7 @@ if (isDev) {
     DEV_DB.socketPath = config.MYSQL_SOCKET_PATH
 }
 
-let CONFIG = isDev ? DEV_DB : require('./db-product.json')
+let CONFIG = isDev ? DEV_DB : require('./production.json')
 
 function createPool () {
     return mysql.createPool(CONFIG)
