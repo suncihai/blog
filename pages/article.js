@@ -154,7 +154,6 @@ export default class extends React.Component {
                                 dangerouslySetInnerHTML={{ __html: imageToDatasrc(article.post_content) }}
                             >
                             </div>
-                            <div className="article-end-line"></div>
                         </div>
                         <div className="article-comment">
                             <div className="comment-head">
@@ -201,15 +200,9 @@ export default class extends React.Component {
                         transform: translateY(-50%);
                     }
                     .article-content {
-                        margin-top: 30px;
-                        padding-top: 20px;
+                        padding: 20px 0;
                         text-align: justify;
-                        border-top: 1px dashed #999;
                         font-family: Helvetica, Arial;
-                    }
-                    .article-end-line {
-                        margin: 30px 0;
-                        border-bottom: 1px dashed #999;
                     }
                     .article-comment {
                     }

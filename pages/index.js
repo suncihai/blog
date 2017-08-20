@@ -131,9 +131,9 @@ export default class extends React.Component {
                     }
                     .article-title {
                         font-size: 2.4rem;
-                        font-weight: 300;
                     }
                     .article-digest {
+                        color: #444;
                         padding: 15px;
                         margin-bottom: 15px;
                         background: #f5f5f5;
@@ -171,6 +171,10 @@ export default class extends React.Component {
                         }
                         .article-thumbnail {
                             width: 100%;
+                            text-align: center;
+                        }
+                        .thumbnail {
+                            max-height: 100px;
                         }
                     }
                 `}</style>

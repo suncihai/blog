@@ -26,11 +26,11 @@ export default class extends React.Component {
     }
 
     componentDidMount () {
-        document.addEventListener('scroll', this.onScroll)
+        // document.addEventListener('scroll', this.onScroll)
     }
 
     componentWillUnmount () {
-        document.removeEventListener('scroll', this.onScroll)
+        // document.removeEventListener('scroll', this.onScroll)
     }
 
     onScroll () {
@@ -76,14 +76,14 @@ export default class extends React.Component {
                     <div className="resume-body">
                         {/*<div className="pageins">{ COPY.PAGE_INFO }</div>*/}
                         <div className="content">
-                            <div className="form">
+                            {/*<div className="form">
                                 <h2>职位意向</h2>
                                 <h3>Web 前端开发工程师</h3>
                                 <p>接受的工作地点：广州 、深圳、杭州</p>
-                            </div>
+                            </div>*/}
 
                             <div className="form">
-                                <h2>个人信息</h2>
+                                {/*<h2>个人信息</h2>
                                 <table>
                                     <tbody>
                                         <tr>
@@ -123,7 +123,7 @@ export default class extends React.Component {
                                             <td className="info-value">2014 年 7 月至今（Web 前端开发）</td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table>*/}
                             </div>
 
                             <div className="form">
@@ -131,14 +131,14 @@ export default class extends React.Component {
                                 <p>性格，谦虚随和慢热型；身材长相，经常被错认为是个学生；爱好，最爱看的是篮球（NBA）最爱打的是羽毛球。</p>
                             </div>
 
-                            <div className="form">
+                            {/*<div className="form">
                                 <h2>技术能力</h2>
                                 <ul>
                                     <li>熟练掌握运用 JavaScript / CSS / HTML 以及用各种框架方案进行前端的应用或组件开发；</li>
                                     <li>熟悉前端的自动化流程，对于当前流行的单元测试和可持续化集成方案有具体的实践经验；</li>
                                     <li>有较强的学习和团队协作能力，熟悉前后端数据对接及调试，能快速定位和解决常见问题。</li>
                                 </ul>
-                            </div>
+                            </div>*/}
 
                             <div className="form">
                                 <h2>个人履历</h2>
@@ -177,7 +177,7 @@ export default class extends React.Component {
                                 <p>目前主要用来记录一些与技术有关或无关的点点滴滴，希望在浩瀚的互联网留下自己的一点点痕迹。后台文章发布用的是 WordPress 数据库，主站没有用默认 PHP 模板的搭建方式，而是前后端都用 JavaScript 编写，利用 Next + React + Nodejs 构建服务端渲染的 ReactApp，利于文章的直出和 SEO 收录，另外这种服务端渲染可以很好的控制输出数据的缓存方式，以达到更快的访问速度。</p>
 
                                 <h3 className="opus">社区原创技术文章分享</h3>
-                                <p>工作这两三年来大部分比较懒，博客写的不多，向社区贡献的干货也很少，厚着脸皮列下觉得还看得过去的一些原创文章：</p>
+                                {/*<p>工作这两三年来大部分比较懒，博客写的不多，向社区贡献的干货也很少，厚着脸皮列下觉得还看得过去的一些原创文章：</p>*/}
                                 <ul>
                                     <li><a href="http://weibo.com/1761511274/DptIkhcbT?type=comment" target="_blank">利用 JavaScript 数据绑定实现一个简单的 MVVM 库</a> or <a href="https://segmentfault.com/a/1190000004847657" target="_blank">SegmentFault</a>. 当我的 MVVM 第一版本初步实现后，我在 SegmentFault 分享了这篇文章，将 MVVM 的基本实现思路试图用最简单易懂的方式写出来。那个时候国内社区关于分析 MVVM 完整底层实现原理细节的文章不多，所以得到了很多网友的收藏与推荐，包括小右的点赞转发。</li>
                                     <li><a href="https://www.zhihu.com/question/53176471/answer/134004234" target="_blank">开发 vue（或类似的 MVVM 框架）的过程中，需要面对的主要问题有哪些？</a> 我在知乎上的发表过的一个高票回答。</li>
@@ -185,7 +185,7 @@ export default class extends React.Component {
                                 </ul>
                             </div>
 
-                            <div className="form">
+                            {/*<div className="form">
                                 <h2>期望的工作内容</h2>
                                 <ul>
                                     <li>如果工作内容是一些类似于 toB 的单页面应用，或者是前端业务/组件/框架的设计与编写，或者是关于测试开发流程等，那么可能会很合适我，上手熟悉会很快；</li>
@@ -201,10 +201,10 @@ export default class extends React.Component {
                                 <p>希望加入一个体系成熟（正规军）、融洽和睦（有团建）、互相学习（有分享）的前端团队之中，一起写痛快的代码，做有成就的产品；</p>
                                 <p>工作第一，但工作不是生活的全部，所以不希望公司是重度的 996 模式（有双休或调休）。</p>
                                 <p>如果能有经常或定时组织去打羽毛球的同事最好！</p>
-                            </div>
+                            </div>*/}
                         </div>
                     </div>
-                    <div className="resume-aside">
+                    {/*<div className="resume-aside">
                         <div className={`op animated ${opclass}`}>
                             <a data-tip="发邮件给我" className="op-item" href="mailto:tangbc921@gmail.com">
                                 <img className="op-img" src="/static/images/gmail.svg" alt="SendEmail"/>
@@ -217,7 +217,7 @@ export default class extends React.Component {
                             </a>
                         </div>
                         <ReactTooltip place="left" type="dark" effect="solid"/>
-                    </div>
+                    </div>*/}
                 </div>
 
                 <CommonFoot />
