@@ -255,6 +255,7 @@ export default class extends React.Component {
 
                 <style jsx global>{`
                     pre {
+                        max-height: 500px;
                         font-size: 1.4rem;
                         border-radius: 2px;
                         position: relative;

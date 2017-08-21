@@ -181,7 +181,7 @@ export default class extends React.Component {
                                 <ul>
                                     <li><a href="http://weibo.com/1761511274/DptIkhcbT?type=comment" target="_blank">利用 JavaScript 数据绑定实现一个简单的 MVVM 库</a> or <a href="https://segmentfault.com/a/1190000004847657" target="_blank">SegmentFault</a>. 当我的 MVVM 第一版本初步实现后，我在 SegmentFault 分享了这篇文章，将 MVVM 的基本实现思路试图用最简单易懂的方式写出来。那个时候国内社区关于分析 MVVM 完整底层实现原理细节的文章不多，所以得到了很多网友的收藏与推荐，包括小右的点赞转发。</li>
                                     <li><a href="https://www.zhihu.com/question/53176471/answer/134004234" target="_blank">开发 vue（或类似的 MVVM 框架）的过程中，需要面对的主要问题有哪些？</a> 我在知乎上的发表过的一个高票回答。</li>
-                                    <li><a href="https://segmentfault.com/a/1190000007246561" target="_blank">简单易操作的跨浏览器 JavaScript 单元测试解决方案</a>。一篇介绍跨平台云测试工具 SauceLabs 的使用方法与心得。</li>
+                                    <li>博客其他……</li>
                                 </ul>
                             </div>
 
