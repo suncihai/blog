@@ -137,7 +137,7 @@ export default class extends React.Component {
 
                             <div className="form">
                                 <h2>简单介绍</h2>
-                                <p>性格，谦虚随和慢热型；身材长相，经常被错认为是个学生；爱好，最爱看的是篮球（NBA）最爱打的是羽毛球。</p>
+                                <p>性格，谦虚随和慢热型；身材长相，经常被错认为是个学生；爱好，最爱看篮球（NBA）最爱打羽毛球。</p>
                             </div>
 
                             {/*<div className="form">
@@ -152,8 +152,8 @@ export default class extends React.Component {
                             <div className="form">
                                 <h2>个人履历</h2>
                                 <ul>
-                                    <li>2010 年 9 月至 2014 年 7 月就读于桂林电子科技大学信息与通信专业，修完本科学士学位。</li>
-                                    <li>2014 年 7 月至 2017 年 2 月就职于<a target="_blank" rel="nofollow noopener noreferrer" href="https://www.sunteng.com/">广州舜飞信息科技有限公司</a>，任职 Web 前端开发工程师。</li>
+                                    <li>2010 年 9 月至 2014 年 7 月就读于桂林电子科技大学信息与通信专业。</li>
+                                    <li>2014 年 7 月至 2017 年 2 月就职于<a target="_blank" rel="nofollow noopener noreferrer" href="https://www.sunteng.com/">广州舜飞科技</a>，任职 Web 前端开发工程师。</li>
                                     <li>2017 年 3 月至今就职于珠海金山软件 WPS <a target="_blank" rel="nofollow noopener noreferrer" href="https://drive.wps.cn">云文档</a>，任职 Web 前端开发工程师。</li>
                                 </ul>
                             </div>
