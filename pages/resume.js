@@ -27,10 +27,19 @@ export default class extends React.Component {
 
     componentDidMount () {
         // document.addEventListener('scroll', this.onScroll)
+        let head = document.querySelector('head')
+        this.btnScript = document.createElement('script')
+        this.btnScript.setAttribute('async', true)
+        this.btnScript.setAttribute('type', 'text/javascript')
+        this.btnScript.setAttribute('src', 'https://buttons.github.io/buttons.js')
+        head.appendChild(this.btnScript)
     }
 
     componentWillUnmount () {
         // document.removeEventListener('scroll', this.onScroll)
+
+        let head = document.querySelector('head')
+        head.removeChild(this.btnScript)
     }
 
     onScroll () {
@@ -164,12 +173,13 @@ export default class extends React.Component {
                             <div className="form">
                                 <h2>主要作品</h2>
 
-                                <h3 className="opus"><a href="https://github.com/tangbc/sugar" target="_blank">sugar.js</a> 一个用于开发前端模块化 UI 组件的轻量级 MVVM 框架</h3>
+                                <h3 className="opus"><a className="github-button" target="_blank" href="https://github.com/tangbc/sugar" data-size="large"  data-icon="octicon-star" data-show-count="true" aria-label="Stars on GitHub">sugar.js</a> 一个用于开发前端模块化 UI 组件的轻量级 MVVM 框架</h3>
                                 <p>这是我的第一个开源作品，也是我自己实现的一个比较完整的框架轮子。独立分离了组件系统和 MVVM 指令系统，方便按需移植到所需开发业务中。使用场景定位为快速实现一些中小型前端应用的工具，有着体积小和无依赖的特点，目前处在一个相对很稳定的版本。起初只是为了写个简单的组件系统练练手，后来发现使用伴随着繁琐头疼的 DOM 操作，用第三方 MVVM 框架又觉得太冗余和拘束，于是自己就开发了一个只实现指令系统（纯粹 VielModel）的超级轻量且功能齐全的 MVVM 框架（压缩后仅 28kb）。再后来经过舜飞前端团队考量之后（业务契合度、体积小和可定制需求等优点）把我写的 MVVM 作为一个重要部分嵌入到了前端团队的生产框架中，给团队项目带来了开发的便利和效率的提升，至今前公司的业务项目仍在大面积使用中。</p>
                                 <p>sugar.js 具备构建前端组件应用的基本功能，如组件间消息通信、组件嵌套、组件复用和继承等，API 简单易懂。200 多个测试用例、99% 的测试覆盖率以及通过各种平台浏览器下的测试保证了较高的稳定性和兼容性。项目中也实现了几个完整的有意思的例子，如一个标准的 <a href="https://tangbc.github.io/sugar/demos/todoMVC" target="_blank">TodoMVC</a>（不超过 150 行 JS 代码）等等。</p>
                                 <p>sugar.js 不仅是一个实现比较完整的开源项目，同时也体现了我的代码编写风格和组织习惯，写出健壮、漂亮和易读的代码是我一直追求的目标。关于 sugar.js 更多的信息和使用细节可以看下<a href="https://github.com/tangbc/sugar/wiki" target="_blank">文档说明</a>。</p>
 
-                                <h3 className="opus"><a href="https://github.com/tangbc/vue-virtual-scroll-list" target="_blank">vue-virtual-scroll-list</a> 一个基于 Vue2 的虚拟列表组件</h3>
+                                <h3 className="opus">
+                                <a className="github-button" target="_blank" href="https://github.com/tangbc/vue-virtual-scroll-list"  data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Stars on GitHub">vue-virtual-scroll-list</a> 一个基于 Vue2 的虚拟列表组件</h3>
                                 <p>通过 Vue2 虚拟 DOM 构建组件的特性处理大数据列表渲染的性能问题和无限数据加载问题，可无压力渲染十万条列表数据。目前 WPS 云文档正在使用这个组件，以及不少的国内外开发者朋友也在使用、提 issue 反馈和 pull request 贡献，甚至有一些外国人帮助我 fixed typo 英文拼写和语法错误的 😂 目前这个 repo 处于一个使用稳定和正在维护的状态。</p>
 
                                 <h3 className="opus"><a href="https://www.tangbc.com">www.tangbc.com</a> 我的博客网站</h3>
@@ -363,6 +373,9 @@ export default class extends React.Component {
                     .fixed-title {
                         position: fixed !important;
                         top: 0;
+                    }
+                    iframe {
+                        vertical-align: middle !important;
                     }
                 `}</style>
             </div>
