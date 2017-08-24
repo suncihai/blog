@@ -38,6 +38,8 @@ if (typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
         COMMENT_PAGE: 2
     }
 
+    siteConfig.SSR_CACHE = 0
+
     siteConfig.HOST = 'http://localhost:' + siteConfig.LISTEN_PORT
 
     // The path to a unix domain socket to connect to.
