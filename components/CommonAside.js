@@ -47,7 +47,7 @@ const TitleList = (titles = []) => (
             return (
                 <li className="title-name" key={ article.ID }>
                     <span className="title-index constantia">{ index + 1 }. </span>
-                    <Link as={ createPostLink(article.post_name) } href={ createLinkObject(article.post_name) }>
+                    <Link prefetch as={ createPostLink(article.post_name) } href={ createLinkObject(article.post_name) }>
                         <a className="title-link" title={ article.post_title }>{ article.post_title }</a>
                     </Link>
                 </li>
@@ -82,7 +82,7 @@ const CommentList = (comments = []) => (
                 <li className="list" key={ comment.comment_ID }>
                     <span className="author">{ comment.comment_author }</span>
                     <span> { COPY.COMMENTED } </span>
-                    <Link as={ createPostLink(comment.post_name) } href={ createLinkObject(comment.post_name) } >
+                    <Link prefetch as={ createPostLink(comment.post_name) } href={ createLinkObject(comment.post_name) } >
                         <a className="link">{ comment.post_title }</a>
                     </Link>
                     <span>：</span>

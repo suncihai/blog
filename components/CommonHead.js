@@ -33,7 +33,7 @@ export default class extends React.Component {
                     <ul className="ul-clear-list head-item nav">
                     { NAVS.map((nav) => (
                         <li className="nav-item" key={ nav.href }>
-                            <Link href={ nav.href }>
+                            <Link prefetch href={ nav.href }>
                                 <a className={ 'link' + ('/' + this.props.active === nav.href ? ' active' : '') }>
                                     { nav.text }
                                 </a>

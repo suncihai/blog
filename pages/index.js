@@ -84,7 +84,7 @@ export default class extends React.Component {
                         { articles.map((item) => (
                             <div className="list-item" key={ item.ID }>
                                 <div className="article-head">
-                                    <Link as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
+                                    <Link prefetch as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
                                         <a className="article-title">{ item.post_title }</a>
                                     </Link>
                                 </div>
@@ -98,7 +98,7 @@ export default class extends React.Component {
                                     </span>
                                     <span className="article-publish constantia">{ prettyDate(item.post_date) }</span>
                                     { item.no_digest ? '' :
-                                        <Link as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
+                                        <Link prefetch as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
                                             <a> { COPY.CONTINUE }</a>
                                         </Link>
                                     }
