@@ -15,7 +15,7 @@ export default class EssayList extends Index {
         return {
             brief: '心情随笔，与技术无关',
             title: '我的随笔',
-            navActive: '/essay',
+            active: '/essay',
             hasTitle: true,
             articles: res.data || []
         }

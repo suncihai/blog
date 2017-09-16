@@ -23,6 +23,7 @@ export default class extends React.Component {
         return {
             brief: '',
             title: '前端那些事',
+            active: '/',
             hasTitle: false,
             articles: res.data || []
         }
@@ -33,13 +34,13 @@ export default class extends React.Component {
     }
 
     render () {
-        const { title, brief, articles, hasTitle } = this.props
+        const { title, brief, active, articles, hasTitle } = this.props
 
         return (
             <div className="blog center">
                 <DocumentHead title={ title } />
 
-                <CommonHead active="/" />
+                <CommonHead active={ active } />
 
                 <div className="global-body center">
                     <div className="global-left">
@@ -54,18 +55,18 @@ export default class extends React.Component {
                                 </div>
                                 <div className="article-digest">
                                     { item.post_summary }
-                                    { item.no_digest ? '' : ' [...]' }
+                                    { item.no_digest ? '' : ' ... ' }
+                                    { item.no_digest ? '' :
+                                        <Link prefetch as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
+                                            <a title="继续阅读"><i className="icon-arrow-right2"></i></a>
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="article-more constantia">
                                     <span className="article-comments">
                                         <i className="icon-bubble"></i>{ item.comment_count }
                                     </span>
                                     <span className="article-publish">{ prettyDate(item.post_date) }</span>
-                                    { item.no_digest ? '' :
-                                        <Link prefetch as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
-                                            <a> 继续阅读»</a>
-                                        </Link>
-                                    }
                                 </div>
                                 <div className="article-thumbnail">
                                 { item.post_thumbnail ? <img className="thumbnail" data-src={ item.post_thumbnail }/> : '' }

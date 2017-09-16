@@ -11,8 +11,7 @@ Router.onRouteChangeComplete = () => NProgress.done()
 const NAVS = [
     { href: '/', text: '主页' },
     { href: '/essay', text: '我的随笔' },
-    { href: '/message', text: '给我留言' },
-    { href: '/resume', text: '个人简历' }
+    { href: '/message', text: '给我留言' }
 ]
 
 export default class extends React.Component {
@@ -41,6 +40,9 @@ export default class extends React.Component {
                         </li>
                     )) }
                     </ul>
+                    <div className="search">
+                        <i className="icon-search"></i>
+                    </div>
                 </div>
 
                 <style jsx>{`
@@ -54,7 +56,6 @@ export default class extends React.Component {
                         display: inline-block;
                         vertical-align: text-bottom;;
                     }
-
                     .logo {
                         font-size: 2rem;
                         font-family: Constantia, Georgia;
@@ -68,7 +69,7 @@ export default class extends React.Component {
                         display: inline-block;
                     }
                     .nav-item {
-                        margin: 0 2em;
+                        padding: 0 2em;
                         text-align: center;
                         display: inline-block;
                     }
@@ -77,6 +78,14 @@ export default class extends React.Component {
                     }
                     .active {
                         color: #fabf31;
+                    }
+                    .search {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        color: #fff;
+                        width: 200px;
+                        text-align: right;
                     }
 
                     @media (max-width: 880px) {
@@ -97,9 +106,12 @@ export default class extends React.Component {
                             padding: 0;
                         }
                         .nav-item {
-                            width: 25%;
+                            width: 33%;
                             padding: 0;
                             font-size: 1.5rem;
+                        }
+                        .search {
+                            display: none;
                         }
                     }
                 `}</style>
