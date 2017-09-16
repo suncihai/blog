@@ -3,83 +3,47 @@ import axios from 'axios'
 import Link from 'next/link'
 import config from '../config'
 import ReactDOM from 'react-dom'
-import { getApi, createPostLink, createLinkObject, prettyDate } from '../common'
+import { getApi, createPostLink, createLinkObject, prettyDate, loadImage } from '../common'
 
 import CommonHead from '../components/CommonHead'
+import CommonBrief from '../components/CommonBrief'
 import CommonFoot from '../components/CommonFoot'
 import CommonAside from '../components/CommonAside'
 import DocumentHead from '../components/DocumentHead'
 
-const COPY = {
-    TITLE: '前端那些事',
-    KEYWORDS: '前端开发, JavaScript, CSS, HTML, 前端博客, 唐比昌',
-    DESCRIPTION: '记录、分享和总结是一个程序员成长的好习惯，这是我的个人博客，'+
-                '主要记录一些与前端开发相关的心得以及一些生活感悟等，无聊、有空、心情好的时候随便写写~',
-    CONTINUE: '继续阅读»',
-    PUBLISH: '发表于 ',
-}
-
-const PageBrief = (props) => (
-    <div className="pageins">{ props.children }</div>
-)
-
-const CID = config.CATEGORY.ARTICLE
-
-export const imgNodeToRealSrc = imgNode => {
-    if (imgNode.dataset.src) {
-        imgNode.setAttribute('src', imgNode.dataset.src)
-        imgNode.removeAttribute('data-src')
-    }
-}
-
 export default class extends React.Component {
 
     static async getInitialProps () {
-        let resArticle = {}
+        let res = {}
 
         try {
-            resArticle = await axios.get(getApi('articles?category_id='+ CID))
+            res = await axios.get(getApi('articles?category_id='+ config.CATEGORY.ARTICLE))
         } catch (e) {}
 
         return {
             brief: '',
-            navActive: '',
-            title: COPY.TITLE,
-
+            title: '前端那些事',
             hasTitle: false,
-            articles: resArticle.data || []
+            articles: res.data || []
         }
     }
 
     componentDidMount () {
-        this.loadImage(ReactDOM.findDOMNode(this))
-    }
-
-    loadImage (dom) {
-        setTimeout(() => {
-            let images = dom.querySelectorAll('[data-src]')
-            for (let i = 0; i < images.length; i++) {
-                imgNodeToRealSrc(images[i])
-            }
-        }, 0)
+        loadImage(ReactDOM.findDOMNode(this))
     }
 
     render () {
-        const { brief, articles, hasTitle } = this.props
+        const { title, brief, articles, hasTitle } = this.props
 
         return (
             <div className="blog center">
-                <DocumentHead
-                    title={ this.props.title }
-                    keywords={ COPY.KEYWORDS }
-                    description={ COPY.DESCRIPTION }
-                />
+                <DocumentHead title={ title } />
 
-                <CommonHead active={ this.props.navActive } />
+                <CommonHead active="/" />
 
                 <div className="global-body center">
                     <div className="global-left">
-                        { brief ? <PageBrief>{ brief }</PageBrief> : '' }
+                        { brief ? <CommonBrief>{ brief }</CommonBrief> : '' }
                         <div className="list">
                         { articles.map((item) => (
                             <div className="list-item" key={ item.ID }>
@@ -92,14 +56,14 @@ export default class extends React.Component {
                                     { item.post_summary }
                                     { item.no_digest ? '' : ' [...]' }
                                 </div>
-                                <div className="article-more">
-                                    <span className="article-comments constantia">
-                                        <i className="global-comments-icon"></i>{ item.comment_count }
+                                <div className="article-more constantia">
+                                    <span className="article-comments">
+                                        <i className="icon-bubble"></i>{ item.comment_count }
                                     </span>
-                                    <span className="article-publish constantia">{ prettyDate(item.post_date) }</span>
+                                    <span className="article-publish">{ prettyDate(item.post_date) }</span>
                                     { item.no_digest ? '' :
                                         <Link prefetch as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
-                                            <a> { COPY.CONTINUE }</a>
+                                            <a> 继续阅读»</a>
                                         </Link>
                                     }
                                 </div>
@@ -118,8 +82,8 @@ export default class extends React.Component {
 
                 <style jsx>{`
                     .list-item {
-                        padding-bottom: 20px;
-                        margin-bottom: 10px;
+                        padding-bottom: 2em;
+                        margin-bottom: 2em;
                         border-bottom: 1px dashed #999;
                     }
                     .list-item:last-child {
@@ -136,12 +100,15 @@ export default class extends React.Component {
                         color: #444;
                         padding: 15px;
                         margin-bottom: 15px;
-                        background: #f5f5f5;
+                        background: #fafafa;
                         text-align: justify;
                         word-break: break-all;
+                        border-radius: 2px;
                     }
                     .article-more {
                         font-size: 1.4rem;
+                        height: 40px;
+                        line-height: 40px;
                     }
                     .article-publish {
                         margin-right: 1em;
@@ -155,6 +122,9 @@ export default class extends React.Component {
                         width: 50px;
                         text-align: right;
                         color: #a5a5a5;
+                    }
+                    .article-comments i {
+                        margin-right: 6px;
                     }
 
                     @media (max-width: 768px) {

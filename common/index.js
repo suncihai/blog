@@ -101,3 +101,16 @@ export const getDocumentHeight = () => {
         html.offsetHeight
     )
 }
+
+export const loadImage = (dom) => {
+    setTimeout(() => {
+        let images = dom.querySelectorAll('[data-src]')
+        for (let i = 0; i < images.length; i++) {
+            let imgNode = images[i]
+            if (imgNode.dataset.src) {
+                imgNode.setAttribute('src', imgNode.dataset.src)
+                imgNode.removeAttribute('data-src')
+            }
+        }
+    })
+}

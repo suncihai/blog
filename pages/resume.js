@@ -4,15 +4,9 @@ import ReactTooltip from 'react-tooltip'
 import { getDocumentHeight, isMobile } from '../common'
 
 import CommonHead from '../components/CommonHead'
+import CommonBrief from '../components/CommonBrief'
 import CommonFoot from '../components/CommonFoot'
 import DocumentHead from '../components/DocumentHead'
-
-const COPY = {
-    TITLE: '个人简历',
-    KEYWORDS: '简历, 唐比昌, 前端开发工程师',
-    DESCRIPTION: '唐比昌的个人简历，求职 Web 前端开发工程师',
-    PAGE_INFO: '目前在职，可考虑更好的机会。'
-}
 
 export default class extends React.Component {
 
@@ -73,17 +67,17 @@ export default class extends React.Component {
         return (
             <div className="blog center">
                 <DocumentHead
-                    title={ COPY.TITLE }
-                    keywords={ COPY.KEYWORDS }
-                    description={ COPY.DESCRIPTION }
+                    title="个人简历"
+                    keywords="简历, 唐比昌, 前端开发工程师"
+                    description="唐比昌的个人简历，求职 Web 前端开发工程师"
                 />
 
-                <CommonHead active="resume" />
+                <CommonHead active="/resume" />
 
                 <div className="global-body center resume">
                     <div className="resume-padding"></div>
                     <div className="resume-body">
-                        {/*<div className="pageins">{ COPY.PAGE_INFO }</div>*/}
+                        {/*<CommonBrief>目前在职，可考虑更好的机会。</CommonBrief>*/}
                         <div className="content">
                             {/*<div className="form">
                                 <h2>职位意向</h2>

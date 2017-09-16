@@ -147,10 +147,9 @@ export default class CommentForm extends React.Component {
                     <div className="comment-success">
                         <span className="success-author">{ this.state.author }</span>
                         { COPY.SUCCESS.YOUR }
-                        <i className="quote">“</i>
+                        <i className="icon-quotes-left"></i>
                         <span className="success-content">{ this.state.content }</span>
-                        <i className="quote right">”</i>
-                        { COPY.SUCCESS.WAIT }
+                        <i className="icon-quotes-right"></i> { COPY.SUCCESS.WAIT }
                     </div> :
                     <div>
                         <table>

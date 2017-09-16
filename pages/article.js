@@ -2,11 +2,10 @@ import React from 'react'
 import axios from 'axios'
 import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
-import { imgNodeToRealSrc } from './index'
 
 import config from '../config'
 import notFound from '../common/not-found'
-import { getApi, prettyDate, getClientHeight } from '../common'
+import { getApi, prettyDate, getClientHeight, loadImage } from '../common'
 
 import DocumentHead from '../components/DocumentHead'
 import CommonHead from '../components/CommonHead'
@@ -18,12 +17,6 @@ import CommentForm from '../components/CommentForm'
 const SORT_TYPE = {
     ASC: 1,
     DESC: -1
-}
-const COPY = {
-    COMMENT_TOTAL: (count) => '共 '+ count +' 条评论',
-    EARLY_COMMENT: '最早评论',
-    LATEST_COMMENT: '最新评论',
-    COMMENT_TYPE: '评论',
 }
 
 const imageToDatasrc = (post) => {
@@ -85,29 +78,17 @@ export default class extends React.Component {
     onPageReady () {
         let dom = ReactDOM.findDOMNode(this)
 
-        this.loadImage(dom)
-        this.highlightCode(dom)
+        loadImage(dom)
 
-        window.addEventListener('scroll', this.onScroll)
-        this.commentEl = dom.querySelector('.article-comment')
-    }
-
-    highlightCode (dom) {
         setTimeout(() => {
             let nodes = dom.querySelectorAll('pre')
             for (let i = 0; i < nodes.length; i++) {
                 hljs.highlightBlock(nodes[i])
             }
         }, 0)
-    }
 
-    loadImage (dom) {
-        setTimeout(() => {
-            let images = dom.querySelectorAll('[data-src]')
-            for (let i = 0; i < images.length; i++) {
-                imgNodeToRealSrc(images[i])
-            }
-        }, 0)
+        window.addEventListener('scroll', this.onScroll)
+        this.commentEl = dom.querySelector('.article-comment')
     }
 
     onScroll () {
@@ -146,7 +127,7 @@ export default class extends React.Component {
                             <div className="article-info constantia">
                                 <span className="article-date">{ prettyDate(article.post_date) }</span>
                                 <span className="article-comments">
-                                    <i className="global-comments-icon"></i>{ article.comment_count }
+                                    <i className="icon-bubble"></i>{ article.comment_count }
                                 </span>
                             </div>
                             <div
@@ -157,24 +138,24 @@ export default class extends React.Component {
                         </div>
                         <div className="article-comment">
                             <div className="comment-head">
-                                <span className="comment-total constantia">{ COPY.COMMENT_TOTAL(article.comment_count) }</span>
+                                <span className="comment-total constantia">共 { article.comment_count } 条评论</span>
                                 <select
                                     className="comment-sort"
                                     value={ this.state.sortType }
                                     onChange={ this.onSortTypeChange.bind(this) }
                                 >
-                                    <option value={ SORT_TYPE.ASC }>{ COPY.EARLY_COMMENT }</option>
-                                    <option value={ SORT_TYPE.DESC }>{ COPY.LATEST_COMMENT }</option>
+                                    <option value={ SORT_TYPE.ASC }>最早评论</option>
+                                    <option value={ SORT_TYPE.DESC }>最新评论</option>
                                 </select>
                             </div>
                             <CommentList
                                 toLoad={ this.state.reached }
                                 articleId={ article.post_id }
                                 sortType={ this.state.sortType }
-                                typeName={ COPY.COMMENT_TYPE }
+                                typeName="评论"
                             />
                             <div className="comment-form">
-                                <CommentForm typeName={ COPY.COMMENT_TYPE } articleId={ article.post_id } />
+                                <CommentForm typeName="评论" articleId={ article.post_id } />
                             </div>
                         </div>
                     </div>
@@ -198,6 +179,9 @@ export default class extends React.Component {
                         right: 0;
                         top: 50%;
                         transform: translateY(-50%);
+                    }
+                    .article-comments i {
+                        margin-right: 5px;
                     }
                     .article-content {
                         padding: 20px 0;
@@ -258,7 +242,8 @@ export default class extends React.Component {
                         font-size: 1.4rem;
                         border-radius: 2px;
                         position: relative;
-                        font-family: 'Roboto Mono', Monaco, courier, monospace;
+                        // font-family: 'Roboto Mono', Monaco, courier, monospace;
+                        font-family: CamingoCode, Monaco, Courier, "Source Han Sans SC", monospace;
                     }
                     .hljs.javascript:after {
                         position: absolute;
