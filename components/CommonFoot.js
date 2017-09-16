@@ -1,11 +1,7 @@
-const COPY = {
-    TEXT: '别往下看了，我就是底线~'
-}
-
 export default () => (
     <div className="global-foot center">
         <div className="foot-line"></div>
-        <div className="foot-text center">{ COPY.TEXT }</div>
+        <div className="foot-text center">别往下看了，我就是底线~</div>
         <div hidden>
             <script src="https://s19.cnzz.com/z_stat.php?id=5606127&web_id=5606127" type="text/javascript"></script>
         </div>

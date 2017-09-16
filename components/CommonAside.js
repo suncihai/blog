@@ -9,9 +9,7 @@ import CommonLoading from './CommonLoading'
 
 const COPY = {
     ABOUT: {
-        TITLE: '声明',
-        MAIN: '',
-        STATEMENT: '除特别说明外，本站所有文章均为本人原创，内容仅代表个人观点，如需转载请注明出处，谢谢合作 :-)'
+        STATEMENT: '声明：本站所有文章均为本人原创，内容仅代表个人观点，如需转载请注明出处，谢谢合作 :-)'
     },
     FLINK: {
         TITLE: '友情链接：',
@@ -234,9 +232,6 @@ export default class CommonAside extends React.Component {
             <div className="global-right">
                 <div className="common-aside">
                     <div className="about center">
-                        <div className="item-head">
-                            <h3 className="item-head-title">{ COPY.ABOUT.TITLE }</h3>
-                        </div>
                         <div className="item-content">
                             <p>{ COPY.ABOUT.MAIN }</p>
                             <p className="site-statement">{ COPY.ABOUT.STATEMENT }</p>
@@ -345,9 +340,6 @@ export default class CommonAside extends React.Component {
                     .item-head {
                         height: 35px;
                         line-height: 35px;
-                        background: #fff url(/static/images/stripe.png);
-                        background-repeat: repeat-x;
-                        background-position: center center;
                     }
                     .item-head-title {
                         margin: 0;

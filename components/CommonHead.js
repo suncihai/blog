@@ -9,7 +9,7 @@ Router.onRouteChangeError = () => NProgress.done()
 Router.onRouteChangeComplete = () => NProgress.done()
 
 const NAVS = [
-    { href: '/', text: '博客首页' },
+    { href: '/', text: '主页' },
     { href: '/essay', text: '我的随笔' },
     { href: '/message', text: '给我留言' },
     { href: '/resume', text: '个人简历' }
@@ -61,7 +61,6 @@ export default class extends React.Component {
                     }
                     .site-name {
                         color: #fabf31;
-                        text-shadow: 0px 0px 1px #f7c346;
                     }
 
                     .nav {
@@ -69,7 +68,7 @@ export default class extends React.Component {
                         display: inline-block;
                     }
                     .nav-item {
-                        padding: 0 2.4em;
+                        margin: 0 2em;
                         text-align: center;
                         display: inline-block;
                     }
