@@ -42,6 +42,10 @@ module.exports = {
             }
         }
 
+        if (desc.charAt(desc.length - 1) === char) {
+            desc = desc.substr(0, desc.length - 1)
+        }
+
         return desc
     }
 }

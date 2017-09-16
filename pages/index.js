@@ -3,6 +3,7 @@ import axios from 'axios'
 import Link from 'next/link'
 import config from '../config'
 import ReactDOM from 'react-dom'
+import { trackEvent } from '../plugins/trace'
 import { getApi, createPostLink, createLinkObject, prettyDate, loadImage } from '../common'
 
 import CommonHead from '../components/CommonHead'
@@ -58,7 +59,7 @@ export default class extends React.Component {
                                     { item.no_digest ? '' : ' ... ' }
                                     { item.no_digest ? '' :
                                         <Link prefetch as={ createPostLink(item.post_name) } href={ createLinkObject(item.post_name) }>
-                                            <a title="继续阅读"><i className="icon-arrow-right2"></i></a>
+                                            <a title="继续阅读"><i className="icon-arrow-right2" onClick={() => trackEvent('摘要更多', '点击：' + item.post_name)}></i></a>
                                         </Link>
                                     }
                                 </div>

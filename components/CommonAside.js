@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import Link from 'next/link'
+import { trackEvent } from '../plugins/trace'
 
 import config from '../config'
 import { getApi, createPostLink, createLinkObject, isMobile } from '../common'
@@ -43,7 +44,7 @@ const TitleList = (titles = []) => (
     <ul className="ul-clear-list">
         { titles.map((article, index) => {
             return (
-                <li className="title-name" key={ article.ID }>
+                <li className="title-name" key={ article.ID } onClick={() => trackEvent('侧边栏链接跳转', '最新文章')}>
                     <span className="title-index constantia">{ index + 1 }. </span>
                     <Link prefetch as={ createPostLink(article.post_name) } href={ createLinkObject(article.post_name) }>
                         <a className="title-link" title={ article.post_title }>{ article.post_title }</a>
@@ -77,7 +78,7 @@ const CommentList = (comments = []) => (
     <ul className="ul-clear-list">
         { comments.map((comment, index) => {
             return (
-                <li className="list" key={ comment.comment_ID }>
+                <li className="list" key={ comment.comment_ID } onClick={() => trackEvent('侧边栏链接跳转', '最新评论')}>
                     <span className="author">{ comment.comment_author }</span>
                     <span> { COPY.COMMENTED } </span>
                     <Link prefetch as={ createPostLink(comment.post_name) } href={ createLinkObject(comment.post_name) } >
@@ -150,14 +151,15 @@ export default class CommonAside extends React.Component {
         }
     }
 
-    eventClickTab (tabType) {
+    eventClickTab (tabType, tabText) {
         this.setState({ tabType })
+        trackEvent('点击侧边栏最新', tabText)
     }
 
     getTabHead (Tab) {
         let klass = 'tab-head-item ' + (this.state.tabType === Tab.TYPE ? 'active' : '')
         return (
-            <div className={ klass } onClick={ this.eventClickTab.bind(this, Tab.TYPE) }>
+            <div className={ klass } onClick={ this.eventClickTab.bind(this, Tab.TYPE, Tab.TEXT) }>
                 { Tab.TEXT }
 
                 <style jsx>{`
@@ -256,7 +258,7 @@ export default class CommonAside extends React.Component {
                                 <ul className="friend-link-content">
                                 { FRIEND_LINKS.map(flink => {
                                     return (
-                                        <li key={ flink.LINK }>
+                                        <li key={ flink.LINK } onClick={() => trackEvent('点击友情链接', flink.TITLE)}>
                                             <a
                                                 target="_blank"
                                                 href={ flink.LINK }
@@ -272,7 +274,7 @@ export default class CommonAside extends React.Component {
                         <div className="footnote">
                             <span>Powered by</span>
                             <a rel="nofollow noopener noreferrer" href="https://github.com/zeit/next.js"> next.js </a>
-                            <a rel="nofollow noopener noreferrer" href="https://github.com/tangbc/blog">{ COPY.SOURCE }</a>
+                            <a rel="nofollow noopener noreferrer" href="https://github.com/tangbc/blog" onClick={() => trackEvent('点击查看源代码')}>{ COPY.SOURCE }</a>
                             <br />
                             <span>© { (new Date).getFullYear() } TANG - </span>
                             <a rel="nofollow noopener" href="http://www.miitbeian.gov.cn">{ COPY.ICP }</a>

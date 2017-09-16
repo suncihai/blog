@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
+import { trackEvent } from '../plugins/trace'
 
 import config from '../config'
 import notFound from '../common/not-found'
@@ -103,9 +104,11 @@ export default class extends React.Component {
     }
 
     onSortTypeChange (evt) {
+        let val = evt.target.value
         this.setState({
-            sortType: evt.target.value
+            sortType: val
         })
+        trackEvent('切换评论排序方式', val === '1' ? '最早评论' : '最新评论')
     }
 
     render () {

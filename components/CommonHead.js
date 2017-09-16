@@ -3,10 +3,14 @@ import config from '../config'
 import Link from 'next/link'
 import NProgress from 'nprogress'
 import Router from 'next/router'
+import { trackPageview, trackEvent } from '../plugins/trace'
 
 Router.onRouteChangeStart = () => NProgress.start()
 Router.onRouteChangeError = () => NProgress.done()
-Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeComplete = (url) => {
+    NProgress.done()
+    trackPageview()
+}
 
 const NAVS = [
     { href: '/', text: '主页' },
@@ -24,14 +28,14 @@ export default class extends React.Component {
         return (
             <div className="global-head">
                 <div className="common-head center">
-                    <div className="logo head-item">
+                    <div className="logo head-item" onClick={() => trackEvent('头部导航', '点击 LOGO')}>
                         <Link href="/">
                             <a className="site-name">{ '<TANGBC/>' }</a>
                         </Link>
                     </div>
                     <ul className="ul-clear-list head-item nav">
                     { NAVS.map((nav) => (
-                        <li className="nav-item" key={ nav.href }>
+                        <li className="nav-item" key={ nav.href } onClick={() => trackEvent('头部导航', nav.text)}>
                             <Link prefetch href={ nav.href }>
                                 <a className={ 'link' + (this.props.active === nav.href ? ' active' : '') }>
                                     { nav.text }
@@ -40,7 +44,7 @@ export default class extends React.Component {
                         </li>
                     )) }
                     </ul>
-                    <div className="search">
+                    <div className="search" onClick={() => trackEvent('头部导航', '点击搜索按钮')}>
                         <i className="icon-search"></i>
                     </div>
                 </div>
@@ -84,7 +88,7 @@ export default class extends React.Component {
                         right: 0;
                         top: 0;
                         color: #fff;
-                        width: 200px;
+                        // width: 200px;
                         text-align: right;
                     }
 
