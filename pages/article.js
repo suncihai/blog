@@ -70,6 +70,7 @@ export default class extends React.Component {
             let pre = pres[i]
             pre.appendChild(getLineNumber(pre.innerHTML))
             hljs.highlightBlock(pre)
+            pre.style.visibility = 'visible'
         }
 
         window.addEventListener('scroll', this.onScroll)

@@ -1,6 +1,6 @@
 /* 整体布局 */
 export const bodyWidth = '70%'
-export const bodyMaxWidth = '996px'
+export const bodyMaxWidth = '1024px'
 
 /* 头部导航 */
 export const headHeight = '50px'

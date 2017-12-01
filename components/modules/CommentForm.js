@@ -23,7 +23,7 @@ const InputText = styled.input`
     ${FormStyle};
 `
 const Form = styled.div`
-    margin-bottom: 1em;
+    margin-bottom: 2em;
     border-radius: 2px;
 `
 const Table = styled.table`

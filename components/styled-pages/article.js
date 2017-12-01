@@ -46,6 +46,7 @@ export const ArticleBody = styled.div`
         padding-left: 2.8em;
         font-size: 1.4rem;
         font-weight: bold;
+        visibility: hidden;
     }
     blockquote {
         background: #f8f8f8;

@@ -82,7 +82,7 @@ const CommentBodyReplyContent = styled.div``
 const CommentNoAudit = styled.div`
     position: absolute;
     right: 0;
-    top: 0;
+    bottom: 0;
     color: #d62219;
     > i {
         font-size: 3em;
@@ -136,9 +136,15 @@ export default class extends React.Component {
 
     getNoAuditComments (list = []) {
         const { id } = this.props
-        const noAudits = commentStorage.get() || []
+        const noAudits = commentStorage.get()
         const auditIds = list.map(comment => comment.id)
-        return noAudits.filter(comment => !~auditIds.indexOf(comment.id) && comment.articleId === id)
+
+        const newNoAudits = noAudits.filter(comment => auditIds.indexOf(comment.id) === -1)
+        commentStorage.set(newNoAudits)
+
+        return noAudits.filter(comment => {
+            return comment.articleId === id && auditIds.indexOf(comment.id) === -1
+        })
     }
 
     addUnAudit (comment) {

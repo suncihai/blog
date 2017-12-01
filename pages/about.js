@@ -27,6 +27,12 @@ export default class extends React.Component {
         }
     }
 
+    onMessageAdded (newMessage) {
+        if (this.refs.list) {
+            this.refs.list.addUnAudit(newMessage)
+        }
+    }
+
     onLoad () {
         this.setState({
             loaded: true
@@ -51,8 +57,9 @@ export default class extends React.Component {
                             </AboutMessageTitle>
                             <AboutMessageSub>无聊的、建议的、批评的、拍砖的、交流的…… 都在这说吧 ~</AboutMessageSub>
                         </AboutMessage>
-                        <ComponentCommentForm type="留言" id={commentId} />
-                        <ComponentCommentList type="留言" id={commentId} reached={true} onLoad={this.onLoad.bind(this)} />
+                        <ComponentCommentForm type="留言" id={commentId} onAdded={this.onMessageAdded.bind(this)} />
+                        <ComponentCommentList type="留言" id={commentId} reached={true}
+                            onLoad={this.onLoad.bind(this)} ref="list" />
                     </AppBody>
                     <ComponentFooter visible={loaded} />
                 </App>
