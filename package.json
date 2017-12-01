@@ -3,6 +3,7 @@
   "name": "blog-beta",
   "version": "2.1.0",
   "scripts": {
+    "lint": "eslint ./",
     "build": "next build",
     "start": "NODE_ENV=production node server/entry.js",
     "dev": "NODE_ENV=development node server/entry.js"
