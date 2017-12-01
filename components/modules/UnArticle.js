@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import ComponentIcon from './Icon'
+
 const UnArticle = styled.div`
     padding-top: 4em;
     text-align: center;
@@ -13,7 +15,7 @@ const UnArticle = styled.div`
 
 export default () => (
     <UnArticle>
-        <i className="iconfont icon-meiyoushuju"></i>
+        <ComponentIcon type="nodata" />
         <p>文章不存在，地址输入有误或者已被删除。</p>
     </UnArticle>
 )

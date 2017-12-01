@@ -56,6 +56,13 @@ app.prepare().then(() => {
         context.respond = false
     })
 
+    // 搜索
+    router.get('/search/:word', async context => {
+        const { req, res, params, query } = context
+        await app.render(req, res, '/search', createMeta(params, query))
+        context.respond = false
+    })
+
     // 数据请求接口
     router.get('/api/:api/:id', async context => {
         const { res, params, query } = context

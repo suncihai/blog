@@ -3,7 +3,7 @@ import Document, { Head, Main, NextScript } from 'next/document'
 
 import GlobalStyle from '../components/GlobalStyle'
 import NormalizeStyle from '../components/NormalizeStyle'
-import NprogressStyle from '../components/NprogressStyle'
+// import NprogressStyle from '../components/NprogressStyle'
 
 export default class MyDocument extends Document {
     render () {
@@ -20,7 +20,6 @@ export default class MyDocument extends Document {
                     <link rel="stylesheet" href="/static/iconfont/iconfont.css" />
                     <link rel='shortcut icon' type='image/x-icon' href='/static/images/favicon.png' />
                     <NormalizeStyle />
-                    <NprogressStyle />
                     <GlobalStyle />
                     {StyleContent}
                 </Head>

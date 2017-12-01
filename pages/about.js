@@ -8,6 +8,7 @@ import ComponentHeader from '../components/modules/Header'
 import ComponentFooter from '../components/modules/Footer'
 import ComponentCommentList from '../components/modules/CommentList'
 import ComponentCommentForm from '../components/modules/CommentForm'
+import ComponentIcon from '../components/modules/Icon'
 import { App, AppBody } from '../components/styled-global'
 import {
     About,
@@ -53,7 +54,7 @@ export default class extends React.Component {
                         </About>
                         <AboutMessage>
                             <AboutMessageTitle>
-                                <i className="iconfont icon-message"></i> 留言板
+                                <ComponentIcon type="message" /> 留言板
                             </AboutMessageTitle>
                             <AboutMessageSub>无聊的、建议的、批评的、拍砖的、交流的…… 都在这说吧 ~</AboutMessageSub>
                         </AboutMessage>

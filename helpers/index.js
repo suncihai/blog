@@ -2,6 +2,26 @@ import config from '../config/server'
 
 export const getApi = path => `${config.host}/api/${path}`
 
+// export const toThousand = n => (n || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1, ')
+
+export const getLineNumber = html => {
+    let lines = ''
+    let splits = html.split(/\r\n|\r|\n/g)
+    let div = document.createElement('div')
+
+    if (!splits[splits.length - 1]) {
+        splits.pop()
+    }
+
+    splits.forEach((line, index) => {
+        lines += `<div style="height:{pr}%;">${index + 1}</div>`
+    })
+
+    div.className = 'line-nubmer'
+    div.innerHTML = `<div class="line-number-box">${lines.replace(/{pr}/g, 1 / splits.length * 100)}</div>`
+    return div
+}
+
 export const prettyDate = dateString => {
     let date = new Date()
     let dateArr = dateString.split(new RegExp('[:| |-]', 'ig'))
@@ -56,24 +76,4 @@ export const prettyDate = dateString => {
     }
 
     return `${year} 年 ${month + 1} 月 ${day} 日`
-}
-
-export const toThousand = n => (n || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1, ')
-
-export const getLineNumber = html => {
-    let lines = ''
-    let splits = html.split(/\r\n|\r|\n/g)
-    let div = document.createElement('div')
-
-    if (!splits[splits.length - 1]) {
-        splits.pop()
-    }
-
-    splits.forEach((line, index) => {
-        lines += `<div style="height:{pr}%;">${index + 1}</div>`
-    })
-
-    div.className = 'line-nubmer'
-    div.innerHTML = `<div class="line-number-box">${lines.replace(/{pr}/g, 1 / splits.length * 100)}</div>`
-    return div
 }

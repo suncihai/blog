@@ -13,6 +13,7 @@ import ComponentUnArticle from '../components/modules/UnArticle'
 import ComponentShareArticle from '../components/modules/ShareArticle'
 import ComponentCommentList from '../components/modules/CommentList'
 import ComponentCommentForm from '../components/modules/CommentForm'
+import ComponentIcon from '../components/modules/Icon'
 import { App, AppBody } from '../components/styled-global'
 import {
     Article,
@@ -100,7 +101,7 @@ export default class extends React.Component {
                             <ComponentShareArticle />
                             <ArticleComment innerRef={el => { this.refComment = el }}>
                                 <ArticleCommentTitle>
-                                    <i className="iconfont icon-list"></i> 评论列表
+                                    <ComponentIcon type="list" /> 评论列表
                                 </ArticleCommentTitle>
                                 <ComponentCommentList reached={reached} id={article.id} type="评论" ref="list" />
                                 <ComponentCommentForm id={article.id} type="评论" onAdded={this.onCommentAdded.bind(this)} />

@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
+import ComponentIcon from './Icon'
 import { Input } from '../styled-global'
 import { navMenus, socials } from '../../config/website'
 import {
@@ -106,7 +107,7 @@ const ComponentMenuList = props => navMenus.map((menu, index) => (
 
 const ComponentSocial = () => socials.map(social => (
     <RightSocialAnchor key={social.link} href={social.link} target="_blank">
-        <i className={`iconfont icon-${social.icon}`}></i>
+        <ComponentIcon type={social.icon} />
     </RightSocialAnchor>
 ))
 
@@ -139,7 +140,7 @@ export default class extends React.Component {
     }
 
     gotoSearch (searchValue) {
-        console.log('gotoSearch: ', searchValue)
+        window.location.href = `/search/${searchValue}`
     }
 
     componentDidMount () {
@@ -187,7 +188,7 @@ export default class extends React.Component {
                                 active={searchVisible}
                                 onClick={this.clickSearch.bind(this)}
                             >
-                                <i className="iconfont icon-search"></i>
+                                <ComponentIcon type="search" />
                             </RightSearchIcon>
                         </RightSearch>
                     </Right>

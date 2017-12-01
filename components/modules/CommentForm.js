@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components'
 import { getApi } from '../../helpers'
 import config from '../../config/server'
 
+import ComponentIcon from './Icon'
 import { Input } from '../styled-global'
 import { fontAuxColor } from '../styled-global/constant'
 
@@ -254,7 +255,7 @@ export default class extends React.Component {
                 <ButtonBox>
                     {!errorText ? null
                         : <TextError>
-                            <i className="iconfont icon-jinggao" /> {errorText}
+                            <ComponentIcon type="warning" /> {errorText}
                         </TextError>
                     }
                     <ButtonReset onClick={this.onReset.bind(this)}>重置</ButtonReset>

@@ -2,7 +2,8 @@ import React from 'react'
 import axios from 'axios'
 import styled, { css } from 'styled-components'
 
-import Loading from './Loading'
+import ComponentIcon from './Icon'
+import ComponentLoading from './Loading'
 import commentStorage from '../../helpers/storage'
 import { getApi, prettyDate } from '../../helpers'
 import { auxColor, fontAuxColor, fontFamilyNumber } from '../styled-global/constant'
@@ -119,7 +120,7 @@ const ComponentList = props => props.comments.map(comment => (
                     <CommentBodyReplyContent>{comment.answers[0].content}</CommentBodyReplyContent>
                 </CommentBodyReply>}
         </CommentBody>
-        {comment.noAudit ? <CommentNoAudit><i className="iconfont icon-noaudit"></i></CommentNoAudit> : null}
+        {comment.noAudit ? <CommentNoAudit><ComponentIcon type="noaudit" /></CommentNoAudit> : null}
     </Comment>
 ))
 
@@ -212,11 +213,11 @@ export default class extends React.Component {
         let { isLoad, error, comments } = this.state
 
         return (
-            <List>{isLoad ? <Loading />
+            <List>{isLoad ? <ComponentLoading />
                 : <ListBody>{error ? <ListError></ListError>
                     : <ListContent>{!comments.length
                         ? <ListEmpty>
-                            <i className="iconfont icon-nodata" />
+                            <ComponentIcon type="nodata" />
                             {` 暂时还没有${type} ~`}
                         </ListEmpty>
                         : <ComponentList comments={comments} />
