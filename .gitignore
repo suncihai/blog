@@ -3,5 +3,4 @@
 .DS_Store
 node_modules
 npm-debug.log
-performance.log
-server/db/production.json
+server/db/db.pro.json

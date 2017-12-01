@@ -1,6 +1,4 @@
-
 module.exports = {
-
     isNumeric (number) {
         return !isNaN(parseFloat(number)) && isFinite(number)
     },
@@ -9,20 +7,12 @@ module.exports = {
         return post.replace(/<(?:.|\n)*?>/gm, '')
     },
 
-    getThumbnail (post) {
+    getFirstThumbnail (post) {
         let matches = post.match(/<img.*src=[\"](.*?)[\"].*?>/)
         return matches && matches[1] || ''
     },
 
-    getChineseWord: function (post, limit) {
-        post = post.replace(/[^\u4E00-\u9FA5]/g, '')
-        if (limit) {
-            post = post.substr(0, limit)
-        }
-        return post
-    },
-
-    getPostDesc (post, limit) {
+    getPostSummary (post, limit) {
         let desc, char = '\u3002'
         let sentences = post.split(char)
 
@@ -47,5 +37,13 @@ module.exports = {
         }
 
         return desc
+    },
+
+    getChineseWord (post, limit) {
+        post = post.replace(/[^\u4E00-\u9FA5]/g, '')
+        if (limit) {
+            post = post.substr(0, limit)
+        }
+        return post
     }
 }

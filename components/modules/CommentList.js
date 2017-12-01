@@ -1,0 +1,177 @@
+import React from 'react'
+import axios from 'axios'
+import styled from 'styled-components'
+
+import { getApi, prettyDate } from '../../helpers'
+import Loading from './Loading'
+import { auxColor, fontAuxColor, fontFamilyNumber } from '../styled-global/constant'
+
+const List = styled.div`
+    padding-bottom: 2em;
+`
+const ListBody = styled.div``
+const ListError = styled.div``
+const ListContent = styled.div``
+const ListEmpty = styled.div`
+    text-align: center;
+    padding: 2em 0;
+`
+const Comment = styled.div`
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px dashed ${auxColor};
+    &:last-child {
+        border: none;
+    }
+`
+const CommentHead = styled.div`
+    height: 40px;
+    line-height: 40px;
+    padding-left: 2.6em;
+    text-align: right;
+`
+const CommentHeadAuthor = styled.span`
+    float: left;
+`
+const CommentHeadAuthorAvatar = styled.img`
+    width: 30px;
+    height: auto;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -15px;
+`
+const CommentHeadLocal = styled.span`
+    font-size: small;
+    font-style: italic;
+    color: ${fontAuxColor};
+    font-family: ${fontFamilyNumber};
+`
+const CommentHeadDate = CommentHeadLocal.extend`
+    &:before {
+        content: '·';
+        padding: 0 .5em;
+    }
+`
+const CommentBody = styled.div`
+    padding-left: 3em;
+    font-size: 1.4rem;
+`
+const CommentBodyContent = styled.div``
+const CommentBodyReply = styled.div`
+    background: #f5f5f5;
+    padding: 0.5em 1em;
+    margin-top: .5em;
+`
+const CommentBodyReplyName = styled.div`
+    font-weight: bold;
+`
+const CommentBodyReplyContent = styled.div``
+
+const urlRE = /^(http|https):\/\//
+const commentUrl = url => urlRE.test(url) ? url : '//' + url
+
+const ComponentAuthor = props => (
+    <CommentHeadAuthor>{!props.url
+        ? <span>{props.author}</span>
+        : <a target="_blank" rel="nofollow noopener noreferrer" href={commentUrl(props.url)}>
+            {props.author}
+        </a>
+    }</CommentHeadAuthor>
+)
+
+const ComponentList = props => props.comments.map(comment => (
+    <Comment key={comment.id}>
+        <CommentHead>
+            <CommentHeadAuthorAvatar src={`https://avatar.qwps.cn/avatar/${comment.author}`} />
+            <ComponentAuthor author={comment.author} url={comment.url} />
+            <CommentHeadLocal>{comment.local}</CommentHeadLocal>
+            <CommentHeadDate>{prettyDate(comment.date)}</CommentHeadDate>
+        </CommentHead>
+        <CommentBody>
+            <CommentBodyContent>{comment.content}</CommentBodyContent>
+            {!comment.answers.length ? null
+                : <CommentBodyReply>
+                    <CommentBodyReplyName>
+                        {`${comment.answers[0].author}（博主）回复：`}
+                    </CommentBodyReplyName>
+                    <CommentBodyReplyContent>{comment.answers[0].content}</CommentBodyReplyContent>
+                </CommentBodyReply>}
+        </CommentBody>
+    </Comment>
+))
+
+export default class extends React.Component {
+    constructor (props) {
+        super(props)
+        this.state = {
+            error: '',
+            comments: [],
+            isLoad: true,
+            loaded: false
+        }
+    }
+
+    onLoad () {
+        if (this.props.onLoad) {
+            this.props.onLoad()
+        }
+    }
+
+    async load () {
+        this.setState({
+            isLoad: true
+        })
+
+        const url = getApi(`comments/${this.props.id}`)
+        await axios.get(url).then(res => {
+            this.setState({
+                error: '',
+                loaded: true,
+                isLoad: false,
+                comments: res.data
+            })
+        }).catch(err => {
+            this.setState({
+                comments: [],
+                loaded: true,
+                isLoad: false,
+                error: err.message || `${this.props.type}加载失败`
+            })
+        })
+
+        this.onLoad()
+    }
+
+    componentWillReceiveProps (nextProps) {
+        if (nextProps.reached && !this.state.loaded) {
+            this.load()
+        }
+    }
+
+    componentDidMount () {
+        if (this.props.reached) {
+            this.load()
+        }
+    }
+
+    render () {
+        const { type } = this.props
+        const { isLoad, error, comments } = this.state
+
+        return (
+            <List>{isLoad ? <Loading />
+                : <ListBody>{error ? <ListError></ListError>
+                    : <ListContent>{!comments.length
+                        ? <ListEmpty>
+                            <i className="iconfont icon-nodata" />
+                            {` 暂时还没有${type} ~`}
+                        </ListEmpty>
+                        : <ComponentList comments={comments} />
+                    }</ListContent>
+                }</ListBody>
+            }</List>
+        )
+    }
+}

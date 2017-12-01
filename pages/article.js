@@ -2,349 +2,107 @@ import React from 'react'
 import axios from 'axios'
 import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
-import { trackEvent } from '../plugins/trace'
 
-import config from '../config'
-import notFound from '../common/not-found'
-import { getApi, prettyDate, getClientHeight, loadImage } from '../common'
+import { getApi, prettyDate, getLineNumber } from '../helpers'
 
+import HighLightStyle from '../components/HighLightStyle'
 import DocumentHead from '../components/DocumentHead'
-import CommonHead from '../components/CommonHead'
-import CommonFoot from '../components/CommonFoot'
-import CommonAside from '../components/CommonAside'
-import CommentList from '../components/CommentList'
-import CommentForm from '../components/CommentForm'
-
-const SORT_TYPE = {
-    ASC: 1,
-    DESC: -1
-}
-
-const imageToDatasrc = (post) => {
-    return post.replace(/<img([\s\S]*?)src\s*=\s*(['"])([\s\S]*?)\2([^>]*)>/gi, '<img$1data-src=$2$3$2$4>')
-}
-
-const INIT_STATE = () => {
-    return {
-        reached: false,
-        sortType: SORT_TYPE.DESC
-    }
-}
+import ComponentHeader from '../components/modules/Header'
+import ComponentFooter from '../components/modules/Footer'
+import ComponentUnArticle from '../components/modules/UnArticle'
+import ComponentShareArticle from '../components/modules/ShareArticle'
+import ComponentCommentList from '../components/modules/CommentList'
+import ComponentCommentForm from '../components/modules/CommentForm'
+import { App, AppBody } from '../components/styled-global'
+import {
+    Article,
+    ArticleHeader,
+    ArticleDate,
+    ArticleBody,
+    ArticleComment,
+    ArticleCommentTitle
+} from '../components/styled-pages/article'
 
 export default class extends React.Component {
-
     static async getInitialProps ({ query, res }) {
-        let resArticle = {}
-
-        try {
-            resArticle = await axios.get(getApi('article?alias='+ query.alias))
-        } catch (e) {}
-
-        if (!resArticle.data) {
-            res.statusCode = 404
-            res.end(notFound)
-            return
-        }
-
+        const { name } = query
+        const { data } = await axios.get(getApi(`article/${name}`))
         return {
-            hasTitle: true,
-            article: resArticle.data
+            name,
+            article: data
         }
     }
 
     constructor (props) {
         super(props)
-        this.state = INIT_STATE()
+        this.state = {
+            reached: false
+        }
         this.onScroll = this.onScroll.bind(this)
     }
 
-    // 单页模式下，从其他文章跳转过来需要重置状态
-    componentWillReceiveProps (nextProps) {
-        this.setState(INIT_STATE())
-    }
-
-    componentDidMount () {
-        this.onPageReady()
-    }
-
-    componentWillUnmount () {
-        window.removeEventListener('scroll', this.onScroll)
-    }
-
-    // 单页模式下，更新图片和代码块
-    componentDidUpdate () {
-        this.onPageReady()
-    }
-
-    onPageReady () {
-        let dom = ReactDOM.findDOMNode(this)
-
-        loadImage(dom)
-
-        setTimeout(() => {
-            let nodes = dom.querySelectorAll('pre')
-            for (let i = 0; i < nodes.length; i++) {
-                hljs.highlightBlock(nodes[i])
-            }
-        }, 0)
-
-        window.addEventListener('scroll', this.onScroll)
-        this.commentEl = dom.querySelector('.article-comment')
-    }
-
     onScroll () {
-        if (
-            !this.state.reached &&
-            this.commentEl.offsetTop - window.scrollY < getClientHeight()
-        ) {
+        if (this.state.reached || !this.refComment) {
+            return
+        }
+
+        const clientHeight = document.compatMode === 'CSS1Compat'
+            ? document.documentElement.clientHeight
+            : document.body.clientHeight
+
+        if (this.refComment.offsetTop - window.scrollY < clientHeight) {
             this.setState({
                 reached: true
             })
         }
     }
 
-    onSortTypeChange (evt) {
-        let val = evt.target.value
-        this.setState({
-            sortType: val
-        })
-        trackEvent('切换评论排序方式', val === '1' ? '最早评论' : '最新评论')
+    componentDidMount () {
+        const el = ReactDOM.findDOMNode(this)
+        const pres = el.querySelectorAll('pre')
+        for (let i = 0; i < pres.length; i++) {
+            let pre = pres[i]
+            pre.appendChild(getLineNumber(pre.innerHTML))
+            hljs.highlightBlock(pre)
+        }
+
+        window.addEventListener('scroll', this.onScroll)
+    }
+
+    componentWillUnmount () {
+        window.removeEventListener('scroll', this.onScroll)
     }
 
     render () {
-        const { article, hasTitle } = this.props
+        const { reached } = this.state
+        const { article, name } = this.props
 
         return (
-            <div className="blog">
+            <div>
                 <DocumentHead
-                    title={ article.post_title }
-                    description={ article.post_summary }
-                />
-                <CommonHead />
-                <link href="/static/libs/highlight.css" rel="stylesheet" />
-
-                <div className="global-body center">
-                    <div className="global-left">
-                        <div className="article">
-                            <h1 className="article-title">{ article.post_title }</h1>
-                            <div className="article-info constantia">
-                                <span className="article-date">{ prettyDate(article.post_date) }</span>
-                                <span className="article-comments">
-                                    <i className="icon-bubble"></i>{ article.comment_count }
-                                </span>
-                            </div>
-                            <div
-                                className="article-content"
-                                dangerouslySetInnerHTML={{ __html: imageToDatasrc(article.post_content) }}
-                            >
-                            </div>
-                        </div>
-                        <div className="article-comment">
-                            <div className="comment-head">
-                                <span className="comment-total constantia">共 { article.comment_count } 条评论</span>
-                                <select
-                                    className="comment-sort"
-                                    value={ this.state.sortType }
-                                    onChange={ this.onSortTypeChange.bind(this) }
-                                >
-                                    <option value={ SORT_TYPE.ASC }>最早评论</option>
-                                    <option value={ SORT_TYPE.DESC }>最新评论</option>
-                                </select>
-                            </div>
-                            <CommentList
-                                toLoad={ this.state.reached }
-                                articleId={ article.post_id }
-                                sortType={ this.state.sortType }
-                                typeName="评论"
-                            />
-                            <div className="comment-form">
-                                <CommentForm typeName="评论" articleId={ article.post_id } />
-                            </div>
-                        </div>
-                    </div>
-
-                    <CommonAside hasTitle={ hasTitle } />
-                </div>
-
-                <CommonFoot />
-
-                <style jsx>{`
-                    .article-title {
-                        font-weight: 300;
-                        line-height: 150%;
-                        font-size: 2.8rem;
-                    }
-                    .article-info {
-                        color: #808080;
-                    }
-                    .article-comments {
-                        position: absolute;
-                        right: 0;
-                        top: 50%;
-                        transform: translateY(-50%);
-                    }
-                    .article-comments i {
-                        margin-right: 5px;
-                    }
-                    .article-content {
-                        padding: 20px 0;
-                        text-align: justify;
-                        font-family: Helvetica, Arial;
-                    }
-                    .article-comment {
-                    }
-                    .comment-total {
-                        color: #808080;
-                    }
-                    .comment-add {
-                        position: absolute;
-                        right: 7em;
-                        top: 0;
-                        font-size: 1.4rem;
-                        text-decoration: underline;
-                        transition: background 500ms ease-out;
-                        background: rgba(100, 149, 237, .7);
-                        color: #fbf7f0;
-                        text-decoration: none;
-                        padding: 0 10px;
-                        border-radius: 2px;
-                    }
-                    .comment-add:hover {
-                        background: rgba(100, 149, 237, 1);
-                    }
-                    .comment-sort {
-                        position: absolute;
-                        right: 0;
-                        top: 0;
-                        font-size: 1.4rem;
-                        outline: none;
-                        border-color: #dadada;
-                        background: #f7f7f7;
-                    }
-
-                    @media (max-width: 768px) {
-                        .comment-add {
-                            display: none;
-                        }
-                        .article-title {
-                            font-size: 2rem;
-                        }
-                        .article-content {
-                            margin-top: 20px;
-                            padding-top: 10px;
-                            letter-spacing: 1px;
-                        }
-                        .article-end-line {
-                            margin: 20px 0;
-                        }
-                    }
-                `}</style>
-
-                <style jsx global>{`
-                    pre {
-                        font-size: 1.4rem;
-                        border-radius: 2px;
-                        position: relative;
-                        // font-family: 'Roboto Mono', Monaco, courier, monospace;
-                        font-family: CamingoCode, Monaco, Courier, "Source Han Sans SC", monospace;
-                    }
-                    .hljs.javascript:after {
-                        position: absolute;
-                        content: 'JS';
-                        top: 0;
-                        right: .5em;
-                        font-weight: bold;
-                        font-family: monospace, sans-serif;
-                    }
-                    .hljs.html:after {
-                        position: absolute;
-                        content: 'HTML';
-                        top: 0;
-                        right: .5em;
-                        font-weight: bold;
-                        font-family: monospace, sans-serif;
-                    }
-                    .hljs.css:after {
-                        position: absolute;
-                        content: 'CSS';
-                        top: 0;
-                        right: .5em;
-                        font-weight: bold;
-                        font-family: monospace, sans-serif;
-                    }
-                    .hljs.php:after {
-                        position: absolute;
-                        content: 'PHP';
-                        top: 0;
-                        right: .5em;
-                        font-weight: bold;
-                        font-family: monospace, sans-serif;
-                    }
-                    .hljs.json:after {
-                        position: absolute;
-                        content: 'JSON';
-                        top: 0;
-                        right: .5em;
-                        font-weight: bold;
-                        font-family: monospace, sans-serif;
-                    }
-                    .article-content h2 {
-                        padding-top: 1em;
-                        padding-bottom: .5em;
-                        font-weight: 400;
-                        font-size: 2.4rem;
-                        border-bottom: 1px dashed #999;
-                    }
-                    .article-content h3 {
-                        padding-top: .8em;
-                        padding-bottom: .4em;
-                        font-weight: 400;
-                        font-size: 2rem;
-                        border-bottom: 1px dashed #c3c3c3;
-                    }
-                    .article-content img {
-                        border-radius: 2px;
-                        max-width: 100%;
-                        height: auto;
-                        transition: 500ms ease-out;
-                    }
-                    .article-content img:hover {
-                        transform: scale(1.02);
-                    }
-                    .article-content blockquote {
-                        background: #f8f8f8;
-                        margin: 0;
-                        padding: 0.2rem 2rem;
-                        border-left: 5px solid #b4cfff;
-                    }
-                    .article-content ol li, .article-content ul li {
-                        margin: 0.5rem 0;
-                    }
-                    .article-content code {
-                        padding: 0 0.2rem;
-                        border-radius: 3px;
-                        display: inline-block;
-                        background: #eee;
-                        vertical-align: middle;
-                        font-size: 85%;
-                        font-family: 'Roboto Mono', Monaco, courier, monospace;
-                    }
-                `}</style>
-
-                <style jsx global>{`
-                    @media (max-width: 768px) {
-                        .hljs.javascript:after,
-                        .hljs.html:after,
-                        .hljs.css:after,
-                        .hljs.php:after,
-                        .hljs.json:after {
-                            display: none;
-                        }
-                        pre {
-                            font-size: 1.2rem;
-                        }
-                    }
-                `}</style>
+                    title={article && article.title}
+                    description={article && article.description} />
+                <App>
+                    <ComponentHeader />
+                    <AppBody>{!article
+                        ? <ComponentUnArticle />
+                        : <Article>
+                            <ArticleHeader><a href={`/article/${name}`}>{article.title}</a></ArticleHeader>
+                            <ArticleDate>{`写于：${prettyDate(article.date)}`}</ArticleDate>
+                            <ArticleBody dangerouslySetInnerHTML={{ __html: article.content }} />
+                            <ComponentShareArticle />
+                            <ArticleComment innerRef={el => { this.refComment = el }}>
+                                <ArticleCommentTitle>
+                                    <i className="iconfont icon-list"></i> 评论列表
+                                </ArticleCommentTitle>
+                                <ComponentCommentList reached={reached} id={article.id} type="评论" />
+                                <ComponentCommentForm id={article.id} type="评论" />
+                            </ArticleComment>
+                        </Article>
+                    }</AppBody>
+                    <ComponentFooter visible={true} />
+                </App>
+                <HighLightStyle />
             </div>
         )
     }

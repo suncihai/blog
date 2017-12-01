@@ -1,46 +1,55 @@
-let db = require('../db')
-let axios = require('axios')
-let util = require('../utils')
-let config = require('../../config')
+const db = require('../db')
+const axios = require('axios')
+const { isNumeric } = require('../utils')
+const { commentLocal } = require('../../config/server')
 
-const SHOW_LOCAL = config.REQUEST_COMMENT_LOCAL
+const getSort = sort => sort.toUpperCase() === 'ASC' ? 'ASC' : 'DESC'
 
-const UNKNOWN_AREA = '\u672a\u77e5\u5730\u533a'
-const QUERY_IP_API = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip='
-function getLocalByIp (ip) {
-    return axios.get(QUERY_IP_API + ip).then((res) => {
-        let data = res.data
-        if (typeof data === 'object' && data.ret === 1) {
-            let country = data.country
-            return (country !== '\u4e2d\u56fd' ? country : '') +
-                (data.province === data.city ? data.city : data.province + data.city)
-        } else {
-            return UNKNOWN_AREA
+const queryFields = [
+    'comment_ID', 'comment_date', 'comment_author', 'comment_author_IP',
+    'comment_author_url', 'comment_content', 'comment_parent', 'user_id'
+]
+
+const getCommentList = (id, sort = 'DESC') => new Promise((resolve, reject) => {
+    const connection = db.createConnection()
+    const articleId = isNumeric(id) ? id : 0
+    const sql = [
+        `SELECT ${queryFields} FROM wp_comments WHERE`,
+        `comment_approved=1 AND comment_post_ID = ${articleId}`,
+        `ORDER BY comment_date ${getSort(sort)}`
+    ].join(' ')
+
+    connection.query(sql, (err, res) => {
+        connection.end()
+
+        if (err) {
+            return reject(err)
         }
-    }).catch((err) => {
-        return UNKNOWN_AREA
+
+        resolve(formatComments(res || []))
     })
-}
+})
 
 const formatComments = async comments => {
-    let orignals = [], answerMap = {}
-    for (let i = 0; i < comments.length; i++) {
-        let comment = comments[i]
+    let results = []
+    let answerMap = {}
 
+    comments.forEach(comment => {
         if (comment.comment_parent) {
-            let answer = {
+            const answer = {
                 id: comment.comment_ID,
                 date: comment.comment_date,
                 author: comment.comment_author,
                 content: comment.comment_content
             }
+
             if (!answerMap[comment.comment_parent]) {
                 answerMap[comment.comment_parent] = [answer]
             } else {
                 answerMap[comment.comment_parent].push(answer)
             }
         } else {
-            orignals.push({
+            results.push({
                 id: comment.comment_ID,
                 author: comment.comment_author,
                 url: comment.comment_author_url,
@@ -49,56 +58,26 @@ const formatComments = async comments => {
                 date: comment.comment_date,
             })
         }
+    })
+
+    for (let i = 0; i < results.length; i++) {
+        let res = results[i]
+        res.answers = answerMap[res.id] || []
+        res.local = commentLocal ? await getLocal(res.local) : ''
     }
 
-    for (let j = 0; j < orignals.length; j++) {
-        let orignal = orignals[j]
-        orignal.answers = answerMap[orignal.id] || []
-        if (SHOW_LOCAL) {
-            orignal.local = await getLocalByIp(orignal.local)
-        } else {
-            orignal.local = ''
-        }
+    return results
+}
+
+const unknown = '未知地区'
+const iplookup = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip='
+const getLocal = ip => axios.get(iplookup + ip).then(res => {
+    let { data } = res
+    if (typeof data === 'object' && data.ret === 1) {
+        let { country, province, city } = data
+        return (country === '中国' ? '' : country) + (province === city ? city : province + city)
     }
+    return unknown
+}).catch(err => unknown)
 
-    return orignals
-}
-
-const SORT = {
-    '1': 'ASC',
-    '-1': 'DESC'
-}
-const COMMENT_FIELDS = [
-    'comment_ID', 'comment_date', 'comment_author', 'comment_author_IP',
-    'comment_author_url', 'comment_content', 'comment_parent', 'user_id'
-]
-function getCommentList (article_id, sort) {
-    return new Promise(function (resolve, reject) {
-        let postId = util.isNumeric(article_id) ? article_id : 0
-        let connection = db.createConnection()
-        let QUERY_COMMENTS = 'SELECT ' + COMMENT_FIELDS + ' FROM wp_comments WHERE ' +
-                            'comment_approved=1 AND comment_post_ID='+ postId +
-                            ' ORDER BY comment_date ' + (SORT[sort] || SORT['1'])
-
-        connection.query(QUERY_COMMENTS, function (error, results) {
-            connection.end()
-
-            if (error) {
-                reject(error)
-                throw error
-            }
-
-            resolve(formatComments(results))
-        })
-    })
-}
-
-module.exports = function (query) {
-    return new Promise(function (resolve, reject) {
-        getCommentList(query.article_id, query.sort).then(function (result) {
-            resolve(result)
-        }).catch(function (error) {
-            reject(error)
-        })
-    })
-}
+module.exports = ({ id, sort }) => getCommentList(id, sort).catch(err => err)

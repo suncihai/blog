@@ -3,12 +3,10 @@
  * http://develop.svn.wordpress.org/trunk/src/wp-includes/formatting.php
  */
 
-function autop_newline_preservation_helper (matches) {
-    return matches[0].replace('\n', '<WPPreserveNewline />')
-}
+const autop_newline_preservation_helper = matches => matches[0].replace('\n', '<WPPreserveNewline />')
 
-module.exports = function (pee, br) {
-    var pre_tags = new Map()
+module.exports = (pee, br) => {
+    let pre_tags = new Map()
 
     if (pee.trim() === '') {
         return ''
@@ -18,13 +16,13 @@ module.exports = function (pee, br) {
     pee = pee + '\n'
 
     if (pee.indexOf('<pre') > -1) {
-        var pee_parts = pee.split('</pre>')
-        var last_pee = pee_parts.pop()
+        let pee_parts = pee.split('</pre>')
+        let last_pee = pee_parts.pop()
 
         pee = ''
 
-        pee_parts.forEach(function (pee_part, index) {
-            var start = pee_part.indexOf('<pre')
+        pee_parts.forEach((pee_part, index) => {
+            let start = pee_part.indexOf('<pre')
 
             // Malformed html?
             if (start === -1) {
@@ -32,7 +30,7 @@ module.exports = function (pee, br) {
                 return
             }
 
-            var name = '<pre wp-pre-tag-' + index + '></pre>'
+            let name = '<pre wp-pre-tag-' + index + '></pre>'
             pre_tags[name] = pee_part.substr(start) + '</pre>'
             pee += pee_part.substr(0, start) + name
         })
@@ -43,7 +41,7 @@ module.exports = function (pee, br) {
     pee = pee.replace(/<br \/>\s*<br \/>/, '\n\n')
 
     // Space things out a little
-    var allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|' +
+    let allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|' +
         'pre|form|map|area|blockquote|address|math|style|p|h[1-6]|hr|fieldset|legend|section|article|' +
         'aside|hgroup|header|footer|nav|figure|figcaption|details|menu|summary)'
 
@@ -75,13 +73,13 @@ module.exports = function (pee, br) {
     pee = pee.replace(/\n\n+/gmi, '\n\n') // take care of duplicates
 
     // make paragraphs, including one at the end
-    var pees = pee.split(/\n\s*\n/)
+    let pees = pee.split(/\n\s*\n/)
 
     pee = ''
 
-    pees.forEach(function (tinkle) {
+    pees.forEach(tinkle => {
         pee += '<p>' + tinkle.replace(/^\s+|\s+$/g, '') + '</p>\n'
-    });
+    })
 
     // under certain strange conditions it could create a P of entirely whitespace
     pee = pee.replace(/<p>\s*<\/p>/gmi, '')
@@ -108,9 +106,7 @@ module.exports = function (pee, br) {
     pee = pee.replace(/\n<\/p>$/gmi, '</p>')
 
     if (Object.keys(pre_tags).length) {
-        pee = pee.replace(new RegExp(Object.keys(pre_tags).join('|'), 'gi'), function (matched) {
-            return pre_tags[matched]
-        })
+        pee = pee.replace(new RegExp(Object.keys(pre_tags).join('|'), 'gi'), matched => pre_tags[matched])
     }
 
     return pee

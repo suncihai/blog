@@ -1,22 +1,19 @@
-let mysql = require('mysql')
+const mysql = require('mysql')
+const config = require('../../config/server')
 
-let config = require('../../config')
-let DEV_DB = require('./development.json')
-
-let isDev = process.env.NODE_ENV !== 'production'
+const isDev = process.env.NODE_ENV !== 'production'
+let mysqlConfig = isDev ? require('./db.dev.json') : require('./db.pro.json')
 
 if (isDev) {
-    DEV_DB.socketPath = config.MYSQL_SOCKET_PATH
+    mysqlConfig.socketPath = config.socketPath
 }
 
-let CONFIG = isDev ? DEV_DB : require('./production.json')
-
 function createPool () {
-    return mysql.createPool(CONFIG)
+    return mysql.createPool(mysqlConfig)
 }
 
 function createConnection () {
-    return mysql.createConnection(CONFIG)
+    return mysql.createConnection(mysqlConfig)
 }
 
 module.exports = { createPool, createConnection }

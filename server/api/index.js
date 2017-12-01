@@ -1,10 +1,11 @@
-// The collection of apis.
+const getArticle = require('./getArticle')
+const getArticleList = require('./getArticleList')
+const getComments = require('./getComments')
+const addComment = require('./addComment')
+
 module.exports = {
-    titles: require('./titles'),
-    article: require('./article'),
-    articles: require('./articles'),
-    addcomment: require('./addComment'),
-    getcomments: require('./getComments'),
-    latestcomments: require('./latestComments'),
-    alias: require('./getArticleAlias'),
+    article: getArticle,
+    articles: getArticleList,
+    comments: getComments,
+    comment: addComment
 }
