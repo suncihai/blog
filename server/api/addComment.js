@@ -19,7 +19,7 @@ const validate = data => ((
 
 const addComment = data => new Promise((resolve, reject) => {
     if (!validate(data)) {
-        return reject({
+        return resolve({
             success: false,
             message: '提交项长度超出限制'
         })
@@ -73,5 +73,4 @@ module.exports = (data, res, method) => {
     } else {
         return addComment(data).catch(err => err)
     }
-
 }

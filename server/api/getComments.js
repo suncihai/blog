@@ -55,7 +55,7 @@ const formatComments = async comments => {
                 url: comment.comment_author_url,
                 local: comment.comment_author_IP,
                 content: comment.comment_content,
-                date: comment.comment_date,
+                date: comment.comment_date
             })
         }
     })
@@ -78,6 +78,6 @@ const getLocal = ip => axios.get(iplookup + ip).then(res => {
         return (country === '中国' ? '' : country) + (province === city ? city : province + city)
     }
     return unknown
-}).catch(err => unknown)
+}).catch(err => err)
 
 module.exports = ({ id, sort }) => getCommentList(id, sort).catch(err => err)

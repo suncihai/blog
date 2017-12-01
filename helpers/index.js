@@ -15,7 +15,7 @@ export const prettyDate = dateString => {
     hour = hour < 10 ? '0' + hour : hour
     minute = minute < 10 ? '0' + minute : minute
 
-    let opDate = new Date(year, month, day , hour, minute, second)
+    let opDate = new Date(year, month, day, hour, minute, second)
     let secondDiff = (new Date().getTime() - opDate.getTime()) / 1000
 
     if (secondDiff < 60) {
@@ -36,22 +36,22 @@ export const prettyDate = dateString => {
     if (secondDiff < 3600 * 3) {
         return '3 小时前'
     }
-    if (date.getFullYear() == year && date.getMonth() == month && date.getDate() == day) {
+    if (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) {
         return `今天 ${hour}:${minute}`
     }
-    if (date.getFullYear() == year && date.getMonth() == month && date.getDate() - 1 == day) {
+    if (date.getFullYear() === year && date.getMonth() === month && date.getDate() - 1 === day) {
         return `昨天 ${hour}:${minute}`
     }
-    if (date.getFullYear() == year && date.getMonth() == month && date.getDate() - 2 == day) {
+    if (date.getFullYear() === year && date.getMonth() === month && date.getDate() - 2 === day) {
         return `前天 ${hour}:${minute}`
     }
-    if (date.getFullYear() == year && date.getMonth() == month) {
+    if (date.getFullYear() === year && date.getMonth() === month) {
         return `${month + 1} 月 ${day} 日`
     }
-    if (date.getFullYear() == year) {
+    if (date.getFullYear() === year) {
         return `今年 ${month + 1} 月 ${day} 日`
     }
-    if (date.getFullYear() - 1 == year) {
+    if (date.getFullYear() - 1 === year) {
         return `去年 ${month + 1} 月 ${day} 日`
     }
 

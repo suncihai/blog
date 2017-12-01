@@ -8,12 +8,13 @@ module.exports = {
     },
 
     getFirstThumbnail (post) {
-        let matches = post.match(/<img.*src=[\"](.*?)[\"].*?>/)
-        return matches && matches[1] || ''
+        let matches = post.match(/<img.*src=["](.*?)["].*?>/)
+        return (matches && matches[1]) || ''
     },
 
     getPostSummary (post, limit) {
-        let desc, char = '\u3002'
+        let desc
+        let char = '\u3002'
         let sentences = post.split(char)
 
         if (sentences.lenth === 1) {

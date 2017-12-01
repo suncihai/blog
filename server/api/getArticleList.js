@@ -1,7 +1,6 @@
 const db = require('../db')
 const format = require('../format')
 const { isNumeric } = require('../utils')
-const { summaryLength } = require('../../config/server')
 
 const getArticleIds = categoryId => new Promise((resolve, reject) => {
     const connection = db.createConnection()

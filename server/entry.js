@@ -15,7 +15,9 @@ const defaultHandler = app.getRequestHandler()
 
 const createMeta = (params, query) => {
     let meta = Object.assign({}, params, query)
-    Object.keys(meta).forEach(key => meta[key] = encodeURIComponent(meta[key]))
+    Object.keys(meta).forEach(key => {
+        meta[key] = encodeURIComponent(meta[key])
+    })
     return meta
 }
 
