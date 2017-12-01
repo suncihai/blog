@@ -143,9 +143,9 @@ export default class extends React.Component {
     }
 
     onSubmit () {
-        const { email, content, nickname, homepage } = this.state
+        const { email, content, nickname, homepage, buttonClass } = this.state
 
-        if (!content || !nickname) {
+        if (!content || !nickname || buttonClass !== klass.enable) {
             return
         }
 
@@ -166,11 +166,26 @@ export default class extends React.Component {
             return
         }
 
-        const data = { email, content, nickname, homepage }
-        axios.post(getApi(`comment/${this.props.id}`), data).then(res => {
-            console.log(res)
+        this.setState({
+            buttonClass: klass.pending
+        })
+
+        const postData = { email, content, nickname, homepage }
+        axios.post(getApi(`comment/${this.props.id}`), postData).then(res => {
+            const { data } = res
+            if (data.success) {
+                this.onReset()
+                this.props.onAdded(data.data)
+            } else {
+                this.setState({
+                    errorText: data.message
+                })
+            }
         }).catch(err => {
-            console.error(err)
+            this.setState({
+                errorText: '服务器错误，请稍后重试。'
+            })
+            throw err
         })
     }
 

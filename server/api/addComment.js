@@ -1,5 +1,17 @@
 const db = require('../db')
 const config = require('../../config/server')
+const { queryFields, formatComments } = require('./getComments')
+
+const getComment = id => new Promise((resolve, reject) => {
+    const connection = db.createConnection()
+    const sql = `SELECT ${queryFields} FROM wp_comments WHERE comment_ID = ${id}`
+    connection.query(sql, (err, res) => {
+        if (err) {
+            return reject(err)
+        }
+        resolve(res)
+    })
+})
 
 const getMysqlDate = () => {
     const date = new Date()
@@ -52,16 +64,20 @@ const addComment = data => new Promise((resolve, reject) => {
 
     const sql = `INSERT INTO wp_comments (${keys}) VALUES (${values})`
 
-    connection.query(sql, (err, res) => {
+    connection.query(sql, async (err, res) => {
         connection.end()
 
         if (err) {
             return reject(err)
         }
 
+        const insertData = await getComment(res.insertId)
+        const data = await formatComments(insertData)
+
         resolve({
             success: true,
-            message: 'ok'
+            message: 'ok',
+            data: data[0]
         })
     })
 })

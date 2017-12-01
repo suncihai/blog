@@ -12,17 +12,13 @@ const LoadingAnimation = keyframes`
         transform: rotate(360deg);
     }
 `
-const LoadingIcon = styled.div`
+const LoadingIcon = styled.img`
     animation: ${LoadingAnimation} 1s infinite linear;
     animation-fill-mode: both;
-    display: inline-block;
-    > i {
-        font-size: 2rem;
-    }
 `
 
 export default () => (
     <Loading>
-        <LoadingIcon><i className="iconfont icon-loading"></i></LoadingIcon>
+        <LoadingIcon src="/static/images/loading.svg" />
     </Loading>
 )

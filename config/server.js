@@ -16,7 +16,7 @@ let serverConfig = {
         comment: 539
     },
 
-    // 文章列表摘要字数
+    // 文章摘要字数
     summaryLength: 80,
 
     // 评论列表是否加载评论所在地区

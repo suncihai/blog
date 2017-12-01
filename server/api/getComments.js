@@ -9,6 +9,7 @@ const queryFields = [
     'comment_ID', 'comment_date', 'comment_author', 'comment_author_IP',
     'comment_author_url', 'comment_content', 'comment_parent', 'user_id'
 ]
+module.exports.queryFields = queryFields
 
 const getCommentList = (id, sort = 'DESC') => new Promise((resolve, reject) => {
     const connection = db.createConnection()
@@ -35,6 +36,10 @@ const formatComments = async comments => {
     let answerMap = {}
 
     comments.forEach(comment => {
+        if (!comment) {
+            return
+        }
+
         if (comment.comment_parent) {
             const answer = {
                 id: comment.comment_ID,
@@ -68,6 +73,7 @@ const formatComments = async comments => {
 
     return results
 }
+module.exports.formatComments = formatComments
 
 const unknown = '未知地区'
 const iplookup = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip='
@@ -80,4 +86,4 @@ const getLocal = ip => axios.get(iplookup + ip).then(res => {
     return unknown
 }).catch(err => err)
 
-module.exports = ({ id, sort }) => getCommentList(id, sort).catch(err => err)
+module.exports.default = ({ id, sort }) => getCommentList(id, sort).catch(err => err)

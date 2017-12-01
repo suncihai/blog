@@ -6,6 +6,6 @@ const addComment = require('./addComment')
 module.exports = {
     article: getArticle,
     articles: getArticleList,
-    comments: getComments,
+    comments: getComments.default,
     comment: addComment
 }

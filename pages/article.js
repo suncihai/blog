@@ -41,6 +41,12 @@ export default class extends React.Component {
         this.onScroll = this.onScroll.bind(this)
     }
 
+    onCommentAdded (newComment) {
+        if (this.refs.list) {
+            this.refs.list.addUnAudit(newComment)
+        }
+    }
+
     onScroll () {
         if (this.state.reached || !this.refComment) {
             return
@@ -95,8 +101,8 @@ export default class extends React.Component {
                                 <ArticleCommentTitle>
                                     <i className="iconfont icon-list"></i> 评论列表
                                 </ArticleCommentTitle>
-                                <ComponentCommentList reached={reached} id={article.id} type="评论" />
-                                <ComponentCommentForm id={article.id} type="评论" />
+                                <ComponentCommentList reached={reached} id={article.id} type="评论" ref="list" />
+                                <ComponentCommentForm id={article.id} type="评论" onAdded={this.onCommentAdded.bind(this)} />
                             </ArticleComment>
                         </Article>
                     }</AppBody>

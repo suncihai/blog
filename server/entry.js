@@ -42,10 +42,10 @@ app.prepare().then(() => {
         context.respond = false
     })
 
-    // 留言板
-    router.get('/message', async context => {
+    // 关于
+    router.get('/about', async context => {
         const { req, res, query } = context
-        await app.render(req, res, '/message', query)
+        await app.render(req, res, '/about', query)
         context.respond = false
     })
 
@@ -80,7 +80,7 @@ app.prepare().then(() => {
         context.respond = true
     })
 
-    // 其他请求
+    // 其他静态资源辅助脚本等
     router.get('*', async context => {
         await defaultHandler(context.req, context.res)
         context.respond = false
