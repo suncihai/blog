@@ -2,15 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { license } from '../../config/website'
-import { auxColor } from '../styled-global/constant'
 
 const Share = styled.div`
     padding: 2em 0;
 `
 const License = styled.div`
     padding: 1em;
-    border-radius: 2px;
-    border: 1px dashed ${auxColor};
+    background: #f5f5f5;
 `
 const LicenseImg = styled.img`
     display: block;

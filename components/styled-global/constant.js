@@ -10,7 +10,7 @@ export const footerHeight = '50px'
 
 /* 统一 UI 样式 */
 export const fontSize = '1.6rem' // 默认字体大小
-export const fontColor = '#333' // 默认字体颜色
+export const fontColor = '#000' // 默认字体颜色
 export const fontAuxColor = '#999' // 默认字体辅助色
 export const fontFamily = 'sans-serif' // 默认字体
 export const fontFamilyNumber = 'Constantia, Georgia, monospace' // 数字字体
