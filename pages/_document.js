@@ -3,7 +3,7 @@ import Document, { Head, Main, NextScript } from 'next/document'
 
 import GlobalStyle from '../components/GlobalStyle'
 import NormalizeStyle from '../components/NormalizeStyle'
-// import NprogressStyle from '../components/NprogressStyle'
+import Script from '../components/modules/Script'
 
 export default class MyDocument extends Document {
     render () {
@@ -28,6 +28,13 @@ export default class MyDocument extends Document {
                         {AppContent}
                     </div>
                     <NextScript />
+                    <Script>{() => {
+                        document.addEventListener('DOMContentLoaded', () => {
+                            let s = document.createElement('script')
+                            s.src = 'https://s19.cnzz.com/z_stat.php?id=5606127&web_id=5606127'
+                            document.body.appendChild(s)
+                        })
+                    }}</Script>
                 </body>
             </html>
         )

@@ -8,6 +8,7 @@ import config from '../../config/server'
 import ComponentIcon from './Icon'
 import { Input } from '../styled-global'
 import { fontAuxColor } from '../styled-global/constant'
+import track from '../../helpers/track'
 
 const FormStyle = css`
     width: 100%;
@@ -123,12 +124,15 @@ export default class extends React.Component {
         this.state = initState()
     }
 
-    onReset () {
+    onReset (e) {
         this.setState(initState())
         this.refEmail.value = ''
         this.refContent.value = ''
         this.refNickname.value = ''
         this.refHomepage.value = ''
+        if (e) {
+            track('reset.click', this.props.type)
+        }
     }
 
     onChange (type, value) {
@@ -164,6 +168,7 @@ export default class extends React.Component {
         if (errorText) {
             errorText += '长度超出限制，请修改后再提交。'
             this.setState({ errorText })
+            track('value.overlength', this.props.type)
             return
         }
 
@@ -177,6 +182,7 @@ export default class extends React.Component {
             if (data.success) {
                 this.onReset()
                 this.props.onAdded(data.result)
+                track('form.onsubmit', this.props.type)
             } else {
                 this.setState({
                     errorText: data.message
@@ -186,6 +192,7 @@ export default class extends React.Component {
             this.setState({
                 errorText: '服务器错误，请稍后重试。'
             })
+            track('form.server.error', this.props.id)
             throw err
         })
     }

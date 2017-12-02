@@ -11,6 +11,7 @@ import {
     auxColor,
     auxAnchorColor
 } from '../styled-global/constant'
+import track from '../../helpers/track'
 
 const Header = styled.div`
     width: 100%;
@@ -98,7 +99,7 @@ const RightSearchIcon = styled.span`
 `
 
 const ComponentMenuList = props => navMenus.map((menu, index) => (
-    <MenuItem key={menu.path}>
+    <MenuItem key={menu.path} onClick={() => track('nav.click', menu.name)}>
         <MenuItemAnchor
             href={menu.path}
             className={`${props.path === menu.path ? 'active' : ''}`}
@@ -108,7 +109,9 @@ const ComponentMenuList = props => navMenus.map((menu, index) => (
 ))
 
 const ComponentSocial = () => socials.map(social => (
-    <RightSocialAnchor key={social.link} href={social.link} target="_blank">
+    <RightSocialAnchor target="_blank"
+        key={social.link} href={social.link}
+        onClick={() => track('social.click', social.icon)} >
         <ComponentIcon type={social.icon} />
     </RightSocialAnchor>
 ))
@@ -136,6 +139,7 @@ export default class extends React.Component {
         if (searchVisible) {
             searchValue = searchValue.trim()
             if (searchValue) {
+                track('search.go.click', searchValue)
                 this.gotoSearch(searchValue)
             } else {
                 this.activeSearch(searchValue)
@@ -144,6 +148,7 @@ export default class extends React.Component {
             this.setState({
                 searchVisible: true
             })
+            track('search.open')
         }
     }
 
@@ -157,6 +162,7 @@ export default class extends React.Component {
                 this.setState({
                     searchVisible: false
                 })
+                track('search.cancel', e.target.className)
             }
         })
 
@@ -165,6 +171,7 @@ export default class extends React.Component {
             searchValue = searchValue.trim()
 
             if (e.keyCode === 13 && searchValue) {
+                track('search.go.enter', searchValue)
                 this.gotoSearch(searchValue)
             }
         })

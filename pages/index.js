@@ -18,6 +18,7 @@ import {
     ArticleInfoItem,
     NoMoreBottom
 } from '../components/styled-pages/index'
+import track from '../helpers/track'
 
 export default class extends React.Component {
     static async getInitialProps () {
@@ -69,7 +70,8 @@ export default class extends React.Component {
                         <NoMoreBottom><ComponentIcon type="over" /> 加载完毕，没有更多了~</NoMoreBottom>
                     </AppBody>
                     <ComponentFooter visible={true} />
-                    <ComponentTooltip place="bottom" className="tooltip" delayShow={100} />
+                    <ComponentTooltip place="bottom" className="tooltip" delayShow={100}
+                        afterShow={() => track('list.tp.shows')} />
                 </App>
             </div>
         )

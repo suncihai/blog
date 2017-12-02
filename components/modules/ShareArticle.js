@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { license } from '../../config/website'
+import track from '../../helpers/track'
 
 const Share = styled.div`
     padding: 2em 0;
@@ -24,7 +25,9 @@ export default class extends React.Component {
                 <License>
                     <LicenseImg src="/static/images/license.svg" />
                     <LicenseName>
-                        本文采用『<a href={license.link} target="_blank" rel="nofollow noopener">
+                        本文采用『<a href={license.link} target="_blank" rel="nofollow noopener"
+                            onClick={() => track('license.click')}
+                        >
                             {license.name}
                         </a>』进行许可。
                     </LicenseName>
