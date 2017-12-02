@@ -18,12 +18,15 @@ import {
     ListItemTitle,
     ListItemContent
 } from '../components/styled-pages/search'
+import track from '../helpers/track'
 
 const division = '<span class="division">···</span>'
 const ComponentList = props => props.results.map(result => (
     <ListItem key={result.id}>
         <ListItemTitle>
-            <a href={`/article/${result.name}`} dangerouslySetInnerHTML={{ __html: result.title }} />
+            <a href={`/article/${result.name}`}
+                onClick={() => track('search.result.click', result.title)}
+                dangerouslySetInnerHTML={{ __html: result.title }} />
         </ListItemTitle>
         {!result.mcontent ? null
             : <ListItemContent

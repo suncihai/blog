@@ -5,6 +5,7 @@ const categorys = {
     'search.go.click': '头部·点击进行搜索',
     'search.go.enter': '头部·回车进行搜索',
     'search.cancel': '头部·点击空白取消搜索',
+    'search.result.click': '搜索·点击搜索结果',
     'list.tp.shows': '列表·浮层提示显示次数',
     'source.click': '页脚·点击查看源代码',
     'icp.click': '页脚·点击备案号',
