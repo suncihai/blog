@@ -27,7 +27,10 @@ const codeRE = /<pre.*?>/g
 
 const getArticleList = ids => new Promise((resolve, reject) => {
     if (!ids.length) {
-        resolve([])
+        resolve({
+            success: true,
+            result: []
+        })
     }
 
     const connection = db.createConnection()
@@ -44,17 +47,20 @@ const getArticleList = ids => new Promise((resolve, reject) => {
             return reject(err)
         }
 
-        resolve((res || []).map(row => {
-            const content = row.post_content
-            const chineseCount = (content.match(chineseRE) || []).length
-            const englishCount = (content.match(englishRE) || []).length
-            const words = chineseCount * chineseSpeed + englishCount * englishSpeed
-            return format(row, {
-                codes: (content.match(codeRE) || []).length,
-                minutes: Math.max(Math.round(words / 60), 3),
-                thumbnails: (content.match(imagesRE) || []).length
+        resolve({
+            success: true,
+            result: (res || []).map(row => {
+                const content = row.post_content
+                const chineseCount = (content.match(chineseRE) || []).length
+                const englishCount = (content.match(englishRE) || []).length
+                const words = chineseCount * chineseSpeed + englishCount * englishSpeed
+                return format(row, {
+                    codes: (content.match(codeRE) || []).length,
+                    minutes: Math.max(Math.round(words / 60), 3),
+                    thumbnails: (content.match(imagesRE) || []).length
+                })
             })
-        }))
+        })
     })
 })
 

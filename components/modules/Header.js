@@ -120,6 +120,13 @@ export default class extends React.Component {
         }
     }
 
+    activeSearch (value) {
+        if (this.refInput) {
+            this.refInput.focus()
+            this.refInput.value = value
+        }
+    }
+
     clickSearch (e) {
         let { searchVisible, searchValue } = this.state
 
@@ -129,8 +136,7 @@ export default class extends React.Component {
             if (searchValue) {
                 this.gotoSearch(searchValue)
             } else {
-                this.refInput.focus()
-                this.refInput.value = searchValue
+                this.activeSearch(searchValue)
             }
         } else {
             this.setState({
@@ -140,7 +146,7 @@ export default class extends React.Component {
     }
 
     gotoSearch (searchValue) {
-        window.location.href = `/search/${searchValue}`
+        window.location.href = `/search/${encodeURIComponent(searchValue)}`
     }
 
     componentDidMount () {

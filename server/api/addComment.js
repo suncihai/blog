@@ -33,6 +33,7 @@ const addComment = data => new Promise((resolve, reject) => {
     if (!validate(data)) {
         return resolve({
             success: false,
+            result: null,
             message: '提交项长度超出限制'
         })
     }
@@ -77,7 +78,7 @@ const addComment = data => new Promise((resolve, reject) => {
         resolve({
             success: true,
             message: 'ok',
-            data: data[0]
+            result: data[0]
         })
     })
 })

@@ -23,12 +23,18 @@ const getArticle = name => new Promise((resolve, reject) => {
         const data = res && res[0]
         if (data) {
             const content = data.post_content
-            resolve(format(data, {
-                content: autop(content, true),
-                description: getChineseWord(removeHTMLTag(content), summaryLength)
-            }))
+            resolve({
+                success: true,
+                result: format(data, {
+                    content: autop(content, true),
+                    description: getChineseWord(removeHTMLTag(content), summaryLength)
+                })
+            })
         } else {
-            resolve(null)
+            resolve({
+                success: false,
+                result: null
+            })
         }
     })
 })

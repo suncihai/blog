@@ -177,13 +177,14 @@ export default class extends React.Component {
 
         const url = getApi(`comments/${this.props.id}`)
         await axios.get(url).then(res => {
-            const noAudits = this.getNoAuditComments(res.data)
+            const { data } = res
+            const noAudits = this.getNoAuditComments(data.result)
 
             this.setState({
                 error: '',
                 loaded: true,
                 isLoad: false,
-                comments: noAudits.concat(res.data)
+                comments: noAudits.concat(data.result)
             })
         }).catch(err => {
             this.setState({

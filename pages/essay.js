@@ -10,7 +10,7 @@ export default class Essay extends Index {
         const { data } = await axios.get(getApi(`articles/${config.category.essay}`))
         return {
             path: '/essay',
-            list: data
+            list: data.result
         }
     }
 }

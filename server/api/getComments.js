@@ -20,14 +20,19 @@ const getCommentList = (id, sort = 'DESC') => new Promise((resolve, reject) => {
         `ORDER BY comment_date ${getSort(sort)}`
     ].join(' ')
 
-    connection.query(sql, (err, res) => {
+    connection.query(sql, async (err, res) => {
         connection.end()
 
         if (err) {
             return reject(err)
         }
 
-        resolve(formatComments(res || []))
+        const result = await formatComments(res || [])
+
+        resolve({
+            success: true,
+            result: result
+        })
     })
 })
 

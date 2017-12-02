@@ -16,6 +16,9 @@ let serverConfig = {
         comment: 539
     },
 
+    // 搜索结果高亮前后字符数
+    searchRange: 30,
+
     // 文章摘要字数
     summaryLength: 80,
 

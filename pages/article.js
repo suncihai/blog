@@ -30,7 +30,7 @@ export default class extends React.Component {
         const { data } = await axios.get(getApi(`article/${name}`))
         return {
             name,
-            article: data
+            article: data.result
         }
     }
 

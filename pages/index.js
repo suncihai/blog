@@ -24,7 +24,7 @@ export default class extends React.Component {
         const { data } = await axios.get(getApi(`articles/${config.category.article}`))
         return {
             path: '/',
-            list: data
+            list: data.result
         }
     }
 

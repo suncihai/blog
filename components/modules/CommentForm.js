@@ -176,7 +176,7 @@ export default class extends React.Component {
             const { data } = res
             if (data.success) {
                 this.onReset()
-                this.props.onAdded(data.data)
+                this.props.onAdded(data.result)
             } else {
                 this.setState({
                     errorText: data.message
