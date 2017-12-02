@@ -63,7 +63,7 @@ export default class extends React.Component {
                             <AboutMessageSub>无聊的、建议的、批评的、拍砖的、交流的…… 都在这说吧 ~</AboutMessageSub>
                         </AboutMessage>
                         <ComponentCommentForm type="留言" id={commentId} onAdded={this.onMessageAdded.bind(this)} />
-                        <ComponentCommentList type="留言" id={commentId} reached={true}
+                        <ComponentCommentList type="留言" id={commentId} reached={true} autoscroll={false}
                             onLoad={this.onLoad.bind(this)} ref="list" />
                     </AppBody>
                     <ComponentFooter visible={loaded} />

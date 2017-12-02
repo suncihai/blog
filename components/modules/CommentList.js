@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import ReactDOM from 'react-dom'
 import styled, { css } from 'styled-components'
 
 import ComponentIcon from './Icon'
@@ -138,6 +139,18 @@ export default class extends React.Component {
         }
     }
 
+    updateScroll () {
+        let offsetTop = 0
+        let el = ReactDOM.findDOMNode(this)
+
+        el = el.offsetParent
+        while (el) {
+            offsetTop += el.offsetTop
+            el = el.offsetParent
+        }
+        window.scrollTo(0, offsetTop)
+    }
+
     getNoAuditComments (list = []) {
         const { id } = this.props
         const noAudits = commentStorage.get()
@@ -165,6 +178,10 @@ export default class extends React.Component {
         })
 
         commentStorage.set(noAudits)
+
+        if (this.props.autoscroll) {
+            this.updateScroll()
+        }
     }
 
     afterLoad () {

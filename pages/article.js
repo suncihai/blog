@@ -103,7 +103,7 @@ export default class extends React.Component {
                                 <ArticleCommentTitle>
                                     <ComponentIcon type="list" /> 评论列表
                                 </ArticleCommentTitle>
-                                <ComponentCommentList reached={reached} id={article.id} type="评论" ref="list" />
+                                <ComponentCommentList reached={reached} autoscroll={true} id={article.id} type="评论" ref="list" />
                                 <ComponentCommentForm id={article.id} type="评论" onAdded={this.onCommentAdded.bind(this)} />
                             </ArticleComment>
                         </Article>
