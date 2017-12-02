@@ -54,9 +54,9 @@ const searchWord = word => new Promise((resolve, reject) => {
     word = word.replace(/(^'*)|('*$)/g, '')
 
     const sql = [
-        'SELECT ID, post_title, post_name, post_date, post_content',
+        'SELECT ID, post_title, post_name, post_content',
         `FROM wp_posts WHERE (post_title LIKE "%${word}%" OR post_content LIKE "%${word}%")`,
-        `AND post_status='publish' AND post_type='post'`
+        'AND post_status="publish" AND post_type="post"'
     ].join(' ')
 
     connection.query(sql, (err, res) => {

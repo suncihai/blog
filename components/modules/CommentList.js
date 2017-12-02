@@ -75,11 +75,14 @@ const CommentBodyReply = styled.div`
     background: #f5f5f5;
     padding: 0.5em 1em;
     margin-top: .5em;
+    text-align: justify;
 `
 const CommentBodyReplyName = styled.div`
     font-weight: bold;
 `
-const CommentBodyReplyContent = styled.div``
+const CommentBodyReplyContent = styled.div`
+    text-align: justify;
+`
 const CommentNoAudit = styled.div`
     position: absolute;
     right: 0;

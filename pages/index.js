@@ -17,14 +17,14 @@ import {
     ArticleInfo,
     ArticleInfoItem,
     NoMoreBottom
-} from '../components/styled-pages'
+} from '../components/styled-pages/index'
 
 export default class extends React.Component {
     static async getInitialProps () {
         const { data } = await axios.get(getApi(`articles/${config.category.article}`))
         return {
             path: '/',
-            list: data.result
+            list: data.result || []
         }
     }
 

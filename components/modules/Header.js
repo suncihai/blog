@@ -86,6 +86,8 @@ const RightSearchInput = styled.input`
     position: relative;
     top: -2px;
     width: 0;
+    padding-right: 2.4em;
+    box-sizing: border-box;
     animation: ${RightSearchAnimate} 300ms ease-in-out forwards;
 `
 const RightSearchIcon = styled.span`

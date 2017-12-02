@@ -1,7 +1,7 @@
 import React from 'react'
 
 import config from '../config/server'
-import { introduce } from '../config/website'
+import { introduce, declaration } from '../config/website'
 
 import DocumentHead from '../components/DocumentHead'
 import ComponentHeader from '../components/modules/Header'
@@ -13,6 +13,7 @@ import { App, AppBody } from '../components/styled-global'
 import {
     About,
     AboutDesc,
+    AboutDeclaration,
     AboutMessage,
     AboutMessageSub,
     AboutMessageTitle
@@ -51,6 +52,9 @@ export default class extends React.Component {
                     <AppBody>
                         <About>
                             <AboutDesc>{introduce}</AboutDesc>
+                            <AboutDeclaration>
+                                <strong>声明：</strong> {declaration}
+                            </AboutDeclaration>
                         </About>
                         <AboutMessage>
                             <AboutMessageTitle>
