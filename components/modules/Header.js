@@ -159,10 +159,13 @@ export default class extends React.Component {
     componentDidMount () {
         document.addEventListener('click', e => {
             if (e.timeStamp !== this.ckTimeStamp) {
+                if (this.state.searchVisible) {
+                    track('search.cancel', e.target.className)
+                }
+
                 this.setState({
                     searchVisible: false
                 })
-                track('search.cancel', e.target.className)
             }
         })
 
