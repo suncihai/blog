@@ -6,9 +6,12 @@ const getComment = id => new Promise((resolve, reject) => {
     const connection = db.createConnection()
     const sql = `SELECT ${queryFields} FROM wp_comments WHERE comment_ID = ${id}`
     connection.query(sql, (err, res) => {
+        connection.end()
+
         if (err) {
             return reject(err)
         }
+
         resolve(res)
     })
 })
@@ -19,6 +22,8 @@ const isNicknameExist = nickname => new Promise((resolve, reject) => {
     nickname = connection.escape(nickname)
     const sql = `SELECT comment_ID FROM wp_comments WHERE comment_author = ${nickname}`
     connection.query(sql, (err, res) => {
+        connection.end()
+
         if (err) {
             return reject(err)
         }
