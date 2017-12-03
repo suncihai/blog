@@ -3,11 +3,15 @@
 Source of https://www.tangbc.com
 
 
-## Thanks to
+## Thanks repo
 
 * [nextjs](https://github.com/zeit/next.js)
 
 * [react](https://facebook.github.io/react/)
+
+* [styled-components](https://www.styled-components.com/)
+
+* [koa](http://koajs.com/)
 
 * [mysql](https://github.com/mysqljs/mysql)
 
@@ -18,6 +22,14 @@ Source of https://www.tangbc.com
 * [lru-cache](https://github.com/isaacs/node-lru-cache)
 
 * [nprogress](https://github.com/rstacruz/nprogress)
+
+
+## Deploy production with pm2
+
+```
+npm run build
+pm2 start npm --name "blog" -- start
+```
 
 
 ## Report
