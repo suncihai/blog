@@ -3,6 +3,7 @@ import axios from 'axios'
 import ComponentTooltip from 'react-tooltip'
 
 import config from '../config/server'
+import { navMenus } from '../config/website'
 import { getApi, prettyDate } from '../helpers'
 
 import DocumentHead from '../components/DocumentHead'
@@ -22,19 +23,22 @@ import track from '../helpers/track'
 
 export default class extends React.Component {
     static async getInitialProps () {
+        const path = '/'
+        const { name } = navMenus.find(nav => nav.path === path) || {}
         const { data } = await axios.get(getApi(`articles/${config.category.article}`))
         return {
-            path: '/',
+            path,
+            title: name,
             list: data.result || []
         }
     }
 
     render () {
-        const { path, list } = this.props
+        const { path, title, list } = this.props
 
         return (
             <div>
-                <DocumentHead />
+                <DocumentHead title={title} />
                 <App>
                     <ComponentHeader path={path} />
                     <AppBody>

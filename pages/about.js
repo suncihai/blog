@@ -1,7 +1,7 @@
 import React from 'react'
 
 import config from '../config/server'
-import { introduce, declaration } from '../config/website'
+import { introduce, declaration, navMenus } from '../config/website'
 
 import DocumentHead from '../components/DocumentHead'
 import ComponentHeader from '../components/modules/Header'
@@ -19,6 +19,8 @@ import {
     AboutMessageTitle
 } from '../components/styled-pages/about'
 
+const path = '/about'
+const { name } = navMenus.find(nav => nav.path === path) || {}
 const commentId = config.category.comment
 
 export default class extends React.Component {
@@ -46,9 +48,9 @@ export default class extends React.Component {
 
         return (
             <div>
-                <DocumentHead title="关于我" />
+                <DocumentHead title={name} />
                 <App>
-                    <ComponentHeader path="/about" />
+                    <ComponentHeader path={path} />
                     <AppBody>
                         <About>
                             <AboutDesc>{introduce}</AboutDesc>
