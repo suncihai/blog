@@ -28,7 +28,7 @@ const isNicknameExist = nickname => new Promise((resolve, reject) => {
             return reject(err)
         }
 
-        return res.length !== 0
+        resolve(res.length !== 0)
     })
 })
 
