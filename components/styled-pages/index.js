@@ -59,8 +59,10 @@ export const ArticleInfo = styled.div`
 export const ArticleInfoItem = styled.span`
     margin-right: 2.5em;
     vertical-align: top;
-    &:first-child {
-        display: none;
+    @media (max-width: ${mediaEdge}) {
+        &:first-child {
+            display: none;
+        }
     }
     > i {
         margin-right: .35em;

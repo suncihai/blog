@@ -41,7 +41,7 @@ export const ArticleBody = styled.div`
         color: #800080;
     }
     img {
-        border-radius: 1px;
+        border-radius: .15em;
         max-width: 100%;
         height: auto;
         border: 1px solid ${auxColor};

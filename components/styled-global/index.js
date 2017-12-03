@@ -8,6 +8,12 @@ export const AppBodyStyle = css`
         width: ${bodyMobileWidth};
     }
 `
+export const EllipsisStyle = css`
+    overflow: hidden;
+    word-wrap: normal;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+`
 
 // 全局布局
 export const App = styled.div`

@@ -6,6 +6,7 @@ import { getApi } from '../../helpers'
 import config from '../../config/server'
 
 import ComponentIcon from './Icon'
+import { Icon as ComponentLoadingIcon } from './/Loading'
 import { FormStyle } from '../styled-global'
 import { fontAuxColor, mediaEdge } from '../styled-global/constant'
 import track from '../../helpers/track'
@@ -27,9 +28,6 @@ const InputText = styled.input`
 const Form = styled.div`
     margin-bottom: 2em;
     border-radius: 2px;
-    @media (max-width: ${mediaEdge}) {
-        margin-bottom: 1em;
-    }
 `
 const Table = styled.table`
     width: 100%;
@@ -74,6 +72,13 @@ const TextError = styled.span`
     left: 0;
     color: #d62219;
     padding: 0.35em 0;
+    @media (max-width: ${mediaEdge}) {
+        display: block;
+        position: relative;
+        text-align: left;
+        font-size: 1.4rem;
+        padding: 0 0 1em 0;
+    }
 `
 const ButtonStyle = css`
     display: inline-block;
@@ -84,6 +89,7 @@ const ButtonStyle = css`
     color: #fff;
     outline: none;
     font-size: 1.4rem;
+    user-select: none;
 `
 const ButtonReset = styled.button`
     ${ButtonStyle};
@@ -106,20 +112,14 @@ const ButtonSubmit = styled.button`
         background: gray;
     }
     &.pending {
+        opacity: .7;
         cursor: not-allowed;
-        opacity: 0.7;
-    }
-    &.failed {
-        cursor: default;
-        background: #ea5035;
     }
 `
 
 const klass = {
     enable: 'enable',
-    disable: 'disable',
-    pending: 'pending',
-    failed: 'failed'
+    disable: 'disable'
 }
 
 const charLimit = config.commentCharLimit
@@ -130,6 +130,7 @@ const initState = () => ({
     nickname: '',
     homepage: '',
     errorText: '',
+    pending: false,
     buttonClass: klass.disable
 })
 
@@ -163,9 +164,9 @@ export default class extends React.Component {
     }
 
     onSubmit () {
-        const { email, content, nickname, homepage, buttonClass } = this.state
+        const { email, content, nickname, homepage, buttonClass, pending } = this.state
 
-        if (!content || !nickname || buttonClass !== klass.enable) {
+        if (!content || !nickname || buttonClass !== klass.enable || pending) {
             return
         }
 
@@ -188,7 +189,7 @@ export default class extends React.Component {
         }
 
         this.setState({
-            buttonClass: klass.pending
+            pending: true
         })
 
         const postData = { email, content, nickname, homepage }
@@ -215,7 +216,8 @@ export default class extends React.Component {
 
     render () {
         const { type } = this.props
-        const { buttonClass, errorText } = this.state
+        const { buttonClass, errorText, pending } = this.state
+        const klass = `${buttonClass}${pending ? ' pending' : ''}`
 
         return (
             <Form>
@@ -282,8 +284,9 @@ export default class extends React.Component {
                         </TextError>
                     }
                     <ButtonReset onClick={this.onReset.bind(this)}>重置</ButtonReset>
-                    <ButtonSubmit className={buttonClass} onClick={this.onSubmit.bind(this)}>
-                        {`提交${type}`}
+                    <ButtonSubmit className={klass} onClick={this.onSubmit.bind(this)}>
+                        {pending ? <ComponentLoadingIcon /> : null}
+                        {pending ? ' 提交中' : `提交${type}`}
                     </ButtonSubmit>
                 </ButtonBox>
             </Form>

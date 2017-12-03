@@ -30,6 +30,11 @@ const Menu = styled.ul`
 `
 const MenuItem = styled.li`
     display: inline-block;
+    @media (max-width: ${mediaEdge}) {
+        width: 33%;
+        text-align: center;
+        position: relative;
+    }
 `
 const MenuItemAnchor = styled.a`
     color: #808080;
@@ -44,6 +49,9 @@ const MenuItemDivision = styled.span`
     :after {
         content: '·';
         color: ${auxAnchorColor};
+    }
+    @media (max-width: ${mediaEdge}) {
+        display: none;
     }
 `
 const Right = styled.div`

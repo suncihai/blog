@@ -7,6 +7,7 @@ import ComponentIcon from './Icon'
 import ComponentLoading from './Loading'
 import commentStorage from '../../helpers/storage'
 import { getApi, prettyDate } from '../../helpers'
+import { EllipsisStyle } from '../styled-global'
 import { auxColor, fontAuxColor, fontFamilyNumber, mediaEdge } from '../styled-global/constant'
 
 const List = styled.div`
@@ -46,7 +47,10 @@ const CommentHead = styled.div`
     ${NoAuditStyle};
 `
 const CommentHeadAuthor = styled.span`
-    float: left;
+    position: absolute;
+    left: 2.6em;
+    max-width: 50%;
+    ${EllipsisStyle};
 `
 const CommentHeadAuthorAvatar = styled.img`
     width: 30px;
@@ -101,7 +105,7 @@ const urlRE = /^(http|https):\/\//
 const commentUrl = url => urlRE.test(url) ? url : '//' + url
 
 const ComponentAuthor = props => (
-    <CommentHeadAuthor>{!props.url
+    <CommentHeadAuthor title={props.author}>{!props.url
         ? <span>{props.author}</span>
         : <a target="_blank" rel="nofollow noopener noreferrer" href={commentUrl(props.url)}>
             {props.author}

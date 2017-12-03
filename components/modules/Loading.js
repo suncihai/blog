@@ -1,6 +1,9 @@
 import styled, { keyframes } from 'styled-components'
 
-const LoadingAnimation = keyframes`
+import ComponentIcon from './Icon'
+import { auxAnchorColor } from '../styled-global/constant'
+
+const Animate = keyframes`
     from {
         transform: rotate(0deg);
     }
@@ -8,26 +11,30 @@ const LoadingAnimation = keyframes`
         transform: rotate(360deg);
     }
 `
-const Loading = styled.div`
-    width: 20px;
-    height: 20px;
-    margin: 0 auto;
-    border-radius: 50%;
-    border: 2px solid #333;
-    animation: ${LoadingAnimation} 1s infinite linear;
+const LoadingIcon = styled.span`
+    color: ${auxAnchorColor};
+    height: ${props => props.size}px;
+    line-height: ${props => props.size}px;
+    display: inline-block;
+    animation: ${Animate} 1s infinite linear;
     animation-fill-mode: both;
+    > i {
+        font-size: ${props => props.size}px;
+    }
 `
-const LoadingIcon = styled.div`
-    width: 30px;
-    height: 20px;
-    background: #fff;
-    position: absolute;
-    left: -5px;
-    top: 6px;
+const Loading = styled.div`
+    padding: 1em 0;
+    text-align: center;
 `
 
-export default () => (
+export const Icon = props => ((
+    <LoadingIcon size={props.size || 16}>
+        <ComponentIcon type="loading" />
+    </LoadingIcon>
+))
+
+export default props => ((
     <Loading>
-        <LoadingIcon />
+        <Icon size={props.size || 32} />
     </Loading>
-)
+))
