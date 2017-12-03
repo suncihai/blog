@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 import { getApi } from '../../helpers'
 import config from '../../config/server'
@@ -67,11 +67,28 @@ const ButtonBox = styled.div`
     text-align: right;
     margin-top: 1em;
 `
+const shakeAnimation = keyframes`
+    from, to {
+      transform: translate3d(0, 0, 0);
+    }
+
+    10%, 30%, 50%, 70%, 90% {
+      transform: translate3d(-10px, 0, 0);
+    }
+
+    20%, 40%, 60%, 80% {
+      transform: translate3d(10px, 0, 0);
+    }
+`
 const TextError = styled.span`
     position: absolute;
     left: 0;
     color: #d62219;
+    font-size: 1.4rem;
     padding: 0.35em 0;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-name: ${shakeAnimation};
     @media (max-width: ${mediaEdge}) {
         display: block;
         position: relative;
@@ -202,12 +219,16 @@ export default class extends React.Component {
                 track('form.onsubmit', this.props.type)
             } else {
                 this.setState({
-                    errorText: data.message
+                    pending: false,
+                    errorText: data.message,
+                    buttonClass: klass.enable
                 })
             }
         }).catch(err => {
             this.setState({
-                errorText: '服务器错误，请稍后重试。'
+                pending: false,
+                errorText: '服务器错误，请稍后重试。',
+                buttonClass: klass.enable
             })
             track('form.server.error', this.props.id)
             throw err
@@ -285,7 +306,7 @@ export default class extends React.Component {
                     }
                     <ButtonReset onClick={this.onReset.bind(this)}>重置</ButtonReset>
                     <ButtonSubmit className={klass} onClick={this.onSubmit.bind(this)}>
-                        {pending ? <ComponentLoadingIcon /> : null}
+                        {pending ? <ComponentLoadingIcon color="#fff" /> : null}
                         {pending ? ' 提交中' : `提交${type}`}
                     </ButtonSubmit>
                 </ButtonBox>

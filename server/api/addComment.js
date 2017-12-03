@@ -13,6 +13,20 @@ const getComment = id => new Promise((resolve, reject) => {
     })
 })
 
+const isNicknameExist = nickname => new Promise((resolve, reject) => {
+    const connection = db.createConnection()
+
+    nickname = connection.escape(nickname)
+    const sql = `SELECT comment_ID FROM wp_comments WHERE comment_author = ${nickname}`
+    connection.query(sql, (err, res) => {
+        if (err) {
+            return reject(err)
+        }
+
+        return res.length !== 0
+    })
+})
+
 const getMysqlDate = () => {
     const date = new Date()
     const gmt = date.toISOString().slice(0, 19).replace('T', ' ')
@@ -35,6 +49,15 @@ const addComment = data => new Promise((resolve, reject) => {
             success: false,
             result: null,
             message: '提交项长度超出限制'
+        })
+    }
+
+    const nicknameExist = (async () => await isNicknameExist(data.nickname))()
+    if (nicknameExist) {
+        return resolve({
+            success: false,
+            result: null,
+            message: '该昵称已被占用，请另起一个'
         })
     }
 

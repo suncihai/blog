@@ -29,7 +29,7 @@ let serverConfig = {
     commentCharLimit: {
         email: 50,
         content: 300,
-        nickname: 20,
+        nickname: 12,
         homepage: 100
     }
 }
