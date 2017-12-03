@@ -198,7 +198,7 @@ export default class extends React.Component {
             isLoad: true
         })
 
-        const url = getApi(`comments/${this.props.id}`)
+        const url = getApi(`comments/${this.props.id}`, window.location.origin)
         await axios.get(url).then(res => {
             const { data } = res
             const noAudits = this.getNoAuditComments(data.result)

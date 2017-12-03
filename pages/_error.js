@@ -61,7 +61,8 @@ export default class extends React.Component {
         const { postId, statusCode } = this.props
         if (postId) {
             track('error.old', postId)
-            const { data } = await axios.get(getApi(`postname/${postId}`)).catch(err => err.response)
+            const url = getApi(`postname/${postId}`, window.location.origin)
+            const { data } = await axios.get(url).catch(err => err.response)
             const { name } = data
             if (name) {
                 track('error.jump', name)

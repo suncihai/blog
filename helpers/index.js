@@ -1,8 +1,6 @@
 import config from '../config/server'
 
-export const getApi = path => `${config.host}/api/${path}`
-
-// export const toThousand = n => (n || 0).toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1, ')
+export const getApi = (path, host) => `${host || config.host}/api/${path}`
 
 export const getLineNumber = html => {
     let lines = ''

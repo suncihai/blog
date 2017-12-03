@@ -36,12 +36,20 @@ let serverConfig = {
 
 // 开发模式调整为本地数据库
 if (process.env.NODE_ENV !== 'production') {
+    const ip = (() => {
+        const os = require('os')
+        const interfaces = os.networkInterfaces()
+        const envs = interfaces.en0 || interfaces.eth0 || []
+        const env = envs.find(env => env.family === 'IPv4') || {}
+        return env.address || 'localhost'
+    })()
+
     serverConfig.category.essay = 24
     serverConfig.category.article = 1
     serverConfig.category.comment = 2
 
     serverConfig.ssrCache = 0
-    serverConfig.host = 'http://localhost:' + serverConfig.port
+    serverConfig.host = `http://${ip}:${serverConfig.port}`
 
     // https://github.com/mysqljs/mysql#connection-options
     serverConfig.socketPath = '/Applications/MAMP/tmp/mysql/mysql.sock'

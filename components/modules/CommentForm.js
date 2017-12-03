@@ -192,7 +192,8 @@ export default class extends React.Component {
         })
 
         const postData = { email, content, nickname, homepage }
-        axios.post(getApi(`comment/${this.props.id}`), postData).then(res => {
+        const url = getApi(`comment/${this.props.id}`, window.location.origin)
+        axios.post(url, postData).then(res => {
             const { data } = res
             if (data.success) {
                 this.onReset()
