@@ -48,7 +48,7 @@ const validate = data => ((
     data.homepage.length <= charLimit.homepage
 ))
 
-const addComment = data => new Promise((resolve, reject) => {
+const addComment = data => new Promise(async (resolve, reject) => {
     if (!validate(data)) {
         return resolve({
             success: false,
@@ -57,7 +57,8 @@ const addComment = data => new Promise((resolve, reject) => {
         })
     }
 
-    const nicknameExist = (async () => await isNicknameExist(data.nickname))()
+    const nicknameExist = await isNicknameExist(data.nickname)
+
     if (nicknameExist) {
         return resolve({
             success: false,
