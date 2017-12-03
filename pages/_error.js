@@ -5,7 +5,6 @@ import styled from 'styled-components'
 
 import { getApi } from '../helpers'
 import track from '../helpers/track'
-import StatScript from '../components/modules/StatScript'
 
 const Error = styled.div`
     position: fixed;
@@ -92,7 +91,10 @@ export default class extends React.Component {
                     <title>😂😂😂😂😂😂😂</title>
                 </Head>
                 <Error>{tryToFindback
-                    ? <ErrorMessage>{update}，正在尝试跳转到新地址……</ErrorMessage>
+                    ? <ErrorMessage>
+                        {update}，正在尝试跳转到新地址……
+                        或：<a href="/">回首页</a>
+                    </ErrorMessage>
                     : <ErrorOther>
                         <ErrorMessage>{`${message}: ${statusCode}`}</ErrorMessage>
                         <ErrorAnchor href="javascript:;" onClick={this.onTry.bind(this)}>刷新重试</ErrorAnchor>
@@ -101,7 +103,6 @@ export default class extends React.Component {
                         >回到首页</ErrorAnchor>
                     </ErrorOther>
                 }</Error>
-                <StatScript />
             </div>
         )
     }
