@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { icp, copyright, source } from '../../config/website'
 import { AppBodyStyle } from '../styled-global'
 import {
+    mediaEdge,
     footerHeight,
     auxAnchorColor
 } from '../styled-global/constant'
@@ -24,6 +25,9 @@ const FooterBody = styled.div`
     ${AppBodyStyle};
     a {
         color: ${auxAnchorColor};
+        &:hover {
+            text-decoration: underline;
+        }
     }
 `
 const FooterCopyright = styled.small`
@@ -35,9 +39,19 @@ const FooterSource = styled.small`
         content: '·';
         margin: .5em;
     }
+    @media (max-width: ${mediaEdge}) {
+        position: absolute;
+        right: 0;
+        &:before {
+            display: none;
+        }
+    }
 `
 const FooterIcp = styled.small`
     float: right;
+    @media (max-width: ${mediaEdge}) {
+        display: none;
+    }
 `
 
 export default class extends React.Component {

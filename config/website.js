@@ -34,4 +34,4 @@ export const socials = [
 
 export const icp = '桂 ICP 备 12002316 号'
 export const source = 'https://github.com/tangbc/blog'
-export const copyright = `© ${(new Date()).getFullYear()} TANG`
+export const copyright = `© ${(new Date()).getFullYear()} TBC 的码棚`

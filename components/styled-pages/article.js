@@ -3,6 +3,11 @@ import { auxColor, fontAuxColor, mediaEdge } from '../styled-global/constant'
 
 export const Article = styled.div`
     padding: 2em 0;
+    a {
+        &:hover {
+            text-decoration: underline;
+        }
+    }
     @media (max-width: ${mediaEdge}) {
         padding: 1em 0;
     }
@@ -16,7 +21,6 @@ export const ArticleHeader = styled.h1`
 `
 export const ArticleDate = styled.div`
     padding-bottom: 2em;
-    font-style: italic;
     color: ${fontAuxColor};
     @media (max-width: ${mediaEdge}) {
         padding-bottom: 1em;
