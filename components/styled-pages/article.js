@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { auxColor, fontAuxColor, fontFamilyNumber, mediaEdge } from '../styled-global/constant'
+import { auxColor, fontAuxColor, mediaEdge } from '../styled-global/constant'
 
 export const Article = styled.div`
     padding: 2em 0;
@@ -18,7 +18,6 @@ export const ArticleDate = styled.div`
     padding-bottom: 2em;
     font-style: italic;
     color: ${fontAuxColor};
-    font-family: ${fontFamilyNumber};
     @media (max-width: ${mediaEdge}) {
         padding-bottom: 1em;
     }

@@ -8,7 +8,7 @@ import ComponentLoading from './Loading'
 import commentStorage from '../../helpers/storage'
 import { getApi, prettyDate } from '../../helpers'
 import { EllipsisStyle } from '../styled-global'
-import { auxColor, fontAuxColor, fontFamilyNumber, mediaEdge } from '../styled-global/constant'
+import { auxColor, fontAuxColor, mediaEdge } from '../styled-global/constant'
 
 const List = styled.div`
     padding-bottom: 2em;
@@ -65,12 +65,14 @@ const CommentHeadLocal = styled.span`
     font-size: small;
     font-style: italic;
     color: ${fontAuxColor};
-    font-family: ${fontFamilyNumber};
 `
 const CommentHeadDate = CommentHeadLocal.extend`
     &:before {
         content: '·';
         padding: 0 .5em;
+    }
+    @media (max-width: ${mediaEdge}) {
+        display: none;
     }
 `
 const CommentBody = styled.div`

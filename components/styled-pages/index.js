@@ -3,7 +3,6 @@ import {
     fontColor,
     fontAuxColor,
     auxColor,
-    fontFamilyNumber,
     footerHeight,
     mediaEdge
 } from '../styled-global/constant'
@@ -50,8 +49,6 @@ export const ArticleInfo = styled.div`
     font-size: 1.4rem;
     padding-left: 1.9em;
     color: ${fontAuxColor};
-    font-style: italic;
-    font-family: ${fontFamilyNumber};
     @media (max-width: ${mediaEdge}) {
         padding: 0;
     }
