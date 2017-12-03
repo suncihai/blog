@@ -1,8 +1,18 @@
 import styled from 'styled-components'
-import { fontColor, fontAuxColor, auxColor, fontFamilyNumber, footerHeight } from '../styled-global/constant'
+import {
+    fontColor,
+    fontAuxColor,
+    auxColor,
+    fontFamilyNumber,
+    footerHeight,
+    mediaEdge
+} from '../styled-global/constant'
 
 export const List = styled.div`
     padding: 2em 0;
+    @media (max-width: ${mediaEdge}) {
+        padding: 1em 0;
+    }
 `
 export const ListItem = styled.div`
     margin-bottom: 2em;
@@ -11,6 +21,10 @@ export const ListItem = styled.div`
     &:last-child {
         border: none;
         margin-bottom: 0;
+    }
+    @media (max-width: ${mediaEdge}) {
+        margin-bottom: 1em;
+        padding-bottom: 1em;
     }
 `
 export const ArticleTitle = styled.h2`
@@ -25,6 +39,12 @@ export const ArticleTitle = styled.h2`
             text-decoration: underline;
         }
     }
+    @media (max-width: ${mediaEdge}) {
+        font-size: 2rem;
+        &:before {
+            display: none;
+        }
+    }
 `
 export const ArticleInfo = styled.div`
     font-size: 1.4rem;
@@ -32,10 +52,16 @@ export const ArticleInfo = styled.div`
     color: ${fontAuxColor};
     font-style: italic;
     font-family: ${fontFamilyNumber};
+    @media (max-width: ${mediaEdge}) {
+        padding: 0;
+    }
 `
 export const ArticleInfoItem = styled.span`
     margin-right: 2.5em;
     vertical-align: top;
+    &:first-child {
+        display: none;
+    }
     > i {
         margin-right: .35em;
     }

@@ -2,15 +2,9 @@ import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
 import ComponentIcon from './Icon'
-import { Input } from '../styled-global'
 import { navMenus, socials } from '../../config/website'
-import {
-    bodyWidth,
-    headHeight,
-    bodyMaxWidth,
-    auxColor,
-    auxAnchorColor
-} from '../styled-global/constant'
+import { FormStyle, AppBodyStyle } from '../styled-global'
+import { headHeight, auxColor, auxAnchorColor, mediaEdge } from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const Header = styled.div`
@@ -22,14 +16,17 @@ const Header = styled.div`
 `
 const Nav = styled.div`
     margin: 0 auto;
-    width: ${bodyWidth};
-    max-width: ${bodyMaxWidth};
+    ${AppBodyStyle};
 `
 const Menu = styled.ul`
     margin: 0;
     padding: 0;
     list-style-type: none;
     display: inline-block;
+    @media (max-width: ${mediaEdge}) {
+        width: 100%;
+        display: block;
+    }
 `
 const MenuItem = styled.li`
     display: inline-block;
@@ -55,6 +52,9 @@ const Right = styled.div`
     position: absolute;
     & > div {
         display: inline-block;
+    }
+    @media (max-width: ${mediaEdge}) {
+        display: none;
     }
 `
 const RightSocial = styled.div`
@@ -82,7 +82,7 @@ const RightSearchAnimate = keyframes`
     }
 `
 const RightSearchInput = styled.input`
-    ${Input};
+    ${FormStyle};
     display: inline-block;
     position: relative;
     top: -2px;

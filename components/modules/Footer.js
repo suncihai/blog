@@ -2,7 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { icp, copyright, source } from '../../config/website'
-import { bodyWidth, bodyMaxWidth, footerHeight, auxAnchorColor } from '../styled-global/constant'
+import { AppBodyStyle } from '../styled-global'
+import {
+    footerHeight,
+    auxAnchorColor
+} from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const Footer = styled.div`
@@ -16,9 +20,8 @@ const FooterBody = styled.div`
     margin: 0 auto;
     text-align: center;
     color: ${auxAnchorColor};
-    width: ${bodyWidth};
-    max-width: ${bodyMaxWidth};
     border-top: 1px solid #efefef;
+    ${AppBodyStyle};
     a {
         color: ${auxAnchorColor};
     }

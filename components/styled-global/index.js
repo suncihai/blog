@@ -1,5 +1,13 @@
 import styled, { css } from 'styled-components'
-import { bodyWidth, bodyMaxWidth } from './constant'
+import { bodyWidth, mediaEdge, bodyMobileWidth, bodyMaxWidth } from './constant'
+
+export const AppBodyStyle = css`
+    width: ${bodyWidth};
+    max-width: ${bodyMaxWidth};
+    @media (max-width: ${mediaEdge}) {
+        width: ${bodyMobileWidth};
+    }
+`
 
 // 全局布局
 export const App = styled.div`
@@ -8,12 +16,11 @@ export const App = styled.div`
 `
 export const AppBody = styled.div`
     margin: 0 auto;
-    width: ${bodyWidth};
-    max-width: ${bodyMaxWidth};
+    ${AppBodyStyle};
 `
 
 // 统一表单样式
-export const Input = css`
+export const FormStyle = css`
     display: block;
     color: #464a4c;
     font-size: 1rem;

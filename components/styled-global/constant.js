@@ -1,5 +1,7 @@
 /* 整体布局 */
 export const bodyWidth = '70%'
+export const mediaEdge = '640px'
+export const bodyMobileWidth = '90%'
 export const bodyMaxWidth = '1024px'
 
 /* 头部导航 */

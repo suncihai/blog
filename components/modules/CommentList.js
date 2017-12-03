@@ -7,10 +7,13 @@ import ComponentIcon from './Icon'
 import ComponentLoading from './Loading'
 import commentStorage from '../../helpers/storage'
 import { getApi, prettyDate } from '../../helpers'
-import { auxColor, fontAuxColor, fontFamilyNumber } from '../styled-global/constant'
+import { auxColor, fontAuxColor, fontFamilyNumber, mediaEdge } from '../styled-global/constant'
 
 const List = styled.div`
     padding-bottom: 2em;
+    @media (max-width: ${mediaEdge}) {
+        padding-bottom: 1em;
+    }
 `
 const ListBody = styled.div``
 const ListError = styled.div``

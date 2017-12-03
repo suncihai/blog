@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
-import { bodyWidth, bodyMaxWidth } from '../styled-global/constant'
+import { AppBodyStyle} from '../styled-global'
 
 const Noticer = styled.div`
-    width: ${bodyWidth};
-    max-width: ${bodyMaxWidth};
     padding-top: 2em;
+    ${AppBodyStyle};
     > i {
         font-size: 2rem;
     }

@@ -1,8 +1,11 @@
 import styled from 'styled-components'
-import { auxColor, fontAuxColor, fontFamilyNumber } from '../styled-global/constant'
+import { auxColor, fontAuxColor, fontFamilyNumber, mediaEdge } from '../styled-global/constant'
 
 export const Article = styled.div`
     padding: 2em 0;
+    @media (max-width: ${mediaEdge}) {
+        padding: 1em 0;
+    }
 `
 export const ArticleHeader = styled.h1`
     font-size: 2.8rem;
@@ -16,6 +19,9 @@ export const ArticleDate = styled.div`
     font-style: italic;
     color: ${fontAuxColor};
     font-family: ${fontFamilyNumber};
+    @media (max-width: ${mediaEdge}) {
+        padding-bottom: 1em;
+    }
 `
 export const ArticleBody = styled.div`
     text-align: justify;

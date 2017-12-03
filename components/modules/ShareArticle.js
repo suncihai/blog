@@ -2,10 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { license } from '../../config/website'
+import { mediaEdge } from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const Share = styled.div`
     padding: 2em 0;
+    @media (max-width: ${mediaEdge}) {
+        padding: 1em 0;
+    }
 `
 const License = styled.div`
     padding: 1em;

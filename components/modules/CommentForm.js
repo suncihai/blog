@@ -6,27 +6,30 @@ import { getApi } from '../../helpers'
 import config from '../../config/server'
 
 import ComponentIcon from './Icon'
-import { Input } from '../styled-global'
-import { fontAuxColor } from '../styled-global/constant'
+import { FormStyle } from '../styled-global'
+import { fontAuxColor, mediaEdge } from '../styled-global/constant'
 import track from '../../helpers/track'
 
-const FormStyle = css`
+const CommentFormStyle = css`
     width: 100%;
     resize: none;
     font-size: 1.4rem;
     padding: .75rem;
 `
 const Textarea = styled.textarea`
-    ${Input};
     ${FormStyle};
+    ${CommentFormStyle};
 `
 const InputText = styled.input`
-    ${Input};
     ${FormStyle};
+    ${CommentFormStyle};
 `
 const Form = styled.div`
     margin-bottom: 2em;
     border-radius: 2px;
+    @media (max-width: ${mediaEdge}) {
+        margin-bottom: 1em;
+    }
 `
 const Table = styled.table`
     width: 100%;
@@ -40,6 +43,14 @@ const Td = styled.td`
     }
     &.right {
         padding: 0 1em;
+    }
+    @media (max-width: ${mediaEdge}) {
+        &.left {
+            padding: .5em 0;
+        }
+        &.right {
+            padding: 0 .5em;
+        }
     }
 `
 const Label = styled.label`
@@ -79,6 +90,10 @@ const ButtonReset = styled.button`
     background: #778899;
     margin-right: 2em;
     cursor: pointer;
+    @media (max-width: ${mediaEdge}) {
+        position: absolute;
+        left: 0;
+    }
 `
 const ButtonSubmit = styled.button`
     ${ButtonStyle};
