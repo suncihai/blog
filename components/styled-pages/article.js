@@ -18,9 +18,12 @@ export const ArticleHeader = styled.h1`
     > a {
         color: #2f4f4f;
     }
+    @media (max-width: ${mediaEdge}) {
+        font-size: 2rem;
+    }
 `
 export const ArticleDate = styled.div`
-    padding-bottom: 2em;
+    padding-bottom: 2.2em;
     color: ${fontAuxColor};
     @media (max-width: ${mediaEdge}) {
         padding-bottom: 1em;
@@ -32,10 +35,16 @@ export const ArticleBody = styled.div`
         font-weight: 400;
         padding: 0.5em 0;
         border-bottom: 1px dashed ${auxColor};
+        @media (max-width: ${mediaEdge}) {
+            font-size: 2rem;
+        }
     }
     h3 {
         font-weight: 400;
         padding-top: .5em;
+        @media (max-width: ${mediaEdge}) {
+            font-size: 1.8rem;
+        }
     }
     code {
         padding: 0 0.3em;

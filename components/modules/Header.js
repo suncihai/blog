@@ -18,6 +18,9 @@ const Nav = styled.div`
     margin: 0 auto;
     ${AppBodyStyle};
 `
+const Logo = styled.img`
+    display: none;
+`
 const Menu = styled.ul`
     margin: 0;
     padding: 0;
@@ -194,6 +197,7 @@ export default class extends React.Component {
         return (
             <Header>
                 <Nav>
+                    <Logo src="/static/images/favicon.png" />
                     <Menu>
                         <ComponentMenuList path={this.props.path} />
                     </Menu>

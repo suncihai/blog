@@ -39,7 +39,7 @@ export const ArticleTitle = styled.h2`
         }
     }
     @media (max-width: ${mediaEdge}) {
-        font-size: 2rem;
+        font-size: 1.8rem;
         &:before {
             display: none;
         }
