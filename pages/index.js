@@ -10,14 +10,14 @@ import HeadMeta from '../components/modules/HeadMeta'
 import ComponentHeader from '../components/modules/Header'
 import ComponentFooter from '../components/modules/Footer'
 import ComponentIcon from '../components/modules/Icon'
+import ComponentNoMore from '../components/modules/NoMore'
 import { App, AppBody } from '../components/styled-global'
 import {
     List,
     ListItem,
     ArticleTitle,
     ArticleInfo,
-    ArticleInfoItem,
-    NoMoreBottom
+    ArticleInfoItem
 } from '../components/styled-pages/index'
 import track from '../helpers/track'
 
@@ -71,7 +71,7 @@ export default class extends React.Component {
                                 </ArticleInfo>
                             </ListItem>
                         ))}</List>
-                        <NoMoreBottom><ComponentIcon type="over" /> 加载完毕，没有更多了~</NoMoreBottom>
+                        <ComponentNoMore />
                     </AppBody>
                     <ComponentFooter visible={true} />
                     <ComponentTooltip place="bottom" className="tooltip" delayShow={100}

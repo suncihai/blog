@@ -7,6 +7,7 @@ import HeadMeta from '../components/modules/HeadMeta'
 import ComponentHeader from '../components/modules/Header'
 import ComponentFooter from '../components/modules/Footer'
 import ComponentIcon from '../components/modules/Icon'
+import ComponentNoMore from '../components/modules/NoMore'
 import { App, AppBody } from '../components/styled-global'
 import {
     Header,
@@ -80,6 +81,7 @@ export default class extends React.Component {
                                 </ListHeader>
                                 <ListBody>
                                     <ComponentList results={results} />
+                                    <ComponentNoMore />
                                 </ListBody>
                             </List>}
                     </AppBody>

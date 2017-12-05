@@ -3,7 +3,6 @@ import {
     fontColor,
     fontAuxColor,
     auxColor,
-    footerHeight,
     mediaEdge
 } from '../styled-global/constant'
 
@@ -63,15 +62,5 @@ export const ArticleInfoItem = styled.span`
     }
     > i {
         margin-right: .35em;
-    }
-`
-export const NoMoreBottom = styled.div`
-    font-size: small;
-    text-align: center;
-    color: ${fontAuxColor};
-    margin-bottom: ${footerHeight};
-    > i {
-        top: 1px;
-        position: relative;
     }
 `

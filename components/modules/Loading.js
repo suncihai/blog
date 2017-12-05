@@ -34,6 +34,6 @@ export const Icon = ({ size, color }) => ((
 
 export default ({ size, color }) => ((
     <Loading>
-        <Icon size={size || 32} color={color || '#6495ed'} />
+        <Icon size={size || 28} color={color || '#6495ed'} />
     </Loading>
 ))
