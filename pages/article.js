@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom'
 import { getApi, prettyDate, getLineNumber } from '../helpers'
 
 import HighLightStyle from '../components/HighLightStyle'
-import DocumentHead from '../components/DocumentHead'
+import HeadMeta from '../components/modules/HeadMeta'
 import ComponentHeader from '../components/modules/Header'
 import ComponentFooter from '../components/modules/Footer'
 import ComponentUnArticle from '../components/modules/UnArticle'
@@ -27,7 +27,7 @@ import {
 export default class extends React.Component {
     static async getInitialProps ({ query, res }) {
         const { name } = query
-        const { data } = await axios.get(getApi(`article/${name}`))
+        const { data } = await axios.get(getApi(`article/${name}`)).catch(err => err)
         return {
             name,
             article: data.result
@@ -87,7 +87,7 @@ export default class extends React.Component {
 
         return (
             <div>
-                <DocumentHead
+                <HeadMeta
                     title={article && article.title}
                     description={article && article.description} />
                 <App>

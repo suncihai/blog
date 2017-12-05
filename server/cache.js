@@ -1,14 +1,14 @@
 const LruCache = require('lru-cache')
-const config = require('../../config/server')
+const { ssrCache } = require('../../config/server')
 
 const hour = 1000 * 60 * 60
 const cache = new LruCache({
     max: 100,
-    maxAge: config.ssrCache * hour
+    maxAge: ssrCache * hour
 })
 
-module.exports = function (app, req, res, path, query) {
-    let uri = decodeURIComponent(req.url)
+module.exports = (app, req, res, path, query) => {
+    const uri = decodeURIComponent(req.url)
 
     if (cache.has(uri)) {
         console.log(`Server from cache: ${uri}`)
@@ -24,7 +24,7 @@ module.exports = function (app, req, res, path, query) {
             console.log(`Current of caches: ${cache.keys().length}`)
         }
 
-        res.setHeader('Render-From', 'ssr-first')
+        res.setHeader('Render-From', 'ssr-cache')
         res.end(renderString)
     }).catch(err => {
         app.renderError(err, req, res, path, query)

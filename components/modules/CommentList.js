@@ -28,7 +28,6 @@ const NoAuditStyle = css`
         user-select: none;
         cursor: default;
         filter: blur(1px);
-        opacity: 0.6;
     }
 `
 const Comment = styled.div`
@@ -76,8 +75,7 @@ const CommentHeadDate = CommentHeadLocal.extend`
     }
 `
 const CommentBody = styled.div`
-    padding-left: 3em;
-    font-size: 1.4rem;
+    padding-left: 2.6em;
     ${NoAuditStyle};
 `
 const CommentBodyContent = styled.div``
@@ -104,18 +102,18 @@ const CommentNoAudit = styled.div`
 `
 
 const urlRE = /^(http|https):\/\//
-const commentUrl = url => urlRE.test(url) ? url : '//' + url
+const commentUrl = url => urlRE.test(url) ? url : '//' + url // 为了兼容旧的无协议网址
 
-const ComponentAuthor = props => (
-    <CommentHeadAuthor title={props.author}>{!props.url
-        ? <span>{props.author}</span>
-        : <a target="_blank" rel="nofollow noopener noreferrer" href={commentUrl(props.url)}>
-            {props.author}
+const ComponentAuthor = ({ author, url }) => (
+    <CommentHeadAuthor title={author}>{!url
+        ? <span>{author}</span>
+        : <a target="_blank" rel="nofollow noopener noreferrer" href={commentUrl(url)}>
+            {author}
         </a>
     }</CommentHeadAuthor>
 )
 
-const ComponentList = props => props.comments.map(comment => (
+const ComponentList = ({ comments }) => comments.map(comment => (
     <Comment key={comment.id}>
         <CommentHead className={comment.noAudit ? 'no-audit' : ''}>
             <CommentHeadAuthorAvatar src={`https://avatar.qwps.cn/avatar/${comment.author}`} />
@@ -160,7 +158,7 @@ export default class extends React.Component {
         window.scrollTo(0, offsetTop)
     }
 
-    getNoAuditComments (list = []) {
+    getNoAudits (list = []) {
         const { id } = this.props
         const noAudits = commentStorage.get()
         const auditIds = list.map(comment => comment.id)
@@ -180,7 +178,7 @@ export default class extends React.Component {
         comment.noAudit = true
         comment.articleId = this.props.id
         comments.unshift(comment)
-        noAudits.push(comment)
+        noAudits.unshift(comment)
 
         this.setState({
             comments: comments
@@ -207,7 +205,7 @@ export default class extends React.Component {
         const url = getApi(`comments/${this.props.id}`, window.location.origin)
         await axios.get(url).then(res => {
             const { data } = res
-            const noAudits = this.getNoAuditComments(data.result)
+            const noAudits = this.getNoAudits(data.result)
 
             this.setState({
                 error: '',

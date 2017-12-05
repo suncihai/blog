@@ -71,11 +71,9 @@ const shakeAnimation = keyframes`
     from, to {
       transform: translate3d(0, 0, 0);
     }
-
     10%, 30%, 50%, 70%, 90% {
       transform: translate3d(-10px, 0, 0);
     }
-
     20%, 40%, 60%, 80% {
       transform: translate3d(10px, 0, 0);
     }
@@ -151,6 +149,8 @@ const initState = () => ({
     buttonClass: klass.disable
 })
 
+const urlRE = /^(http|https):\/\//
+
 export default class extends React.Component {
     constructor (props) {
         super(props)
@@ -200,8 +200,16 @@ export default class extends React.Component {
 
         if (errorText) {
             errorText += '长度超出限制，请修改后再提交。'
-            this.setState({ errorText })
             track('value.overlength', this.props.type)
+        }
+
+        if (homepage && !urlRE.test(homepage)) {
+            errorText = '网址格式错误，请填写完整正确的 URL'
+            track('value.urlerror', this.props.type)
+        }
+
+        if (errorText) {
+            this.setState({ errorText })
             return
         }
 

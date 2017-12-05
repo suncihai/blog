@@ -3,7 +3,7 @@ import React from 'react'
 import config from '../config/server'
 import { introduce, declaration, navMenus } from '../config/website'
 
-import DocumentHead from '../components/DocumentHead'
+import HeadMeta from '../components/modules/HeadMeta'
 import ComponentHeader from '../components/modules/Header'
 import ComponentFooter from '../components/modules/Footer'
 import ComponentCommentList from '../components/modules/CommentList'
@@ -48,7 +48,7 @@ export default class extends React.Component {
 
         return (
             <div>
-                <DocumentHead title={name} />
+                <HeadMeta title={name} />
                 <App>
                     <ComponentHeader path={path} />
                     <AppBody>

@@ -1,7 +1,6 @@
 import styled, { keyframes } from 'styled-components'
 
 import ComponentIcon from './Icon'
-import { auxAnchorColor } from '../styled-global/constant'
 
 const Animate = keyframes`
     from {
@@ -27,14 +26,14 @@ const Loading = styled.div`
     text-align: center;
 `
 
-export const Icon = props => ((
-    <LoadingIcon size={props.size || 16} color={props.color}>
+export const Icon = ({ size, color }) => ((
+    <LoadingIcon size={size || 16} color={color}>
         <ComponentIcon type="loading" />
     </LoadingIcon>
 ))
 
-export default props => ((
+export default ({ size, color }) => ((
     <Loading>
-        <Icon size={props.size || 32} color={props.color || auxAnchorColor} />
+        <Icon size={size || 32} color={color || '#6495ed'} />
     </Loading>
 ))

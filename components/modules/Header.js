@@ -18,9 +18,6 @@ const Nav = styled.div`
     margin: 0 auto;
     ${AppBodyStyle};
 `
-const Logo = styled.img`
-    display: none;
-`
 const Menu = styled.ul`
     margin: 0;
     padding: 0;
@@ -109,11 +106,11 @@ const RightSearchIcon = styled.span`
     color: ${props => props.active ? '#000' : auxAnchorColor};
 `
 
-const ComponentMenuList = props => navMenus.map((menu, index) => (
+const ComponentMenuList = ({ path }) => navMenus.map((menu, index) => (
     <MenuItem key={menu.path} onClick={() => track('nav.click', menu.name)}>
         <MenuItemAnchor
             href={menu.path}
-            className={`${props.path === menu.path ? 'active' : ''}`}
+            className={`${path === menu.path ? 'active' : ''}`}
         >{menu.name}</MenuItemAnchor>
         {index === navMenus.length - 1 ? null : <MenuItemDivision />}
     </MenuItem>
@@ -197,7 +194,6 @@ export default class extends React.Component {
         return (
             <Header>
                 <Nav>
-                    <Logo src="/static/images/favicon.png" />
                     <Menu>
                         <ComponentMenuList path={this.props.path} />
                     </Menu>
@@ -211,13 +207,11 @@ export default class extends React.Component {
                                     placeholder="搜索文章、内容"
                                     onAnimationEnd={e => e.target.focus()}
                                     innerRef={input => { this.refInput = input }}
-                                    onChange={e => this.setState({ searchValue: e.target.value })}
-                                />
+                                    onChange={e => this.setState({ searchValue: e.target.value })} />
                             }
                             <RightSearchIcon
                                 active={searchVisible}
-                                onClick={this.clickSearch.bind(this)}
-                            >
+                                onClick={this.clickSearch.bind(this)}>
                                 <ComponentIcon type="search" />
                             </RightSearchIcon>
                         </RightSearch>

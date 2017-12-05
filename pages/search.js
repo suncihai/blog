@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { getApi } from '../helpers'
 
-import DocumentHead from '../components/DocumentHead'
+import HeadMeta from '../components/modules/HeadMeta'
 import ComponentHeader from '../components/modules/Header'
 import ComponentFooter from '../components/modules/Footer'
 import ComponentIcon from '../components/modules/Icon'
@@ -21,7 +21,7 @@ import {
 import track from '../helpers/track'
 
 const division = '<span class="division">···</span>'
-const ComponentList = props => props.results.map(result => (
+const ComponentList = ({ results }) => results.map(result => (
     <ListItem key={result.id}>
         <ListItemTitle>
             <a href={`/article/${result.name}`}
@@ -29,8 +29,7 @@ const ComponentList = props => props.results.map(result => (
                 dangerouslySetInnerHTML={{ __html: result.title }} />
         </ListItemTitle>
         {!result.mcontent ? null
-            : <ListItemContent
-                dangerouslySetInnerHTML={{ __html: result.content.join(division) }} />
+            : <ListItemContent dangerouslySetInnerHTML={{ __html: result.content.join(division) }} />
         }
     </ListItem>
 ))
@@ -38,7 +37,7 @@ const ComponentList = props => props.results.map(result => (
 export default class extends React.Component {
     static async getInitialProps ({ query }) {
         const { word } = query
-        const { data } = await axios.get(getApi(`search/${word}`))
+        const { data } = await axios.get(getApi(`search/${word}`)).catch(err => err)
         return {
             message: data.message,
             results: data.result || [],
@@ -66,7 +65,7 @@ export default class extends React.Component {
 
         return (
             <div>
-                <DocumentHead title={`搜索：${word}`} />
+                <HeadMeta title={`搜索：${word}`} />
                 <App>
                     <ComponentHeader />
                     <AppBody>

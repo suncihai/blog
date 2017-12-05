@@ -10,7 +10,7 @@ export default class Essay extends Index {
     static async getInitialProps () {
         const path = '/essay'
         const { name } = navMenus.find(nav => nav.path === path) || {}
-        const { data } = await axios.get(getApi(`articles/${config.category.essay}`))
+        const { data } = await axios.get(getApi(`articles/${config.category.essay}`)).catch(err => err)
         return {
             path,
             title: name,

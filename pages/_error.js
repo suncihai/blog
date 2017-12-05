@@ -61,7 +61,7 @@ export default class extends React.Component {
         if (postId) {
             track('error.old', postId)
             const url = getApi(`postname/${postId}`, window.location.origin)
-            const { data } = await axios.get(url).catch(err => err.response)
+            const { data } = await axios.get(url).catch(err => err)
             const { name } = data
             if (name) {
                 track('error.jump', name)
@@ -99,8 +99,8 @@ export default class extends React.Component {
                         <ErrorMessage>{`${message}: ${statusCode}`}</ErrorMessage>
                         <ErrorAnchor href="javascript:;" onClick={this.onTry.bind(this)}>刷新重试</ErrorAnchor>
                         <ErrorAnchor className="backhome" href="/"
-                            onClick={() => track('error.backhome', statusCode)}
-                        >回到首页</ErrorAnchor>
+                            onClick={() => track('error.backhome', statusCode)}>回到首页
+                        </ErrorAnchor>
                     </ErrorOther>
                 }</Error>
             </div>

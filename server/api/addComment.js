@@ -40,20 +40,27 @@ const getMysqlDate = () => {
     return { gmt, local }
 }
 
+const urlRE = /^(http|https):\/\//
 const charLimit = config.commentCharLimit
-const validate = data => ((
-    data.email.length <= charLimit.email &&
-    data.content.length <= charLimit.content &&
-    data.nickname.length <= charLimit.nickname &&
-    data.homepage.length <= charLimit.homepage
-))
+const validate = ({ email, content, nickname, homepage }) => {
+    const lengthValid = email.length <= charLimit.email &&
+        content.length <= charLimit.content &&
+        nickname.length <= charLimit.nickname &&
+        homepage.length <= charLimit.homepage
+
+    if (lengthValid && homepage) {
+        return urlRE.test(homepage)
+    }
+
+    return lengthValid
+}
 
 const addComment = data => new Promise(async (resolve, reject) => {
     if (!validate(data)) {
         return resolve({
             success: false,
             result: null,
-            message: '提交项长度超出限制'
+            message: '提交项不符合要求'
         })
     }
 

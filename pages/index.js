@@ -6,7 +6,7 @@ import config from '../config/server'
 import { navMenus } from '../config/website'
 import { getApi, prettyDate } from '../helpers'
 
-import DocumentHead from '../components/DocumentHead'
+import HeadMeta from '../components/modules/HeadMeta'
 import ComponentHeader from '../components/modules/Header'
 import ComponentFooter from '../components/modules/Footer'
 import ComponentIcon from '../components/modules/Icon'
@@ -25,7 +25,7 @@ export default class extends React.Component {
     static async getInitialProps () {
         const path = '/'
         const { name } = navMenus.find(nav => nav.path === path) || {}
-        const { data } = await axios.get(getApi(`articles/${config.category.article}`))
+        const { data } = await axios.get(getApi(`articles/${config.category.article}`)).catch(err => err)
         return {
             path,
             title: name,
@@ -38,7 +38,7 @@ export default class extends React.Component {
 
         return (
             <div>
-                <DocumentHead title={title} />
+                <HeadMeta title={title} />
                 <App>
                     <ComponentHeader path={path} />
                     <AppBody>

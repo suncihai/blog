@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 import { license } from '../../config/website'
@@ -22,21 +21,16 @@ const LicenseName = styled.div`
     padding: .5em 0;
 `
 
-export default class extends React.Component {
-    render () {
-        return (
-            <Share>
-                <License>
-                    <LicenseImg src="/static/images/license.svg" />
-                    <LicenseName>
-                        本文采用『<a href={license.link} target="_blank" rel="nofollow noopener"
-                            onClick={() => track('license.click')}
-                        >
-                            {license.name}
-                        </a>』进行许可。
-                    </LicenseName>
-                </License>
-            </Share>
-        )
-    }
-}
+export default () => ((
+    <Share>
+        <License>
+            <LicenseImg src="/static/images/license.svg" />
+            <LicenseName>
+                本文采用『<a href={license.link} target="_blank" rel="nofollow noopener"
+                    onClick={() => track('license.click')}>
+                    {license.name}
+                </a>』进行许可。
+            </LicenseName>
+        </License>
+    </Share>
+))

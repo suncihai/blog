@@ -2,7 +2,8 @@ import {
     fontSize,
     fontColor,
     fontFamily,
-    anchorColor
+    anchorColor,
+    lineHeight
 } from './styled-global/constant'
 
 export default () => (
@@ -12,9 +13,9 @@ export default () => (
         }
         body {
             background: #fff;
-            line-height: 180%;
             color: ${fontColor};
             font-size: ${fontSize};
+            line-height: ${lineHeight};
             -moz-osx-font-smoothing: grayscale;
             -webkit-font-smoothing: antialiased;
             font-family: ${fontFamily};

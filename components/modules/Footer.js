@@ -3,11 +3,7 @@ import styled from 'styled-components'
 
 import { icp, copyright, source } from '../../config/website'
 import { AppBodyStyle } from '../styled-global'
-import {
-    mediaEdge,
-    footerHeight,
-    auxAnchorColor
-} from '../styled-global/constant'
+import { mediaEdge, footerHeight, auxAnchorColor } from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const Footer = styled.div`
@@ -92,8 +88,7 @@ export default class extends React.Component {
                     <FooterCopyright>{copyright}</FooterCopyright>
                     <FooterSource>
                         <a rel="nofollow noopener" target="_blank" href={source}
-                            onClick={() => track('source.click')}
-                        >源代码</a>
+                            onClick={() => track('source.click')}>源代码</a>
                     </FooterSource>
                     <FooterIcp>
                         <a rel="nofollow noopener" target="_blank" href="http://www.miitbeian.gov.cn/">{icp}</a>

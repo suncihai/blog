@@ -1,8 +1,11 @@
+const flag = 'NO_AUDIT_COMMENTS'
+
 export default {
-    set: function (noAuditComments) {
-        localStorage.setItem('NO_AUDIT_COMMENTS', JSON.stringify(noAuditComments))
+    set (noAuditComments) {
+        localStorage.setItem(flag, JSON.stringify(noAuditComments))
     },
-    get: function () {
-        return JSON.parse(localStorage.getItem('NO_AUDIT_COMMENTS') || '[]')
+
+    get () {
+        return JSON.parse(localStorage.getItem(flag) || '[]')
     }
 }

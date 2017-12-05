@@ -12,6 +12,7 @@ const categorys = {
     'license.click': '内容·点击许可协议',
     'reset.click': '表单·点击重置按钮',
     'value.overlength': '表单·超出长度限制',
+    'value.urlerror': '表单·网址格式错误',
     'form.onsubmit': '表单·提交成功',
     'form.server.error': '表单·服务器错误',
     'error.old': '错误·来自旧数字地址',
@@ -23,9 +24,8 @@ const categorys = {
 }
 
 /**
+ * category (String), action (String)
  * 用户交互埋点统计 http://open.cnzz.com/a/api/trackevent/
- * category (String) 表示事件发生在谁身上，如“视频”、“小说”、“轮显层”等等。
- * action (String) 表示访客跟元素交互的行为动作，如"播放"、"收藏"、"翻层"等等。
  */
 const track = (category, action) => {
     category = categorys[category] || category

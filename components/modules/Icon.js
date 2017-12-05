@@ -1,3 +1,3 @@
-export default props => (
-    <i className={`iconfont icon-${props.type}`}></i>
+export default ({ type }) => (
+    <i className={`iconfont icon-${type}`}></i>
 )

@@ -21,20 +21,20 @@ export const getLineNumber = html => {
 }
 
 export const prettyDate = dateString => {
-    let date = new Date()
-    let dateArr = dateString.split(new RegExp('[:| |-]', 'ig'))
-    let year = +dateArr[0]
-    let month = +dateArr[1] - 1
-    let day = +dateArr[2]
+    const date = new Date()
+    const dateArr = dateString.split(new RegExp('[:| |-]', 'ig'))
+    const year = +dateArr[0]
+    const month = +dateArr[1] - 1
+    const day = +dateArr[2]
     let hour = +dateArr[3]
     let minute = +dateArr[4]
-    let second = +dateArr[5]
+    const second = +dateArr[5]
 
     hour = hour < 10 ? '0' + hour : hour
     minute = minute < 10 ? '0' + minute : minute
 
-    let opDate = new Date(year, month, day, hour, minute, second)
-    let secondDiff = (new Date().getTime() - opDate.getTime()) / 1000
+    const opDate = new Date(year, month, day, hour, minute, second)
+    const secondDiff = (new Date().getTime() - opDate.getTime()) / 1000
 
     if (secondDiff < 60) {
         return '刚刚'

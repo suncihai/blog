@@ -8,20 +8,20 @@ module.exports = {
     },
 
     getFirstThumbnail (post) {
-        let matches = post.match(/<img.*src=["](.*?)["].*?>/)
+        const matches = post.match(/<img.*src=["](.*?)["].*?>/)
         return (matches && matches[1]) || ''
     },
 
     getPostSummary (post, limit) {
         let desc
-        let char = '\u3002'
-        let sentences = post.split(char)
+        const char = '\u3002'
+        const sentences = post.split(char)
 
         if (sentences.lenth === 1) {
             desc = post.substr(0, limit)
         } else {
-            let sentence1 = sentences[0]
-            let sentence2 = sentences[1]
+            const sentence1 = sentences[0]
+            const sentence2 = sentences[1]
 
             if (sentence1.lenth < limit && sentence1.lenth > limit * 0.7) {
                 desc = sentence1

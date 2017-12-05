@@ -28,27 +28,6 @@ app.prepare().then(() => {
     server.proxy = true
     server.use(bodyParser())
 
-    // 首页
-    router.get('/', async context => {
-        const { req, res, query } = context
-        await app.render(req, res, '/', query)
-        context.respond = false
-    })
-
-    // 随笔
-    router.get('/essay', async context => {
-        const { req, res, query } = context
-        await app.render(req, res, '/essay', query)
-        context.respond = false
-    })
-
-    // 关于
-    router.get('/about', async context => {
-        const { req, res, query } = context
-        await app.render(req, res, '/about', query)
-        context.respond = false
-    })
-
     // 文章内容
     router.get('/article/:name', async context => {
         const { req, res, params, query } = context
@@ -75,7 +54,10 @@ app.prepare().then(() => {
             context.body = `API NOT SUPPORT: ${params.api}`
         }
         context.respond = true
-    }).post('/api/comment/:id', async context => {
+    })
+
+    // 添加评论
+    router.post('/api/comment/:id', async context => {
         const body = context.request.body
         const { req, res, params, ip } = context
         const result = await apis.comment(Object.assign(body, {
@@ -87,7 +69,7 @@ app.prepare().then(() => {
         context.respond = true
     })
 
-    // 其他静态资源辅助脚本等
+    // index, essay, about 以及其他资源脚本
     router.get('*', async context => {
         await defaultHandler(context.req, context.res)
         context.respond = false
