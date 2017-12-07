@@ -49,7 +49,7 @@ app.prepare().then(() => {
 
         if (typeof handler === 'function') {
             const result = await handler(createMeta(params, query), res)
-            context.body = JSON.stringify(result)
+            context.body = result
         } else {
             context.body = `API NOT SUPPORT: ${params.api}`
         }
@@ -65,7 +65,7 @@ app.prepare().then(() => {
             id: params.id,
             ua: req.headers['user-agent']
         }), res, req.method)
-        context.body = JSON.stringify(result)
+        context.body = result
         context.respond = true
     })
 
