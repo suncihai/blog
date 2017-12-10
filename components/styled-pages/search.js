@@ -22,10 +22,12 @@ export const ListBody = styled.div``
 export const ListItem = styled.div``
 export const ListItemTitle = styled.h2`
     font-weight: 400;
+    font-size: 2rem;
 `
 export const ListItemContent = styled.div`
     text-align: justify;
     padding-bottom: 2em;
+    font-size: 1.4rem;
     .division {
         margin: 0 1em;
         color: ${auxColor};

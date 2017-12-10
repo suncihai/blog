@@ -23,7 +23,7 @@ export const ArticleHeader = styled.h1`
     }
 `
 export const ArticleDate = styled.div`
-    padding-bottom: 2.2em;
+    padding-bottom: 1.5em;;
     color: ${fontAuxColor};
     @media (max-width: ${mediaEdge}) {
         padding-bottom: 1em;
@@ -46,6 +46,9 @@ export const ArticleBody = styled.div`
             font-size: 1.8rem;
         }
     }
+    p {
+        margin-bottom: 1.5em;
+    }
     code {
         padding: 0 0.3em;
         border-radius: 0.2em;
@@ -53,7 +56,7 @@ export const ArticleBody = styled.div`
         color: #800080;
     }
     img {
-        border-radius: .15em;
+        border-radius: .1em;
         max-width: 100%;
         height: auto;
         border: 1px solid ${auxColor};
