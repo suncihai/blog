@@ -74,7 +74,9 @@ const formatComments = async comments => {
     for (let i = 0; i < results.length; i++) {
         let res = results[i]
         res.answers = answerMap[res.id] || []
-        res.local = commentLocal ? await getLocal(res.local) : ''
+        if (commentLocal) {
+            res.local = await getLocal(res.local)
+        }
     }
 
     return results
@@ -84,10 +86,9 @@ module.exports.formatComments = formatComments
 const unknown = '未知地区'
 const iplookup = `http://apis.juhe.cn/ip/ip2addr?dtype=json&key=${appkey}`
 const getLocal = ip => axios.get(`${iplookup}&ip=${ip}`).then(res => {
-    let { resultcode, result } = res.data
-    const resCode = +resultcode
+    const { result } = res.data
     const errCode = +res.data.error_code
-    if (resCode === 200 && !errCode && typeof result === 'object') {
+    if (!errCode && result) {
         return result.area || unknown
     }
     return unknown
