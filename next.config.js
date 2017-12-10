@@ -6,11 +6,9 @@ module.exports = {
         if (dev) {
             config.module.rules.push({
                 test: /\.js$/,
-                include: [
-                    path.resolve(__dirname, 'components'),
-                    path.resolve(__dirname, 'config'),
-                    path.resolve(__dirname, 'pages'),
-                    path.resolve(__dirname, 'server')
+                exclude: [
+                    path.resolve(__dirname, 'static'),
+                    path.resolve(__dirname, 'node_modules')
                 ],
                 loader: 'eslint-loader',
                 options: {

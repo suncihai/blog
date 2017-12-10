@@ -55,22 +55,12 @@ const validate = ({ email, content, nickname, homepage }) => {
     return lengthValid
 }
 
-const emojiRE = /\ud83c[\udf00-\udfff]|\ud83d[\udc00-\ude4f]|\ud83d[\ude80-\udeff]/g
-
 const addComment = data => new Promise(async (resolve, reject) => {
     if (!validate(data)) {
         return resolve({
             success: false,
             result: null,
             message: '提交项不符合要求'
-        })
-    }
-
-    if (emojiRE.test(JSON.stringify(data))) {
-        return resolve({
-            success: false,
-            result: null,
-            message: '暂时不支持输入 emoji 表情'
         })
     }
 

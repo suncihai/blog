@@ -1,6 +1,6 @@
 let serverConfig = {
     // 服务端口
-    port: 4000,
+    port: 5501,
 
     // 服务主机
     host: 'https://www.tangbc.com',
@@ -11,8 +11,8 @@ let serverConfig = {
 
     // 数据库字段 id
     category: {
-        essay: 15,
-        article: 14,
+        essay: 4,
+        article: 2,
         comment: 539
     },
 
