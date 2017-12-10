@@ -49,6 +49,8 @@ const CommentHeadAuthor = styled.span`
     position: absolute;
     left: 2.6em;
     max-width: 50%;
+    font-weight: bold;
+    color: #666;
     ${EllipsisStyle};
 `
 const CommentHeadAuthorAvatar = styled.img`
@@ -62,10 +64,19 @@ const CommentHeadAuthorAvatar = styled.img`
 `
 const CommentHeadLocal = styled.span`
     font-size: small;
-    font-style: italic;
     color: ${fontAuxColor};
 `
 const CommentHeadDate = CommentHeadLocal.extend`
+    @media (max-width: ${mediaEdge}) {
+        display: none;
+    }
+`
+const CommentHeadLocalDivision = styled.span`
+    &:before {
+        content: '·';
+        padding: 0 .5em;
+        color: ${fontAuxColor};
+    }
     @media (max-width: ${mediaEdge}) {
         display: none;
     }
@@ -115,7 +126,8 @@ const ComponentList = ({ comments }) => comments.map(comment => (
         <CommentHead className={comment.noAudit ? 'no-audit' : ''}>
             <CommentHeadAuthorAvatar src={`https://avatar.qwps.cn/avatar/${comment.author}`} />
             <ComponentAuthor author={comment.author} url={comment.url} />
-            <CommentHeadLocal>{comment.local ? comment.local + ' · ' : ''}</CommentHeadLocal>
+            <CommentHeadLocal>{comment.local}</CommentHeadLocal>
+            {comment.local ? <CommentHeadLocalDivision /> : null}
             <CommentHeadDate>{prettyDate(comment.date)}</CommentHeadDate>
         </CommentHead>
         <CommentBody className={comment.noAudit ? 'no-audit' : ''}>

@@ -55,6 +55,16 @@ const validate = ({ email, content, nickname, homepage }) => {
     return lengthValid
 }
 
+const emojiRE = /\ud83c[\udf00-\udfff]|\ud83d[\udc00-\ude4f]|\ud83d[\ude80-\udeff]/g
+const removeEmoji = data => {
+    Object.keys(data).forEach(key => {
+        if (emojiRE.test(data[key])) {
+            data[key] = data[key].replace(emojiRE, '??')
+        }
+    })
+    return data
+}
+
 const addComment = data => new Promise(async (resolve, reject) => {
     if (!validate(data)) {
         return resolve({
@@ -64,7 +74,9 @@ const addComment = data => new Promise(async (resolve, reject) => {
         })
     }
 
-    const nicknameExist = await isNicknameExist(data.nickname)
+    const { email, content, nickname, homepage, ip, id, ua } = removeEmoji(data)
+
+    const nicknameExist = await isNicknameExist(nickname)
 
     if (nicknameExist) {
         return resolve({
@@ -75,7 +87,6 @@ const addComment = data => new Promise(async (resolve, reject) => {
     }
 
     const { gmt, local } = getMysqlDate()
-    const { email, content, nickname, homepage, ip, id, ua } = data
     const sets = {
         comment_post_ID: id,
         comment_author: nickname,
