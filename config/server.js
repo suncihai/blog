@@ -23,7 +23,7 @@ let serverConfig = {
     summaryLength: 80,
 
     // 评论列表是否加载评论所在地区
-    commentLocal: true,
+    commentLocal: false,
 
     // 评论字数限制
     commentCharLimit: {
