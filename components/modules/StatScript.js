@@ -14,6 +14,14 @@ const installStat = () => {
         }
         document.body.appendChild(s)
     })
+
+    window.addEventListener('error', err => {
+        try {
+            const { message, colno, lineno, filename, type } = err
+            const detail = `[${message} (${colno},${lineno})] in ${filename}`
+            window._czc.push(['_trackEvent', '代码报错统计', type, detail])
+        } catch (e) {}
+    })
 }
 
 export default () => (
