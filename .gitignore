@@ -4,3 +4,4 @@
 node_modules
 npm-debug.log
 server/db/db.pro.json
+server/api/userkey.json

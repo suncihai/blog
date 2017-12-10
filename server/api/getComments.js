@@ -2,6 +2,7 @@ const db = require('../db')
 const axios = require('axios')
 const { isNumeric } = require('../utils')
 const { commentLocal } = require('../../config/server')
+const { appkey } = require('./userkey.json')
 
 const getSort = sort => sort.toUpperCase() === 'ASC' ? 'ASC' : 'DESC'
 
@@ -81,12 +82,13 @@ const formatComments = async comments => {
 module.exports.formatComments = formatComments
 
 const unknown = '未知地区'
-const iplookup = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip='
-const getLocal = ip => axios.get(iplookup + ip).then(res => {
-    let { data } = res
-    if (typeof data === 'object' && data.ret === 1) {
-        let { country, province, city } = data
-        return (country === '中国' ? '' : country) + (province === city ? city : province + city)
+const iplookup = `http://apis.juhe.cn/ip/ip2addr?dtype=json&key=${appkey}`
+const getLocal = ip => axios.get(`${iplookup}&ip=${ip}`).then(res => {
+    let { resultcode, result } = res.data
+    const resCode = +resultcode
+    const errCode = +res.data.error_code
+    if (resCode === 200 && !errCode && typeof result === 'object') {
+        return result.area || unknown
     }
     return unknown
 }).catch(err => err)
