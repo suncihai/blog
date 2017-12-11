@@ -3,6 +3,7 @@ const axios = require('axios')
 const { isNumeric } = require('../utils')
 const { commentLocal } = require('../../config/server')
 const { appkey } = require('./userkey.json')
+const LruCache = require('lru-cache')
 
 const getSort = sort => sort.toUpperCase() === 'ASC' ? 'ASC' : 'DESC'
 
@@ -37,6 +38,11 @@ const getCommentList = (id, sort = 'DESC') => new Promise((resolve, reject) => {
     })
 })
 
+const ipCache = new LruCache({
+    max: 1000,
+    stale: true
+})
+const ipRE = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/
 const formatComments = async comments => {
     let results = []
     let answerMap = {}
@@ -64,7 +70,7 @@ const formatComments = async comments => {
                 id: comment.comment_ID,
                 author: comment.comment_author,
                 url: comment.comment_author_url,
-                local: comment.comment_author_IP,
+                ip: comment.comment_author_IP,
                 content: comment.comment_content,
                 date: comment.comment_date
             })
@@ -74,27 +80,35 @@ const formatComments = async comments => {
     for (let i = 0; i < results.length; i++) {
         let res = results[i]
         res.answers = answerMap[res.id] || []
-        if (commentLocal) {
-            res.local = await getLocal(res.local)
-        } else {
-            res.local = ''
+
+        // 获取 IP 对应的地区并进行数据缓存
+        let local = ''
+        const ip = res.ip
+        if (commentLocal && ipRE.test(ip)) {
+            const hit = ipCache.get(ip)
+            if (hit) {
+                local = hit
+            } else {
+                local = await getLocal(ip)
+                if (local) {
+                    ipCache.set(ip, local)
+                }
+            }
         }
+
+        delete res.ip
+        res.local = local
     }
 
     return results
 }
 module.exports.formatComments = formatComments
 
-const unknown = '' // 查询有误不显示地区
 const iplookup = `http://apis.juhe.cn/ip/ip2addr?dtype=json&key=${appkey}`
 const getLocal = ip => axios.get(`${iplookup}&ip=${ip}`).then(res => {
     const { result } = res.data
     const errCode = +res.data.error_code
-
-    if (!errCode && result) {
-        return result.area
-    }
-    return unknown
+    return !errCode && result ? result.area : ''
 }).catch(err => err)
 
 module.exports.default = ({ id, sort }) => getCommentList(id, sort).catch(err => err)
