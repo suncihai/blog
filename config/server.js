@@ -7,7 +7,10 @@ let serverConfig = {
 
     // 服务端渲染缓存时间（小时）
     // 关闭服务端渲染缓存设为 0
-    ssrCache: 24,
+    cacheMaxage: 0,
+
+    // 服务端渲染缓存的页面（文章页单独处理）
+    cachePaths: ['/', '/essay', '/about'],
 
     // 数据库字段 id
     category: {

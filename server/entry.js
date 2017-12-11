@@ -6,6 +6,8 @@ const Router = require('koa-router')
 
 const apis = require('./api')
 const config = require('../config/server')
+const ssrcache = require('./ssrcache')
+const { cacheMaxage, cachePaths } = config
 
 const app = next({
     dir: path.resolve(__dirname, '../'),
@@ -30,8 +32,14 @@ app.prepare().then(() => {
 
     // 文章内容
     router.get('/article/:name', async context => {
+        const path = '/article'
         const { req, res, params, query } = context
-        await app.render(req, res, '/article', createMeta(params, query))
+        const meta = createMeta(params, query)
+        if (cacheMaxage) {
+            ssrcache(app, req, res, path, meta)
+        } else {
+            await app.render(req, res, path, createMeta(params, query))
+        }
         context.respond = false
     })
 
@@ -71,7 +79,13 @@ app.prepare().then(() => {
 
     // index, essay, about 以及其他资源脚本
     router.get('*', async context => {
-        await defaultHandler(context.req, context.res)
+        const { req, res } = context
+        const { path } = context.request
+        if (cacheMaxage && ~cachePaths.indexOf(path)) {
+            ssrcache(app, req, res, path)
+        } else {
+            await defaultHandler(context.req, context.res)
+        }
         context.respond = false
     })
 
