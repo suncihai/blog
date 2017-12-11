@@ -37,8 +37,6 @@ const getCommentList = (id, sort = 'DESC') => new Promise((resolve, reject) => {
     })
 })
 
-// IP 请求流量超限制
-let ipOverflow = false
 const formatComments = async comments => {
     let results = []
     let answerMap = {}
@@ -76,7 +74,7 @@ const formatComments = async comments => {
     for (let i = 0; i < results.length; i++) {
         let res = results[i]
         res.answers = answerMap[res.id] || []
-        if (commentLocal && !ipOverflow) {
+        if (commentLocal) {
             res.local = await getLocal(res.local)
         } else {
             res.local = ''
@@ -87,13 +85,11 @@ const formatComments = async comments => {
 }
 module.exports.formatComments = formatComments
 
-const unknown = '' // 查询有误、流量超限不显示地区
+const unknown = '' // 查询有误不显示地区
 const iplookup = `http://apis.juhe.cn/ip/ip2addr?dtype=json&key=${appkey}`
 const getLocal = ip => axios.get(`${iplookup}&ip=${ip}`).then(res => {
     const { result } = res.data
     const errCode = +res.data.error_code
-
-    ipOverflow = errCode === 10012
 
     if (!errCode && result) {
         return result.area
