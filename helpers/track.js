@@ -20,7 +20,9 @@ const categorys = {
     'error.unjump': '错误·跳转到新地址失败',
     'error.other': '错误·其他错误',
     'error.try': '错误·点击刷新重试',
-    'error.backhome': '错误·点击回到首页'
+    'resume.print': '简历·PC端点击打印',
+    'resume.m.print': '简历·Mobile端点击打印',
+    'resume.download': '简历·点击下载PDF'
 }
 
 /**

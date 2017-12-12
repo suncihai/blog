@@ -14,6 +14,11 @@ export const EllipsisStyle = css`
     white-space: nowrap;
     text-overflow: ellipsis;
 `
+export const PrintHideStyle = css`
+    @media print {
+        display: none;
+    }
+`
 
 // 全局布局
 export const App = styled.div`

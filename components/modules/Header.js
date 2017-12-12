@@ -1,22 +1,30 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 import ComponentIcon from './Icon'
 import { navMenus, socials } from '../../config/website'
-import { FormStyle, AppBodyStyle } from '../styled-global'
+import { FormStyle, AppBodyStyle, PrintHideStyle } from '../styled-global'
 import { headHeight, auxColor, auxAnchorColor, mediaEdge } from '../styled-global/constant'
 import track from '../../helpers/track'
 
+const MobileFullWidthStyle = css`
+    @media (max-width: ${mediaEdge}) {
+        width: 100%;
+    }
+`
 const Header = styled.div`
     width: 100%;
     height: ${headHeight};
     line-height: ${headHeight};
     background: #f8f8ff;
     border-bottom: 1px solid #efefef;
+    ${PrintHideStyle};
+    ${MobileFullWidthStyle};
 `
 const Nav = styled.div`
     margin: 0 auto;
     ${AppBodyStyle};
+    ${MobileFullWidthStyle};
 `
 const Menu = styled.ul`
     margin: 0;
@@ -31,9 +39,9 @@ const Menu = styled.ul`
 const MenuItem = styled.li`
     display: inline-block;
     @media (max-width: ${mediaEdge}) {
-        width: 33%;
         text-align: center;
         position: relative;
+        width: ${1 / navMenus.length * 100}%;
     }
 `
 const MenuItemAnchor = styled.a`

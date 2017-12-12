@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { icp, copyright, source } from '../../config/website'
-import { AppBodyStyle } from '../styled-global'
+import { AppBodyStyle, PrintHideStyle } from '../styled-global'
 import { mediaEdge, footerHeight, auxAnchorColor } from '../styled-global/constant'
 import track from '../../helpers/track'
 
@@ -12,7 +12,8 @@ const Footer = styled.div`
     line-height: ${footerHeight};
     position: ${props => props.scrollBar ? '' : 'fixed'};
     bottom: 0;
-    `
+    ${PrintHideStyle};
+`
 const FooterBody = styled.div`
     margin: 0 auto;
     text-align: center;
