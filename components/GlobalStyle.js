@@ -1,3 +1,4 @@
+import { injectGlobal } from 'styled-components'
 import {
     fontSize,
     fontColor,
@@ -6,31 +7,29 @@ import {
     lineHeight
 } from './styled-global/constant'
 
-export default () => (
-    <style jsx global>{`
-        html {
-            font-size: 62.5%;
-        }
-        body {
-            background: #fff;
-            color: ${fontColor};
-            font-size: ${fontSize};
-            line-height: ${lineHeight};
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-font-smoothing: antialiased;
-            font-family: ${fontFamily};
-        }
-        a {
-            color: ${anchorColor};
-            text-decoration: none;
-        }
-        div {
-            position: relative;
-        }
-        .tooltip {
-            opacity: .8 !important;
-            padding: 0 1em !important;
-            font-size: 1.2rem !important;
-        }
-    `}</style>
-)
+injectGlobal`
+    html {
+        font-size: 62.5%;
+    }
+    body {
+        background: #fff;
+        color: ${fontColor};
+        font-size: ${fontSize};
+        line-height: ${lineHeight};
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-family: ${fontFamily};
+    }
+    a {
+        color: ${anchorColor};
+        text-decoration: none;
+    }
+    div {
+        position: relative;
+    }
+    .tooltip {
+        opacity: .8 !important;
+        padding: 0 1em !important;
+        font-size: 1.2rem !important;
+    }
+`

@@ -87,6 +87,7 @@ export default class extends React.Component {
 
         return (
             <div>
+                <style type="text/css" dangerouslySetInnerHTML={{ __html: HighLightStyle }} />
                 <HeadMeta
                     title={article && article.title}
                     description={article && article.description} />
@@ -110,7 +111,6 @@ export default class extends React.Component {
                     }</AppBody>
                     <ComponentFooter visible={true} />
                 </App>
-                <HighLightStyle />
             </div>
         )
     }
