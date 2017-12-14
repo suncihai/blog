@@ -10,7 +10,7 @@ let serverConfig = {
     cacheMaxage: 5,
 
     // 服务端渲染缓存的页面（文章页单独处理）
-    cachePaths: ['/', '/essay', '/about', 'resume'],
+    cachePaths: ['/', '/essay', '/about', '/resume'],
 
     // 数据库字段 id
     category: {
