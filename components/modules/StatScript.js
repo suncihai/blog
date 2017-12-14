@@ -17,9 +17,9 @@ const installStat = () => {
 
     window.addEventListener('error', err => {
         try {
-            const { message, colno, lineno, filename, type } = err
-            const detail = `[${message} (${colno},${lineno})] in ${filename}`
-            window._czc.push(['_trackEvent', '代码报错统计', type, detail])
+            const { message, filename } = err
+            const detail = `[${message}] in ${filename}`
+            window._czc.push(['_trackEvent', '代码报错统计', navigator.userAgent, detail])
         } catch (e) {}
     })
 }
