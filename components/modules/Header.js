@@ -114,8 +114,8 @@ const RightSearchIcon = styled.span`
     color: ${props => props.active ? '#000' : auxAnchorColor};
 `
 
-const ComponentMenuList = ({ path }) => navMenus.map((menu, index) => (
-    <MenuItem key={menu.path} onClick={() => track('nav.click', menu.name)}>
+const ComponentMenuList = ({ path, statusCode }) => navMenus.map((menu, index) => (
+    <MenuItem key={menu.path} onClick={() => track('nav.click', `${menu.name}${statusCode}`)}>
         <MenuItemAnchor
             href={menu.path}
             className={`${path === menu.path ? 'active' : ''}`}
@@ -197,13 +197,16 @@ export default class extends React.Component {
     }
 
     render () {
+        const { statusCode } = this.props
         const { searchVisible } = this.state
 
         return (
             <Header>
                 <Nav>
                     <Menu>
-                        <ComponentMenuList path={this.props.path} />
+                        <ComponentMenuList
+                            path={this.props.path}
+                            statusCode={statusCode ? '·' + statusCode : ''} />
                     </Menu>
                     <Right>
                         <RightSocial>

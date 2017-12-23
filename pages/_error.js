@@ -6,24 +6,31 @@ import styled from 'styled-components'
 import { getApi } from '../helpers'
 import track from '../helpers/track'
 
+import ComponentHeader from '../components/modules/Header'
+import ComponentFooter from '../components/modules/Footer'
+import ComponentIcon from '../components/modules/Icon'
+import { Icon as ComponentLoadingIcon } from '../components/modules/Loading'
+import { App, AppBody } from '../components/styled-global'
+
 const Error = styled.div`
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    padding-top: 4em;
+    text-align: center;
 `
-const ErrorOther = styled.div``
-const ErrorAnchor = styled.a`
-    font-size: 1.4rem;
-    &.backhome {
-        position: absolute;
-        right: 0;
+const ErrorIcon = styled.div`
+    > i {
+        font-size: 6rem;
     }
 `
-const ErrorMessage = styled.h3``
+const ErrorText = styled.h2`
+    margin: 2em 0;
+    font-weight: 300;
+`
+const ErrorJump = styled.div`
+    font-weight: 200;
+`
 
 const numRE = /\d+/
-const urlRE = /^(\/)\d+(.html)$/
+const urlRE = /^(\/)\d+(.html)/
 
 export default class extends React.Component {
     static getInitialProps ({ req, res, jsonPageRes }) {
@@ -38,7 +45,6 @@ export default class extends React.Component {
             : (jsonPageRes ? jsonPageRes.status : null)
 
         return {
-            url,
             postId,
             statusCode
         }
@@ -47,13 +53,9 @@ export default class extends React.Component {
     constructor (props) {
         super(props)
         this.state = {
-            found: false
+            found: false,
+            noResult: false
         }
-    }
-
-    onTry () {
-        track('error.try', this.props.statusCode)
-        window.location.reload()
     }
 
     async componentDidMount () {
@@ -70,9 +72,12 @@ export default class extends React.Component {
                 })
                 window.setTimeout(() => {
                     window.location.href = `/article/${name}`
-                }, 1500)
+                }, 2000)
             } else {
                 track('error.unjump', postId)
+                this.setState({
+                    noResult: true
+                })
             }
         } else {
             track('error.other', statusCode)
@@ -80,29 +85,43 @@ export default class extends React.Component {
     }
 
     render () {
-        const { statusCode, postId, url } = this.props
-        const tryToFindback = statusCode === 404 && postId && url
-        const message = statusCode === 404 ? '抱歉，页面不存在' : '貌似出了点差错'
-        const update = this.state.found ? '已找到新地址' : '当前访问的文章地址已更新'
+        const { found, noResult } = this.state
+        const { statusCode, postId } = this.props
+        const errorMessage = statusCode === 404
+            ? '您访问的页面不存在或被移到了新的地址 ~'
+            : '服务器开小差，请稍后重试 ~'
+
+        let jumpMessage
+        if (postId) {
+            jumpMessage = noResult
+                ? '😞 抱歉没有找到旧地址，您可以到博客别处看看 ~'
+                : found
+                    ? '已找到新地址，现在立刻马上即将为您跳转到新页面 🚀'
+                    : '当前访问的文章地址已更新，正在尝试找到新地址'
+        }
 
         return (
             <div>
                 <Head>
-                    <title>😂😂😂😂😂😂😂</title>
+                    <title>😂 😂 😂</title>
                 </Head>
-                <Error>{tryToFindback
-                    ? <ErrorMessage>
-                        {update}，正在尝试跳转到新地址……
-                        或：<a href="/">回首页</a>
-                    </ErrorMessage>
-                    : <ErrorOther>
-                        <ErrorMessage>{`${message}: ${statusCode}`}</ErrorMessage>
-                        <ErrorAnchor href="javascript:;" onClick={this.onTry.bind(this)}>刷新重试</ErrorAnchor>
-                        <ErrorAnchor className="backhome" href="/"
-                            onClick={() => track('error.backhome', statusCode)}>回到首页
-                        </ErrorAnchor>
-                    </ErrorOther>
-                }</Error>
+                <App>
+                    <ComponentHeader statusCode={statusCode} />
+                    <AppBody>
+                        <Error>
+                            <ErrorIcon>
+                                <ComponentIcon type={found ? 'happy' : 'sad'} />
+                            </ErrorIcon>
+                            <ErrorText>{errorMessage}</ErrorText>
+                            {!jumpMessage ? null
+                                : <ErrorJump>
+                                    {jumpMessage}&nbsp;&nbsp;
+                                    {noResult || found ? null : <ComponentLoadingIcon />}
+                                </ErrorJump>}
+                        </Error>
+                    </AppBody>
+                    <ComponentFooter visible={true} />
+                </App>
             </div>
         )
     }
