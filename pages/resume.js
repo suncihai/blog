@@ -62,7 +62,6 @@ export default class extends React.Component {
                         </Header>
 
                         <Title>前端开发工程师</Title>
-                        <Desc>接受的工作地点：深圳、广州</Desc>
 
                         <Title>个人信息</Title>
                         <Table>
@@ -70,18 +69,12 @@ export default class extends React.Component {
                                 <Tr>
                                     <Td className="key">姓名</Td>
                                     <Td className="value">唐比昌</Td>
-                                    <Td className="key">出生年月</Td>
-                                    <Td className="value">1990 · 09 （处女座）</Td>
-                                </Tr>
-                                <Tr>
-                                    <Td className="key">所在地</Td>
-                                    <Td className="value">广东省 · 珠海市</Td>
                                     <Td className="key">家乡籍贯</Td>
                                     <Td className="value">广西壮族自治区 · 桂林市</Td>
                                 </Tr>
                                 <Tr>
-                                    <Td className="key">个人博客</Td>
-                                    <Td className="value"><a href="/">https://www.tangbc.com</a></Td>
+                                    <Td className="key">所在地</Td>
+                                    <Td className="value">广东省 · 珠海市</Td>
                                     <Td className="key">毕业院校</Td>
                                     <Td className="value">桂林电子科技大学 · 本科</Td>
                                 </Tr>
