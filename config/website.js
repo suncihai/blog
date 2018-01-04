@@ -27,12 +27,5 @@ export const license = {
     link: 'https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh'
 }
 
-export const socials = [
-    { icon: 'weibo', link: 'https://weibo.com/tbc0921' },
-    { icon: 'zhihu', link: 'https://www.zhihu.com/people/tangbc' },
-    { icon: 'github', link: 'https://github.com/tangbc' }
-]
-
 export const icp = '桂 ICP 备 12002316 号'
-export const source = 'https://github.com/tangbc/blog'
 export const copyright = `© ${(new Date()).getFullYear()} ${titleSuffix}`

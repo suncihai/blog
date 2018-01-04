@@ -2,9 +2,9 @@ import React from 'react'
 import styled, { css, keyframes } from 'styled-components'
 
 import ComponentIcon from './Icon'
-import { navMenus, socials } from '../../config/website'
+import { navMenus } from '../../config/website'
 import { FormStyle, AppBodyStyle, PrintHideStyle } from '../styled-global'
-import { headHeight, auxColor, auxAnchorColor, mediaEdge } from '../styled-global/constant'
+import { headHeight, auxAnchorColor, mediaEdge } from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const MobileFullWidthStyle = css`
@@ -73,18 +73,6 @@ const Right = styled.div`
         display: none;
     }
 `
-const RightSocial = styled.div`
-    height: 22px;
-    line-height: 22px;
-    vertical-align: baseline;
-    padding-right: 1.5em;
-    margin-right: 1.5em;
-    border-right: 1px solid ${auxColor};
-`
-const RightSocialAnchor = styled.a`
-    color: ${auxAnchorColor};
-    margin-left: 1.5em;
-`
 const RightSearch = styled.div`
     vertical-align: top;
     min-width: 1.5em;
@@ -122,14 +110,6 @@ const ComponentMenuList = ({ path, statusCode }) => navMenus.map((menu, index) =
         >{menu.name}</MenuItemAnchor>
         {index === navMenus.length - 1 ? null : <MenuItemDivision />}
     </MenuItem>
-))
-
-const ComponentSocial = () => socials.map(social => (
-    <RightSocialAnchor target="_blank"
-        key={social.link} href={social.link}
-        onClick={() => track('social.click', social.icon)} >
-        <ComponentIcon type={social.icon} />
-    </RightSocialAnchor>
 ))
 
 export default class extends React.Component {
@@ -209,9 +189,6 @@ export default class extends React.Component {
                             statusCode={statusCode ? '·' + statusCode : ''} />
                     </Menu>
                     <Right>
-                        <RightSocial>
-                            <ComponentSocial />
-                        </RightSocial>
                         <RightSearch onClick={e => { this.ckTimeStamp = e.timeStamp }}>
                             {!searchVisible ? null
                                 : <RightSearchInput

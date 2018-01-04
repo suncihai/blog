@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { icp, copyright, source } from '../../config/website'
+import { icp, copyright } from '../../config/website'
 import { AppBodyStyle, PrintHideStyle } from '../styled-global'
 import { mediaEdge, footerHeight, auxAnchorColor } from '../styled-global/constant'
 import track from '../../helpers/track'
@@ -29,19 +29,25 @@ const FooterBody = styled.div`
 `
 const FooterCopyright = styled.small`
     float: left;
-`
-const FooterSource = styled.small`
-    float: left;
-    &:before {
+    &:after {
         content: '·';
-        margin: .5em;
+        margin: 0 .5em;
     }
     @media (max-width: ${mediaEdge}) {
-        position: absolute;
-        right: 0;
-        &:before {
+        &:after {
             display: none;
         }
+    }
+`
+const FooterSocial = styled.div`
+    float: left;
+    font-size: small;
+    > span:first-child:after {
+        content: '·';
+        margin: 0 .5em;
+    }
+    @media (max-width: ${mediaEdge}) {
+        float: right;
     }
 `
 const FooterIcp = styled.small`
@@ -86,11 +92,15 @@ export default class extends React.Component {
         return (
             <Footer scrollBar={scrollBar} style={{ visibility: visibility }}>
                 <FooterBody>
-                    <FooterCopyright>{copyright}</FooterCopyright>
-                    <FooterSource>
-                        <a rel="nofollow noopener" target="_blank" href={source}
-                            onClick={() => track('source.click')}>源代码</a>
-                    </FooterSource>
+                    <FooterCopyright>
+                        <a href="/">{copyright}</a>
+                    </FooterCopyright>
+                    <FooterSocial>
+                        <span><a rel="nofollow noopener" href="https://www.zhihu.com/people/tangbc"
+                            target="_blank" onClick={() => track('footer.zhihu')}>知乎</a></span>
+                        <span><a rel="nofollow noopener" href="https://github.com/tangbc"
+                            target="_blank" onClick={() => track('footer.github')}>Github</a></span>
+                    </FooterSocial>
                     <FooterIcp>
                         <a rel="nofollow noopener" target="_blank" href="http://www.miitbeian.gov.cn/">{icp}</a>
                     </FooterIcp>
