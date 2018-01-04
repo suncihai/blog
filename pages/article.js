@@ -3,7 +3,7 @@ import axios from 'axios'
 import hljs from 'highlight.js'
 import ReactDOM from 'react-dom'
 
-import { getApi, prettyDate, getLineNumber } from '../helpers'
+import { getApi, getLineNumber } from '../helpers'
 
 import HighLightStyle from '../components/HighLightStyle'
 import HeadMeta from '../components/modules/HeadMeta'
@@ -97,7 +97,7 @@ export default class extends React.Component {
                         ? <ComponentUnArticle />
                         : <Article>
                             <ArticleHeader><a href={`/article/${name}`}>{article.title}</a></ArticleHeader>
-                            <ArticleDate>{`写于：${prettyDate(article.date)}`}</ArticleDate>
+                            <ArticleDate>{`写于：${article.date}`}</ArticleDate>
                             <ArticleBody dangerouslySetInnerHTML={{ __html: article.content }} />
                             <ComponentShareArticle />
                             <ArticleComment innerRef={el => { this.refComment = el }}>

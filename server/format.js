@@ -5,7 +5,6 @@ const map = {
     ID: 'id',
     post_title: 'title',
     post_name: 'name',
-    post_date: 'date',
     comment_count: 'comments'
 }
 

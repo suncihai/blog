@@ -1,6 +1,6 @@
 const db = require('../db')
 const axios = require('axios')
-const { isNumeric } = require('../utils')
+const { isNumeric, prettyDate } = require('../utils')
 const { commentLocal } = require('../../config/server')
 const { appkey } = require('./userkey.json')
 const LruCache = require('lru-cache')
@@ -55,7 +55,7 @@ const formatComments = async comments => {
         if (comment.comment_parent) {
             const answer = {
                 id: comment.comment_ID,
-                date: comment.comment_date,
+                date: prettyDate(comment.comment_date),
                 author: comment.comment_author,
                 content: comment.comment_content
             }
@@ -72,7 +72,7 @@ const formatComments = async comments => {
                 url: comment.comment_author_url,
                 ip: comment.comment_author_IP,
                 content: comment.comment_content,
-                date: comment.comment_date
+                date: prettyDate(comment.comment_date)
             })
         }
     })

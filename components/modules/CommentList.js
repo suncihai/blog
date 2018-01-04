@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components'
 import ComponentIcon from './Icon'
 import ComponentLoading from './Loading'
 import commentStorage from '../../helpers/storage'
-import { getApi, prettyDate } from '../../helpers'
+import { getApi } from '../../helpers'
 import { EllipsisStyle } from '../styled-global'
 import { auxColor, fontAuxColor, mediaEdge } from '../styled-global/constant'
 
@@ -128,7 +128,7 @@ const ComponentList = ({ comments }) => comments.map(comment => (
             <ComponentAuthor author={comment.author} url={comment.url} />
             <CommentHeadLocal>{comment.local}</CommentHeadLocal>
             {comment.local ? <CommentHeadLocalDivision /> : null}
-            <CommentHeadDate>{prettyDate(comment.date)}</CommentHeadDate>
+            <CommentHeadDate>{comment.date}</CommentHeadDate>
         </CommentHead>
         <CommentBody className={comment.noAudit ? 'no-audit' : ''}>
             <CommentBodyContent>{comment.content}</CommentBodyContent>

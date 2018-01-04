@@ -4,7 +4,7 @@ import ComponentTooltip from 'react-tooltip'
 
 import config from '../config/server'
 import { navMenus } from '../config/website'
-import { getApi, prettyDate } from '../helpers'
+import { getApi } from '../helpers'
 
 import HeadMeta from '../components/modules/HeadMeta'
 import ComponentHeader from '../components/modules/Header'
@@ -50,7 +50,7 @@ export default class extends React.Component {
                                 <ArticleInfo>
                                     <ArticleInfoItem data-tip="发布时间">
                                         <ComponentIcon type="date" />
-                                        {prettyDate(article.date)}
+                                        {article.date}
                                     </ArticleInfoItem>
                                     {article.comments ? <ArticleInfoItem data-tip="评论数">
                                         <ComponentIcon type="comment" />

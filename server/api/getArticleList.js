@@ -1,6 +1,6 @@
 const db = require('../db')
 const format = require('../format')
-const { isNumeric } = require('../utils')
+const { isNumeric, prettyDate } = require('../utils')
 
 const getArticleIds = categoryId => new Promise((resolve, reject) => {
     const connection = db.createConnection()
@@ -55,6 +55,7 @@ const getArticleList = ids => new Promise((resolve, reject) => {
                 const englishCount = (content.match(englishRE) || []).length
                 const words = chineseCount * chineseSpeed + englishCount * englishSpeed
                 return format(row, {
+                    date: prettyDate(row.post_date),
                     codes: (content.match(codeRE) || []).length,
                     minutes: Math.max(Math.round(words / 60), 3),
                     thumbnails: (content.match(imagesRE) || []).length

@@ -2,7 +2,7 @@ const db = require('../db')
 const format = require('../format')
 const autop = require('../utils/autop')
 const { summaryLength } = require('../../config/server')
-const { removeHTMLTag, getChineseWord } = require('../utils')
+const { removeHTMLTag, getChineseWord, prettyDate } = require('../utils')
 
 const getArticle = name => new Promise((resolve, reject) => {
     const connection = db.createConnection()
@@ -27,6 +27,7 @@ const getArticle = name => new Promise((resolve, reject) => {
                 success: true,
                 result: format(data, {
                     content: autop(content, true),
+                    date: prettyDate(data.post_date),
                     description: getChineseWord(removeHTMLTag(content), summaryLength)
                 })
             })
