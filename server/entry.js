@@ -38,7 +38,7 @@ app.prepare().then(() => {
         if (cacheMaxage) {
             ssrcache(app, req, res, path, meta)
         } else {
-            await app.render(req, res, path, createMeta(params, query))
+            await app.render(req, res, path, meta)
         }
         context.respond = false
     })
@@ -84,7 +84,7 @@ app.prepare().then(() => {
         if (cacheMaxage && ~cachePaths.indexOf(path)) {
             ssrcache(app, req, res, path)
         } else {
-            await defaultHandler(context.req, context.res)
+            await defaultHandler(req, res)
         }
         context.respond = false
     })

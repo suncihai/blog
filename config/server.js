@@ -7,7 +7,7 @@ let serverConfig = {
 
     // 服务端渲染缓存时间（分钟）
     // 关闭服务端渲染缓存设为 0
-    cacheMaxage: 5,
+    cacheMaxage: 0,
 
     // 服务端渲染缓存的页面（文章页单独处理）
     cachePaths: ['/', '/essay', '/about', '/resume'],
