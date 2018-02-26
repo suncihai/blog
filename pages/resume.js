@@ -1,7 +1,6 @@
 import React from 'react'
 
 import track from '../helpers/track'
-import { navMenus } from '../config/website'
 
 import HeadMeta from '../components/modules/HeadMeta'
 import ComponentHeader from '../components/modules/Header'
@@ -25,8 +24,6 @@ import {
     Li
 } from '../components/styled-pages/resume'
 
-const path = '/resume'
-const { name } = navMenus.find(nav => nav.path === path) || {}
 const mobileRE = /iPhone|iPad|iPod|Android/i
 
 export default class extends React.Component {
@@ -49,11 +46,11 @@ export default class extends React.Component {
         return (
             <div>
                 <HeadMeta
-                    title={name}
+                    title="个人简历"
                     keywords="简历,唐比昌,前端开发工程师"
                     description="唐比昌的个人简历：Web 前端开发工程师" />
                 <App>
-                    <ComponentHeader path={path} />
+                    <ComponentHeader />
                     <AppBody>
                         <Header>
                             <HeaderOperator onClick={this.eventPrint.bind(this)}>[打印简历]</HeaderOperator>

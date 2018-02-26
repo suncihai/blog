@@ -18,7 +18,6 @@ export const declaration = [
 export const navMenus = [
     { path: '/', name: '技术文章' },
     { path: '/essay', name: '生活杂记' },
-    { path: '/resume', name: '个人简历' },
     { path: '/about', name: '关于我' }
 ]
 
