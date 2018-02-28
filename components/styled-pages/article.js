@@ -59,7 +59,6 @@ export const ArticleBody = styled.div`
         border-radius: .1em;
         max-width: 100%;
         height: auto;
-        border: 1px solid ${auxColor};
     }
     pre {
         border-radius: .15em;
