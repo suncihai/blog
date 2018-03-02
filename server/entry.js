@@ -7,7 +7,7 @@ const Router = require('koa-router')
 const apis = require('./api')
 const config = require('../config/server')
 const ssrcache = require('./ssrcache')
-const { cacheMaxage, cachePaths } = config
+const { cacheMaxage, topPaths } = config
 
 const app = next({
     dir: path.resolve(__dirname, '../'),
@@ -79,10 +79,20 @@ app.prepare().then(() => {
 
     // index, essay, about 以及其他资源脚本
     router.get('*', async context => {
-        const { req, res } = context
-        const { path } = context.request
-        if (cacheMaxage && ~cachePaths.indexOf(path)) {
-            ssrcache(app, req, res, path)
+        const { req, res, params, query } = context
+        let { path } = context.request
+        const length = path.length
+
+        if (path[length - 1] === '/') {
+            path = path.substr(0, length - 1)
+        }
+
+        if (~topPaths.indexOf(path)) {
+            if (cacheMaxage) {
+                ssrcache(app, req, res, path)
+            } else {
+                await app.render(req, res, path, createMeta(params, query))
+            }
         } else {
             await defaultHandler(req, res)
         }

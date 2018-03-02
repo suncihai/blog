@@ -9,8 +9,8 @@ let serverConfig = {
     // 关闭服务端渲染缓存设为 0
     cacheMaxage: 0,
 
-    // 服务端渲染缓存的页面（文章页单独处理）
-    cachePaths: ['/', '/essay', '/about', '/resume'],
+    // 一级页面页面（文章页单独处理）
+    topPaths: ['/', '/essay', '/about', '/resume'],
 
     // 数据库字段 id
     category: {
