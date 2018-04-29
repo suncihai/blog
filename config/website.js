@@ -2,11 +2,12 @@ export const titleSuffix = 'TBC 的码棚'
 export const defaultKeywords = '前端开发,JavaScript,个人博客,唐比昌,TBC,tangbichang'
 export const defaultDescription = '一些与前端开发技术相关的东西以及一些生活纪事等等……'
 
+const thisYear = (new Date()).getFullYear()
 export const introduce = [
     '这里是一个十分简陋的个人主页，取名为 “TBC 的码棚”，',
     '因为同学朋友们喜欢简单直接叫我 BC 或 TBC，我的家乡来自山水甲天下的桂林市。',
-    '从事前端开发三年多，目前居住在珠海市就职于 WPS 云文档，喜欢前端开发和产品设计；',
-    '业余时间特别喜欢打羽毛球和看 NBA（不吹不黑），五年金州勇士球迷，水花死忠党 ~'
+    '从事前端开发三年多，目前居住在深圳市就职于腾讯 AlloyTeam，喜欢前端开发和产品设计；',
+    `业余时间特别喜欢打羽毛球和看 NBA（不吹不黑），${thisYear - 2013} 年金州勇士球迷，水花死忠党 🖐`
 ].join('')
 
 export const declaration = [
@@ -27,4 +28,4 @@ export const license = {
 }
 
 export const icp = '桂 ICP 备 12002316 号'
-export const copyright = `© ${(new Date()).getFullYear()} ${titleSuffix}`
+export const copyright = `© ${thisYear} ${titleSuffix}`

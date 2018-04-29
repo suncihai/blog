@@ -7,10 +7,10 @@ import ComponentHeader from '../components/modules/Header'
 import ComponentFooter from '../components/modules/Footer'
 import { App, AppBody } from '../components/styled-global'
 import {
-    Header,
+    // Header,
+    // HeaderOperator,
+    // HeaderDivision,
     Footer,
-    HeaderOperator,
-    HeaderDivision,
     Title,
     TitleSub,
     TitleExp,
@@ -52,13 +52,13 @@ export default class extends React.Component {
                 <App>
                     <ComponentHeader />
                     <AppBody>
-                        <Header>
+                        {/* <Header>
                             <HeaderOperator onClick={this.eventPrint.bind(this)}>[打印简历]</HeaderOperator>
                             <HeaderDivision />
                             <HeaderOperator onClick={this.eventDownload.bind(this)}>[下载 PDF 简历]</HeaderOperator>
-                        </Header>
+                        </Header> */}
 
-                        <Title>前端开发工程师</Title>
+                        {/* <Title>前端开发工程师</Title> */}
 
                         <Title>个人信息</Title>
                         <Table>
@@ -67,11 +67,11 @@ export default class extends React.Component {
                                     <Td className="key">姓名</Td>
                                     <Td className="value">唐比昌</Td>
                                     <Td className="key">家乡籍贯</Td>
-                                    <Td className="value">广西壮族自治区 · 桂林市</Td>
+                                    <Td className="value">广西桂林</Td>
                                 </Tr>
                                 <Tr>
                                     <Td className="key">所在地</Td>
-                                    <Td className="value">广东省 · 珠海市</Td>
+                                    <Td className="value">广东深圳</Td>
                                     <Td className="key">毕业院校</Td>
                                     <Td className="value">桂林电子科技大学 · 本科</Td>
                                 </Tr>
@@ -86,20 +86,35 @@ export default class extends React.Component {
 
                         <Title>简单介绍</Title>
                         <Desc>
-                            性格：谦虚随和慢热型；长相：经常被错认为是个学生；
-                            爱好：最爱 NBA 和羽毛球；风格：空格缩进无分号党。
+                            性格：谦虚随和慢热型；
+                            爱好：NBA 、羽毛球；
+                            风格：空格缩进无分号党。
                         </Desc>
                         <Title>个人履历</Title>
                         <Ul>
-                            <Li>2010 年 9 月至 2014 年 7 月就读于桂林电子科技大学信息与通信专业。</Li>
                             <Li>
-                                2014 年 7 月至 2017 年 2 月就职于&nbsp;
-                                <a target="_blank" rel="nofollow noopener noreferrer" href="https://www.sunteng.com/">
-                                    广州舜飞科技
-                                </a>，任职 Web 前端开发工程师。
+                                2010·09 至 2014·07 就读于&nbsp;
+                                <a target="_blank" rel="nofollow noopener noreferrer" href="http://www.gliet.edu.cn">
+                                    桂林电子科技大学
+                                </a>。
                             </Li>
                             <Li>
-                                2017 年 3 月至今就职于珠海金山办公 WPS 云文档，任职 Web 前端开发工程师。
+                                2014·07 至 2017·02 就职于&nbsp;
+                                <a target="_blank" rel="nofollow noopener noreferrer" href="http://www.sunteng.com">
+                                    广州舜飞科技
+                                </a>。
+                            </Li>
+                            <Li>
+                                2017·02 至 2018·03 就职于金山&nbsp;
+                                <a target="_blank" rel="nofollow noopener noreferrer" href="https://drive.wps.cn">
+                                    WPS
+                                </a>。
+                            </Li>
+                            <Li>
+                                2018·03 至今就职于腾讯&nbsp;
+                                <a target="_blank" rel="nofollow noopener noreferrer" href="http://www.alloyteam.com/">
+                                    AlloyTeam
+                                </a>。
                             </Li>
                         </Ul>
 
@@ -124,7 +139,7 @@ export default class extends React.Component {
                             指令绑定名称借鉴了 Vue 的设计风格，大大提升了开发的效率和体验，
                             承载了多个项目绝大部分表单和页面逻辑的交互实现，并且拥有很好的稳定性和团队成员使用反馈。
                         </Desc>
-                        <TitleSub>金山 WPS（2017·03 ~ 现在）</TitleSub>
+                        <TitleSub>金山 WPS（2017·03 ~ 2018.03）</TitleSub>
                         <Desc>
                             <a target="_blank" href="https://drive.wps.cn">WPS 云文档</a>
                             &nbsp;是 WPS Office 生态系统中的一个重要部分（网页版文档管理应用），
@@ -167,7 +182,7 @@ export default class extends React.Component {
                             这是我第二个比较受欢迎的开源作品，通过 Vue2 虚拟 DOM
                             构建组件的特性处理大数据列表渲染的性能问题和无限数据加载问题，
                             可无压力渲染十万条列表数据。代码实现和文档编写都得到了不少赞美和肯定，
-                            目前已为许多国内外的开发者所使用和验证，通过 NPM 包下载量最多的时候达到 2K/月。
+                            目前已为许多国内外的开发者所使用和验证，通过 NPM 包下载量最多的时候达到 10K/月。
                             同时也收到了很多的 issue 反馈、改进建议和 pull request，目前这个 repo 处于一个使用稳定的状态。
                         </Desc>
                         <TitleSub>
@@ -201,27 +216,8 @@ export default class extends React.Component {
                             <Li>其他的详见我的博客“技术文章”专栏。</Li>
                         </Ul>
 
-                        <Title>期望的工作内容</Title>
-                        <Ul>
-                            <Li>
-                                如果工作内容是一些前端业务/组件/框架的设计与编写，
-                                或者是关于测试开发流程等，那么可能会很合适我，上手熟悉会很快；
-                            </Li>
-                            <Li>
-                                如果是服务端开发如 NodeJS，虽然之前工作也有参与过少量这方面的开发以及我的博客服务端也是用 NodeJS 编写的，
-                                但都是一些接口的设计与数据查询，对核心方面了解不多，这一块可能会上手慢点；
-                            </Li>
-                            <Li>
-                                目前对于 Mobile 端的开发涉及不多，也希望能有机会往这个方向（React Native, Hybrid App 等）去发展最好；
-                            </Li>
-                            <Li>
-                                关于 Linux 和运维，我目前所实践过的就是在腾讯云服务器上自动化部署和维护我的博客了。
-                            </Li>
-                        </Ul>
-                        <Desc>
-                            至于希望做哪方面的工作，我没有严格的取向，不是非得做擅长的，而排拆不擅长的，如能两者兼顾是最好的，
-                            还有就是看重团队的位置安排，做技术解决问题就是快乐所在，即使接触一些之前涉及甚少的开发类型我觉得自己也有能力去快速上手并做好。
-                        </Desc>
+                        <Desc></Desc>
+
                         <End>
                             End.
                         </End>
