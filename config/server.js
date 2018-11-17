@@ -47,9 +47,9 @@ if (process.env.NODE_ENV !== 'production') {
         return env.address || 'localhost'
     })()
 
-    serverConfig.category.essay = 24
-    serverConfig.category.article = 1
-    serverConfig.category.comment = 2
+    serverConfig.category.essay = 3
+    serverConfig.category.article = 2
+    serverConfig.category.comment = 539
 
     serverConfig.ssrCache = 0
     serverConfig.host = `http://${ip}:${serverConfig.port}`
