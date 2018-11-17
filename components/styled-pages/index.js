@@ -17,9 +17,6 @@ export const ListItem = styled.div`
     margin-bottom: 2em;
     padding-bottom: 2em;
     border-bottom: 1px dashed ${auxColor};
-    &:active {
-        background: #f4f4f4;
-    }
     &:last-child {
         border: none;
         margin-bottom: 0;
@@ -32,6 +29,9 @@ export const ListItem = styled.div`
         padding: 1em;
         user-select: none;
         ${onePixelBorder}
+        &:active {
+            background: #f4f4f4;
+        }
     }
 `
 export const ArticleTitle = styled.h2`
