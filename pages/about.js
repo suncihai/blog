@@ -57,16 +57,16 @@ export default class extends React.Component {
                             <AboutDeclaration>
                                 <strong>声明：</strong> {declaration}
                             </AboutDeclaration>
+                            <AboutMessage>
+                                <AboutMessageTitle>
+                                    <ComponentIcon type="message" /> 留言板
+                                </AboutMessageTitle>
+                                <AboutMessageSub>无聊的、建议的、批评的、拍砖的、交流的…… 都在这说吧 ~</AboutMessageSub>
+                            </AboutMessage>
+                            <ComponentCommentForm type="留言" id={commentId} onAdded={this.onMessageAdded.bind(this)} />
+                            <ComponentCommentList type="留言" id={commentId} reached={true} autoscroll={false}
+                                onLoad={this.onLoad.bind(this)} ref="list" />
                         </About>
-                        <AboutMessage>
-                            <AboutMessageTitle>
-                                <ComponentIcon type="message" /> 留言板
-                            </AboutMessageTitle>
-                            <AboutMessageSub>无聊的、建议的、批评的、拍砖的、交流的…… 都在这说吧 ~</AboutMessageSub>
-                        </AboutMessage>
-                        <ComponentCommentForm type="留言" id={commentId} onAdded={this.onMessageAdded.bind(this)} />
-                        <ComponentCommentList type="留言" id={commentId} reached={true} autoscroll={false}
-                            onLoad={this.onLoad.bind(this)} ref="list" />
                     </AppBody>
                     <ComponentFooter visible={loaded} />
                 </App>

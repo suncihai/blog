@@ -4,7 +4,7 @@ import styled, { css, keyframes } from 'styled-components'
 import ComponentIcon from './Icon'
 import { navMenus } from '../../config/website'
 import { FormStyle, AppBodyStyle, PrintHideStyle } from '../styled-global'
-import { headHeight, auxAnchorColor, mediaEdge } from '../styled-global/constant'
+import { headHeight, auxAnchorColor, mediaEdge, onePixelBorder } from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const MobileFullWidthStyle = css`
@@ -20,6 +20,9 @@ const Header = styled.div`
     border-bottom: 1px solid #efefef;
     ${PrintHideStyle};
     ${MobileFullWidthStyle};
+    @media (max-width: ${mediaEdge}) {
+        ${onePixelBorder}
+    }
 `
 const Nav = styled.div`
     margin: 0 auto;

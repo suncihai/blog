@@ -3,26 +3,35 @@ import {
     fontColor,
     fontAuxColor,
     auxColor,
-    mediaEdge
+    mediaEdge,
+    onePixelBorder
 } from '../styled-global/constant'
 
 export const List = styled.div`
     padding: 2em 0;
     @media (max-width: ${mediaEdge}) {
-        padding: 1em 0;
+        padding: 0;
     }
 `
 export const ListItem = styled.div`
     margin-bottom: 2em;
     padding-bottom: 2em;
     border-bottom: 1px dashed ${auxColor};
+    &:active {
+        background: #f4f4f4;
+    }
     &:last-child {
         border: none;
         margin-bottom: 0;
+        @media (max-width: ${mediaEdge}) {
+            margin-bottom: 2em;
+        }
     }
     @media (max-width: ${mediaEdge}) {
-        margin-bottom: 1em;
-        padding-bottom: 1em;
+        margin: 0;
+        padding: 1em;
+        user-select: none;
+        ${onePixelBorder}
     }
 `
 export const ArticleTitle = styled.h2`
@@ -35,6 +44,9 @@ export const ArticleTitle = styled.h2`
         color: ${fontColor};
         &:hover {
             text-decoration: underline;
+            @media (max-width: ${mediaEdge}) {
+                text-decoration: none;
+            }
         }
     }
     @media (max-width: ${mediaEdge}) {

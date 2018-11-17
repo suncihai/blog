@@ -8,7 +8,7 @@ import ComponentLoading from './Loading'
 import commentStorage from '../../helpers/storage'
 import { getApi } from '../../helpers'
 import { EllipsisStyle } from '../styled-global'
-import { auxColor, fontAuxColor, mediaEdge } from '../styled-global/constant'
+import { auxColor, fontAuxColor, mediaEdge, onePixelBorder } from '../styled-global/constant'
 
 const List = styled.div`
     padding-bottom: 2em;
@@ -36,6 +36,9 @@ const Comment = styled.div`
     border-bottom: 1px dashed ${auxColor};
     &:last-child {
         border: none;
+    }
+    @media (max-width: ${mediaEdge}) {
+        ${onePixelBorder}
     }
 `
 const CommentHead = styled.div`

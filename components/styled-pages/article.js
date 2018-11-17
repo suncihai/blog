@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { auxColor, fontAuxColor, mediaEdge } from '../styled-global/constant'
+import { auxColor, fontAuxColor, mediaEdge, onePixelBorder } from '../styled-global/constant'
 
 export const Article = styled.div`
     padding: 2em 0;
@@ -9,7 +9,7 @@ export const Article = styled.div`
         }
     }
     @media (max-width: ${mediaEdge}) {
-        padding: 1em 0;
+        padding: 1em;
     }
 `
 export const ArticleHeader = styled.h1`
@@ -37,6 +37,7 @@ export const ArticleBody = styled.div`
         border-bottom: 1px dashed ${auxColor};
         @media (max-width: ${mediaEdge}) {
             font-size: 2rem;
+            ${onePixelBorder}
         }
     }
     h3 {

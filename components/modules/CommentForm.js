@@ -8,7 +8,7 @@ import config from '../../config/server'
 import ComponentIcon from './Icon'
 import { Icon as ComponentLoadingIcon } from './/Loading'
 import { FormStyle } from '../styled-global'
-import { fontAuxColor, mediaEdge } from '../styled-global/constant'
+import { fontAuxColor, mediaEdge, onePixelBorder } from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const CommentFormStyle = css`
@@ -16,6 +16,11 @@ const CommentFormStyle = css`
     resize: none;
     font-size: 1.4rem;
     padding: .75rem;
+    appearance: none;
+    @media (max-width: ${mediaEdge}) {
+        border-color: rgba(0, 0, 0, .35);
+        ${onePixelBorder}
+    }
 `
 const Textarea = styled.textarea`
     ${FormStyle};

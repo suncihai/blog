@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { auxColor, fontAuxColor } from '../styled-global/constant'
 
 export const About = styled.div`
-    padding: 1em 0;
+    padding: 1em;
     text-align: justify;
 `
 export const AboutDesc = styled.p`
@@ -12,7 +12,7 @@ export const AboutDesc = styled.p`
 `
 export const AboutDeclaration = styled.p``
 export const AboutMessage = styled.div`
-    padding-bottom: 2em;
+    padding: 1em 0 2em 0;
 `
 export const AboutMessageTitle = styled.h3`
     border-left: 4px solid ${auxColor};

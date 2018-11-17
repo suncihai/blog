@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { icp, copyright } from '../../config/website'
 import { AppBodyStyle, PrintHideStyle } from '../styled-global'
-import { mediaEdge, footerHeight, auxAnchorColor } from '../styled-global/constant'
+import { mediaEdge, footerHeight, auxAnchorColor, onePixelBorder } from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const Footer = styled.div`
@@ -25,6 +25,9 @@ const FooterBody = styled.div`
         &:hover {
             text-decoration: underline;
         }
+    }
+    @media (max-width: ${mediaEdge}) {
+        ${onePixelBorder}
     }
 `
 const FooterCopyright = styled.small`

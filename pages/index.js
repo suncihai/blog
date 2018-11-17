@@ -21,6 +21,9 @@ import {
 } from '../components/styled-pages/index'
 import track from '../helpers/track'
 
+// iOS 下激活 active 伪类需要 touchstart 绑定一个匿名函数
+const touchStartNoopForActive = () => {}
+
 export default class extends React.Component {
     static async getInitialProps () {
         const path = '/'
@@ -43,7 +46,7 @@ export default class extends React.Component {
                     <ComponentHeader path={path} />
                     <AppBody>
                         <List>{list.map(article => (
-                            <ListItem key={article.id}>
+                            <ListItem key={article.id} onTouchStart={touchStartNoopForActive}>
                                 <ArticleTitle>
                                     <a href={`/article/${article.name}`}>{article.title}</a>
                                 </ArticleTitle>
