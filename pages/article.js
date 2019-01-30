@@ -100,7 +100,7 @@ export default class extends React.Component {
                             <ArticleDate>{`写于：${article.date}`}</ArticleDate>
                             <ArticleBody dangerouslySetInnerHTML={{ __html: article.content }} />
                             <ComponentShareArticle />
-                            <ArticleComment innerRef={el => { this.refComment = el }}>
+                            <ArticleComment ref={el => { this.refComment = el }}>
                                 <ArticleCommentTitle>
                                     <ComponentIcon type="list" /> 评论列表
                                 </ArticleCommentTitle>

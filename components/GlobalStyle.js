@@ -1,4 +1,4 @@
-import { injectGlobal } from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 import {
     fontSize,
     fontColor,
@@ -7,7 +7,7 @@ import {
     lineHeight
 } from './styled-global/constant'
 
-injectGlobal`
+createGlobalStyle`
     html {
         font-size: 62.5%;
     }

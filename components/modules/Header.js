@@ -197,7 +197,7 @@ export default class extends React.Component {
                                 : <RightSearchInput
                                     placeholder="搜索文章、内容"
                                     onAnimationEnd={e => e.target.focus()}
-                                    innerRef={input => { this.refInput = input }}
+                                    ref={input => { this.refInput = input }}
                                     onChange={e => this.setState({ searchValue: e.target.value })} />
                             }
                             <RightSearchIcon

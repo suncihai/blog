@@ -69,7 +69,7 @@ const CommentHeadLocal = styled.span`
     font-size: small;
     color: ${fontAuxColor};
 `
-const CommentHeadDate = CommentHeadLocal.extend`
+const CommentHeadDate = styled(CommentHeadLocal)`
     @media (max-width: ${mediaEdge}) {
         display: none;
     }

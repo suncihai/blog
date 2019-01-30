@@ -1,6 +1,8 @@
 .next
 .idea
 .DS_Store
+temp
+build
 node_modules
 npm-debug.log
 server/db/db.pro.json

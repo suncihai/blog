@@ -264,7 +264,7 @@ export default class extends React.Component {
                             </Td>
                             <Td className="right">
                                 <Textarea id="c_content" rows="3"
-                                    innerRef={input => { this.refContent = input }}
+                                    ref={input => { this.refContent = input }}
                                     placeholder={`限 ${charLimit.content} 个字符以内`}
                                     onChange={e => this.onChange('content', e.target.value)}
                                 ></Textarea>
@@ -277,7 +277,7 @@ export default class extends React.Component {
                             </Td>
                             <Td className="right">
                                 <InputText id="c_nickname"
-                                    innerRef={input => { this.refNickname = input }}
+                                    ref={input => { this.refNickname = input }}
                                     placeholder={`限 ${charLimit.nickname} 个字符以内`}
                                     onChange={e => this.onChange('nickname', e.target.value)}
                                 ></InputText>
@@ -290,7 +290,7 @@ export default class extends React.Component {
                             </Td>
                             <Td className="right">
                                 <InputText id="c_email"
-                                    innerRef={input => { this.refEmail = input }}
+                                    ref={input => { this.refEmail = input }}
                                     placeholder={`限 ${charLimit.email} 个字符以内`}
                                     onChange={e => this.setState({ email: e.target.value })}
                                 ></InputText>
@@ -303,7 +303,7 @@ export default class extends React.Component {
                             </Td>
                             <Td className="right">
                                 <InputText id="c_homepage"
-                                    innerRef={input => { this.refHomepage = input }}
+                                    ref={input => { this.refHomepage = input }}
                                     placeholder={`限 ${charLimit.homepage} 个字符以内`}
                                     onChange={e => this.setState({ homepage: e.target.value })}
                                 ></InputText>

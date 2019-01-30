@@ -7,11 +7,12 @@ module.exports = {
     },
     // "extends": "eslint:recommended",
     "extends": "standard",
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
-            "experimentalObjectRestSpread": true,
             "jsx": true
         },
+        "ecmaVersion": 5,
         "sourceType": "module"
     },
     "plugins": [

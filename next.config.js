@@ -2,6 +2,8 @@ const path = require('path')
 
 // https://github.com/zeit/next.js#custom-configuration
 module.exports = {
+    distDir: 'build',
+
     webpack: (config, { dev }) => {
         if (dev) {
             config.module.rules.push({
