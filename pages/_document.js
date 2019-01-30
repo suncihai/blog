@@ -1,7 +1,7 @@
 import { ServerStyleSheet } from 'styled-components'
 import Document, { Head, Main, NextScript } from 'next/document'
 
-import '../components/GlobalStyle'
+import { GlobalStyle } from '../components/GlobalStyle'
 import StatScript from '../components/modules/StatScript'
 
 export default class MyDocument extends Document {
@@ -19,6 +19,7 @@ export default class MyDocument extends Document {
                     <link rel="stylesheet" href="/static/styles/reset.css" />
                     <link rel="stylesheet" href="/static/iconfont/iconfont.css" />
                     <link rel='shortcut icon' type='image/x-icon' href='/static/images/favicon.png' />
+                    <GlobalStyle />
                     {ComponentStyleFragments}
                 </Head>
                 <body>
