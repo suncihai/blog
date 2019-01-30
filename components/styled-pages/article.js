@@ -53,20 +53,21 @@ export const ArticleBody = styled.div`
     code {
         padding: 0 0.3em;
         border-radius: 0.2em;
-        background: #f5f5f5;
-        color: #800080;
+        background: #fff8dc;
+        color: #f92672;
+        font-size: 1.4rem;
     }
     img {
         border-radius: .1em;
         max-width: 100%;
         height: auto;
+        margin: 0.5em 0;
     }
     pre {
         border-radius: .15em;
         position: relative;
         padding-left: 2.8em;
         font-size: 1.4rem;
-        font-weight: bold;
         visibility: hidden;
     }
     blockquote {

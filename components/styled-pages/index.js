@@ -35,7 +35,8 @@ export const ListItem = styled.div`
     }
 `
 export const ArticleTitle = styled.h2`
-    font-weight: 300;
+    font-weight: 400;
+    font-size: 2.2rem;
     &:before {
         content: '•';
         padding-right: .5em;

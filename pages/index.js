@@ -69,7 +69,7 @@ export default class extends React.Component {
                                     </ArticleInfoItem> : null}
                                     <ArticleInfoItem data-tip="估计阅读时间">
                                         <ComponentIcon type="read" />
-                                        {article.minutes} ′
+                                        {article.minutes}′
                                     </ArticleInfoItem>
                                 </ArticleInfo>
                             </ListItem>

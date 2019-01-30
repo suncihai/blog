@@ -12,6 +12,8 @@ const Footer = styled.div`
     line-height: ${footerHeight};
     position: ${props => props.scrollBar ? '' : 'fixed'};
     bottom: 0;
+    padding: 0 1em;
+    box-sizing: border-box;
     ${PrintHideStyle};
 `
 const FooterBody = styled.div`
