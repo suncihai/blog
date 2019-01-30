@@ -12,6 +12,12 @@ let serverConfig = {
     // 一级页面页面（文章页单独处理）
     topPaths: ['/', '/essay', '/about', '/resume'],
 
+    // 需要提供在根目录的静态文件，比如：www.tangbc.com/test.txt
+    // 目标文件需放在 /static/rootAssets 目录下，判断依据为 indexOf 为 0
+    rootAssets: [
+        'MP_verify_6IRzYt9UdhTYwh1a.txt'
+    ],
+
     // 数据库字段 id
     category: {
         essay: 4,

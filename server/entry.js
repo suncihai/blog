@@ -1,5 +1,5 @@
 const Koa = require('koa')
-const path = require('path')
+const Path = require('path')
 const next = require('next')
 const bodyParser = require('koa-body')
 const Router = require('koa-router')
@@ -7,10 +7,10 @@ const Router = require('koa-router')
 const apis = require('./api')
 const config = require('../config/server')
 const ssrcache = require('./ssrcache')
-const { cacheMaxage, topPaths } = config
+const { cacheMaxage, topPaths, rootAssets } = config
 
 const app = next({
-    dir: path.resolve(__dirname, '../'),
+    dir: Path.resolve(__dirname, '../'),
     dev: process.env.NODE_ENV === 'development'
 })
 const defaultHandler = app.getRequestHandler()
@@ -21,6 +21,15 @@ const createMeta = (params, query) => {
         meta[key] = encodeURIComponent(meta[key])
     })
     return meta
+}
+
+const checkRootAssets = path => {
+    for (let i = 0; i < rootAssets.length; i++) {
+        if (path.indexOf(rootAssets[i]) === 1) {
+            return true
+        }
+    }
+    return false
 }
 
 app.prepare().then(() => {
@@ -93,6 +102,9 @@ app.prepare().then(() => {
             } else {
                 await app.render(req, res, path, createMeta(params, query))
             }
+        } else if (checkRootAssets(path)) {
+            const rootFile = Path.resolve(`static/rootAssets${path}`)
+            app.serveStatic(req, res, rootFile)
         } else {
             await defaultHandler(req, res)
         }
