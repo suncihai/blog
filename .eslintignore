@@ -1,3 +1,6 @@
+.idea
+temp
+build
 static/**
 node_modules/**
 server/utils/autop.js
