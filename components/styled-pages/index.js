@@ -7,6 +7,25 @@ import {
     onePixelBorder
 } from '../styled-global/constant'
 
+export const Preface = styled.div`
+    margin-top: 2em;
+    @media (max-width: ${mediaEdge}) {
+        padding: 1em;
+        margin-top: 1em;
+    }
+`
+export const PrefaceContent = styled.p`
+    margin: 0;
+    padding: 1em;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background: #fff8dc;
+    font-size: 1.4rem;
+    font-weight: 100;
+    border-radius: .1em;
+`
+
 export const List = styled.div`
     padding: 2em 0;
     @media (max-width: ${mediaEdge}) {

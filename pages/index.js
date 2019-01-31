@@ -13,6 +13,8 @@ import ComponentIcon from '../components/modules/Icon'
 import ComponentNoMore from '../components/modules/NoMore'
 import { App, AppBody } from '../components/styled-global'
 import {
+    Preface,
+    PrefaceContent,
     List,
     ListItem,
     ArticleTitle,
@@ -32,12 +34,13 @@ export default class extends React.Component {
         return {
             path,
             title: name,
+            preface: '',
             list: data.result || []
         }
     }
 
     render () {
-        const { path, title, list } = this.props
+        const { path, title, preface, list } = this.props
 
         return (
             <div>
@@ -45,6 +48,11 @@ export default class extends React.Component {
                 <App>
                     <ComponentHeader path={path} />
                     <AppBody>
+                        {preface ? <Preface>
+                            <PrefaceContent>
+                                {preface}
+                            </PrefaceContent>
+                        </Preface> : null}
                         <List>{list.map(article => (
                             <ListItem key={article.id} onTouchStart={touchStartNoopForActive}>
                                 <ArticleTitle>

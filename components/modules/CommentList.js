@@ -137,9 +137,7 @@ const ComponentList = ({ comments }) => comments.map(comment => (
             <CommentBodyContent>{comment.content}</CommentBodyContent>
             {!comment.answers.length ? null
                 : <CommentBodyReply>
-                    <CommentBodyReplyName>
-                        {`${comment.answers[0].author}（博主）回复：`}
-                    </CommentBodyReplyName>
+                    <CommentBodyReplyName>博主回复：</CommentBodyReplyName>
                     <CommentBodyReplyContent>{comment.answers[0].content}</CommentBodyReplyContent>
                 </CommentBodyReply>}
         </CommentBody>

@@ -102,7 +102,7 @@ const TextError = styled.span`
 `
 const ButtonStyle = css`
     display: inline-block;
-    width: 100px;
+    width: 120px;
     border: none;
     padding: .75em;
     border-radius: .1em;

@@ -10,7 +10,9 @@ export const AboutDesc = styled.p`
         font-size: 2.4rem;
     }
 `
-export const AboutDeclaration = styled.p``
+export const AboutDeclaration = styled.p`
+    padding-top: 1em;
+`
 export const AboutMessage = styled.div`
     padding: 1em 0 2em 0;
 `
