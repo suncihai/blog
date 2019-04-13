@@ -13,7 +13,7 @@ export const Article = styled.div`
     }
 `
 export const ArticleHeader = styled.h1`
-    font-size: 2.8rem;
+    font-size: 2.6rem;
     font-weight: 400;
     > a {
         color: #2f4f4f;
@@ -55,7 +55,7 @@ export const ArticleBody = styled.div`
         border-radius: 0.2em;
         background: #fff8dc;
         color: #f92672;
-        font-size: 1.4rem;
+        /* font-size: 1.4rem; */
     }
     img {
         border-radius: .1em;
@@ -68,7 +68,7 @@ export const ArticleBody = styled.div`
         position: relative;
         padding-left: 2.8em;
         font-size: 1.4rem;
-        visibility: hidden;
+        /* visibility: hidden; */
     }
     blockquote {
         background: #f8f8f8;

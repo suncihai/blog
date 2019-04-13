@@ -8,7 +8,7 @@ import config from '../../config/server'
 import ComponentIcon from './Icon'
 import { Icon as ComponentLoadingIcon } from './/Loading'
 import { FormStyle } from '../styled-global'
-import { fontAuxColor, mediaEdge, onePixelBorder } from '../styled-global/constant'
+import { fontAuxColor, mediaEdge, onePixelBorder, fontFamily } from '../styled-global/constant'
 import track from '../../helpers/track'
 
 const CommentFormStyle = css`
@@ -17,6 +17,7 @@ const CommentFormStyle = css`
     font-size: 1.4rem;
     padding: .75rem;
     appearance: none;
+    font-family: ${fontFamily};
     @media (max-width: ${mediaEdge}) {
         border-color: rgba(0, 0, 0, .35);
         ${onePixelBorder}
@@ -110,6 +111,7 @@ const ButtonStyle = css`
     outline: none;
     font-size: 1.4rem;
     user-select: none;
+    font-family: ${fontFamily};
 `
 const ButtonReset = styled.button`
     ${ButtonStyle};
