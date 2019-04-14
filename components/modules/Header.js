@@ -51,6 +51,7 @@ const MenuItemAnchor = styled.a`
     color: #808080;
     &.active {
         color: inherit;
+        font-weight: bold;
         text-decoration: underline;
     }
 `

@@ -35,7 +35,7 @@ export const List = styled.div`
 export const ListItem = styled.div`
     margin-bottom: 2em;
     padding-bottom: 2em;
-    border-bottom: 1px dashed ${auxColor};
+    border-bottom: 1px dotted ${auxColor};
     &:last-child {
         border: none;
         margin-bottom: 0;

@@ -27,7 +27,7 @@ export const navMenus = [
     },
     {
         path: '/about',
-        name: '关于我'
+        name: '关于本站'
     }
 ]
 
